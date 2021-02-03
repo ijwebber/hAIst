@@ -2,22 +2,20 @@
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float speed = 0.2f;
+    public float MovementSpeed =1;
+ 
+    private void Start()
+    {
+        
+    }
+ 
+    void Update()
+    {
+        // player movement - forward, backward, left, right
+        float horizontal = Input.GetAxis("Horizontal") * MovementSpeed * Time.deltaTime;
+        float vertical = Input.GetAxis("Vertical") * MovementSpeed * Time.deltaTime;
+        
+        transform.position += new Vector3(horizontal, 0, vertical);
 
-    void Update() {
-        if (Input.GetKey("w")) {
-            this.transform.localPosition += new Vector3(0, 0, speed);
-        }
-        if (Input.GetKey("a")) {
-            this.transform.localPosition += new Vector3(-speed, 0, 0);
-        }
-        if (Input.GetKey("s")) {
-            this.transform.localPosition += new Vector3(0, 0, -speed);
-        }
-        if (Input.GetKey("d")) {
-            this.transform.localPosition += new Vector3(speed, 0, 0);
-        }
-        
-        
     }
 }
