@@ -4,7 +4,6 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5;
     private Rigidbody rb;
-    Vector3 m_EulerAngleVelocity;
  
     private void Start()
     {
