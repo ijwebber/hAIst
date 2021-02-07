@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviourPun
 {
     public float speed = 5;
     [SerializeField] private Rigidbody rb;
-    private TextMesh Caption = null;
+    //private TextMesh Caption = null;
 
  
     private void Start()
@@ -39,12 +39,15 @@ public class PlayerMovement : MonoBehaviourPun
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         
-        Vector3 moveVector = new Vector3(horizontal, 0, vertical);
+        Vector3 moveVector = new Vector3(horizontal, 0, vertical); //changed 0 to 0.0001 toa avodd error messages
+
+        if (moveVector != Vector3.zero) {
         Quaternion deltaRotation = Quaternion.LookRotation(moveVector);
+        rb.rotation = deltaRotation;
+        }
 
         moveVector = moveVector.normalized * speed * Time.deltaTime;
         rb.MovePosition(transform.position + moveVector);
         
-        rb.rotation = deltaRotation;
     }
 }

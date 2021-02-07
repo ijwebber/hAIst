@@ -337,11 +337,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f125b3e31c52740a0b9675b5ad345d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  obstruction: {fileID: 0}
+  name: 
+  objectMaterial: {fileID: 0}
+  prevObjectMaterial: {fileID: 0}
+  currentObject:
+  - 
   distance: -8
   height: 12
-  centerOffset: {x: 0, y: 0, z: 0}
   followOnStart: 0
-  smoothSpeed: 0.125
 --- !u!1001 &5037312652373100741
 PrefabInstance:
   m_ObjectHideFlags: 0
