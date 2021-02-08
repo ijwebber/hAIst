@@ -4,6 +4,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5;
     private Rigidbody rb;
+
+    
  
     private void Start()
     {
@@ -13,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
  
     void FixedUpdate()
     {
+      
+
+
         // player movement - forward, backward, left, right
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
@@ -25,4 +30,8 @@ public class PlayerMovement : MonoBehaviour
         
         rb.rotation = deltaRotation;
     }
+
+ 
+
+
 }

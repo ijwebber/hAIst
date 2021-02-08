@@ -13,6 +13,8 @@ public class FollowPlayer : MonoBehaviour
 
     public Material prevObjectMaterial;
 
+    public int points = 0;
+
     public string[] currentObject = {""};  // at most, there will probably be two walls in this array so initialise for two strings, but for now just do 1
 
 
@@ -77,5 +79,9 @@ public class FollowPlayer : MonoBehaviour
         Color color = prevObjectMaterial.color;
         color.a = alpha;
         prevObjectMaterial.color = color;
+    }
+
+    private void OnGUI(){
+        GUI.Label(new Rect(10,10,100,20),"Score : " + points);
     }
 }
