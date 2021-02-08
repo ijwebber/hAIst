@@ -3,6 +3,7 @@
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5;
+    
     private Rigidbody rb;
 
     
@@ -26,7 +27,15 @@ public class PlayerMovement : MonoBehaviour
             rb.rotation = deltaRotation;
         }
 
-        moveVector = moveVector.normalized * speed * Time.deltaTime;
+        // Checks for any adjustments to speed
+        float finalSpeed = speed;
+        if (Input.GetKey(KeyCode.LeftShift)) {
+            finalSpeed =  speed * 1.5f;
+        } else if (Input.GetKey(KeyCode.Space)) {
+            finalSpeed = speed * 0.75f;
+        }
+
+        moveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
         rb.MovePosition(transform.position + moveVector);
     }
 }
