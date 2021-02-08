@@ -17,11 +17,30 @@ public class FollowPlayer : MonoBehaviour
 
     public string[] currentObject = {""};  // at most, there will probably be two walls in this array so initialise for two strings, but for now just do 1
 
+    public float targetTime = 0;    // increase the target time by a certain amount i.e. 10s
+
+    public int seconds; // convert to seconds
+
 
     // Update is called once per frame
     void Update()
     {
         transform.position = player.position + offset;
+
+        if(targetTime != 0 && !(seconds < 0)){
+            targetTime -= Time.deltaTime;
+            seconds = (int)(targetTime % 60);   
+        }
+        else if(targetTime < 0 || seconds < 0){
+            seconds = 0;
+            targetTime = 0;
+        }
+        else{
+            seconds = 0;
+            targetTime = 0;
+        }
+        
+        
         
         
         Ray ray = GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
@@ -83,5 +102,6 @@ public class FollowPlayer : MonoBehaviour
 
     private void OnGUI(){
         GUI.Label(new Rect(10,10,100,20),"Score : " + points);
+        GUI.Label(new Rect(10,40,100,20),"Cool Down : " + seconds);
     }
 }
