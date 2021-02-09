@@ -39,70 +39,32 @@ public class Grid {
             for (int j = 0; j < gridArray.GetLength(1); j++) {
                 velocities[i,j] = speedOfSound;
                 debugTextArray[i,j] = UtilsClass.CreateWorldText(gridArray[i,j].ToString(), null, (offset + (Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize))) + new Vector3(cellSize, cellSize) *.5f, 5, Color.white, TextAnchor.MiddleCenter);
-                Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j+1)*cellSize), Color.white, 100f);
-                Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i+1,j)*cellSize), Color.white, 100f);
+                // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j+1)*cellSize), Color.white, 100f);
+                // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i+1,j)*cellSize), Color.white, 100f);
             }
-            Debug.DrawLine(new Vector3(0,height)*cellSize, new Vector3(width, height), Color.white, 100f);
-            Debug.DrawLine(new Vector3(width,0)*cellSize, new Vector3(width, height), Color.white, 100f);
+            // Debug.DrawLine(new Vector3(0,height)*cellSize, new Vector3(width, height), Color.white, 100f);
+            // Debug.DrawLine(new Vector3(width,0)*cellSize, new Vector3(width, height), Color.white, 100f);
         }
         List<GameObject> walls = getWalls();
         foreach (GameObject w in walls)
         {
             Vector3 wallPos = new Vector3(w.transform.position.x, 0, w.transform.position.z) + offset;
         }
-        for (int i = 0; i < gridArray.GetLength(0); i++) {
-            for (int j = 0; j < gridArray.GetLength(1); j++) {
-                foreach (GameObject w in walls)
-                {
-                    float localVel = speedOfSound;
-                    BoxCollider mCollider;
-                    BoxCollider boxCollider;
-                    if (w.TryGetComponent<BoxCollider>(out mCollider)) {
-                        int startx = (int) (mCollider.bounds.min.x - offset.x);
-                        int endx = (int) (mCollider.bounds.max.x - offset.x);
-                        int starty = (int) (mCollider.bounds.min.z - offset.z);
-                        int endy = (int) (mCollider.bounds.max.z - offset.z);
-                        if (startx <= 0) {
-                            startx = 0;
-                        }
-                        if (endx <= 0) {
-                            endx = 0;
-                        }
-                        if (endy <= 0) {
-                            endy = 0;
-                        }
-                        if (starty <= 0) {
-                            starty = 0;
-                        }
-                        if (endx > width) {
-                            endx = width-1;
-                        }
-                        if (startx > width) {
-                            startx = width-1;
-                        }
-                        if (starty > height) {
-                            starty = height-1;
-                        }
-                        if (endy > height) {
-                            endy = height-1;
-                        }
-                        if (startx > 0 && starty > 0 && endx < width && endy < height) {
-                            for (int x = startx; x <= endx; x++) {
-                                for (int y = starty; y <= endy; y++) {
-                                    velocities[x,y] = 343;
-                                }
-                            }
-                        }
-                        // if(mCollider.bounds.Contains(telePos)) {
-                        //     localVel = 343;
-                        // }
-                    }
-                    // } else if(w.TryGetComponent<BoxCollider>(out boxCollider)) {
-                    //     if(boxCollider.bounds.Contains(telePos)) {
-                    //         localVel = 343;
-                    //     }
-                    // }
-                    // velocities[i,j] = localVel;
+        for (int i = 0; i < gridArray.GetLength(0)-2; i++) {
+            for (int j = 0; j < gridArray.GetLength(1) - 2; j++) {
+                float localVel = speedOfSound;
+                Vector3 point1 = new Vector3(i, 5, j) + offset;
+                Vector3 point2 = new Vector3(i+1, 5, j) + offset;
+                Vector3 point3 = new Vector3(i, 5, j+1) + offset;
+                if (Physics.Linecast(point1, point2, (1 << 8))) {
+                    velocities[i,j] = 343;
+                    velocities[i+1,j] = 343;
+
+                } else if (Physics.Linecast(point1, point3, (1 << 8))) {
+                    velocities[i,j] = 343;
+                    velocities[i,j+1] = 343;
+                } else {
+                    velocities[i,j] = localVel;
                 }
             }
         }
@@ -154,10 +116,12 @@ public class Grid {
                 } else {
                     nextPressure[x,y] = nextValue;
                 }
-                debugTextArray[x,y].text = nextPressure[x,y].ToString();
+                // debugTextArray[x,y].text = nextPressure[x,y].ToString();
                 float r = 0;
+                float a = 0;
                 if (nextPressure[x,y] != 0) {
                     r = (float)(1/nextPressure[x,y]);
+                    a = 1;
                 }
                 if (velocities[x,y] == speedOfSound) {
                     debugTextArray[x,y].color = new Vector4(r,r,r,1);
@@ -174,7 +138,7 @@ public class Grid {
     public void SetValue(int x, int y, int value) {
         if (x >=0 && y >= 0 && x < width && y < height) {
             gridArray[x,y] = value;
-            debugTextArray[x,y].text = value.ToString();
+            // debugTextArray[x,y].text = value.ToString();
             currentPressure[x,y] = value;
         }
     }
