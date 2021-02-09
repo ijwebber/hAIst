@@ -12,9 +12,21 @@ public class Testing : MonoBehaviour
     }
 
     void Update() {
+        if (Input.GetKeyDown("k")) {
+            Vector3 playerPosition = player.transform.position;
+            grid.SetValue(playerPosition, 60);
+        }
         if (Input.GetKeyDown("l")) {
             Vector3 playerPosition = player.transform.position;
-            grid.SetValue(playerPosition, 56);
+            grid.SetValue(playerPosition, 30);
         }
+        if (Input.GetKeyDown("j")) {
+            Vector3 playerPosition = player.transform.position;
+            grid.SetValue(playerPosition, 120);
+        }
+    }
+
+    void FixedUpdate() {
+        grid.updateNodes();
     }
 }
