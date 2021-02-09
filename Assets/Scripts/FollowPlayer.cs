@@ -7,7 +7,7 @@ public class FollowPlayer : MonoBehaviour
 
     public GameObject obstruction;  // global obstructions 
 
-    public string name; // name of current object in view
+    public string currentName; // name of current object in view
     
     public Material objectMaterial;
 
@@ -41,8 +41,6 @@ public class FollowPlayer : MonoBehaviour
         }
         
         
-        
-        
         Ray ray = GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
         RaycastHit hit;
 
@@ -52,24 +50,24 @@ public class FollowPlayer : MonoBehaviour
             print("I'm looking at " + hit.transform.name);
 
             obstruction = hit.transform.gameObject;
-            name = obstruction.name; // name of obstruction
+            currentName = obstruction.name; // name of obstruction
             objectMaterial = obstruction.GetComponent<Renderer>().material; 
             
-            if(obstruction.tag == "hideObject" &&  currentObject[0] == name){   // case where we are hidden behind a wall but we don't move to another wall
+            if(obstruction.tag == "hideObject" &&  currentObject[0] == currentName){   // case where we are hidden behind a wall but we don't move to another wall
                 //obstruction.GetComponent<Renderer>().enabled = false;  
                 SetAlpha(0.5F);     
             }
             else if(obstruction.tag == "hideObject" &&  currentObject[0] == ""){ // case where we are hidden behind a wall but the array is "empty"
                 //obstruction.GetComponent<Renderer>().enabled = false;
                 SetAlpha(0.5F);  
-                currentObject[0] = name;
+                currentObject[0] = currentName;
             }
-            else if (obstruction.tag == "hideObject" &&  currentObject[0] != name){ // case where we are hidden behind a new wall to the one in the array
+            else if (obstruction.tag == "hideObject" &&  currentObject[0] != currentName){ // case where we are hidden behind a new wall to the one in the array
                 GameObject prev = GameObject.Find(currentObject[0]);   // change prev wall to visible
                 //prev.GetComponent<Renderer>().enabled = true; 
                 prevObjectMaterial = prev.GetComponent<Renderer>().material; 
                 SetAlpha1(1F); 
-                currentObject[0] = name; // replace with new name
+                currentObject[0] = currentName; // replace with new name
             }
             else if (obstruction.name == "Timmy" && currentObject[0] != "") {  
             // set previous object back to visible, need to have a way to specifically change the visibility of the previous object
