@@ -29,10 +29,13 @@ public class newSoundPropagate : MonoBehaviour
             float distance = soundDistance(50,20,1);
             RaycastHit hit;
             // raycast to guards
+            int LayerMask = (1 << 8);
+            print(LayerMask);
             foreach (GameObject g in guards)
             {
-                if (Physics.Raycast(player.transform.position, g.transform.position, out hit, distance,  ~(1 << 9), QueryTriggerInteraction.UseGlobal))
+                if (!Physics.Linecast(player.transform.position, g.transform.position, out hit, LayerMask, QueryTriggerInteraction.UseGlobal) && Vector3.Distance(player.position, g.transform.position) < distance)
                 {
+                    Debug.DrawLine(player.position, g.transform.position);
                     print("Guard " + g.transform.position + " alerted");
                 }
             }

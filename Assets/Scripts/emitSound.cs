@@ -146,6 +146,7 @@ public class emitSound : MonoBehaviour
         // normal sound
         if (Input.GetKeyDown("p")) {
             // determime max range of sound travel
+            Debug.Log("p button down");
             float distance = soundDistance(60,20,1);
             Pulse newPulse = Pulse.CreatePulse(gameObject, player.position, line, distance, 0, 60);
         }
