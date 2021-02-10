@@ -27,10 +27,10 @@ public class FollowPlayer : MonoBehaviour
     {
         transform.position = player.position + offset;
 
-        if(targetTime != 0 && !(seconds < 0)){
-            targetTime -= Time.deltaTime;
-            seconds = (int)(targetTime % 60);   
-        }
+        if(targetTime != 0 && !(seconds < 0)){      // perhaps change this so from the pick up script, you set target time to 0 if the time left is 0/ seconds
+            targetTime -= Time.deltaTime;           // in float
+            seconds = (int)(targetTime % 60);       // convert from float, updating the seconds variable
+        }                                           // this chunk of code can be moved to the HUD script
         else if(targetTime < 0 || seconds < 0){
             seconds = 0;
             targetTime = 0;
