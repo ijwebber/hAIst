@@ -5,10 +5,12 @@ using UnityEngine;
 public class Testing : MonoBehaviour
 {
     private Grid grid;
+    private Vector3 soundSource;
     public GameObject player;
     public GameObject gridContainer;
     void Start() {
-        grid = new Grid(100,50,1f, gridContainer);
+        grid = new Grid(110,60,1f, gridContainer);
+        soundSource = new Vector3(-1,-1,-1);
     }
 
     void Update() {
@@ -22,11 +24,15 @@ public class Testing : MonoBehaviour
         }
         if (Input.GetKeyDown("j")) {
             Vector3 playerPosition = player.transform.position;
-            grid.SetValue(playerPosition, 120);
+            soundSource = playerPosition;
+            grid.SetValue(playerPosition, 240);
         }
     }
 
     void FixedUpdate() {
         grid.updateNodes();
+        // if (soundSource != new Vector3(-1,-1,-1)) {
+        //     grid.SetValue(soundSource, 240);
+        // }
     }
 }

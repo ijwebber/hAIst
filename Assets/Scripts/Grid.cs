@@ -10,11 +10,12 @@ public class Node {
 public class Grid {
     private int width;
     private int height;
+    private float maxPressure = 120;
     private float deltaT, v;
     private float speedOfSound = 343/10;
     private int[,] gridArray;
     private float cellSize;
-    private Vector3 offset = new Vector3(-50f,9,0f);
+    private Vector3 offset = new Vector3(-50.12f,11f,0.61f);
     private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
 
@@ -53,17 +54,32 @@ public class Grid {
         for (int i = 0; i < gridArray.GetLength(0)-2; i++) {
             for (int j = 0; j < gridArray.GetLength(1) - 2; j++) {
                 float localVel = speedOfSound;
-                Vector3 point1 = new Vector3(i, 5, j) + offset;
-                Vector3 point2 = new Vector3(i+1, 5, j) + offset;
-                Vector3 point3 = new Vector3(i, 5, j+1) + offset;
+                bool noCollision = false;
+                Vector3 point1 = new Vector3(i, 3, j) + offset;
+                Vector3 point2 = new Vector3(i+1, 3, j) + offset;
+                Vector3 point3 = new Vector3(i, 3, j+1) + offset;
+                Vector3 point4 = new Vector3(i+1, 3, j+1) + offset;
                 if (Physics.Linecast(point1, point2, (1 << 8))) {
                     velocities[i,j] = 343;
                     velocities[i+1,j] = 343;
-
-                } else if (Physics.Linecast(point1, point3, (1 << 8))) {
+                    noCollision = true;
+                }
+                if (Physics.Linecast(point1, point3, (1 << 8))) {
                     velocities[i,j] = 343;
                     velocities[i,j+1] = 343;
-                } else {
+                    noCollision = true;
+                }
+                if (Physics.Linecast(point1, point4, (1 << 8))) {
+                    velocities[i,j] = 343;
+                    velocities[i+1,j+1] = 343;
+                    noCollision = true;
+                }
+                // if (Physics.Linecast(point2, point3, (1 << 8))) {
+                //     velocities[i+1,j] = 343;
+                //     velocities[i,j+1] = 343;
+                //     noCollision = true;
+                // }
+                if (!noCollision) {
                     velocities[i,j] = localVel;
                 }
             }
@@ -116,15 +132,16 @@ public class Grid {
                 } else {
                     nextPressure[x,y] = nextValue;
                 }
-                // debugTextArray[x,y].text = nextPressure[x,y].ToString();
-                float r = 0;
+                // debugTextArray[x,y].text = ((int)(nextPressure[x,y])).ToString();
+                float r = 1f;
                 float a = 0;
                 if (nextPressure[x,y] != 0) {
-                    r = (float)(1/nextPressure[x,y]);
+                    r = (float)((1/nextPressure[x,y]));
+                    // Debug.Log(r);
                     a = 1;
                 }
                 if (velocities[x,y] == speedOfSound) {
-                    debugTextArray[x,y].color = new Vector4(r,r,r,1);
+                    debugTextArray[x,y].color = new Vector4(1,1,1,(1-r));
                 } else {
                     debugTextArray[x,y].color = new Vector4(1,0,0,1);
                 }

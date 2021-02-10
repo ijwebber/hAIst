@@ -8,4 +8,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ArtMuseum.unity
     guid: 47c3c38f55659c447ba42e450c9c5b84
+  - enabled: 1
+    path: Assets/Scenes/Lights.unity
+    guid: 10121e7a673ca1b448814084a7f18044
+  - enabled: 1
+    path: Assets/Scenes/Sound.unity
+    guid: 6722f27f10a4920dface56cdc0b3cb38
+  - enabled: 1
+    path: Assets/Scenes/ArtItems.unity
+    guid: 4fa26a59c9636f2489dce288af9b08c2
+  - enabled: 1
+    path: Assets/Scenes/AI.unity
+    guid: 584dd9545b4fb4a48ac69742e7247494
+  - enabled: 0
+    path: Assets/Scenes/Character.unity
+    guid: 02469f14a397fb843b6d35249a77f0a2
   m_configObjects: {}
