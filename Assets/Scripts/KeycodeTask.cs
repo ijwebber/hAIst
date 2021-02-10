@@ -30,7 +30,7 @@ public class KeycodeTask : MonoBehaviour
             return;
         }*/
 
-        _inputCode.text += num;
+        _inputCode.text += num;             // set inputcode box to what ever buttom input it is
 
         if(_inputCode.text == _cardCode.text){
             _inputCode.text = "Correct";
