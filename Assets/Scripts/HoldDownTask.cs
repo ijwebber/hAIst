@@ -13,7 +13,7 @@ public class HoldDownTask : MonoBehaviour
     private float timer = 0f;
     public float holdTime = 5.0f;
     private bool held = false;
-    private string[] paint1 = {"MonaLisa","TheShahin","TilosPride"};
+    private string[] paint1 = {"MonaLisa","TheShahin","TilosPride"};  // need to get this all into one script shared across the mini games
     private int[] scores = {250,600,1000};
     //public GameObject message;
 
@@ -32,10 +32,6 @@ public class HoldDownTask : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        //if(inRange){}      // keep track of whether player is in range or not
-        //else{}
-
         int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
         if(Input.GetKeyDown(KeyCode.E)){    // if player is holding down E, start a timer
@@ -56,6 +52,7 @@ public class HoldDownTask : MonoBehaviour
         
         if(Input.GetKey(KeyCode.E) == false){ // if key is not being pressed, just set held to false
             held = false;
+        
         }
 
         if(held && inRange && timeLeft == 0 && !inventory.isFull()){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
@@ -81,9 +78,7 @@ public class HoldDownTask : MonoBehaviour
             }
 
             inventory.Add(gameObject);
-            mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
-            //message.SetActive(false);
-            
+            mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration       
         }    
     }
 
@@ -101,9 +96,16 @@ public class HoldDownTask : MonoBehaviour
 
     private void OnGUI(){
 
-        if(inRange){GUI.Label(new Rect(490,400,160,40),"HOLD E TO PICK UP");}
-        else{GUI.Label(new Rect(50,50,100,20),"");}
-        
+        int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  
+
+        if(inRange && Input.GetKey(KeyCode.E) && timeLeft == 0) 
+        {
+            GUI.Label(new Rect(490,400,160,40),"");
+        }
+        else if(inRange){
+            GUI.Label(new Rect(490,400,160,40),"HOLD E TO PICK UP");
+        }
+        else{GUI.Label(new Rect(50,50,100,20),"");}     
         
     }
 }

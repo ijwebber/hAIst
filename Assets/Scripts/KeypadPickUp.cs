@@ -36,10 +36,6 @@ public class KeypadPickUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-       // if(inRange){//print(gameObject.name);}      // keep track of whether player is in range or not
-       // else{//print("NOT IN RANGE");}
-
         int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
         if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0 && !inventory.isFull()){
@@ -47,12 +43,12 @@ public class KeypadPickUp : MonoBehaviour
             canvasActive = true;
         } 
         
-        if(canvasActive == true && inRange == false){
+        if(canvasActive == true && inRange == false){   // check if canvas is true but player is out of range, then disable the canvas
             keycodeTask.SetActive(false);
             canvasActive = false;
         }
 
-        bool keyCorrect = keycodeTask.GetComponent<KeycodeTask>().codeCorrect;
+        bool keyCorrect = keycodeTask.GetComponent<KeycodeTask>().codeCorrect;  // boolean which just checks if the code is correct
 
         if(keyCorrect && inRange && timeLeft == 0){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method
 
@@ -73,12 +69,12 @@ public class KeypadPickUp : MonoBehaviour
                 mainCam.GetComponent<FollowPlayer>().points+=cost;  
             }
             else{
-                mainCam.GetComponent<FollowPlayer>().points+=10; // if the painting isn't "valuable", then just give it 10 points
+                mainCam.GetComponent<FollowPlayer>().points+=10; // if the painting isn't "valuable", then just give player 10 points
             }
 
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
            
-            inventory.Add(gameObject);
+            inventory.Add(gameObject); // add object to inventory
             keycodeTask.SetActive(false);
             keyCorrect = false;
             keycodeTask.GetComponent<KeycodeTask>().codeCorrect = false;

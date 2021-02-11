@@ -47,8 +47,6 @@ public class FollowPlayer : MonoBehaviour
         
         if (Physics.Raycast(ray, out hit))
         {
-            //print("I'm looking at " + hit.transform.name);
-
             obstruction = hit.transform.gameObject;
             currentName = obstruction.name; // name of obstruction
             objectMaterial = obstruction.GetComponent<Renderer>().material; 
@@ -77,13 +75,7 @@ public class FollowPlayer : MonoBehaviour
                 SetAlpha1(1F); 
                 currentObject[0] = "";
             }
-        }
-        else
-        {
-            //print("I'm looking at nothing ");
-            
-        }
-        
+        } 
     }
 
     void SetAlpha(float alpha){            // need to merge these together by creating maybe just one object material class?
@@ -100,6 +92,6 @@ public class FollowPlayer : MonoBehaviour
 
     private void OnGUI(){
         GUI.Label(new Rect(10,10,100,20),"Score : " + points);
-        GUI.Label(new Rect(10,40,100,20),"Cool Down : " + seconds);
+        if(seconds !=0){GUI.Label(new Rect(10,40,100,20),"Cool Down : " + seconds); }
     }
 }
