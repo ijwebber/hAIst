@@ -19,6 +19,8 @@ public class Inventory : MonoBehaviour
     void Start() {
         isFullList = new bool[size];
         items = new GameObject[size];
+
+        itemText.enabled = false;
     }
 
     public void Add(GameObject item) {
@@ -46,9 +48,18 @@ public class Inventory : MonoBehaviour
     }
 
     public void ShowName(int i) {
-        if (isFullList[i]) {
+        if (isFullList[i - 1]) {
             itemText.enabled = true;
-            itemText.text = items[i].name; 
+            itemText.text = items[i - 1].name;
+
+            items[i - 1].transform.localScale *= 1.1f; 
+        }
+    }
+
+    public void HideName(int i) {
+        if (isFullList[i - 1]) {
+            itemText.enabled = false;
+            items[i - 1].transform.localScale /= 1.1f; 
         }
     }
 }
