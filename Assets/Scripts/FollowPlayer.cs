@@ -47,7 +47,7 @@ public class FollowPlayer : MonoBehaviour
         
         if (Physics.Raycast(ray, out hit))
         {
-            print("I'm looking at " + hit.transform.name);
+            //print("I'm looking at " + hit.transform.name);
 
             obstruction = hit.transform.gameObject;
             currentName = obstruction.name; // name of obstruction
@@ -80,7 +80,7 @@ public class FollowPlayer : MonoBehaviour
         }
         else
         {
-            print("I'm looking at nothing ");
+            //print("I'm looking at nothing ");
             
         }
         

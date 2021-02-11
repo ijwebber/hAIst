@@ -34,8 +34,8 @@ public class PickUp : MonoBehaviour
     void Update()
     {
         
-        if(inRange){print(gameObject.name);}      // keep track of whether player is in range or not
-        else{print("NOT IN RANGE");}
+        //if(inRange){print(gameObject.name);}      // keep track of whether player is in range or not
+        //else{print("NOT IN RANGE");}
 
         int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
