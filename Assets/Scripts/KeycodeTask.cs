@@ -5,12 +5,12 @@ using UnityEngine.UI;
 public class KeycodeTask : MonoBehaviour
 {
     public Text _cardCode;
-
     public Text _inputCode;
     public int codeLength = 5;
     public float codeReset = 0.5f;  // code reset time in seconds
     private bool isReset = false;
-    public bool codeCorrect = false;
+    public bool codeCorrect = false; // This code should be attached to the keycode task object in the canvas
+
     private void OnEnable() {       // when the UI is active, do the following
         string code = string.Empty;
 
