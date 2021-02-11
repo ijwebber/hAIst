@@ -21,13 +21,16 @@ public class KeypadPickUp : MonoBehaviour
     private int[] scores = {250,600,1000};
 
     public GameObject keycodeTask;
+    private Inventory inventory;
 
     // Start is called before the first frame update
     void Start()
     {
         mainCam = Camera.main;  //link camera object to main camera (that follows the player)
         mainCam.GetComponent<FollowPlayer>().seconds = 0;
-        
+
+        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+    
     }
 
     // Update is called once per frame
@@ -39,7 +42,7 @@ public class KeypadPickUp : MonoBehaviour
 
         int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
-        if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0){
+        if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0 && !inventory.isFull()){
             keycodeTask.SetActive(true);
             canvasActive = true;
         } 
@@ -75,7 +78,7 @@ public class KeypadPickUp : MonoBehaviour
 
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
            
-            Destroy(gameObject);
+            inventory.Add(gameObject);
             keycodeTask.SetActive(false);
             keyCorrect = false;
             keycodeTask.GetComponent<KeycodeTask>().codeCorrect = false;

@@ -15,6 +15,7 @@ public class FixImageTask : MonoBehaviour
     private int[] scores = {250,600,1000};
 
     public GameObject pictureTask;
+    private Inventory inventory;
 
     // This script is to be used for the "rotate" task and should be applied to the object that is to be stolen
     // Start is called before the first frame update
@@ -22,6 +23,9 @@ public class FixImageTask : MonoBehaviour
     {
         mainCam = Camera.main;  //link camera object to main camera (that follows the player)
         mainCam.GetComponent<FollowPlayer>().seconds = 0;
+
+        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+    
     }
 
     // Update is called once per frame
@@ -42,7 +46,7 @@ public class FixImageTask : MonoBehaviour
 
         bool pictureCorrect = pictureTask.GetComponent<RotateTask>().win;
 
-        if(pictureCorrect && inRange && timeLeft == 0){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method
+        if(pictureCorrect && inRange && timeLeft == 0 && !inventory.isFull()){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method
 
             string paintingName = gameObject.name;
             int paintingIndex = 0;
@@ -65,7 +69,8 @@ public class FixImageTask : MonoBehaviour
             }
 
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
-            Destroy(gameObject);
+            
+            inventory.Add(gameObject);
             pictureTask.SetActive(false);
             pictureCorrect = false;
             pictureTask.GetComponent<RotateTask>().win = false;

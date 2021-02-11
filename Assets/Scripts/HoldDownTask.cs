@@ -17,10 +17,16 @@ public class HoldDownTask : MonoBehaviour
     private int[] scores = {250,600,1000};
     //public GameObject message;
 
+    private Inventory inventory;
+
     void Start()
     {
         mainCam = Camera.main;  //link camera object to main camera (that follows the player)
         mainCam.GetComponent<FollowPlayer>().seconds = 0;
+
+
+        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+        
     }
 
     // Update is called once per frame
@@ -37,7 +43,7 @@ public class HoldDownTask : MonoBehaviour
             timer = startTime;
         }
 
-        if(Input.GetKey(KeyCode.E) && held == false && timeLeft == 0){   // for each time E is being held down, count/increment the timer and remove the onscreen text
+        if(Input.GetKey(KeyCode.E) && held == false && timeLeft == 0 && !inventory.isFull()){   // for each time E is being held down, count/increment the timer and remove the onscreen text
             //message.SetActive(false);
             timer += Time.deltaTime;                   
             if(timer>(startTime + holdTime)){   // if the time reaches 5s, then set held to true, else set to false
@@ -52,7 +58,7 @@ public class HoldDownTask : MonoBehaviour
             held = false;
         }
 
-        if(held && inRange && timeLeft == 0){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+        if(held && inRange && timeLeft == 0 && !inventory.isFull()){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
 
             string paintingName = gameObject.name;
             int paintingIndex = 0;
@@ -74,7 +80,7 @@ public class HoldDownTask : MonoBehaviour
                 mainCam.GetComponent<FollowPlayer>().points+=10; // if the painting isn't "valuable", then just give it 10 points
             }
 
-            Destroy(gameObject);
+            inventory.Add(gameObject);
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
             //message.SetActive(false);
             

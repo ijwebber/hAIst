@@ -22,12 +22,15 @@ public class PickUp : MonoBehaviour
 
     public GameObject keycodeTask;
 
+    private Inventory inventory;
+
     // Start is called before the first frame update
     void Start()
     {
         mainCam = Camera.main;  //link camera object to main camera (that follows the player)
         mainCam.GetComponent<FollowPlayer>().seconds = 0;
         
+        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
     }
 
     // Update is called once per frame
@@ -58,7 +61,7 @@ public class PickUp : MonoBehaviour
             held = false;
         }*/
 
-        if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0){
+        if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0 && !inventory.isFull()){
             keycodeTask.SetActive(true);
             canvasActive = true;
         } 
@@ -93,10 +96,12 @@ public class PickUp : MonoBehaviour
             }
 
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
+            
+            inventory.Add(gameObject);
             keycodeTask.SetActive(false);
             keyCorrect = false;
             keycodeTask.GetComponent<KeycodeTask>().codeCorrect = false;
-            Destroy(gameObject);
+            
         }    
     }
 
