@@ -69,8 +69,8 @@ public class FollowPlayer : MonoBehaviour
                 SetAlpha1(1F); 
                 currentObject[0] = currentName; // replace with new name
             }
-            else if (obstruction.name == "Timmy" && currentObject[0] != "") {  
-            // set previous object back to visible, need to have a way to specifically change the visibility of the previous object
+            if (obstruction.name == "Timmy" && currentObject[0] != "") {  
+                // set previous object back to visible, need to have a way to specifically change the visibility of the previous object
                 GameObject prev = GameObject.Find(currentObject[0]);   
                 //prev.GetComponent<Renderer>().enabled = true; 
                 prevObjectMaterial = prev.GetComponent<Renderer>().material; 
