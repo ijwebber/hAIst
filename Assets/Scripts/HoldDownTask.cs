@@ -15,7 +15,7 @@ public class HoldDownTask : MonoBehaviour
     private bool held = false;
     private string[] paint1 = {"MonaLisa","TheShahin","TilosPride"};
     private int[] scores = {250,600,1000};
-    public GameObject message;
+    //public GameObject message;
 
     void Start()
     {
@@ -27,8 +27,8 @@ public class HoldDownTask : MonoBehaviour
     void Update()
     {
         
-        if(inRange){message.SetActive(true);}      // keep track of whether player is in range or not
-        else{message.SetActive(false);}
+        //if(inRange){}      // keep track of whether player is in range or not
+        //else{}
 
         int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
@@ -38,7 +38,7 @@ public class HoldDownTask : MonoBehaviour
         }
 
         if(Input.GetKey(KeyCode.E) && held == false && timeLeft == 0){   // for each time E is being held down, count/increment the timer and remove the onscreen text
-            message.SetActive(false);
+            //message.SetActive(false);
             timer += Time.deltaTime;                   
             if(timer>(startTime + holdTime)){   // if the time reaches 5s, then set held to true, else set to false
                 held = true;
@@ -58,7 +58,7 @@ public class HoldDownTask : MonoBehaviour
             int paintingIndex = 0;
             bool exists = false;
 
-            for(int i = 0; i <= paint1.Length;i++){ // find if painting is part of the list etc...
+            for(int i = 0; i < paint1.Length;i++){ // find if painting is part of the list etc...
                 if(paint1[i] == paintingName){
                     exists = true;                 // if so, then set exists to true and set the index
                     paintingIndex = i;
@@ -73,9 +73,11 @@ public class HoldDownTask : MonoBehaviour
             else{
                 mainCam.GetComponent<FollowPlayer>().points+=10; // if the painting isn't "valuable", then just give it 10 points
             }
-            mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
-            message.SetActive(false);
+
             Destroy(gameObject);
+            mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
+            //message.SetActive(false);
+            
         }    
     }
 
@@ -89,5 +91,13 @@ public class HoldDownTask : MonoBehaviour
         if((other.name == "Timmy")){
             inRange = false;
         }
+    }
+
+    private void OnGUI(){
+
+        if(inRange){GUI.Label(new Rect(490,400,160,40),"HOLD E TO PICK UP");}
+        else{GUI.Label(new Rect(50,50,100,20),"");}
+        
+        
     }
 }
