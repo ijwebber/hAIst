@@ -10,10 +10,6 @@ public class FixImageTask : MonoBehaviour
 
     public Camera mainCam;  // define camera object
 
-    private string[] paint1 = {"MonaLisa","TheShahin","TilosPride"};
-
-    private int[] scores = {250,600,1000};
-
     public GameObject pictureTask;
     private Inventory inventory;
 
@@ -47,27 +43,6 @@ public class FixImageTask : MonoBehaviour
         bool pictureCorrect = pictureTask.GetComponent<RotateTask>().win;
 
         if(pictureCorrect && inRange && timeLeft == 0 && !inventory.isFull()){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method
-
-            string paintingName = gameObject.name;
-            int paintingIndex = 0;
-            bool exists = false;
-
-            for(int i = 0; i < paint1.Length;i++){ // find if painting is part of the list etc...
-                if(paint1[i] == paintingName){
-                    exists = true;                 // if so, then set exists to true and set the index
-                    paintingIndex = i;
-                    break;
-                }
-            }
-
-            if(exists){
-                int cost = scores[paintingIndex];   // index of the painting matches the index of its score
-                mainCam.GetComponent<FollowPlayer>().points+=cost;  
-            }
-            else{
-                mainCam.GetComponent<FollowPlayer>().points+=10; // if the painting isn't "valuable", then just give it 10 points
-            }
-
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
             
             inventory.Add(gameObject);

@@ -91,7 +91,6 @@ public class FollowPlayer : MonoBehaviour
     }
 
     private void OnGUI(){
-        GUI.Label(new Rect(10,10,100,20),"Score : " + points);
         if(seconds !=0){GUI.Label(new Rect(10,40,100,20),"Cool Down : " + seconds); }
     }
 }
