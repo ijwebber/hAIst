@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventoryHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
+public class InventoryHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler 
 {
 
     public int slotNumber;
@@ -20,6 +20,10 @@ public class InventoryHover : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData) {
         inventory.HideName(slotNumber);
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+        inventory.Remove(slotNumber);
     }
 
 }

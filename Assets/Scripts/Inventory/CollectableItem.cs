@@ -14,7 +14,7 @@ public class CollectableItem : MonoBehaviour
         initialPos = transform.position;
     }
 
-    void ReturnToInitialPosition() {
+    public void ReturnToInitialPosition() {
         transform.position = initialPos;
     }
 }
