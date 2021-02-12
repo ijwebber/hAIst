@@ -16,7 +16,7 @@ public class Grid {
     private int[,] gridArray;
     private float cellSize;
     private Vector3 offset = new Vector3(-50.12f,11f,0.61f);
-    private TextMesh[,] debugTextArray;
+    // private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
 
     public Grid(int width, int height, float inCellSize, GameObject gridContainer) {
@@ -26,7 +26,7 @@ public class Grid {
         
         //Initialise arrays
         gridArray = new int[width,height];
-        debugTextArray = new TextMesh[width,height];
+        // debugTextArray = new TextMesh[width,height];
 
         deltaT = .02f;
         v = 343/10f;
@@ -39,7 +39,7 @@ public class Grid {
         for (int i = 0; i < gridArray.GetLength(0); i++) {
             for (int j = 0; j < gridArray.GetLength(1); j++) {
                 velocities[i,j] = speedOfSound;
-                debugTextArray[i,j] = UtilsClass.CreateWorldText(gridArray[i,j].ToString(), null, (offset + (Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize))) + new Vector3(cellSize, cellSize) *.5f, 5, Color.white, TextAnchor.MiddleCenter);
+                // debugTextArray[i,j] = UtilsClass.CreateWorldText(gridArray[i,j].ToString(), null, (offset + (Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize))) + new Vector3(cellSize, cellSize) *.5f, 5, Color.white, TextAnchor.MiddleCenter);
                 // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j+1)*cellSize), Color.white, 100f);
                 // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i+1,j)*cellSize), Color.white, 100f);
             }
@@ -99,10 +99,14 @@ public class Grid {
         return walls;
     }
 
+    public double GetValue(int x, int y) {
+        return this.currentPressure[x,y];
+    }
+
     //get world position of grid (doesn't work)
-    private Vector3 GetWorldPosition(int x, int y) {
-        Vector3 position = new Vector3(x,y) * cellSize;
-        Debug.Log(position.ToString());
+    public Vector3 GetWorldPosition(int x, int y) {
+        Vector3 position = (new Vector3(x,0,y) * cellSize);
+        position += offset;
         return position;
     }
 
@@ -140,15 +144,27 @@ public class Grid {
                     // Debug.Log(r);
                     a = 1;
                 }
-                if (velocities[x,y] == speedOfSound) {
-                    debugTextArray[x,y].color = new Vector4(1,1,1,(1-r));
-                } else {
-                    debugTextArray[x,y].color = new Vector4(1,0,0,1);
-                }
+                // if (velocities[x,y] == speedOfSound) {
+                    // debugTextArray[x,y].color = new Vector4(1,1,1,(1-r));
+                // } else {
+                //     debugTextArray[x,y].color = new Vector4(1,0,0,1);
+                // }
             }
         }
-        previousPressure = (double[,])currentPressure.Clone();
-        currentPressure = (double[,])nextPressure.Clone();
+        this.previousPressure = (double[,])currentPressure.Clone();
+        this.currentPressure = (double[,])nextPressure.Clone();
+    }
+
+    public int GetWidth() {
+        return this.width;
+    }
+
+    public int GetHeight() {
+        return this.height;
+    }
+
+    public float GetCellSize() {
+        return this.cellSize;
     }
 
     // set value of grid

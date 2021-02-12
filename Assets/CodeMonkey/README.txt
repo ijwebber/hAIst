@@ -8,8 +8,5 @@ Cheers!
            unitycodemonkey.com
 --------------------------------------------------
 
-Version: 1.03
-Date: 06-02-2021
-
 Version: 1.02
 Date: 01-06-2018

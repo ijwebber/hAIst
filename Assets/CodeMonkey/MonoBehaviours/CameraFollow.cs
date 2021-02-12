@@ -22,8 +22,6 @@ namespace CodeMonkey.MonoBehaviours {
      * */
     public class CameraFollow : MonoBehaviour {
 
-        public static CameraFollow Instance { get; private set; }
-
         private Camera myCamera;
         private Func<Vector3> GetCameraFollowPositionFunc;
         private Func<float> GetCameraZoomFunc;
@@ -43,8 +41,7 @@ namespace CodeMonkey.MonoBehaviours {
             }
         }
 
-        private void Awake() {
-            Instance = this;
+        private void Start() {
             myCamera = transform.GetComponent<Camera>();
         }
 

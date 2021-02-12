@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Testing : MonoBehaviour
 {
+    [SerializeField] public SoundVisual soundVis;
     private Grid grid;
     private Vector3 soundSource;
     public GameObject player;
@@ -11,6 +12,7 @@ public class Testing : MonoBehaviour
     void Start() {
         grid = new Grid(110,60,1f, gridContainer);
         soundSource = new Vector3(-1,-1,-1);
+
     }
 
     void Update() {
@@ -31,6 +33,7 @@ public class Testing : MonoBehaviour
 
     void FixedUpdate() {
         grid.updateNodes();
+        soundVis.SetGrid(grid);
         // if (soundSource != new Vector3(-1,-1,-1)) {
         //     grid.SetValue(soundSource, 240);
         // }
