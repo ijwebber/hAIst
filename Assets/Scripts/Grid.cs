@@ -145,7 +145,7 @@ public class Grid {
                     a = 1;
                 }
                 // if (velocities[x,y] == speedOfSound) {
-                    // debugTextArray[x,y].color = new Vector4(1,1,1,(1-r));
+                //     debugTextArray[x,y].color = new Vector4(1,1,1,(1-r));
                 // } else {
                 //     debugTextArray[x,y].color = new Vector4(1,0,0,1);
                 // }
