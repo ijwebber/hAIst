@@ -18,6 +18,9 @@ public class menu_script : MonoBehaviourPunCallbacks
     bool joiningRoom = false;
     public GUISkin myskin = null;
 
+    private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+
+
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
@@ -59,7 +62,8 @@ public class menu_script : MonoBehaviourPunCallbacks
                 roomOptions.IsOpen = true;
                 roomOptions.IsVisible = true;
                 roomOptions.MaxPlayers = (byte)4; //Set any number
-
+                customProperties.Add("num_ready", 0);
+                roomOptions.CustomRoomProperties = customProperties;
                 PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
             }
         }

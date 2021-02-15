@@ -321,7 +321,8 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 5395006071217287135}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -361,17 +362,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 9108ed745e9f7b34abadbe063da937ad,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.75
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9108ed745e9f7b34abadbe063da937ad,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.18
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9108ed745e9f7b34abadbe063da937ad,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9108ed745e9f7b34abadbe063da937ad,
         type: 3}

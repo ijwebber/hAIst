@@ -23,11 +23,9 @@ public class PlayerMovement : MonoBehaviourPun
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraControlPlayer Component on playerPrefab.", this);
         }
-        //Caption = this.gameObject.GetComponent<TextMesh>();
-        //Caption.text = photonView.Owner.NickName;//string.Format("Player{0}", photonView.ViewID);
-
-
     }
+
+    
  
     void FixedUpdate()
     {
@@ -41,7 +39,8 @@ public class PlayerMovement : MonoBehaviourPun
         
         Vector3 moveVector = new Vector3(horizontal, 0, vertical); //changed 0 to 0.0001 toa avodd error messages
 
-        if (moveVector != Vector3.zero) {
+        if (moveVector != Vector3.zero) 
+        {
         Quaternion deltaRotation = Quaternion.LookRotation(moveVector);
         rb.rotation = deltaRotation;
         }
