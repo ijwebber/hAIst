@@ -15,9 +15,62 @@ public class Grid {
     private float speedOfSound = 343/10;
     private int[,] gridArray;
     private float cellSize;
-    private Vector3 offset = new Vector3(-50.12f,11f,0.61f);
+    public Vector3 offset = new Vector3(-50f,11f,0.61f);
     // private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
+
+    public void updateWalls() {
+        // populate grid
+        for (int i = 0; i < gridArray.GetLength(0); i++) {
+            for (int j = 0; j < gridArray.GetLength(1); j++) {
+                velocities[i,j] = speedOfSound;
+                // debugTextArray[i,j] = UtilsClass.CreateWorldText(gridArray[i,j].ToString(), null, (offset + (Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize))) + new Vector3(cellSize, cellSize) *.5f, 5, Color.white, TextAnchor.MiddleCenter);
+                // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j+1)*cellSize), Color.white, 100f);
+                // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i+1,j)*cellSize), Color.white, 100f);
+            }
+            // Debug.DrawLine(new Vector3(0,height)*cellSize, new Vector3(width, height), Color.white, 100f);
+            // Debug.DrawLine(new Vector3(width,0)*cellSize, new Vector3(width, height), Color.white, 100f);
+        }
+        List<GameObject> walls = getWalls();
+        foreach (GameObject w in walls)
+        {
+            Vector3 wallPos = new Vector3(w.transform.position.x, 0, w.transform.position.z) + offset;
+        }
+        for (int i = 0; i < gridArray.GetLength(0)-2; i++) {
+            for (int j = 0; j < gridArray.GetLength(1) - 2; j++) {
+                float localVel = speedOfSound;
+                bool Collision = false;
+                Vector3 point1 = new Vector3(i, 3, j) + offset;
+                Vector3 point2 = new Vector3(i+1, 3, j) + offset;
+                Vector3 point3 = new Vector3(i, 3, j+1) + offset;
+                Vector3 point4 = new Vector3(i+1, 3, j+1) + offset;
+                if (Physics.Linecast(point1, point2, (1 << 8)) || Physics.Linecast(point2, point1, (1<<8))) {
+                    velocities[i,j] = 343;
+                    velocities[i+1,j] = 343;
+                    Collision = true;
+                }
+                if (Physics.Linecast(point1, point3, (1 << 8)) || Physics.Linecast(point3, point1, (1<<8))) {
+                    velocities[i,j] = 343;
+                    velocities[i,j+1] = 343;
+                    Collision = true;
+                }
+                if (Physics.Linecast(point1, point4, (1 << 8))) {
+                    velocities[i,j] = 343;
+                    velocities[i+1,j+1] = 343;
+                    Collision = true;
+                }
+                // if (Physics.Linecast(point2, point3, (1 << 8))) {
+                //     velocities[i+1,j] = 343;
+                //     velocities[i,j+1] = 343;
+                //     noCollision = true;
+                // }
+                if (!Collision) {
+                    velocities[i,j] = localVel;
+                }
+            }
+        }
+
+    }
 
     public Grid(int width, int height, float inCellSize, GameObject gridContainer) {
         this.width = width;
@@ -54,32 +107,32 @@ public class Grid {
         for (int i = 0; i < gridArray.GetLength(0)-2; i++) {
             for (int j = 0; j < gridArray.GetLength(1) - 2; j++) {
                 float localVel = speedOfSound;
-                bool noCollision = false;
+                bool Collision = false;
                 Vector3 point1 = new Vector3(i, 3, j) + offset;
                 Vector3 point2 = new Vector3(i+1, 3, j) + offset;
                 Vector3 point3 = new Vector3(i, 3, j+1) + offset;
                 Vector3 point4 = new Vector3(i+1, 3, j+1) + offset;
-                if (Physics.Linecast(point1, point2, (1 << 8))) {
+                if (Physics.Linecast(point1, point2, (1 << 8)) || Physics.Linecast(point2, point1, (1 << 8))) {
                     velocities[i,j] = 343;
                     velocities[i+1,j] = 343;
-                    noCollision = true;
+                    Collision = true;
                 }
-                if (Physics.Linecast(point1, point3, (1 << 8))) {
+                if (Physics.Linecast(point1, point3, (1 << 8)) || Physics.Linecast(point3, point1, (1 << 8))) {
                     velocities[i,j] = 343;
                     velocities[i,j+1] = 343;
-                    noCollision = true;
+                    Collision = true;
                 }
-                if (Physics.Linecast(point1, point4, (1 << 8))) {
-                    velocities[i,j] = 343;
-                    velocities[i+1,j+1] = 343;
-                    noCollision = true;
-                }
+                // if (Physics.Linecast(point1, point4, (1 << 8))) {
+                //     velocities[i,j] = 343;
+                //     velocities[i+1,j+1] = 343;
+                //     Collision = true;
+                // }
                 // if (Physics.Linecast(point2, point3, (1 << 8))) {
                 //     velocities[i+1,j] = 343;
                 //     velocities[i,j+1] = 343;
                 //     noCollision = true;
                 // }
-                if (!noCollision) {
+                if (!Collision) {
                     velocities[i,j] = localVel;
                 }
             }

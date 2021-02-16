@@ -18,6 +18,7 @@ public class Testing : MonoBehaviour
     }
 
     void Update() {
+        // grid.updateWalls();
         if (Input.GetKeyDown("k")) {
             Vector3 playerPosition = player.transform.position;
             grid.SetValue(playerPosition, 60);
