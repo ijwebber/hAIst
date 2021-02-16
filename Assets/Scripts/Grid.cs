@@ -15,7 +15,7 @@ public class Grid {
     private float speedOfSound = 343/10;
     private int[,] gridArray;
     private float cellSize;
-    public Vector3 offset = new Vector3(-50f,11f,0.61f);
+    public Vector3 offset = new Vector3(-50f,11f,0f);
     // private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
 
@@ -122,11 +122,11 @@ public class Grid {
                     velocities[i,j+1] = 343;
                     Collision = true;
                 }
-                // if (Physics.Linecast(point1, point4, (1 << 8))) {
-                //     velocities[i,j] = 343;
-                //     velocities[i+1,j+1] = 343;
-                //     Collision = true;
-                // }
+                if (Physics.Linecast(point1, point4, (1 << 8)) || Physics.Linecast(point4, point1, (1<<8))) {
+                    velocities[i,j] = 343;
+                    velocities[i+1,j+1] = 343;
+                    Collision = true;
+                }
                 // if (Physics.Linecast(point2, point3, (1 << 8))) {
                 //     velocities[i+1,j] = 343;
                 //     velocities[i,j+1] = 343;
