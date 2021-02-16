@@ -133,7 +133,7 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
 
         }
         if (total_ready > 1) {
-            PhotonNetwork.LoadLevel("Combined");
+            PhotonNetwork.LoadLevel("BuildScene");
         }   
 
     }

@@ -195,16 +195,14 @@ MonoBehaviour:
   player: {fileID: 4783553250932223790}
   offset: {x: -0.1, y: 3, z: 2.5}
   obstruction: {fileID: 0}
-  name: 
+  currentName: 
   objectMaterial: {fileID: 0}
   prevObjectMaterial: {fileID: 0}
+  points: 0
   currentObject:
   - 
-  distance: 7
-  height: 3
-  centerOffset: {x: 0, y: 0, z: 0}
-  followOnStart: 0
-  smoothSpeed: 0.125
+  targetTime: 0
+  seconds: 0
 --- !u!54 &5037312651882039958
 Rigidbody:
   m_ObjectHideFlags: 0
