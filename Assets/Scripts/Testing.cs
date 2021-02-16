@@ -10,8 +10,10 @@ public class Testing : MonoBehaviour
     public GameObject player;
     public GameObject gridContainer;
     void Start() {
+        player = GameObject.Find("Timmy");
         grid = new Grid(110,60,1f, gridContainer);
         soundSource = new Vector3(-1,-1,-1);
+        // Debug.Log(GameObject.Find("Timmy"));
 
     }
 
