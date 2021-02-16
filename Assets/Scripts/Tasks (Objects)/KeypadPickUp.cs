@@ -12,6 +12,8 @@ public class KeypadPickUp : MonoBehaviour
 
     public Camera mainCam;  // define camera object
 
+    public GameObject cooldown;
+
 
     //private float startTime = 0f;
     //private float timer = 0f;
@@ -49,7 +51,7 @@ public class KeypadPickUp : MonoBehaviour
         bool keyCorrect = keycodeTask.GetComponent<KeycodeTask>().codeCorrect;  // boolean which just checks if the code is correct
 
         if(keyCorrect && inRange && timeLeft == 0){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method         
-            mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
+            cooldown.GetComponent<CooldownScript>().targetTime += 11;  // increase time duration
            
             //inventory.Add(gameObject); // add object to inventory
             keycodeTask.SetActive(false);
