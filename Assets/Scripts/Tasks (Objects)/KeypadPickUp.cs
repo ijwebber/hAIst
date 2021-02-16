@@ -36,7 +36,7 @@ public class KeypadPickUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
+        int timeLeft = cooldown.GetComponent<CooldownScript>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
         if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0){
             keycodeTask.SetActive(true);
