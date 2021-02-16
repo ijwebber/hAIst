@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class FieldOfView : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class FieldOfView : MonoBehaviour
 
     public LayerMask targetMask;
     public LayerMask obstacleMask;
+
+    public NavMeshAgent agent;
 
     [HideInInspector]
     public List<Transform> visibleTargets = new List<Transform>();
@@ -47,8 +50,11 @@ public class FieldOfView : MonoBehaviour
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                 {
                     Debug.Log("in View");
+                    
                     //we can see the target, we add this to our visibletargets list
+
                     visibleTargets.Add(target);
+                    //agent.SetDestination(target.position);
                 }
             }
         }

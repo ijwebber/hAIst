@@ -1,55 +1,64 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class GuardMovement : MonoBehaviour
 {
-    public float speed = 5;
-    private Rigidbody rb;
-    public Vector3 moveDirection;
-    public LayerMask isWall;
-    public float maxDistFromWall = 2;
- 
-    void Start () {
-        rb = GetComponent<Rigidbody>();
-        moveDirection = ChooseDirection();
-        transform.rotation = Quaternion.LookRotation(moveDirection);
+    
+
+    public NavMeshAgent agent;
+
+
+    public List<Vector3> patrolPath = new List<Vector3> {new Vector3(-44.0f, 13.38f, 27.83f), new Vector3(-8.0f, 13.38f, 27.7f), new Vector3(-6.2f, 13.38f, 4.3f), new Vector3(-32.4f, 13.21f, 13.0f)};
+    private int currDes = 0;
+    private bool start = true;
+    
+
+    private void Awake()
+    {
+        
+    }
+    void Update()
+    {
+
+        FieldOfView fovScript = GetComponent<FieldOfView>();
+
+        if (fovScript.visibleTargets.Count != 0)
+        {
+            agent.SetDestination(fovScript.visibleTargets[0].position);
+        }
+        
+        if (start)
+        {
+            agent.SetDestination(patrolPath[currDes]);
+            start = false;
+        }
+
+        Debug.Log(agent.pathStatus);
+        Vector3 pos = transform.position;
+        //Debug.Log(pos.z.ToString());
+        if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
+        {
+            
+            if (currDes == patrolPath.Count - 1)
+            {
+                currDes = 0;
+            }
+            else currDes++;
+
+            //Debug.Log(currDes);
+            
+            agent.SetDestination(patrolPath[currDes]);
+        }
+
+       
+        
+    }
+    void Start() {
+        
     }
    
     
-    void FixedUpdate () {  
-        Vector3 moveVector = moveDirection * speed * Time.deltaTime;
-        rb.MovePosition(transform.position + moveVector);
- 
-        if(Physics.Raycast (transform.position, transform.forward, maxDistFromWall, isWall))
-        {
-            moveDirection = ChooseDirection();
-            transform.rotation = Quaternion.LookRotation(moveDirection);
-        }
-    }
- 
- 
-    Vector3 ChooseDirection() {
-        System.Random Ran = new System.Random();
-        int i = Ran.Next(0, 3);
-        Vector3 temp = new Vector3 ();
-
-        switch (i) {
-            case 0:
-                temp = -transform.forward;
-                break;
-
-            case 1:
-                temp = transform.right;
-                break;
-
-            case 2:
-                temp = -transform.right;
-                break;
-
-            default:
-                temp = transform.forward;
-                break;
-        }
-
-        return temp;
-    }
+   
 }
