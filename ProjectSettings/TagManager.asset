@@ -15,12 +15,12 @@ TagManager:
   - 
   - 
   - Wall
+  - Player
+  - Guards
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - ObjectPanel
   - 
   - 
   - 
