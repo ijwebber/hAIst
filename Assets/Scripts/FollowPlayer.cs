@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FollowPlayer : MonoBehaviourPun
+public class FollowPlayer : MonoBehaviour
 {   
     public Transform player;
     public Vector3 offset;
@@ -22,7 +22,6 @@ public class FollowPlayer : MonoBehaviourPun
     public int seconds; // convert to seconds
 
 
-
     // Update is called once per frame
     void Update()
     {
@@ -41,29 +40,11 @@ public class FollowPlayer : MonoBehaviourPun
             targetTime = 0;
         }
         
-        [Tooltip("The height we want the camera to be above the target")]
-        [SerializeField]
-        private float height = 3.0f;
         
-        [Tooltip("Allow the camera to be offseted vertically from the target, for example giving more view of the sceneray and less ground.")]
-        [SerializeField]
-        private Vector3 centerOffset = Vector3.zero;
+        Ray ray = GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+        RaycastHit hit;
 
-        [Tooltip("Set this as false if a component of a prefab being instanciated by Photon Network, and manually call OnStartFollowing() when and if needed.")]
-        [SerializeField]
-        private bool followOnStart = false;
-
-        [Tooltip("The Smoothing for the camera to follow the target")]
-        [SerializeField]
-        private float smoothSpeed = 0.125f;
-
-        // cached transform of the target
-        Transform cameraTransform;
-
-        // maintain a flag internally to reconnect if target is lost or camera is switched
-        bool isFollowing;
         
-
         if (Physics.Raycast(ray, out hit))
         {
             obstruction = hit.transform.gameObject;
