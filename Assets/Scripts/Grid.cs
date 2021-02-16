@@ -15,7 +15,7 @@ public class Grid {
     private float speedOfSound = 343/10;
     private int[,] gridArray;
     private float cellSize;
-    public Vector3 offset = new Vector3(-50f,11f,0f);
+    public Vector3 offset = new Vector3(-50.4f,11f,0f);
     // private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
 
@@ -108,25 +108,34 @@ public class Grid {
             for (int j = 0; j < gridArray.GetLength(1) - 2; j++) {
                 float localVel = speedOfSound;
                 bool Collision = false;
-                Vector3 point1 = new Vector3(i, 3, j) + offset;
-                Vector3 point2 = new Vector3(i+1, 3, j) + offset;
-                Vector3 point3 = new Vector3(i, 3, j+1) + offset;
-                Vector3 point4 = new Vector3(i+1, 3, j+1) + offset;
-                if (Physics.Linecast(point1, point2, (1 << 8)) || Physics.Linecast(point2, point1, (1 << 8))) {
+                Vector3 point1 = new Vector3(i, 2, j) + offset;
+                Vector3 point2 = new Vector3(i+1, 2, j) + offset;
+                Vector3 point3 = new Vector3(i, 2, j+1) + offset;
+                Vector3 point4 = new Vector3(i+1, 2, j+1) + offset;
+                Color c1 = Color.green;
+                Color c2 = Color.green;
+                Color c3 = Color.green;
+                if (Physics.Linecast(point2, point1, (1 << 8))) {
                     velocities[i,j] = 343;
-                    velocities[i+1,j] = 343;
+                    c1 = Color.red;
+                    // velocities[i+1,j] = 343;
                     Collision = true;
                 }
-                if (Physics.Linecast(point1, point3, (1 << 8)) || Physics.Linecast(point3, point1, (1 << 8))) {
+                if (Physics.Linecast(point3, point1, (1 << 8))) {
+                    c2 = Color.red;
                     velocities[i,j] = 343;
-                    velocities[i,j+1] = 343;
+                    // velocities[i,j+1] = 343;
                     Collision = true;
                 }
-                if (Physics.Linecast(point1, point4, (1 << 8)) || Physics.Linecast(point4, point1, (1<<8))) {
-                    velocities[i,j] = 343;
-                    velocities[i+1,j+1] = 343;
-                    Collision = true;
-                }
+                // if (Physics.Linecast(point4, point1, (1<<8))) {
+                //     c3 = Color.red;
+                //     velocities[i,j] = 343;
+                //     // velocities[i+1,j+1] = 343;
+                //     Collision = true;
+                // }
+                Debug.DrawLine(point1, point2, c1,100);
+                Debug.DrawLine(point1, point3, c2,100);
+                Debug.DrawLine(point1, point4, c3,100);
                 // if (Physics.Linecast(point2, point3, (1 << 8))) {
                 //     velocities[i+1,j] = 343;
                 //     velocities[i,j+1] = 343;
