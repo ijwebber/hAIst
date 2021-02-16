@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class KeypadPickUp : MonoBehaviour
 {
@@ -34,7 +36,7 @@ public class KeypadPickUp : MonoBehaviour
     {
         int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
-        if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0 && !inventory.isFull()){
+        if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0){
             keycodeTask.SetActive(true);
             canvasActive = true;
         } 
@@ -49,11 +51,21 @@ public class KeypadPickUp : MonoBehaviour
         if(keyCorrect && inRange && timeLeft == 0){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method         
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
            
-            inventory.Add(gameObject); // add object to inventory
+            //inventory.Add(gameObject); // add object to inventory
             keycodeTask.SetActive(false);
             keyCorrect = false;
             keycodeTask.GetComponent<KeycodeTask>().codeCorrect = false;
+            
+            gameObject.GetComponent<PhotonView>().RPC("destroyObject",RpcTarget.All);
+
+            //photonView.RPC("destroyObject")
+            //Destroy(gameObject);
         }    
+    }
+
+    [PunRPC]
+    void destroyObject(){
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other) {       // if player enters the box collider of the object, do etc...
