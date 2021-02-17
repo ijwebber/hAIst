@@ -13,13 +13,6 @@ public class KeypadPickUp : MonoBehaviour
     public Camera mainCam;  // define camera object
 
     public GameObject cooldown;
-
-
-    //private float startTime = 0f;
-    //private float timer = 0f;
-    //public float holdTime = 5.0f;
-    //private bool held = false;
-
     public GameObject keycodeTask;
     private Inventory inventory;
 
