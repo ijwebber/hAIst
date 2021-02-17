@@ -27,11 +27,17 @@ public class SoundVisual : MonoBehaviour
                 int index = x * grid.GetHeight() + y;
                 Vector3 quadSize = new Vector3(1,1,0) * grid.GetCellSize();
                 double gridValue = grid.GetValue(x,y);
-                float a = 0;
+                float a = 0f;
                 if (gridValue != 0) {
                     // Debug.Log(gridValue);
                     gridValue = 1/gridValue;
-                    a = .2f;
+                    if (1-gridValue < .2f) {
+                        a = .2f;
+                    } else if(1-gridValue > .6f) {
+                        a = .6f;
+                    } else {
+                        a = (float)(1-gridValue);
+                    }
                 }
                 Vector4 color = new Vector4(gradient.Evaluate((float)gridValue).r, gradient.Evaluate((float)gridValue).g, gradient.Evaluate((float)gridValue).b, a);
                 Vector2 gridvalueUV = new Vector2((float)gridValue, 0);
