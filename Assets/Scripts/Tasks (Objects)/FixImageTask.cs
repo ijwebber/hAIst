@@ -8,6 +8,8 @@ public class FixImageTask : MonoBehaviour
 
     bool canvasActive = false;
 
+    bool buttonPressed = false;
+
     public Camera mainCam;  // define camera object
 
     public GameObject pictureTask;
@@ -33,12 +35,16 @@ public class FixImageTask : MonoBehaviour
         if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0){
             pictureTask.SetActive(true);
             canvasActive = true;
+            buttonPressed = true;
         } 
         
         if(canvasActive == true && inRange == false){
             pictureTask.SetActive(false);
             canvasActive = false;
+            buttonPressed = false;
         }
+
+        writeMessage(timeLeft);
 
         bool pictureCorrect = pictureTask.GetComponent<RotateTask>().win;
 
@@ -53,6 +59,12 @@ public class FixImageTask : MonoBehaviour
         }    
     }
 
+    void writeMessage(int timeLeft){
+        if(inRange && buttonPressed && timeLeft == 0){mainCam.GetComponent<Message>().messageD = "";}
+        else if(Input.GetKey(KeyCode.E) && inRange && timeLeft != 0){mainCam.GetComponent<Message>().messageD = "Wait for the Cooldown";}
+        else if(inRange){mainCam.GetComponent<Message>().messageD = "Press E to pick up";}
+    }
+
     private void OnTriggerEnter(Collider other) {       // if player enters the box collider of the object, do etc...
         if((other.name == "Timmy")){
             inRange = true;
@@ -63,6 +75,7 @@ public class FixImageTask : MonoBehaviour
     private void OnTriggerExit(Collider other) {        // if player exits the box collider of the object, do etc...
         if((other.name == "Timmy")){
             inRange = false;
+            mainCam.GetComponent<Message>().messageD = "";
         }
     }
 }

@@ -14,7 +14,11 @@ public class HoldDownTask : MonoBehaviour
     public float holdTime = 5.0f;
     private bool held = false;
 
+    //public GameObject messageController;
+
     private Inventory inventory;
+
+    //public GameObject newMessage;
 
     void Start()
     {
@@ -23,6 +27,8 @@ public class HoldDownTask : MonoBehaviour
 
 
         inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+
+        //newMessage = GameObject.FindGameObjectWithTag("displayMessage");
         
     }
 
@@ -46,6 +52,8 @@ public class HoldDownTask : MonoBehaviour
                 held = false;
             }
         }
+
+        writeMessage(timeLeft);
         
         if(Input.GetKey(KeyCode.E) == false){ // if key is not being pressed, just set held to false
             held = false;
@@ -67,21 +75,13 @@ public class HoldDownTask : MonoBehaviour
     private void OnTriggerExit(Collider other) {        // if player exits the box collider of the object, do etc...
         if((other.name == "Timmy")){
             inRange = false;
+            mainCam.GetComponent<Message>().messageD = "";
         }
     }
 
-    private void OnGUI(){
-
-        int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  
-
-        if(inRange && Input.GetKey(KeyCode.E) && timeLeft == 0) 
-        {
-            GUI.Label(new Rect(490,400,160,40),"");
-        }
-        else if(inRange){
-            GUI.Label(new Rect(490,400,160,40),"HOLD E TO PICK UP");
-        }
-        else{GUI.Label(new Rect(50,50,100,20),"");}     
-        
+    void writeMessage(int timeLeft){
+        if(inRange && Input.GetKey(KeyCode.E) && timeLeft == 0){mainCam.GetComponent<Message>().messageD = "";}
+        else if(Input.GetKey(KeyCode.E) && inRange && timeLeft != 0){mainCam.GetComponent<Message>().messageD = "Wait for the Cooldown";}
+        else if(inRange){mainCam.GetComponent<Message>().messageD = "Hold E to pick up";}
     }
 }

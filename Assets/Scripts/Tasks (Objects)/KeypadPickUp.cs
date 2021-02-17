@@ -7,20 +7,14 @@ using Photon.Realtime;
 public class KeypadPickUp : MonoBehaviour
 {
     bool inRange = false;
-
     bool canvasActive = false;
 
     public Camera mainCam;  // define camera object
 
     public GameObject cooldown;
-
-
-    //private float startTime = 0f;
-    //private float timer = 0f;
-    //public float holdTime = 5.0f;
-    //private bool held = false;
-
     public GameObject keycodeTask;
+    
+    public bool buttonPressed = false;
     private Inventory inventory;
 
     // Start is called before the first frame update
@@ -40,15 +34,21 @@ public class KeypadPickUp : MonoBehaviour
 
         if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0){
             keycodeTask.SetActive(true);
+            buttonPressed = true;
             canvasActive = true;
         } 
         
         if(canvasActive == true && inRange == false){   // check if canvas is true but player is out of range, then disable the canvas
             keycodeTask.SetActive(false);
             canvasActive = false;
+            buttonPressed = false;
         }
 
+        writeMessage(timeLeft);
+
         bool keyCorrect = keycodeTask.GetComponent<KeycodeTask>().codeCorrect;  // boolean which just checks if the code is correct
+
+
 
         if(keyCorrect && inRange && timeLeft == 0){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method         
             cooldown.GetComponent<CooldownScript>().targetTime += 11;  // increase time duration
@@ -70,6 +70,13 @@ public class KeypadPickUp : MonoBehaviour
         Destroy(gameObject);
     }
 
+
+   void writeMessage(int timeLeft){
+        if(inRange && buttonPressed && timeLeft == 0){mainCam.GetComponent<Message>().messageD = "";}
+        else if(Input.GetKey(KeyCode.E) && inRange && timeLeft != 0){mainCam.GetComponent<Message>().messageD = "Wait for the Cooldown";}
+        else if(inRange){mainCam.GetComponent<Message>().messageD = "Press E to pick up";}
+    }
+
     private void OnTriggerEnter(Collider other) {       // if player enters the box collider of the object, do etc...
         if((other.name == "Timmy")){
             inRange = true;
@@ -80,6 +87,7 @@ public class KeypadPickUp : MonoBehaviour
     private void OnTriggerExit(Collider other) {        // if player exits the box collider of the object, do etc...
         if((other.name == "Timmy")){
             inRange = false;
+            mainCam.GetComponent<Message>().messageD = "";
         }
     }
 }
