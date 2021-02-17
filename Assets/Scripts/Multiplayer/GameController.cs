@@ -6,6 +6,9 @@ using Photon.Pun;
 public class GameController : MonoBehaviourPunCallbacks
 {
     public GameObject playerPrefab;
+    public GameObject guardPrefab;
+    public GameObject guardPrefab2;
+    public GameObject guardPrefab3;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
 
@@ -19,6 +22,12 @@ public class GameController : MonoBehaviourPunCallbacks
             return;
         }
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, SpawnPoint.transform.position, Quaternion.identity);
+        //PhotonNetwork.Instantiate(guardPrefab.name, new Vector3(-36.33f, 13.363f, 6.43f), Quaternion.identity);
+        
+        PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
+
         Debug.Log("Spawned a player");
         
     }
