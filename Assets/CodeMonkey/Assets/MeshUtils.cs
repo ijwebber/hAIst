@@ -120,7 +120,7 @@ public static class MeshUtils {
         return mesh;
     }
 
-    public static void AddToMeshArrays(Vector3[] vertices, Vector2[] uvs, int[] triangles, int index, Vector3 pos, float rot, Vector3 baseSize, Vector2 uv00, Vector2 uv11) {
+    public static void AddToMeshArrays(Vector3[] vertices, Vector2[] uvs, Color[] colors, int[] triangles, int index, Vector3 pos, float rot, Vector3 baseSize, Vector2 uv00, Vector2 uv11, Vector4 color) {
 		//Relocate vertices
 		int vIndex = index*4;
 		int vIndex0 = vIndex;
@@ -148,6 +148,11 @@ public static class MeshUtils {
 		uvs[vIndex1] = new Vector2(uv00.x, uv00.y);
 		uvs[vIndex2] = new Vector2(uv11.x, uv00.y);
 		uvs[vIndex3] = new Vector2(uv11.x, uv11.y);
+
+		colors[vIndex0] = color;
+		colors[vIndex1] = color;
+		colors[vIndex2] = color;
+		colors[vIndex3] = color;
 		
 		//Create triangles
 		int tIndex = index*6;
