@@ -45,7 +45,7 @@ public class FollowPlayer : MonoBehaviour
         RaycastHit hit;
 
         
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1<<11)))
         {
             obstruction = hit.transform.gameObject;
             currentName = obstruction.name; // name of obstruction
