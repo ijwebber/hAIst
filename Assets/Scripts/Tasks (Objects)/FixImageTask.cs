@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class FixImageTask : MonoBehaviour
@@ -9,6 +11,8 @@ public class FixImageTask : MonoBehaviour
     bool canvasActive = false;
 
     public Camera mainCam;  // define camera object
+
+    public GameObject cooldown;
 
     public GameObject pictureTask;
     private Inventory inventory;
@@ -20,7 +24,7 @@ public class FixImageTask : MonoBehaviour
         mainCam = Camera.main;  //link camera object to main camera (that follows the player)
         mainCam.GetComponent<FollowPlayer>().seconds = 0;
 
-        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
+        //inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
     
     }
 
@@ -28,7 +32,7 @@ public class FixImageTask : MonoBehaviour
     void Update()
     {
         
-        int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
+        int timeLeft = cooldown.GetComponent<CooldownScript>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
         if(Input.GetKey(KeyCode.E) && inRange && canvasActive == false && timeLeft == 0){
             pictureTask.SetActive(true);
@@ -42,15 +46,22 @@ public class FixImageTask : MonoBehaviour
 
         bool pictureCorrect = pictureTask.GetComponent<RotateTask>().win;
 
-        if(pictureCorrect && inRange && timeLeft == 0 && !inventory.isFull()){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method
-            mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration
+        if(pictureCorrect && inRange && timeLeft == 0){ // if both player is in range and the button E is pressed, then add points to the score, move this to its own method
+            cooldown.GetComponent<CooldownScript>().targetTime += 11;  // increase time duration
             
-            inventory.Add(gameObject);
+            //inventory.Add(gameObject);
             pictureTask.SetActive(false);
+            
             pictureCorrect = false;
             pictureTask.GetComponent<RotateTask>().win = false;
+            gameObject.GetComponent<PhotonView>().RPC("destroyObject",RpcTarget.All);
             
         }    
+    }
+
+    [PunRPC]
+    void destroyObject(){
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other) {       // if player enters the box collider of the object, do etc...

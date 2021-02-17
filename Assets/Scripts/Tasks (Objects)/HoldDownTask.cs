@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public class HoldDownTask : MonoBehaviour
@@ -8,7 +10,7 @@ public class HoldDownTask : MonoBehaviour
 
     public Camera mainCam;  // define camera object
 
-
+    public GameObject cooldown;
     private float startTime = 0f;
     private float timer = 0f;
     public float holdTime = 5.0f;
@@ -29,7 +31,7 @@ public class HoldDownTask : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  // access the seconds variable from the mainCam class/ follow player script
+        int timeLeft = cooldown.GetComponent<CooldownScript>().seconds;  // access the seconds variable from the mainCam class/ follow player script
 
         if(Input.GetKeyDown(KeyCode.E)){    // if player is holding down E, start a timer
             startTime = Time.time;
@@ -53,7 +55,9 @@ public class HoldDownTask : MonoBehaviour
         }
 
         if(held && inRange && timeLeft == 0 && !inventory.isFull()){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
-            inventory.Add(gameObject);
+            //inventory.Add(gameObject);
+            cooldown.GetComponent<CooldownScript>().targetTime += 11;
+            gameObject.GetComponent<PhotonView>().RPC("destroyObject",RpcTarget.All);
             mainCam.GetComponent<FollowPlayer>().targetTime += 11;  // increase time duration       
         }    
     }
@@ -70,18 +74,9 @@ public class HoldDownTask : MonoBehaviour
         }
     }
 
-    private void OnGUI(){
 
-        int timeLeft = mainCam.GetComponent<FollowPlayer>().seconds;  
-
-        if(inRange && Input.GetKey(KeyCode.E) && timeLeft == 0) 
-        {
-            GUI.Label(new Rect(490,400,160,40),"");
-        }
-        else if(inRange){
-            GUI.Label(new Rect(490,400,160,40),"HOLD E TO PICK UP");
-        }
-        else{GUI.Label(new Rect(50,50,100,20),"");}     
-        
+    [PunRPC]
+    void destroyObject(){
+        Destroy(gameObject);
     }
 }
