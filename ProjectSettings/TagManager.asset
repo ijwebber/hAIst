@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - hideObject
+  - Bullet
+  - steal
   layers:
   - Default
   - TransparentFX
