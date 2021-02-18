@@ -23,9 +23,9 @@ public class FieldOfViewEditiro : Editor
 
         //draws a line to every target in visibleTargets in red using their positions
         Handles.color = Color.red;
-        foreach(Transform visibleTarget in fov.visibleTargets)
+        foreach(GameObject visibleTarget in fov.visibleTargets)
         {
-            Handles.DrawLine(fov.transform.position, visibleTarget.position);
+            Handles.DrawLine(fov.transform.position, visibleTarget.transform.position);
         }
     }
     // Start is called before the first frame update

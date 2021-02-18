@@ -24,20 +24,51 @@ public class GuardMovement : MonoBehaviour
 
         FieldOfView fovScript = GetComponent<FieldOfView>();
 
+        //if a target is in fov then path to that target
         if (fovScript.visibleTargets.Count != 0)
         {
-            agent.SetDestination(fovScript.visibleTargets[0].position);
+
+            GameObject playerToFollow = fovScript.visibleTargets[0];
+
+            foreach (GameObject g in fovScript.visibleTargets)
+            {
+                PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
+
+                if (!moveScript.disabled)
+                {
+                    playerToFollow = g;
+                    agent.SetDestination(g.transform.position);
+                    break;
+
+                }
+            }
+            PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
+
+            //if guard is next to player then disable his ass
+            if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1f && !playerMoveScript.disabled)
+            {
+                
+         
+                playerMoveScript.disabled = true;
+
+
+            }
+
+            
+
+                
         }
         
+        //below loops through patrol path
         if (start)
         {
             agent.SetDestination(patrolPath[currDes]);
             start = false;
         }
 
-        Debug.Log(agent.pathStatus);
-        Vector3 pos = transform.position;
-        //Debug.Log(pos.z.ToString());
+        
+        
+        //if destination has been reached, the guard moves to the next cords in the patrol path
         if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
         {
             

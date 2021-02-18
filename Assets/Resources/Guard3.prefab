@@ -141,7 +141,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4609556142392328302}
-  m_LocalRotation: {x: -0, y: -0.18972461, z: -0, w: 0.98183733}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4, y: 13.363, z: 34.8}
   m_LocalScale: {x: 1, y: 1, z: 0.99577}
   m_Children:
@@ -150,7 +150,7 @@ Transform:
   - {fileID: 7126371638413342453}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -21.873001, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &3690989282875342137
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -160,12 +160,12 @@ Rigidbody:
   m_GameObject: {fileID: 4609556142392328302}
   serializedVersion: 2
   m_Mass: 10
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 100
+  m_AngularDrag: 100
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!136 &3690989282875342138
 CapsuleCollider:
@@ -233,7 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 9
-  viewAngle: 93
+  viewAngle: 230
   targetMask:
     serializedVersion: 2
     m_Bits: 512
@@ -269,7 +269,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 100
