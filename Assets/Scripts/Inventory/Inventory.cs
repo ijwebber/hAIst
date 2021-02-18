@@ -99,7 +99,6 @@ public class Inventory : MonoBehaviour
 
     public void Show() {
         inventoryCanvas.SetActive(true);
-        Debug.Log("isaac: trying here");
     }
 
     public void Hide() {
