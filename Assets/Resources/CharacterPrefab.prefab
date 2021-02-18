@@ -4529,6 +4529,22 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &1005180519483688374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271825080736462228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab5995986e4996540beb34a741dbe35c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 5
+  inventoryCanvas: {fileID: 8233349426962969785}
+  itemText: {fileID: 4721976591287259089}
+  scoreText: {fileID: 2376833812097399138}
 --- !u!114 &5037312651882039959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4884,7 +4900,7 @@ GameObject:
   - component: {fileID: 5886010104901352466}
   - component: {fileID: 8383453533162655698}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: InvCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5326,15 +5342,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9108ed745e9f7b34abadbe063da937ad, type: 3}
---- !u!1 &5271825080736462228 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9108ed745e9f7b34abadbe063da937ad,
-    type: 3}
-  m_PrefabInstance: {fileID: 5037312652373100741}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4783553250932223790 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9108ed745e9f7b34abadbe063da937ad,
+    type: 3}
+  m_PrefabInstance: {fileID: 5037312652373100741}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5271825080736462228 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9108ed745e9f7b34abadbe063da937ad,
     type: 3}
   m_PrefabInstance: {fileID: 5037312652373100741}
   m_PrefabAsset: {fileID: 0}

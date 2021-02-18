@@ -4,17 +4,21 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour
 {
 
+    // Size of inventory
     public int size = 5;
+
+    // Lists to store info
     private bool[] isFullList;
-
     private GameObject[] items;
-
     private CollectableItem[] itemInfos;
 
-    public GameObject[] slots; // Inventory object slots (give position for the inventory)
-
+    // Inventory Canvas
+    public GameObject inventoryCanvas;
+    
+    // Text on GUI
     public Text itemText;
     public Text scoreText;
+
 
 
     void Start() {
@@ -31,9 +35,6 @@ public class Inventory : MonoBehaviour
                 items[i] = item;
                 isFullList[i] = true;
                 itemInfos[i] = item.GetComponent<CollectableItem>();
-
-                item.transform.position = slots[i].transform.position; // Move object to the inventory camera setup
-                item.layer = 14;    // Update to the correct layer to be visible
                 
                 break;
             }
@@ -96,5 +97,14 @@ public class Inventory : MonoBehaviour
 
     void UpdateScore() {
         scoreText.text = "Score: $" + Score().ToString();
+    }
+
+    public void Show() {
+        inventoryCanvas.SetActive(true);
+        Debug.Log("isaac: trying here");
+    }
+
+    public void Hide() {
+        inventoryCanvas.SetActive(false);
     }
 }

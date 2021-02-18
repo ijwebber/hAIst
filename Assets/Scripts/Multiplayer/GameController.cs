@@ -12,6 +12,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
 
+    private Inventory inventory;
+
     //just spawns in player object
     private void Awake()
     {
@@ -23,7 +25,10 @@ public class GameController : MonoBehaviourPunCallbacks
         }
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, SpawnPoint.transform.position, Quaternion.identity);
         //PhotonNetwork.Instantiate(guardPrefab.name, new Vector3(-36.33f, 13.363f, 6.43f), Quaternion.identity);
-        
+
+        inventory = player.transform.Find("Timmy").GetComponent<Inventory>();
+        inventory.Show();
+
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
@@ -64,6 +69,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
+        inventory.Hide();
     }
 
 }

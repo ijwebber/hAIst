@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 
 public class FlashlightSwitch : MonoBehaviourPun
@@ -12,7 +10,6 @@ public class FlashlightSwitch : MonoBehaviourPun
         initialIntensity = flashlight.intensity;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
