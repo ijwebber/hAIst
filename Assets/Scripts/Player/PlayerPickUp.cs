@@ -16,13 +16,14 @@ public class PlayerPickUp : MonoBehaviourPun
 
     public GameObject fixPaintingGame;
 
-    public GameObject currentObject;
+    private GameObject currentObject;
 
     public bool keyCorrect;
 
     public bool paintingCorrect;
 
     int gameSelection;
+    public float cooldown = 1;
 
 
     // Update is called once per frame
@@ -84,11 +85,12 @@ public class PlayerPickUp : MonoBehaviourPun
                     } 
                     else if (keyCorrect && seconds == 0) {   
                         inventory.Add(other.gameObject);
-                        targetTime += 11;
+                        targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
 
-                        gameObject.GetComponent<PhotonView>().RPC("hideObject",RpcTarget.All);
+                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                         keycodeGame.SetActive(false);
                     } 
                     else if (seconds != 0 ){
@@ -114,11 +116,12 @@ public class PlayerPickUp : MonoBehaviourPun
                     else if (paintingCorrect && seconds == 0) {
 
                         inventory.Add(other.gameObject);
-                        targetTime += 11;
+                        targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
 
-                        gameObject.GetComponent<PhotonView>().RPC("hideObject",RpcTarget.All);
+                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                         fixPaintingGame.SetActive(false);
                     }
                     else if (seconds != 0 ){
@@ -183,7 +186,7 @@ public class PlayerPickUp : MonoBehaviourPun
     }
 
     [PunRPC]
-    void hideObject(){  // do the following
-       currentObject.SetActive(false);
+    void hideObject(int objID) {  // do the following
+       PhotonView.Find(objID).gameObject.SetActive(false);
     }
 }

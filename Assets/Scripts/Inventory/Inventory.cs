@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class Inventory : MonoBehaviour
 {
@@ -45,16 +46,26 @@ public class Inventory : MonoBehaviour
     void UpdateImage(int i) {
         Transform inv = inventoryCanvas.transform.Find("Inventory");
         RawImage image = inv.GetChild(i).GetChild(0).gameObject.GetComponent<RawImage>();
-        image.texture = itemInfos[i].image;
+
+        if (isFullList[i]) {
+            image.texture = itemInfos[i].image;
+        } else {
+            image.texture = null;
+        }
+        
     }
 
     public void Remove(int i) {
         if (isFullList[i - 1]) {
             isFullList[i - 1] = false;
             GameObject item = items[i - 1];
+            
+            int objID = item.GetComponent<PhotonView>().ViewID;
 
-            item.SetActive(true);
+            gameObject.GetComponent<PhotonView>().RPC("ShowObject", RpcTarget.All, objID);
             itemText.enabled = false;
+
+            UpdateImage(i - 1);
             UpdateScore();
         }
     }
@@ -106,6 +117,9 @@ public class Inventory : MonoBehaviour
         inventoryCanvas.SetActive(false);
     }
 
-    
+    [PunRPC]
+    public void ShowObject(int objID) {
+       PhotonView.Find(objID).gameObject.SetActive(true);
+    }
 
 }

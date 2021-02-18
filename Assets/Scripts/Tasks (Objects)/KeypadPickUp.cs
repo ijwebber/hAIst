@@ -13,7 +13,6 @@ public class KeypadPickUp : MonoBehaviour
 
     public GameObject cooldown;
     public GameObject keycodeTask;
-    private Inventory inventory;
 
     // Start is called before the first frame update
     void Start()
