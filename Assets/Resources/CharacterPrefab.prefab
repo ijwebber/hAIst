@@ -4538,6 +4538,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 8
   rb: {fileID: 5037312651882039958}
+  disabled: 0
 --- !u!1 &5037312653400877227
 GameObject:
   m_ObjectHideFlags: 0
@@ -4752,6 +4753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 8
   rb: {fileID: 5037312651882039958}
+  disabled: 0
 --- !u!114 &5395006071217287135
 MonoBehaviour:
   m_ObjectHideFlags: 0
