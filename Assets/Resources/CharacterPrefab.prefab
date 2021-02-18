@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotNumber: 1
-  player: {fileID: 0}
+  player: {fileID: 5271825080736462228}
 --- !u!1 &1252194930868646036
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,7 +1421,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotNumber: 3
-  player: {fileID: 0}
+  player: {fileID: 5271825080736462228}
 --- !u!1 &3273627292111468639
 GameObject:
   m_ObjectHideFlags: 0
@@ -4886,7 +4886,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotNumber: 2
-  player: {fileID: 0}
+  player: {fileID: 5271825080736462228}
 --- !u!1 &8233349426962969785
 GameObject:
   m_ObjectHideFlags: 0
@@ -5076,7 +5076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotNumber: 4
-  player: {fileID: 0}
+  player: {fileID: 5271825080736462228}
 --- !u!1 &8492750711084649609
 GameObject:
   m_ObjectHideFlags: 0
@@ -5237,7 +5237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotNumber: 5
-  player: {fileID: 0}
+  player: {fileID: 5271825080736462228}
 --- !u!1001 &5037312652373100741
 PrefabInstance:
   m_ObjectHideFlags: 0

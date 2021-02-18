@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 
 public class PlayerPickUp : MonoBehaviourPun
@@ -43,61 +41,55 @@ public class PlayerPickUp : MonoBehaviourPun
 
     private void OnCollisionStay(Collision other) {    // what to do whilst players are in range of object
 
-        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            return;
-        }
-
-
-        if(other.gameObject.tag == "steal"){
-
-            if(gameSelection == 0){
-
-                if(Input.GetKey(KeyCode.E)){
-                // whip out mini game
-
-                keycodeGame.SetActive(true);
-
-                }
-                else if(keyCorrect)
-                {
-                    Destroy(other.gameObject);
-                    keycodeGame.SetActive(false);
-                
-                
-                }
-
-                else if(!Input.GetKey(KeyCode.E)){
-                // out put message
-                // check cool down
-                }
-
-            }
-
-            else if(gameSelection == 1){
-
-                if(Input.GetKey(KeyCode.E)){
-                // whip out mini game
-
-                fixPaintingGame.SetActive(true);
-
-                }
-                else if(paintingCorrect)
-                {
-                    Destroy(other.gameObject);
-                    fixPaintingGame.SetActive(false);
-                
-                
-                }
-
-                else if(!Input.GetKey(KeyCode.E)){
-                // out put message
-                // check cool down
-                }
-
-            }
-
             
+            Inventory inventory = GetComponent<Inventory>();
+
+            if (other.gameObject.tag == "steal") {
+                if (gameSelection == 0) {
+                    if(Input.GetKey(KeyCode.E) && !inventory.isFull()) {
+                        // whip out mini game
+                        keycodeGame.SetActive(true);
+                    } 
+                    else if (keyCorrect) {   
+                        inventory.Add(other.gameObject);
+
+                        other.gameObject.SetActive(false);
+                        keycodeGame.SetActive(false);
+                    } 
+                    else if (inventory.isFull()) {
+                        // message to show that inventory is full
+                    }
+                    else if (!Input.GetKey(KeyCode.E)){
+                        // out put message
+                        // check cool down
+                    }
+
+                }
+
+                else if (gameSelection == 1) {
+                    if (Input.GetKey(KeyCode.E) && !inventory.isFull()) {
+                        // whip out mini game
+                        fixPaintingGame.SetActive(true);
+                    }
+                    else if (paintingCorrect) {
+
+                        inventory.Add(other.gameObject);
+
+                        other.gameObject.SetActive(false);
+                        fixPaintingGame.SetActive(false);
+                    }
+                    else if (inventory.isFull()) {
+                        // message to show that inventory is full
+                    }
+                    else if (!Input.GetKey(KeyCode.E)) {
+                        // out put message
+                        // check cool down
+                    }
+
+                }
+            }
         }      
     }
 
@@ -106,6 +98,9 @@ public class PlayerPickUp : MonoBehaviourPun
 
         keycodeGame.SetActive(false);
         fixPaintingGame.SetActive(false);
+
+        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+        fixPaintingGame.GetComponent<RotateTask>().win = false;
 
         //stealObject = false;
         

@@ -10,7 +10,6 @@ public class KeypadPickUp : MonoBehaviour
 
     bool canvasActive = false;
 
-    public Camera mainCam;  // define camera object
 
     public GameObject cooldown;
     public GameObject keycodeTask;
@@ -19,10 +18,6 @@ public class KeypadPickUp : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mainCam = Camera.main;  //link camera object to main camera (that follows the player)
-        mainCam.GetComponent<FollowPlayer>().seconds = 0;
-
-        inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
     
     }
 

@@ -10,21 +10,14 @@ public class FixImageTask : MonoBehaviour
 
     bool canvasActive = false;
 
-    public Camera mainCam;  // define camera object
-
     public GameObject cooldown;
 
     public GameObject pictureTask;
-    private Inventory inventory;
 
     // This script is to be used for the "rotate" task and should be applied to the object that is to be stolen
     // Start is called before the first frame update
     void Start()
     {
-        mainCam = Camera.main;  //link camera object to main camera (that follows the player)
-        mainCam.GetComponent<FollowPlayer>().seconds = 0;
-
-        //inventory = GameObject.FindGameObjectWithTag("Player").GetComponent<Inventory>();
     
     }
 

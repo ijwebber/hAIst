@@ -39,7 +39,6 @@ public class Inventory : MonoBehaviour
                 break;
             }
         }
-
         UpdateScore();
     }
 
@@ -47,10 +46,9 @@ public class Inventory : MonoBehaviour
         if (isFullList[i - 1]) {
             isFullList[i - 1] = false;
             GameObject item = items[i - 1];
-            item.layer = 0;
             items[i - 1].transform.localScale /= 1.1f;
 
-            itemInfos[i - 1].ReturnToInitialPosition();
+            item.SetActive(true);
             itemText.enabled = false;
             UpdateScore();
         }
