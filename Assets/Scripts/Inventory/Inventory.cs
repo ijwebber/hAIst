@@ -35,18 +35,23 @@ public class Inventory : MonoBehaviour
                 items[i] = item;
                 isFullList[i] = true;
                 itemInfos[i] = item.GetComponent<CollectableItem>();
-                
+
+                UpdateImage(i);
                 break;
             }
         }
         UpdateScore();
+    }
+    void UpdateImage(int i) {
+        Transform inv = inventoryCanvas.transform.Find("Inventory");
+        RawImage image = inv.GetChild(i).GetChild(0).gameObject.GetComponent<RawImage>();
+        image.texture = itemInfos[i].image;
     }
 
     public void Remove(int i) {
         if (isFullList[i - 1]) {
             isFullList[i - 1] = false;
             GameObject item = items[i - 1];
-            items[i - 1].transform.localScale /= 1.1f;
 
             item.SetActive(true);
             itemText.enabled = false;
@@ -68,16 +73,12 @@ public class Inventory : MonoBehaviour
             itemText.enabled = true;
             CollectableItem info = itemInfos[i - 1];
             itemText.text = info.itemName + " | $" + info.value.ToString();
-            
-
-            items[i - 1].transform.localScale *= 1.1f; 
         }
     }
 
     public void HideName(int i) {
         if (isFullList[i - 1]) {
             itemText.enabled = false;
-            items[i - 1].transform.localScale /= 1.1f; 
         }
     }
 
@@ -104,4 +105,7 @@ public class Inventory : MonoBehaviour
     public void Hide() {
         inventoryCanvas.SetActive(false);
     }
+
+    
+
 }
