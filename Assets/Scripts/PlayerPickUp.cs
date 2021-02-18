@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class PlayerPickUp : MonoBehaviour
+public class PlayerPickUp : MonoBehaviourPun
 {
 
     bool stealObject = false;
@@ -41,6 +42,12 @@ public class PlayerPickUp : MonoBehaviour
     }
 
     private void OnCollisionStay(Collision other) {    // what to do whilst players are in range of object
+
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
+
 
         if(other.gameObject.tag == "steal"){
 
