@@ -11,6 +11,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject guardPrefab3;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
+    public GameObject EscapeMenu;
+
 
     private Inventory inventory;
 
@@ -37,6 +39,27 @@ public class GameController : MonoBehaviourPunCallbacks
         
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!EscapeMenu.activeSelf)
+            {
+                EscapeMenu.SetActive(true);
+            }
+            else if (EscapeMenu.activeSelf)
+            {
+                EscapeMenu.SetActive(false);
+            }
+        }
+    }
+
+    public void QuitButton()
+    {
+        PhotonNetwork.LeaveRoom();   
+    }
+
+
 
     // Leave Game button
     void OnGUI()
@@ -46,11 +69,6 @@ public class GameController : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom == null)
             return;
 
-        //Leave this Room
-        if (GUI.Button(new Rect(5, 5, 125, 25), "Leave Room"))
-        {
-            PhotonNetwork.LeaveRoom();
-        }
 
         //Show the Room name
         //GUI.Label(new Rect(135, 5, 200, 25), PhotonNetwork.CurrentRoom.Name);
