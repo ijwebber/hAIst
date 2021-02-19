@@ -242,6 +242,7 @@ MonoBehaviour:
     m_Bits: 256
   agent: {fileID: 3690989282875342136}
   visibleTargets: []
+  behindGuardTargets: []
 --- !u!114 &3690989282875342140
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +260,7 @@ MonoBehaviour:
   - {x: -1.8, y: 13.36, z: 20.7}
   - {x: 35.5, y: 13.36, z: 25.3}
   - {x: 5, y: 13.36, z: 5.6}
+  guardDisabled: 0
 --- !u!195 &3690989282875342136
 NavMeshAgent:
   m_ObjectHideFlags: 0
