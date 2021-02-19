@@ -34,7 +34,10 @@ public class SoundController : MonoBehaviour
 
     void Start() {
         player = GameObject.Find("Timmy");
-        grid = new Grid(110,60,1f, gridContainer);
+        #if UNITY_WEBGL && !UNITY_EDITOR
+            Debug.Log(player);
+        #endif
+        grid = new Grid(110,60,1f);
         soundSource = new Vector3(-1,-1,-1);
         // Debug.Log(GameObject.Find("Timmy"));
 
@@ -56,6 +59,9 @@ public class SoundController : MonoBehaviour
         }
         if (Input.GetKeyDown("j")) {
             Vector3 playerPosition = player.transform.position;
+        #if UNITY_WEBGL && !UNITY_EDITOR
+            Debug.Log("!!!pressed j");
+        #endif
             soundSource = playerPosition;
             grid.SetValue(playerPosition, 240);
         }

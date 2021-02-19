@@ -72,7 +72,7 @@ public class Grid {
 
     }
 
-    public Grid(int width, int height, float inCellSize, GameObject gridContainer) {
+    public Grid(int width, int height, float inCellSize) {
         this.width = width;
         this.height = height;
         cellSize = inCellSize;

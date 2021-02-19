@@ -35,7 +35,7 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
-        PhotonNetwork.InstantiateRoomObject(soundMesh.name, new Vector3(0, 0.7f, 0), Quaternion.Euler(90,0,0));
+        PhotonNetwork.InstantiateRoomObject(soundMesh.name, soundMesh.transform.position, soundMesh.transform.rotation);
 
         Debug.Log("Spawned a player");
         
