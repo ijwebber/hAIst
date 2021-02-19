@@ -1,14 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class Testing : MonoBehaviour
+public class SoundController : MonoBehaviour
 {
     [SerializeField] public SoundVisual soundVis;
-    private Grid grid;
+    public Grid grid;
     private Vector3 soundSource;
     public GameObject player;
     public GameObject gridContainer;
+    public int maxVolume;
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        void Awake()
+        {
+            Microphone.Init();
+            Microphone.QueryAudioInput();
+            maxVolume = 0;
+        }
+#endif
+
+// #if UNITY_WEBGL && !UNITY_EDITOR
+        // void Update()
+        // {
+            // Testing.incomingVolume(maxVolume);
+        // }
+// #endif
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+            float[] volumes = Microphone.volumes;
+#endif
+
     void Start() {
         player = GameObject.Find("Timmy");
         grid = new Grid(110,60,1f, gridContainer);
@@ -19,6 +42,10 @@ public class Testing : MonoBehaviour
 
     void Update() {
         // grid.updateWalls();
+#if UNITY_WEBGL && !UNITY_EDITOR
+        Microphone.Update();
+        grid.SetValue(player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*240));
+#endif
         if (Input.GetKeyDown("k")) {
             Vector3 playerPosition = player.transform.position;
             grid.SetValue(playerPosition, 60);
