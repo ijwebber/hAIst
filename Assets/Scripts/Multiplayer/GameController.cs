@@ -92,4 +92,5 @@ public class GameController : MonoBehaviourPunCallbacks
         inventory.Hide();
     }
 
+
 }
