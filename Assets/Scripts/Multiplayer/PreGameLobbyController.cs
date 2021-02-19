@@ -119,9 +119,6 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();   
     }
-
-
-
     
     public int GetNumReady()
     {
