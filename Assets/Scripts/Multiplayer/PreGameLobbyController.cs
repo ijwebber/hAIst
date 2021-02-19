@@ -11,6 +11,8 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
     public GameObject playerPrefab;
     public GUISkin myskin = null;
     public GameObject SpawnPoint;
+    public GameObject EscapeMenu;
+
 
 
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
@@ -29,6 +31,17 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!EscapeMenu.activeSelf)
+            {
+                EscapeMenu.SetActive(true);
+            }
+            else if (EscapeMenu.activeSelf)
+            {
+                EscapeMenu.SetActive(false);
+            }
+        }
         
     }
 
@@ -60,11 +73,7 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom == null)
             return;
 
-        //Leave this Room
-        if (GUI.Button(new Rect(5, 5, 125, 25), "Leave Room"))
-        {
-            PhotonNetwork.LeaveRoom();
-        }
+        
 
         GUI.Label(new Rect(Screen.width-250, 35,200,25), "Players Ready: "+(int)PhotonNetwork.CurrentRoom.CustomProperties["num_ready"] + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
 
@@ -104,6 +113,11 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(customPropertiesRoom);
         CheckAllReady();
 
+    }
+
+    public void QuitButton()
+    {
+        PhotonNetwork.LeaveRoom();   
     }
 
 
