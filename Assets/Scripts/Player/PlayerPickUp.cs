@@ -25,6 +25,11 @@ public class PlayerPickUp : MonoBehaviourPun
     int gameSelection;
     public float cooldown = 1;
 
+    private float startTime = 0f;
+    private float timer = 0f;
+    public float holdTime = 5.0f;
+    private bool held = false;
+
 
     // Update is called once per frame
     void Update()
@@ -61,7 +66,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
         
             System.Random r = new System.Random();
-            gameSelection = r.Next(0,2);
+            gameSelection = r.Next(0,3);
             }                                              
         }
     }
@@ -137,6 +142,33 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
 
                 }
+
+                else if(gameSelection == 2){        // hold down task
+
+                    if(!inventory.isFull() && seconds == 0){
+                        holdDownTask();
+                    }
+                    
+                    else if(inventory.isFull()){
+                        displayMessage(3);
+                    }
+                    
+                    else if(seconds != 0){
+                        displayMessage(1);
+                    }
+                    
+
+                    if(held && seconds == 0){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+                        inventory.Add(other.gameObject);
+                        targetTime += cooldown;
+
+                        //other.gameObject.SetActive(false);
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+
+                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+                          
+                    }   
+                }
             }
         }      
     }
@@ -163,6 +195,7 @@ public class PlayerPickUp : MonoBehaviourPun
         else if(n==1){messageBox.text = "Wait for Cooldown";}
         else if(n==2){messageBox.text = "";}
         else if(n==3){messageBox.text = "Inventory Full";}
+        else if(n==4){messageBox.text = "Hold E for 5 seconds to pick up";}
 
     }
 
@@ -182,6 +215,33 @@ public class PlayerPickUp : MonoBehaviourPun
         }
 
         cooldownBox.text = "Cooldown: " + seconds;
+
+    }
+
+    void holdDownTask(){
+
+        if(Input.GetKeyDown(KeyCode.E)){    // if player is holding down E, start a timer                     
+            startTime = Time.time;
+            timer = startTime;
+            displayMessage(2);
+        }
+
+        if(Input.GetKey(KeyCode.E) && held == false && seconds == 0){   // for each time E is being held down, count/increment the timer and remove the onscreen text
+            timer += Time.deltaTime;                   
+            if(timer>(startTime + holdTime)){   // if the time reaches 5s, then set held to true, else set to false
+                held = true;
+                displayMessage(2);
+            }
+            else{
+                held = false;
+            }
+        }
+
+        if(Input.GetKey(KeyCode.E) == false){ // if key is not being pressed, just set held to false
+            held = false;
+            displayMessage(4);
+        
+        }
 
     }
 
