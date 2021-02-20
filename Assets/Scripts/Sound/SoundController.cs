@@ -4,11 +4,10 @@ using UnityEngine;
 using System.Linq;
 using Photon.Pun;
 
-public class SoundController : MonoBehaviour
+public class SoundController : MonoBehaviourPun
 {
     [SerializeField] public SoundVisual soundVis;
     public Grid grid;
-    private PhotonView photonView;
     private Vector3 soundSource;
     public GameObject player;
     public GameObject gridContainer;
@@ -17,7 +16,6 @@ public class SoundController : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
         void Awake()
         {
-            photonView = photonView.Get(this);
             Microphone.Init();
             Microphone.QueryAudioInput();
             maxVolume = 0;
@@ -66,28 +64,56 @@ public class SoundController : MonoBehaviour
             Debug.Log("!!!pressed j");
         #endif
             soundSource = playerPosition;
-            photonView.RPC("updateGrid", RpcTarget.MasterClient, playerPosition, 240);
+            this.photonView.RPC("updateGrid", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z, 240);
             //grid.SetValue(playerPosition, 240);
         }
-        photonView.RPC("newGrid", RpcTarget.Others, grid);
+
+        //flatten array
+        // sendGrid();
+        // this.photonView.RPC("newGrid", RpcTarget.Others, grid.getPressure(), grid.GetWidth(), grid.GetHeight());
+    }
+
+    void sendGrid() {
+        double[] flatPressure = new double[grid.GetWidth() * grid.GetHeight()];
+        double[,] pressure = grid.getPressure();
+        int i = 0;
+        for (int x = 0; x < grid.GetWidth(); x++)
+        {
+            for (int y = 0; y < grid.GetHeight(); y++) {
+                flatPressure[i] = pressure[x,y];
+                i++;
+            }
+        }
+        this.photonView.RPC("newGrid", RpcTarget.Others, flatPressure, grid.GetWidth(), grid.GetHeight());
     }
 
     [PunRPC]
-    void updateGrid(Vector3 position, int intensity) {
-        grid.SetValue(position, intensity);
-        photonView.RPC("newGrid", RpcTarget.Others, grid);
-        grid.updateNodes();
+    void updateGrid(float x, float y, float z, int intensity) {
+        grid.SetValue(new Vector3(x,y,z), intensity);
+        // sendGrid();
     }
 
     [PunRPC]
-    void newGrid(Grid newGrid) {
+    void newGrid(double[] newGrid, int width, int height) {
         // photonView.RPC("newGrid", RpcTarget.Others, grid);
-        grid = newGrid;
-        grid.updateNodes();
+        double[,] pressure = new double[width,height];
+        int i = 0;
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++) {
+                pressure[x,y] = newGrid[i];
+                i++;
+            }
+        }
+        //serialize now
+        grid.setPressure(pressure);
+        // grid.updateNodes();
     }
     void FixedUpdate() {
-        // grid.updateNodes();
-        // soundVis.SetGrid(grid);
+        // if (PhotonNetwork.IsMasterClient) {
+        grid.updateNodes();
+        // }
+        soundVis.SetGrid(grid);
         // if (soundSource != new Vector3(-1,-1,-1)) {
         //     grid.SetValue(soundSource, 240);
         // }

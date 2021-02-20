@@ -19,6 +19,13 @@ public class Grid {
     // private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
 
+    public double[,] getPressure() {
+        return this.currentPressure;
+    }
+    public void setPressure(double[,] newPressure) {
+        this.currentPressure = newPressure;
+    }
+
     public void updateWalls() {
         // populate grid
         for (int i = 0; i < gridArray.GetLength(0); i++) {
