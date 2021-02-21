@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
@@ -28,8 +29,9 @@ public class GameController : MonoBehaviourPunCallbacks
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, SpawnPoint.transform.position, Quaternion.identity);
         //PhotonNetwork.Instantiate(guardPrefab.name, new Vector3(-36.33f, 13.363f, 6.43f), Quaternion.identity);
 
-        inventory = player.transform.Find("Timmy").GetComponent<Inventory>();
-        inventory.Show();
+
+        // Set score custom props
+        SetScores();
 
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
@@ -62,7 +64,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
     // Leave Game button
-    void OnGUI()
+    /*void OnGUI()
     {
         GUI.skin = myskin;
 
@@ -80,7 +82,7 @@ public class GameController : MonoBehaviourPunCallbacks
             //string isMasterClient = (PhotonNetwork.PlayerList[i].IsMasterClient ? ": MasterClient" : "");
             GUI.Label(new Rect(5, 35 + 30 * i, 200, 25), PhotonNetwork.PlayerList[i].NickName);
         }
-    }
+    }*/
 
     //Go back to main meny when you leave game
     public override void OnLeftRoom()
@@ -88,6 +90,14 @@ public class GameController : MonoBehaviourPunCallbacks
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
         inventory.Hide();
+    }
+
+
+    // Set players score custom property to 0 
+    void SetScores() {
+        Hashtable setScore = new Hashtable() {{"score", 0}};
+		PhotonNetwork.LocalPlayer.SetCustomProperties(setScore);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(setScore);
     }
 
 }

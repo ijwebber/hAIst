@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Photon.Realtime;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerPickUp : MonoBehaviourPun
 {
@@ -75,8 +75,6 @@ public class PlayerPickUp : MonoBehaviourPun
 
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            
-            Inventory inventory = GetComponent<Inventory>();
 
             if (other.gameObject.tag == "steal") {
 
@@ -84,26 +82,24 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 if (gameSelection == 0) {
 
-                    if(Input.GetKey(KeyCode.E) && !inventory.isFull() && seconds == 0) {
+                    if(Input.GetKey(KeyCode.E) && seconds == 0) {
                         keycodeGame.SetActive(true);
                         displayMessage(2);
                     } 
                     else if (keyCorrect && seconds == 0) {   
-                        inventory.Add(other.gameObject);
+                        
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                        UpdateScore(currentObject);
 
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                         keycodeGame.SetActive(false);
                     } 
                     else if (seconds != 0 ){
                         displayMessage(1);
 
-                    }
-                    else if (inventory.isFull()) {
-                        displayMessage(3);
                     }
                     else if (!Input.GetKey(KeyCode.E)){
                         displayMessage(0);
@@ -113,28 +109,26 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 else if (gameSelection == 1) {
 
-                    if (Input.GetKey(KeyCode.E) && !inventory.isFull() && seconds == 0) {
+                    if (Input.GetKey(KeyCode.E) && seconds == 0) {
                         // whip out mini game
                         fixPaintingGame.SetActive(true);
                         displayMessage(2);
                     }
                     else if (paintingCorrect && seconds == 0) {
 
-                        inventory.Add(other.gameObject);
+                        
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                        UpdateScore(currentObject);
 
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                         fixPaintingGame.SetActive(false);
                     }
                     else if (seconds != 0 ){
                         displayMessage(1);
 
-                    }
-                    else if (inventory.isFull()) {
-                        displayMessage(3);
                     }
                     else if (!Input.GetKey(KeyCode.E)) {
                         displayMessage(0);
@@ -145,12 +139,8 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 else if(gameSelection == 2){        // hold down task
 
-                    if(!inventory.isFull() && seconds == 0){
+                    if(seconds == 0){
                         holdDownTask();
-                    }
-                    
-                    else if(inventory.isFull()){
-                        displayMessage(3);
                     }
                     
                     else if(seconds != 0){
@@ -159,12 +149,12 @@ public class PlayerPickUp : MonoBehaviourPun
                     
 
                     if(held && seconds == 0){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
-                        inventory.Add(other.gameObject);
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                        UpdateScore(currentObject);
 
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                           
                     }   
@@ -243,6 +233,34 @@ public class PlayerPickUp : MonoBehaviourPun
         
         }
 
+    }
+
+
+    // Updates a players score 
+    void UpdateScore(GameObject obj) {
+
+        // Get the item and it's value
+        CollectableItem item = obj.GetComponent<CollectableItem>();
+        int value = item.value;
+
+        // Increase the current score by the value
+        int currentPlayerScore = (int) PhotonNetwork.LocalPlayer.CustomProperties["score"]; 
+        int newPlayerScore = currentPlayerScore + value;
+
+        int currentRoomScore = (int) PhotonNetwork.CurrentRoom.CustomProperties["score"];
+        int newRoomScore = currentRoomScore + value;
+        
+        // Create a hashtable entry with the new score
+        Hashtable playerHash = new Hashtable();
+        playerHash.Add("score", newPlayerScore);
+
+        // Set the player property to the new score
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
+
+        Hashtable roomHash = new Hashtable();
+        roomHash.Add("score", newRoomScore);
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roomHash);
     }
 
     [PunRPC]
