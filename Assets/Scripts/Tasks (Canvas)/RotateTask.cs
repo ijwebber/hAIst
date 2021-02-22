@@ -14,13 +14,16 @@ public class RotateTask : MonoBehaviour
     [SerializeField]
     private Sprite[] spriteSetSN;
 
+    [SerializeField]
+    private Sprite[] spriteSetWF;
+
 
     public bool win;
     private void OnEnable() {
         // set win to false
         win = false;
 
-        int randomNum = Random.Range(0,2);
+        int randomNum = Random.Range(0,3);
 
         //int randomNum = 1;
 
@@ -39,6 +42,14 @@ public class RotateTask : MonoBehaviour
             pictures[3].sprite = spriteSetSN[3];
             pictures[4].sprite = spriteSetSN[4];
             pictures[5].sprite = spriteSetSN[5];
+        }
+        else if(randomNum == 2){
+            pictures[0].sprite = spriteSetWF[0];
+            pictures[1].sprite = spriteSetWF[1];
+            pictures[2].sprite = spriteSetWF[2];
+            pictures[3].sprite = spriteSetWF[3];
+            pictures[4].sprite = spriteSetWF[4];
+            pictures[5].sprite = spriteSetWF[5];
         }
 
         // Initialise Rotations

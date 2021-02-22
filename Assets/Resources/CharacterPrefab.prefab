@@ -1177,6 +1177,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 20f6e847207f1fe46afb1cd801e141f8, type: 3}
   - {fileID: 21300000, guid: 86f5f4206406cd54494200b0b5b954c0, type: 3}
   - {fileID: 21300000, guid: 8e89e0a2636d54e4795cb0fc71ea7355, type: 3}
+  spriteSetWF:
+  - {fileID: 21300000, guid: 009a74b78147a0943b5f4dc38f675bd3, type: 3}
+  - {fileID: 21300000, guid: b5c0f29e844fe574dabfdafe65178410, type: 3}
+  - {fileID: 21300000, guid: ae89b3cd6ca443a4dba5dade49ce3c4b, type: 3}
+  - {fileID: 21300000, guid: 2b197d1750efb9d4dae2c4fc1e539b2e, type: 3}
+  - {fileID: 21300000, guid: eb3e4e16d6b08c54b8f8213b3a3e213e, type: 3}
+  - {fileID: 21300000, guid: 7adeb8ec1db8914439d31537bda5800f, type: 3}
   win: 0
 --- !u!1 &2679541220185454257
 GameObject:
