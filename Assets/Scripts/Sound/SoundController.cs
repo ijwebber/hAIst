@@ -39,7 +39,7 @@ public class SoundController : MonoBehaviourPun
         // send microphone volume if above threshold
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();
-        if (Microphone.volumes[0]*240 > 30) {
+        if (Microphone.volumes[0]*240 > 2) {
             sendGrid(player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*240));
         }
 #endif
