@@ -65,6 +65,7 @@ public class GuardMovement : MonoBehaviour
                 
         }
 
+        //check if any players are behind this guard, if they are then notify the player via RPC that they can knock out this guard
         if (fovScript.behindGuardTargets.Count != 0)
         {
             foreach (GameObject g in fovScript.behindGuardTargets)
@@ -83,6 +84,7 @@ public class GuardMovement : MonoBehaviour
             }
         }
 
+        //regular path patrolling if guard is not disabled
         if (!guardDisabled)
         {
             if (start)
@@ -108,10 +110,10 @@ public class GuardMovement : MonoBehaviour
                 agent.SetDestination(patrolPath[currDes]);
             }
         }
-        else
+        else //runs if guard is disabled
         {
             
-
+            //check if the timer has already been started, if so don't start it again
             if (!timedOut)
             {
                 agent.isStopped = true;
@@ -124,6 +126,7 @@ public class GuardMovement : MonoBehaviour
         
     }
 
+    //timer coroutine
     IEnumerator disableForTime(float disableTime)
     {
      
@@ -131,6 +134,7 @@ public class GuardMovement : MonoBehaviour
         guardDisabled = false;
         timedOut = false;
         agent.isStopped = false;
+        
     }
 
     void Start() {

@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 3690989282875342136}
   - component: {fileID: 2337730633997927904}
   - component: {fileID: 7398894807846927064}
+  - component: {fileID: 4251731265097000222}
   m_Layer: 0
   m_Name: Guard3
   m_TagString: Untagged
@@ -257,9 +258,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 3690989282875342136}
   patrolPath:
-  - {x: -1.8, y: 13.36, z: 20.7}
-  - {x: 35.5, y: 13.36, z: 25.3}
-  - {x: 5, y: 13.36, z: 5.6}
+  - {x: 4, y: 13.36, z: 34.8}
   guardDisabled: 0
 --- !u!195 &3690989282875342136
 NavMeshAgent:
@@ -322,6 +321,22 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &4251731265097000222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609556142392328302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7f7f71101b2c84aad5d3398fb8f14b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floatingTextPrefab: {fileID: 2015732713396155458, guid: 242d8ced320ad914680684874b3fec39,
+    type: 3}
+  timerDisplayed: 0
+  offset: {x: 0, y: 3, z: -0.1}
 --- !u!1 &7383316279528216252
 GameObject:
   m_ObjectHideFlags: 0
