@@ -12,10 +12,10 @@ public class Grid {
     private int height;
     private float maxPressure = 120;
     private float deltaT, v;
-    private float speedOfSound = 343/10;
+    private float speedOfSound = 343/10; // this isn't actually the speed of sound, but it's the one that works best
     private int[,] gridArray;
     private float cellSize;
-    public Vector3 offset = new Vector3(-50.4f,11f,0f);
+    public Vector3 offset = new Vector3(-50.4f,11f,0f); // offset for bottom left grid tile (dont change z for some reason idk why)
     // private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
 
@@ -26,6 +26,7 @@ public class Grid {
         this.currentPressure = newPressure;
     }
 
+    // update walls (will need to be implemented for moving walls or obstacles)
     public void updateWalls() {
         // populate grid
         for (int i = 0; i < gridArray.GetLength(0); i++) {
@@ -79,6 +80,7 @@ public class Grid {
 
     }
 
+    // initialise grid
     public Grid(int width, int height, float inCellSize) {
         this.width = width;
         this.height = height;
@@ -106,6 +108,7 @@ public class Grid {
             // Debug.DrawLine(new Vector3(0,height)*cellSize, new Vector3(width, height), Color.white, 100f);
             // Debug.DrawLine(new Vector3(width,0)*cellSize, new Vector3(width, height), Color.white, 100f);
         }
+
         List<GameObject> walls = getWalls();
         foreach (GameObject w in walls)
         {
@@ -125,29 +128,16 @@ public class Grid {
                 if (Physics.Linecast(point2, point1, (1 << 8))) {
                     velocities[i,j] = 343;
                     c1 = Color.red;
-                    // velocities[i+1,j] = 343;
                     Collision = true;
                 }
                 if (Physics.Linecast(point3, point1, (1 << 8))) {
                     c2 = Color.red;
                     velocities[i,j] = 343;
-                    // velocities[i,j+1] = 343;
                     Collision = true;
                 }
-                // if (Physics.Linecast(point4, point1, (1<<8))) {
-                //     c3 = Color.red;
-                //     velocities[i,j] = 343;
-                //     // velocities[i+1,j+1] = 343;
-                //     Collision = true;
-                // }
-                Debug.DrawLine(point1, point2, c1,100);
-                Debug.DrawLine(point1, point3, c2,100);
-                Debug.DrawLine(point1, point4, c3,100);
-                // if (Physics.Linecast(point2, point3, (1 << 8))) {
-                //     velocities[i+1,j] = 343;
-                //     velocities[i,j+1] = 343;
-                //     noCollision = true;
-                // }
+                // Debug.DrawLine(point1, point2, c1,100);
+                // Debug.DrawLine(point1, point3, c2,100);
+                // Debug.DrawLine(point1, point4, c3,100);
                 if (!Collision) {
                     velocities[i,j] = localVel;
                 }
@@ -155,6 +145,7 @@ public class Grid {
         }
     }
 
+    // calculate which nodes of the grid are inside walls
     List<GameObject> getWalls() {
         List<GameObject> walls = new List<GameObject>();
         GameObject[] gos = GameObject.FindObjectsOfType(typeof(GameObject)) as GameObject[]; //will return an array of all GameObjects in the scene
@@ -187,6 +178,7 @@ public class Grid {
                 double x_2 = 0;
                 double y_1 = 0;
                 double y_2 = 0;
+                // handle edge cases
                 if (x+1 < width) {
                     x_1 = currentPressure[x+1,y];
                 }
@@ -199,27 +191,17 @@ public class Grid {
                 if (y != 0) {
                     y_2 = currentPressure[x,y-1];
                 }
+                // god equation -- calculates next node based on the four neighbouring nodes and previous node info
                 double nextValue = 2*currentPressure[x,y] - previousPressure[x,y] + deltaT*deltaT * velocities[x,y]*velocities[x,y] * ((x_1 - 2*currentPressure[x,y] + x_2) + (y_1 - 2*currentPressure[x,y] + y_2));
+                // if the value is in a wall, don't propagate
                 if (nextValue < 1 || velocities[x,y] != speedOfSound) {
                     nextPressure[x,y] = 0f;
                 } else {
                     nextPressure[x,y] = nextValue;
                 }
-                // debugTextArray[x,y].text = ((int)(nextPressure[x,y])).ToString();
-                float r = 1f;
-                float a = 0;
-                if (nextPressure[x,y] != 0) {
-                    r = (float)((1/nextPressure[x,y]));
-                    // Debug.Log(r);
-                    a = 1;
-                }
-                // if (velocities[x,y] == speedOfSound) {
-                //     debugTextArray[x,y].color = new Vector4(1,1,1,(1-r));
-                // } else {
-                //     debugTextArray[x,y].color = new Vector4(1,0,0,1);
-                // }
             }
         }
+        // copy information for next timestep
         this.previousPressure = (double[,])currentPressure.Clone();
         this.currentPressure = (double[,])nextPressure.Clone();
     }
@@ -236,7 +218,7 @@ public class Grid {
         return this.cellSize;
     }
 
-    // set value of grid
+    // insert value into grid
     public void SetValue(int x, int y, int value) {
         if (x >=0 && y >= 0 && x < width && y < height) {
             gridArray[x,y] = value;
