@@ -7,6 +7,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class GameplayUI : MonoBehaviourPunCallbacks
 {
     public Text scoreText;
+    public Text specialUpdateText;
     public Text[] playerScores;
     public GameObject[] specialImages;
 
@@ -55,6 +56,15 @@ public class GameplayUI : MonoBehaviourPunCallbacks
             if (i > -1) {
                 specialImages[i].SetActive(true);
             }
+
+            int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) changedProps["special"];
+
+            if (remaining > 0) {
+                specialUpdateText.text = "Special Items Remaining: " + remaining.ToString();
+            } else {
+                specialUpdateText.text = "Time to escape!";
+            }
+            
         }
         
     }

@@ -107,6 +107,9 @@ public class GameController : MonoBehaviourPunCallbacks
 
         Hashtable setSpecial = new Hashtable() {{"special", 0}};
         PhotonNetwork.CurrentRoom.SetCustomProperties(setSpecial);
+
+        Hashtable setSpecialMax = new Hashtable() {{"specialMax", 3}};
+        PhotonNetwork.CurrentRoom.SetCustomProperties(setSpecialMax);
     }
 
 }
