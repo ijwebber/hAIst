@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundVis: {fileID: 7102897577177839783}
+  localSoundGrid: {fileID: 0}
   player: {fileID: 5037312652672791350, guid: 0c81bfcc69c384ae0a24e8b5d5401fd1, type: 3}
   gridContainer: {fileID: 0}
   maxVolume: 0

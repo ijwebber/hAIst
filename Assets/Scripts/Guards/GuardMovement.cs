@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class GuardMovement : MonoBehaviour
+public class GuardMovement : MonoBehaviourPun
 {
     
 
-    public Grid grid;
+    public GuardController guardController;
     public NavMeshAgent agent;
     public SoundVisual soundVis;
 
@@ -18,6 +18,8 @@ public class GuardMovement : MonoBehaviour
     private int currDes = 0;
     private bool start = true;
     public bool guardDisabled = false;
+    private GameObject player;
+    private bool listening = true;
     private bool onTheWay = false;
     private float xDir = 0;
     private float yDir = 0;
@@ -36,7 +38,8 @@ public class GuardMovement : MonoBehaviour
 
     private void Start() {
         agent.SetDestination(patrolPath[currDes]);
-        this.soundVis = GameObject.FindObjectOfType<SoundVisual>();
+        player = GameObject.Find("Timmy");
+        this.guardController = GameObject.FindObjectOfType<GuardController>();
     }
     void Update()
     {
@@ -70,37 +73,18 @@ public class GuardMovement : MonoBehaviour
             }
         } else {
             // check for sound
-            if(soundVis.grid.GetValue(transform.position) > 3 && !onTheWay) {
-                onTheWay = true;
-                Debug.Log("I hear a who");
-                soundVis.grid.getXY(transform.position, out int x, out int y);
-                double currentMax = 0;
-                for (int xx = -1; xx < +1; xx++)
-                {
-                    for (int yy = -1; yy < +1; yy++) {
-                        if(xx != 0 && yy != 0) {
-                            double temp = soundVis.grid.GetValue(x+xx, y+yy);
-                            if (temp > currentMax) {
-                                currentMax = temp;
-                                Debug.Log("new max at" + transform.position.x + " " + transform.position.z);
-                                xDir = xx;
-                                yDir = yy;
-                            }
-                        }
-                    }
-                    Debug.Log("max value = "+ xDir + " " + yDir);
-                    Physics.Raycast(transform.position, new Vector3(xDir, 0, yDir) ,out RaycastHit hitinfo , Mathf.Infinity, (1 << 8), QueryTriggerInteraction.UseGlobal);
-                    bool ok = agent.SetDestination(hitinfo.point);
-                    Debug.DrawLine(transform.position, hitinfo.point, Color.white, 10);
-                    Debug.Log("going to " + hitinfo.point);
-                    Debug.Log("confirmed? " + ok);
-                    xDir = yDir = 0;
-                }
+            if(guardController.localGrid.GetValue(transform.position) > 3 && listening) {
+                listening = false;
+                Vector3 playerPosition = player.transform.position;
+                Debug.Log("I hear a who at // " + playerPosition);
+                this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
+
             } else {
 
                 //if destination has been reached, the guard moves to the next cords in the patrol path
                 if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
                 {
+                    listening = true;
                     onTheWay = false;
 
                     if (currDes == patrolPath.Count - 1)
@@ -149,6 +133,14 @@ public class GuardMovement : MonoBehaviour
 
        
         
+    }
+
+    [PunRPC]
+    void snitch(float x, float y, float z) {
+        // receive new sound source and update local grid
+        if (!onTheWay) {
+            agent.SetDestination(new Vector3(x,y,z));
+        }
     }
 
     //timer coroutine

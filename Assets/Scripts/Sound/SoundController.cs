@@ -8,6 +8,7 @@ public class SoundController : MonoBehaviourPun
 {
     [SerializeField] public SoundVisual soundVis;
     public Grid grid;
+    public GuardController localSoundGrid;
     // public GuardMovement guardController;
     public GameObject player;
     public GameObject gridContainer;
@@ -31,6 +32,7 @@ public class SoundController : MonoBehaviourPun
     void Start() {
         player = GameObject.Find("Timmy");
         grid = new Grid(110,60,1f);
+        this.localSoundGrid = GameObject.FindObjectOfType<GuardController>();
         // guardController.setGrid(grid);
     }
 
@@ -46,6 +48,7 @@ public class SoundController : MonoBehaviourPun
         }
 #endif
         if (Input.GetKeyDown("j")) {
+            localSoundGrid.setValue(player.transform.position, 240);
             sendGrid(player.transform.position, 240);
         }
         if (Input.GetKeyDown("k")) {
@@ -62,9 +65,9 @@ public class SoundController : MonoBehaviourPun
 
     void sendGrid(Vector3 playerPosition, int intensity) {
         // send new sound source to other clients
-        this.photonView.RPC("updateGrid", RpcTarget.Others, playerPosition.x, playerPosition.y, playerPosition.z, intensity);
+        this.photonView.RPC("updateGrid", RpcTarget.All, playerPosition.x, playerPosition.y, playerPosition.z, intensity);
         // set value in local grid
-        grid.SetValue(playerPosition, intensity);
+        // grid.SetValue(playerPosition, intensity);
     }
 
     [PunRPC]

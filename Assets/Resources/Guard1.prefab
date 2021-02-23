@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d230c7655cfe13741972605c054df625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  guardController: {fileID: 0}
   agent: {fileID: 2818789364988126480}
   soundVis: {fileID: 0}
   patrolPath:
