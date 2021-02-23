@@ -93,7 +93,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
-        inventory.Hide();
+        //inventory.Hide();
     }
 
 
