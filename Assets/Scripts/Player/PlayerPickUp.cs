@@ -92,6 +92,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         //other.gameObject.SetActive(false);
                         UpdateScore(currentObject);
+                        CheckIfSpecial(currentObject);
 
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
@@ -121,6 +122,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         //other.gameObject.SetActive(false);
                         UpdateScore(currentObject);
+                        CheckIfSpecial(currentObject);
 
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
@@ -153,6 +155,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         //other.gameObject.SetActive(false);
                         UpdateScore(currentObject);
+                        CheckIfSpecial(currentObject);
 
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
@@ -261,6 +264,18 @@ public class PlayerPickUp : MonoBehaviourPun
         roomHash.Add("score", newRoomScore);
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(roomHash);
+    }
+
+    void CheckIfSpecial(GameObject obj) {
+        CollectableItem item = obj.GetComponent<CollectableItem>();
+
+        if (item.special) {
+            int currentFound = (int) PhotonNetwork.CurrentRoom.CustomProperties["special"];
+            Hashtable hash = new Hashtable();
+            hash.Add("special", currentFound + 1);
+
+            PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+        }
     }
 
     [PunRPC]

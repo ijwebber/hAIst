@@ -31,7 +31,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
         // Set score custom props
-        SetScores();
+        SetProps();
 
         //PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         //PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
@@ -94,10 +94,13 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
     // Set players score custom property to 0 
-    void SetScores() {
+    void SetProps() {
         Hashtable setScore = new Hashtable() {{"score", 0}};
 		PhotonNetwork.LocalPlayer.SetCustomProperties(setScore);
         PhotonNetwork.CurrentRoom.SetCustomProperties(setScore);
+
+        Hashtable setSpecial = new Hashtable() {{"special", 0}};
+        PhotonNetwork.CurrentRoom.SetCustomProperties(setSpecial);
     }
 
 }
