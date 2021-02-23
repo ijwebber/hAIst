@@ -6,7 +6,7 @@ using CodeMonkey.Utils;
 public class SoundVisual : MonoBehaviour
 {
     public Gradient gradient;
-    private Grid grid;
+    public Grid grid;
     private Mesh mesh;
 
     private void Awake() {
@@ -54,6 +54,12 @@ public class SoundVisual : MonoBehaviour
         // mesh.uv = uv;
         mesh.colors = colors;
         mesh.RecalculateNormals();
+    }
+
+
+    public Grid getGrid() {
+        Debug.Log("sending grid " + this.grid);
+        return this.grid;
     }
 
     public static void CreateEmptyMeshArrays(int quadCount, out Vector3[] vertices, out Vector2[] uvs, out Color[] colors, out int[] triangles) {

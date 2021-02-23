@@ -8,6 +8,7 @@ public class SoundController : MonoBehaviourPun
 {
     [SerializeField] public SoundVisual soundVis;
     public Grid grid;
+    // public GuardMovement guardController;
     public GameObject player;
     public GameObject gridContainer;
     public int maxVolume;
@@ -30,6 +31,7 @@ public class SoundController : MonoBehaviourPun
     void Start() {
         player = GameObject.Find("Timmy");
         grid = new Grid(110,60,1f);
+        // guardController.setGrid(grid);
     }
 
     //function done every frame

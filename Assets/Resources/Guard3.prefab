@@ -257,6 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 3690989282875342136}
+  soundVis: {fileID: 0}
   patrolPath:
   - {x: 4, y: 13.36, z: 34.8}
   guardDisabled: 0

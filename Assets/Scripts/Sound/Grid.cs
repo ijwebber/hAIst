@@ -163,6 +163,11 @@ public class Grid {
         return this.currentPressure[x,y];
     }
 
+    public double GetValue(Vector3 worldPosition) {
+        getXY(worldPosition, out int x, out int y);
+        return this.currentPressure[x,y];
+    }
+
     //get world position of grid (doesn't work)
     public Vector3 GetWorldPosition(int x, int y) {
         Vector3 position = (new Vector3(x,0,y) * cellSize);
@@ -227,7 +232,7 @@ public class Grid {
         }
     }
 
-    private void getXY(Vector3 worldPosition, out int x, out int y) {
+    public void getXY(Vector3 worldPosition, out int x, out int y) {
         x = Mathf.FloorToInt((worldPosition - offset).x / cellSize);
         y = Mathf.FloorToInt((worldPosition - offset).z / cellSize);
     }
