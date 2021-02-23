@@ -38,6 +38,10 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
 
         Debug.Log("Spawned a player");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
         
     }
 
