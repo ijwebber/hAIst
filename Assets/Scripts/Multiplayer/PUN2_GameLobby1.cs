@@ -52,14 +52,6 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
 
-    public override void OnRoomListUpdate(List<RoomInfo> roomList)
-    {
-        Debug.Log("We have received the Room list");
-        //After this callback, update the room list
-        createdRooms = roomList;
-        //PhotonNetwork.JoinLobby(TypedLobby.Default);
-
-    }
 
 
     public void ChangeUserNameInput()
@@ -81,19 +73,6 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     
 
-
-    public override void OnCreateRoomFailed(short returnCode, string message)
-    {
-        Debug.Log("OnCreateRoomFailed got called. This can happen if the room exists (even if not visible). Try another room name.");
-        joiningRoom = false;
-    }
-
-    public override void OnJoinRoomFailed(short returnCode, string message)
-    {
-        Debug.Log("OnJoinRoomFailed got called. This can happen if the room is not existing or full or closed.");
-        joiningRoom = false;
-    }
-
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log("OnJoinRandomFailed got called. This can happen if the room is not existing or full or closed.");
@@ -106,7 +85,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //Set our player name
         //PhotonNetwork.NickName = playerName;
         //Load the Scene called GameLevel (Make sure it's added to build settings)
-        PhotonNetwork.LoadLevel("PreGameLobby");
+        //PhotonNetwork.LoadLevel("PreGameLobby");
     }
     public void OnJoinedLobby()
     {

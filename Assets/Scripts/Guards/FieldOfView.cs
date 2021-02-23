@@ -18,6 +18,11 @@ public class FieldOfView : MonoBehaviour
     [HideInInspector]
     public List<GameObject> visibleTargets = new List<GameObject>();
 
+    [HideInInspector]
+    public List<GameObject> behindGuardTargets = new List<GameObject>();
+
+
+
     //calls FindVisibleTargets after every 'delay' seconds, this is started with a coroutine in start() method when guard object is instiated.
     IEnumerator FindTargetsWithDelay(float delay)
     {
@@ -41,20 +46,31 @@ public class FieldOfView : MonoBehaviour
             Vector3 dirToTarget = (target.transform.position - transform.position).normalized;
 
             //if the object is within the viewangle
-            if(Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
-            {   
+            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
+            {
                 //we get the distance to the target
                 float dstToTarget = Vector3.Distance(transform.position, target.transform.position);
 
                 //checks if obstacle is in way
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                 {
-                    
-                    
+
+
                     //we can see the target, we add this to our visibletargets list
 
                     visibleTargets.Add(target);
-                    
+
+                }
+            }
+            else //if not in viewangle then target must be behind the guard, add to behindguardlist
+            {
+                float dstToTarget = Vector3.Distance(transform.position, target.transform.position);
+
+                //checks if obstacle is in way
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                {
+
+                    behindGuardTargets.Add(target);
                 }
             }
         }

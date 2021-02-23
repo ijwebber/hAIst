@@ -1,27 +1,68 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class RotateTask : MonoBehaviour
 {
     [SerializeField]
-    private RectTransform[] pictures;
+    private Image[] pictures;           // define image containers
+
+    [SerializeField]
+    private Sprite[] spriteSetLS;
+
+    [SerializeField]
+    private Sprite[] spriteSetSN;
+
+    [SerializeField]
+    private Sprite[] spriteSetWF;
+
 
     public bool win;
     private void OnEnable() {
         // set win to false
         win = false;
 
+        int randomNum = Random.Range(0,3);
+
+        //int randomNum = 1;
+
+        if(randomNum == 0){
+            pictures[0].sprite = spriteSetLS[0];
+            pictures[1].sprite = spriteSetLS[1];
+            pictures[2].sprite = spriteSetLS[2];
+            pictures[3].sprite = spriteSetLS[3];
+            pictures[4].sprite = spriteSetLS[4];
+            pictures[5].sprite = spriteSetLS[5];
+        }
+        else if(randomNum == 1){
+            pictures[0].sprite = spriteSetSN[0];
+            pictures[1].sprite = spriteSetSN[1];
+            pictures[2].sprite = spriteSetSN[2];
+            pictures[3].sprite = spriteSetSN[3];
+            pictures[4].sprite = spriteSetSN[4];
+            pictures[5].sprite = spriteSetSN[5];
+        }
+        else if(randomNum == 2){
+            pictures[0].sprite = spriteSetWF[0];
+            pictures[1].sprite = spriteSetWF[1];
+            pictures[2].sprite = spriteSetWF[2];
+            pictures[3].sprite = spriteSetWF[3];
+            pictures[4].sprite = spriteSetWF[4];
+            pictures[5].sprite = spriteSetWF[5];
+        }
+
         // Initialise Rotations
 
         // implement a random number selector between the angles
+        // make rotation random
 
-        pictures[0].GetComponent<RectTransform>().Rotate(0f,0f,180f);
-        pictures[1].GetComponent<RectTransform>().Rotate(0f,0f,90f);
-        pictures[2].GetComponent<RectTransform>().Rotate(0f,0f,-180f);
-        pictures[3].GetComponent<RectTransform>().Rotate(0f,0f,180f);
-        pictures[4].GetComponent<RectTransform>().Rotate(0f,0f,90f);
-        pictures[5].GetComponent<RectTransform>().Rotate(0f,0f,180f);
+        pictures[0].GetComponent<Transform>().Rotate(0f,0f,180f);
+        pictures[1].GetComponent<Transform>().Rotate(0f,0f,-90f);
+        pictures[2].GetComponent<Transform>().Rotate(0f,0f,180f);
+        pictures[3].GetComponent<Transform>().Rotate(0f,0f,90f);
+        pictures[4].GetComponent<Transform>().Rotate(0f,0f,90f);
+        pictures[5].GetComponent<Transform>().Rotate(0f,0f,180f);
 
         
     }
@@ -30,12 +71,12 @@ public class RotateTask : MonoBehaviour
     void Update()
     {
 
-        float picture_1 = pictures[0].GetComponent<RectTransform>().rotation.z; // get rotation values
-        float picture_2 = pictures[1].GetComponent<RectTransform>().rotation.z;
-        float picture_3 = pictures[2].GetComponent<RectTransform>().rotation.z;
-        float picture_4 = pictures[3].GetComponent<RectTransform>().rotation.z;
-        float picture_5 = pictures[4].GetComponent<RectTransform>().rotation.z;
-        float picture_6 = pictures[5].GetComponent<RectTransform>().rotation.z;
+        float picture_1 = pictures[0].GetComponent<Transform>().rotation.z; // get rotation values
+        float picture_2 = pictures[1].GetComponent<Transform>().rotation.z;
+        float picture_3 = pictures[2].GetComponent<Transform>().rotation.z;
+        float picture_4 = pictures[3].GetComponent<Transform>().rotation.z;
+        float picture_5 = pictures[4].GetComponent<Transform>().rotation.z;
+        float picture_6 = pictures[5].GetComponent<Transform>().rotation.z;
 
         int rotation_1 = (Mathf.RoundToInt(picture_1));
         int rotation_2 = (Mathf.RoundToInt(picture_2));

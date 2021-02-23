@@ -47,6 +47,7 @@ public class PlayerMovement : MonoBehaviourPun
             return;
         }
         
+        //starts disabled timer if knocked out
         if (disabled && !timedOut)
         {
             timedOut = true;
@@ -54,6 +55,7 @@ public class PlayerMovement : MonoBehaviourPun
 
         }
 
+        //if not disabled then get keyboard input
         if (!disabled)
         {
             // player movement - forward, backward, left, right

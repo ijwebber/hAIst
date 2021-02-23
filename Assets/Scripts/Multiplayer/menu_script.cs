@@ -20,6 +20,52 @@ public class menu_script : MonoBehaviourPunCallbacks
 
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
 
+    public void Start()
+    {
+        if (PhotonNetwork.IsConnected)
+            {
+                //Re-join Lobby to get the latest Room list
+                PhotonNetwork.JoinLobby(TypedLobby.Default);
+            }
+        else
+            {
+                //We are not connected, estabilish a new connection
+                PhotonNetwork.ConnectUsingSettings();
+            }
+
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("OnCreateRoomFailed got called. This can happen if the room exists (even if not visible). Try another room name.");
+        joiningRoom = false;
+        if (PhotonNetwork.IsConnected)
+            {
+                //Re-join Lobby to get the latest Room list
+                PhotonNetwork.JoinLobby(TypedLobby.Default);
+            }
+        else
+            {
+                //We are not connected, estabilish a new connection
+                PhotonNetwork.ConnectUsingSettings();
+            }
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("OnJoinRoomFailed got called. This can happen if the room is not existing or full or closed.");
+        joiningRoom = false;
+        if (PhotonNetwork.IsConnected)
+            {
+                //Re-join Lobby to get the latest Room list
+                PhotonNetwork.JoinLobby(TypedLobby.Default);
+            }
+        else
+            {
+                //We are not connected, estabilish a new connection
+                PhotonNetwork.ConnectUsingSettings();
+            }
+    }
 
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -62,9 +108,12 @@ public class menu_script : MonoBehaviourPunCallbacks
                 roomOptions.IsOpen = true;
                 roomOptions.IsVisible = true;
                 roomOptions.MaxPlayers = (byte)4; //Set any number
+                if (!customProperties.ContainsKey("num_ready"))
+                {
                 customProperties.Add("num_ready", 0);
+                }
                 roomOptions.CustomRoomProperties = customProperties;
-                PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
+                PhotonNetwork.CreateRoom(roomName, roomOptions, TypedLobby.Default);
             }
         }
 

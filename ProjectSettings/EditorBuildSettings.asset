@@ -24,12 +24,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Character.unity
     guid: 02469f14a397fb843b6d35249a77f0a2
   - enabled: 1
-    path: Assets/Scenes/BuildScene.unity
-    guid: 150773a73b2496a47a282d374185eded
+    path: Assets/Scenes/GameLobby 1.unity
+    guid: 658ff98e9537f49669e493fe41a1ed85
   - enabled: 1
     path: Assets/Scenes/PreGameLobby.unity
     guid: 3fafd0e0696e7418083dbb9b0a13eba3
   - enabled: 1
-    path: Assets/Scenes/GameLobby 1.unity
-    guid: 658ff98e9537f49669e493fe41a1ed85
+    path: Assets/Scenes/BuildScene.unity
+    guid: 150773a73b2496a47a282d374185eded
   m_configObjects: {}

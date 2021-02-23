@@ -54,9 +54,7 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
-        GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0,2,0), Quaternion.identity);
-
-        player.transform.Find("Timmy").GetComponent<Inventory>().Hide();
+        GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, SpawnPoint.transform.position, Quaternion.identity);
 
         customProperties.Add("ready", "false");
         customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;

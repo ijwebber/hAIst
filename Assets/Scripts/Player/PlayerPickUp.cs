@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Photon.Realtime;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerPickUp : MonoBehaviourPun
 {
@@ -24,6 +24,11 @@ public class PlayerPickUp : MonoBehaviourPun
 
     int gameSelection;
     public float cooldown = 1;
+
+    private float startTime = 0f;
+    private float timer = 0f;
+    public float holdTime = 5.0f;
+    private bool held = false;
 
 
     // Update is called once per frame
@@ -61,7 +66,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
         
             System.Random r = new System.Random();
-            gameSelection = r.Next(0,2);
+            gameSelection = r.Next(0,3);
             }                                              
         }
     }
@@ -70,8 +75,6 @@ public class PlayerPickUp : MonoBehaviourPun
 
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            
-            Inventory inventory = GetComponent<Inventory>();
 
             if (other.gameObject.tag == "steal") {
 
@@ -79,26 +82,24 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 if (gameSelection == 0) {
 
-                    if(Input.GetKey(KeyCode.E) && !inventory.isFull() && seconds == 0) {
+                    if(Input.GetKey(KeyCode.E) && seconds == 0) {
                         keycodeGame.SetActive(true);
                         displayMessage(2);
                     } 
                     else if (keyCorrect && seconds == 0) {   
-                        inventory.Add(other.gameObject);
+                        
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                        UpdateScore(currentObject);
 
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                         keycodeGame.SetActive(false);
                     } 
                     else if (seconds != 0 ){
                         displayMessage(1);
 
-                    }
-                    else if (inventory.isFull()) {
-                        displayMessage(3);
                     }
                     else if (!Input.GetKey(KeyCode.E)){
                         displayMessage(0);
@@ -108,19 +109,20 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 else if (gameSelection == 1) {
 
-                    if (Input.GetKey(KeyCode.E) && !inventory.isFull() && seconds == 0) {
+                    if (Input.GetKey(KeyCode.E) && seconds == 0) {
                         // whip out mini game
                         fixPaintingGame.SetActive(true);
                         displayMessage(2);
                     }
                     else if (paintingCorrect && seconds == 0) {
 
-                        inventory.Add(other.gameObject);
+                        
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                        UpdateScore(currentObject);
 
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                         fixPaintingGame.SetActive(false);
                     }
@@ -128,14 +130,34 @@ public class PlayerPickUp : MonoBehaviourPun
                         displayMessage(1);
 
                     }
-                    else if (inventory.isFull()) {
-                        displayMessage(3);
-                    }
                     else if (!Input.GetKey(KeyCode.E)) {
                         displayMessage(0);
                         // check cool down
                     }
 
+                }
+
+                else if(gameSelection == 2){        // hold down task
+
+                    if(seconds == 0){
+                        holdDownTask();
+                    }
+                    
+                    else if(seconds != 0){
+                        displayMessage(1);
+                    }
+                    
+
+                    if(held && seconds == 0){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+                        targetTime += cooldown;
+
+                        //other.gameObject.SetActive(false);
+                        UpdateScore(currentObject);
+
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+                          
+                    }   
                 }
             }
         }      
@@ -163,6 +185,7 @@ public class PlayerPickUp : MonoBehaviourPun
         else if(n==1){messageBox.text = "Wait for Cooldown";}
         else if(n==2){messageBox.text = "";}
         else if(n==3){messageBox.text = "Inventory Full";}
+        else if(n==4){messageBox.text = "Hold E for 5 seconds to pick up";}
 
     }
 
@@ -183,6 +206,61 @@ public class PlayerPickUp : MonoBehaviourPun
 
         cooldownBox.text = "Cooldown: " + seconds;
 
+    }
+
+    void holdDownTask(){
+
+        if(Input.GetKeyDown(KeyCode.E)){    // if player is holding down E, start a timer                     
+            startTime = Time.time;
+            timer = startTime;
+            displayMessage(2);
+        }
+
+        if(Input.GetKey(KeyCode.E) && held == false && seconds == 0){   // for each time E is being held down, count/increment the timer and remove the onscreen text
+            timer += Time.deltaTime;                   
+            if(timer>(startTime + holdTime)){   // if the time reaches 5s, then set held to true, else set to false
+                held = true;
+                displayMessage(2);
+            }
+            else{
+                held = false;
+            }
+        }
+
+        if(Input.GetKey(KeyCode.E) == false){ // if key is not being pressed, just set held to false
+            held = false;
+            displayMessage(4);
+        
+        }
+
+    }
+
+
+    // Updates a players score 
+    void UpdateScore(GameObject obj) {
+
+        // Get the item and it's value
+        CollectableItem item = obj.GetComponent<CollectableItem>();
+        int value = item.value;
+
+        // Increase the current score by the value
+        int currentPlayerScore = (int) PhotonNetwork.LocalPlayer.CustomProperties["score"]; 
+        int newPlayerScore = currentPlayerScore + value;
+
+        int currentRoomScore = (int) PhotonNetwork.CurrentRoom.CustomProperties["score"];
+        int newRoomScore = currentRoomScore + value;
+        
+        // Create a hashtable entry with the new score
+        Hashtable playerHash = new Hashtable();
+        playerHash.Add("score", newPlayerScore);
+
+        // Set the player property to the new score
+        PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
+
+        Hashtable roomHash = new Hashtable();
+        roomHash.Add("score", newRoomScore);
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(roomHash);
     }
 
     [PunRPC]
