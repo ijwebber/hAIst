@@ -37,22 +37,10 @@ public class Inventory : MonoBehaviour
                 isFullList[i] = true;
                 itemInfos[i] = item.GetComponent<CollectableItem>();
 
-                UpdateImage(i);
                 break;
             }
         }
         UpdateScore();
-    }
-    void UpdateImage(int i) {
-        Transform inv = inventoryCanvas.transform.Find("Inventory");
-        RawImage image = inv.GetChild(i).GetChild(0).gameObject.GetComponent<RawImage>();
-
-        if (isFullList[i]) {
-            image.texture = itemInfos[i].image;
-        } else {
-            image.texture = null;
-        }
-        
     }
 
     public void Remove(int i) {
@@ -65,7 +53,6 @@ public class Inventory : MonoBehaviour
             gameObject.GetComponent<PhotonView>().RPC("ShowObject", RpcTarget.All, objID);
             itemText.enabled = false;
 
-            UpdateImage(i - 1);
             UpdateScore();
         }
     }
