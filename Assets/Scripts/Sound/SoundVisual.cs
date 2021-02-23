@@ -21,7 +21,6 @@ public class SoundVisual : MonoBehaviour
     private void UpdateSoundVis() {
         CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
 
-        // Debug.Log(grid.GetWidth());
         for (int x = 0; x < grid.GetWidth(); x++) {
             for (int y = 0; y < grid.GetHeight(); y++)  {
                 int index = x * grid.GetHeight() + y;
@@ -29,8 +28,8 @@ public class SoundVisual : MonoBehaviour
                 double gridValue = grid.GetValue(x,y);
                 float a = 0f;
                 if (gridValue != 0) {
-                    // Debug.Log(gridValue);
                     gridValue = 1/gridValue;
+                    // normalise transparency value
                     if (1-gridValue < .2f) {
                         a = .2f;
                     } else if(1-gridValue > .6f) {
@@ -39,13 +38,17 @@ public class SoundVisual : MonoBehaviour
                         a = (float)(1-gridValue);
                     }
                 }
+                // set color
                 Vector4 color = new Vector4(gradient.Evaluate((float)gridValue).r, gradient.Evaluate((float)gridValue).g, gradient.Evaluate((float)gridValue).b, a);
+
+                // set uv (deprecated, used to set colour from gradient)
                 Vector2 gridvalueUV = new Vector2((float)gridValue, 0);
 
                 MeshUtils.AddToMeshArrays(vertices, uv, colors, triangles, index, Quaternion.Euler(-90,0,0)*grid.GetWorldPosition(x,y), 0f, quadSize, gridvalueUV, gridvalueUV, color);
             }
         }
 
+        // update mesh
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         // mesh.uv = uv;

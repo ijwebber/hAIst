@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Photon.Pun;
 
-public class SoundController : MonoBehaviour
+public class SoundController : MonoBehaviourPun
 {
     [SerializeField] public SoundVisual soundVis;
     public Grid grid;
-    private Vector3 soundSource;
     public GameObject player;
     public GameObject gridContainer;
     public int maxVolume;
@@ -15,57 +15,65 @@ public class SoundController : MonoBehaviour
 #if UNITY_WEBGL && !UNITY_EDITOR
         void Awake()
         {
+            // ask for permissions
             Microphone.Init();
             Microphone.QueryAudioInput();
             maxVolume = 0;
         }
 #endif
 
-// #if UNITY_WEBGL && !UNITY_EDITOR
-        // void Update()
-        // {
-            // Testing.incomingVolume(maxVolume);
-        // }
-// #endif
-
 #if UNITY_WEBGL && !UNITY_EDITOR
             float[] volumes = Microphone.volumes;
 #endif
 
+    // on start
     void Start() {
         player = GameObject.Find("Timmy");
-        grid = new Grid(110,60,1f, gridContainer);
-        soundSource = new Vector3(-1,-1,-1);
-        // Debug.Log(GameObject.Find("Timmy"));
-
+        grid = new Grid(110,60,1f);
     }
 
+    //function done every frame
     void Update() {
-        // grid.updateWalls();
+        // update sound visualisation
+        soundVis.SetGrid(grid);
+        // send microphone volume if above threshold
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();
-        grid.SetValue(player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*240));
+        if (Microphone.volumes[0]*240 > 2) {
+            sendGrid(player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*240));
+        }
 #endif
+        if (Input.GetKeyDown("j")) {
+            sendGrid(player.transform.position, 240);
+        }
         if (Input.GetKeyDown("k")) {
-            Vector3 playerPosition = player.transform.position;
-            grid.SetValue(playerPosition, 60);
+            sendGrid(player.transform.position, 60);
         }
         if (Input.GetKeyDown("l")) {
-            Vector3 playerPosition = player.transform.position;
-            grid.SetValue(playerPosition, 30);
+            sendGrid(player.transform.position, 30);
         }
-        if (Input.GetKeyDown("j")) {
-            Vector3 playerPosition = player.transform.position;
-            soundSource = playerPosition;
-            grid.SetValue(playerPosition, 240);
-        }
+
+        //flatten array
+        // sendGrid();
+        // this.photonView.RPC("newGrid", RpcTarget.Others, grid.getPressure(), grid.GetWidth(), grid.GetHeight());
     }
 
+    void sendGrid(Vector3 playerPosition, int intensity) {
+        // send new sound source to other clients
+        this.photonView.RPC("updateGrid", RpcTarget.Others, playerPosition.x, playerPosition.y, playerPosition.z, intensity);
+        // set value in local grid
+        grid.SetValue(playerPosition, intensity);
+    }
+
+    [PunRPC]
+    void updateGrid(float x, float y, float z, int intensity) {
+        // receive new sound source and update local grid
+        grid.SetValue(new Vector3(x,y,z), intensity);
+    }
+
+    // every time step (every 50th of a second)
     void FixedUpdate() {
+        // call propagation step
         grid.updateNodes();
-        soundVis.SetGrid(grid);
-        // if (soundSource != new Vector3(-1,-1,-1)) {
-        //     grid.SetValue(soundSource, 240);
-        // }
     }
 }

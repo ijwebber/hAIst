@@ -10,6 +10,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject guardPrefab;
     public GameObject guardPrefab2;
     public GameObject guardPrefab3;
+    public SoundVisual soundMesh;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
     public GameObject EscapeMenu;
@@ -36,8 +37,13 @@ public class GameController : MonoBehaviourPunCallbacks
         //PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         //PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(soundMesh.name, soundMesh.transform.position, soundMesh.transform.rotation);
 
         Debug.Log("Spawned a player");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
         
     }
 
@@ -89,7 +95,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
-        inventory.Hide();
+        //inventory.Hide();
     }
 
 
