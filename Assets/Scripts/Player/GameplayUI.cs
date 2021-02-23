@@ -58,14 +58,11 @@ public class GameplayUI : MonoBehaviourPunCallbacks
             }
 
             int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) changedProps["special"];
-
             if (remaining > 0) {
                 specialUpdateText.text = "Special Items Remaining: " + remaining.ToString();
             } else {
                 specialUpdateText.text = "Time to escape!";
             }
-            
         }
-        
     }
 }
