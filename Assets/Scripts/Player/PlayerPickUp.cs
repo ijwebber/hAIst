@@ -97,6 +97,11 @@ public class PlayerPickUp : MonoBehaviourPun
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
                         keycodeGame.SetActive(false);
+                        fixPaintingGame.SetActive(false);
+
+                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                        fixPaintingGame.GetComponent<RotateTask>().win = false;
+                        keycodeGame.SetActive(false);
                     } 
                     else if (seconds != 0 ){
                         displayMessage(1);
@@ -126,6 +131,11 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+                        keycodeGame.SetActive(false);
+                        fixPaintingGame.SetActive(false);
+
+                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                        fixPaintingGame.GetComponent<RotateTask>().win = false;
                         fixPaintingGame.SetActive(false);
                     }
                     else if (seconds != 0 ){
@@ -159,6 +169,13 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+                        
+                        // reset game components
+                        keycodeGame.SetActive(false);
+                        fixPaintingGame.SetActive(false);
+
+                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                        fixPaintingGame.GetComponent<RotateTask>().win = false;
                           
                     }   
                 }
@@ -281,5 +298,6 @@ public class PlayerPickUp : MonoBehaviourPun
     [PunRPC]
     void hideObject(int objID) {  // do the following
        PhotonView.Find(objID).gameObject.SetActive(false);
+       
     }
 }
