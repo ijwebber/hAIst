@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviourPun
     IEnumerator disableForTime(float disableTime)
     {
         rb.constraints = RigidbodyConstraints.FreezeRotation;
-        transform.Rotate(0, 0, 90);
+        //transform.Rotate(0, 0, 90);
         
         yield return new WaitForSeconds(disableTime);
         disabled = false;
