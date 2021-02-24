@@ -3909,6 +3909,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isCrouchWalk
+  - Type: 4
+    SynchronizeType: 2
+    Name: isDown
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
@@ -3925,6 +3928,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SmoothingDelay: 5
+--- !u!114 &7845293358414595718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271825080736462228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 526831ef57200244c9597c0861935e4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 512
+  floatingTextPrefab: {fileID: 2015732713396155458, guid: 242d8ced320ad914680684874b3fec39,
+    type: 3}
+  holdTime: 3
+  startTime: 0
 --- !u!1001 &2542138856328681537
 PrefabInstance:
   m_ObjectHideFlags: 0

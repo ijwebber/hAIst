@@ -82,6 +82,7 @@ public class GuardMovement : MonoBehaviourPun
             if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1f && !playerMoveScript.disabled && !guardDisabled)
             {
                 playerMoveScript.disabled = true;
+                
             }
         } else {
             // check for sound

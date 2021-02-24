@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviourPun
     [SerializeField] private Rigidbody rb;
     //private TextMesh Caption = null;
     public bool disabled = false;
-    private bool timedOut = false;
+    
     private void Start()
     {
         CameraControlPlayer camera_control = this.gameObject.GetComponent<CameraControlPlayer>();
@@ -26,15 +26,7 @@ public class PlayerMovement : MonoBehaviourPun
         }
     }
 
-    IEnumerator disableForTime(float disableTime)
-    {
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
-        //transform.Rotate(0, 0, 90);
-        
-        yield return new WaitForSeconds(disableTime);
-        disabled = false;
-        timedOut = false;
-    }
+   
 
   
 
@@ -48,10 +40,10 @@ public class PlayerMovement : MonoBehaviourPun
         }
         
         //starts disabled timer if knocked out
-        if (disabled && !timedOut)
+        if (disabled)
         {
-            timedOut = true;
-            StartCoroutine(disableForTime(3.0f));
+            this.photonView.RPC("syncDisabled", RpcTarget.All, true);
+            
 
         }
 
@@ -93,5 +85,11 @@ public class PlayerMovement : MonoBehaviourPun
         
 
         
+    }
+
+    [PunRPC]
+    void syncDisabled(bool disabledValue)
+    {   
+        disabled = disabledValue;
     }
 }
