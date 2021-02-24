@@ -34,17 +34,12 @@ public class GameController : MonoBehaviourPunCallbacks
         // Set score custom props
         SetProps();
 
-<<<<<<< HEAD
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
             SetupItems();
         }
         
-        //PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
-        //PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
-=======
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
->>>>>>> guard-sound
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(soundMesh.name, soundMesh.transform.position, soundMesh.transform.rotation);
 
