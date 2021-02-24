@@ -99,14 +99,17 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
 
-    // Set players score custom property to 0 
+    // Set score to 0 && special item numbers
     void SetProps() {
         Hashtable setScore = new Hashtable() {{"score", 0}};
 		PhotonNetwork.LocalPlayer.SetCustomProperties(setScore);
-        PhotonNetwork.CurrentRoom.SetCustomProperties(setScore);
+        
 
         Hashtable setSpecial = new Hashtable() {{"special", 0}, {"specialMax", 3}};
-        PhotonNetwork.CurrentRoom.SetCustomProperties(setSpecial);
-    }
 
+        if (PhotonNetwork.LocalPlayer.IsMasterClient) {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(setScore);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(setSpecial);
+        }
+    }
 }

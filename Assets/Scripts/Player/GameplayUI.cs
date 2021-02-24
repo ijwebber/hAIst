@@ -40,7 +40,18 @@ public class GameplayUI : MonoBehaviourPunCallbacks
             string name = targetPlayer.NickName;
             int i = targetPlayer.ActorNumber - 1;
             string playerText = name + ": $" + changedProps["score"];
-            playerScores[i].text = playerText;    
+            playerScores[i].text = playerText;
+
+            if (PhotonNetwork.LocalPlayer.IsMasterClient) {
+                int total = 0;
+                foreach (Player player in PhotonNetwork.PlayerList) {
+                    total += (int) player.CustomProperties["score"];
+                }
+
+                Hashtable roomScore = new Hashtable();
+                roomScore.Add("score", total);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(roomScore);
+            }    
         }      
     }
 

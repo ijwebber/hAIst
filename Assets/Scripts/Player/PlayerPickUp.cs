@@ -266,9 +266,6 @@ public class PlayerPickUp : MonoBehaviourPun
         // Increase the current score by the value
         int currentPlayerScore = (int) PhotonNetwork.LocalPlayer.CustomProperties["score"]; 
         int newPlayerScore = currentPlayerScore + value;
-
-        int currentRoomScore = (int) PhotonNetwork.CurrentRoom.CustomProperties["score"];
-        int newRoomScore = currentRoomScore + value;
         
         // Create a hashtable entry with the new score
         Hashtable playerHash = new Hashtable();
@@ -276,11 +273,6 @@ public class PlayerPickUp : MonoBehaviourPun
 
         // Set the player property to the new score
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
-
-        Hashtable roomHash = new Hashtable();
-        roomHash.Add("score", newRoomScore);
-
-        PhotonNetwork.CurrentRoom.SetCustomProperties(roomHash);
     }
 
     void CheckIfSpecial(GameObject obj) {
