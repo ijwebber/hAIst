@@ -3898,6 +3898,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SmoothingDelay: 5
+--- !u!114 &3283916612493446799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271825080736462228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 2
+    Name: isWalking
+  - Type: 4
+    SynchronizeType: 2
+    Name: isCrouched
+  - Type: 4
+    SynchronizeType: 2
+    Name: isCrouchWalk
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1001 &2542138856328681537
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3998,13 +4025,18 @@ PrefabInstance:
     - target: {fileID: 8543146254879155823, guid: 6e811334a11215a4e8b9113fc2c60e33,
         type: 3}
       propertyPath: ObservedComponents.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8543146254879155823, guid: 6e811334a11215a4e8b9113fc2c60e33,
         type: 3}
       propertyPath: ObservedComponents.Array.data[1]
       value: 
       objectReference: {fileID: 7562598184786088477}
+    - target: {fileID: 8543146254879155823, guid: 6e811334a11215a4e8b9113fc2c60e33,
+        type: 3}
+      propertyPath: ObservedComponents.Array.data[2]
+      value: 
+      objectReference: {fileID: 3283916612493446799}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e811334a11215a4e8b9113fc2c60e33, type: 3}
 --- !u!4 &4783553250932223790 stripped
