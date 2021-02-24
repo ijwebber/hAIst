@@ -8,7 +8,7 @@ public class CollectableItem : MonoBehaviourPun
     public bool special = false;
 
     [PunRPC]
-    void UpdateObject(bool newSpecial, int newValue) {
+    public void UpdateObject(bool newSpecial, int newValue) {
         Debug.Log(itemName);
         this.value = newValue;
         this.special = newSpecial;

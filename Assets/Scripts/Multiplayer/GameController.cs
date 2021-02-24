@@ -129,10 +129,12 @@ public class GameController : MonoBehaviourPunCallbacks
             if (rand.Contains(i)) {
                 Debug.Log(objs[i].GetComponent<CollectableItem>().itemName);
                 int value = Random.Range(60, 100) * 100;
+                objs[i].GetComponent<CollectableItem>().UpdateObject(true, value);
                 view.RPC("UpdateObject", RpcTarget.All, true, value);
             } else {
                 Debug.Log(objs[i].GetComponent<CollectableItem>().itemName);
                 int value = Random.Range(10, 40) * 100;
+                objs[i].GetComponent<CollectableItem>().UpdateObject(false, value);
                 view.RPC("UpdateObject", RpcTarget.All, false, value);
             } 
         }
