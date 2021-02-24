@@ -34,6 +34,10 @@ public class GameController : MonoBehaviourPunCallbacks
         // Set score custom props
         SetProps();
 
+        if (PhotonNetwork.LocalPlayer.IsMasterClient) {
+            SetupItems();
+        }
+        
         //PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         //PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
@@ -111,5 +115,40 @@ public class GameController : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(setScore);
             PhotonNetwork.CurrentRoom.SetCustomProperties(setSpecial);
         }
+    }
+
+    void SetupItems() {
+        GameObject[] objs = GameObject.FindGameObjectsWithTag("steal");
+
+        // Generate 3 random numbers within the range of the objects
+        List<int> rand = RandomExtension(0, objs.Length, 3);
+
+        for (int i = 0; i < objs.Length; i++){
+            PhotonView view = objs[i].GetComponent<PhotonView>();
+            Debug.Log(view.ViewID.ToString() + "  " + view);
+            if (rand.Contains(i)) {
+                Debug.Log(objs[i].GetComponent<CollectableItem>().itemName);
+                int value = Random.Range(60, 100) * 100;
+                view.RPC("UpdateObject", RpcTarget.All, true, value);
+            } else {
+                Debug.Log(objs[i].GetComponent<CollectableItem>().itemName);
+                int value = Random.Range(10, 40) * 100;
+                view.RPC("UpdateObject", RpcTarget.All, false, value);
+            } 
+        }
+    }
+
+    List<int> RandomExtension(int x, int y, int n) {
+        List<int> rand = new List<int>();
+
+        while (rand.Count < n)
+        {
+            int num = Random.Range(x, y);
+            if (!rand.Contains(num)) {
+                rand.Add(num);
+            }
+        }
+
+        return rand;
     }
 }
