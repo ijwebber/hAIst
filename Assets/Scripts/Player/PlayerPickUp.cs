@@ -102,6 +102,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
                         keycodeGame.SetActive(false);
+                        held = false;
                     } 
                     else if (seconds != 0 ){
                         displayMessage(1);
@@ -137,6 +138,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
                         fixPaintingGame.SetActive(false);
+                        held = false;
                     }
                     else if (seconds != 0 ){
                         displayMessage(1);
@@ -176,6 +178,8 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
+
+                        held = false;
                           
                     }   
                 }
