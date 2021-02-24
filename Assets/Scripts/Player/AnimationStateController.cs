@@ -27,43 +27,46 @@ public class AnimationStateController : MonoBehaviourPun
         bool leftB = Input.GetKey(KeyCode.A);
         bool rightB = Input.GetKey(KeyCode.D);
         bool iscrouched = animator.GetBool("isCrouched");
+        bool isdown = GetComponent<PlayerMovement>().disabled;
 
-        if(Input.GetKey(KeyCode.Space)){
-            animator.SetBool("isCrouched",true);
+        if(isdown){
+            animator.SetBool("isDown",true);
+        }
+        else{
+            animator.SetBool("isDown",false);
+
+            if(Input.GetKey(KeyCode.Space)){
+                animator.SetBool("isCrouched",true);
             iscrouched = true;
             }
 
-        if(!(Input.GetKey(KeyCode.Space))){
-            animator.SetBool("isCrouched",false);
+            if(!(Input.GetKey(KeyCode.Space))){
+                animator.SetBool("isCrouched",false);
+            }
+
+            if(iscrouched && (forwardB || backB || leftB || rightB)){
+                animator.SetBool("isCrouchWalk",true);
+            }
+
+            if(!(iscrouched && (forwardB || backB || leftB || rightB))){
+                animator.SetBool("isCrouchWalk",false);
+            }
+
+            if(Input.GetKey(KeyCode.W) ||Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)  || Input.GetKey(KeyCode.A)  ){
+                animator.SetBool("isWalking",true);
+            }
+
+            if(!(forwardB || backB || leftB || rightB)){
+                animator.SetBool("isWalking",false);
+            }
+
+            if(!(Input.GetKey(KeyCode.Space))){
+                animator.SetBool("isCrouchWalk",false);
+            }
+
+
         }
-
-        if(iscrouched && (forwardB || backB || leftB || rightB)){
-            animator.SetBool("isCrouchWalk",true);
-        }
-
-        if(!(iscrouched && (forwardB || backB || leftB || rightB))){
-            animator.SetBool("isCrouchWalk",false);
-        }
-
-        if(Input.GetKey(KeyCode.W) ||Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)  || Input.GetKey(KeyCode.A)  ){
-            animator.SetBool("isWalking",true);
-        }
-
-        if(!(forwardB || backB || leftB || rightB)){
-            animator.SetBool("isWalking",false);
-        }
-
-        if(!(Input.GetKey(KeyCode.Space))){
-            animator.SetBool("isCrouchWalk",false);
-        }
-
-        
-
-        
-    
         
     }
-
-
     
 }
