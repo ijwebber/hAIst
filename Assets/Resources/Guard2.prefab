@@ -203,7 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 9
-  viewAngle: 230
+  viewAngle: 130
+  meshResolution: 0.22
   targetMask:
     serializedVersion: 2
     m_Bits: 512
@@ -211,6 +212,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   agent: {fileID: 3957590758831994677}
+  viewMeshFilter: {fileID: 0}
   visibleTargets: []
   behindGuardTargets: []
 --- !u!114 &3957590758831994673
@@ -225,7 +227,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d230c7655cfe13741972605c054df625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  guardController: {fileID: 0}
   agent: {fileID: 3957590758831994677}
+  soundVis: {fileID: 0}
   patrolPath:
   - {x: -43.78, y: 13.36, z: 36.98}
   - {x: 43.6, y: 13.36, z: 38.8}
