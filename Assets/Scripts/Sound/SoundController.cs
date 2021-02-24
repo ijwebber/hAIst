@@ -32,14 +32,15 @@ public class SoundController : MonoBehaviourPun
     void Start() {
         player = GameObject.Find("Timmy");
         grid = new Grid(110,60,1f);
+        soundVis.initGrid(grid);
         this.localSoundGrid = GameObject.FindObjectOfType<GuardController>();
         // guardController.setGrid(grid);
     }
 
     //function done every frame
-    void Update() {
+    void LateUpdate() {
         // update sound visualisation
-        soundVis.SetGrid(grid);
+        soundVis.SetGrid();
         // send microphone volume if above threshold
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();

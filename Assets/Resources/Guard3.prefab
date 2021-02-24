@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 2337730633997927904}
   - component: {fileID: 7398894807846927064}
   - component: {fileID: 4251731265097000222}
+  - component: {fileID: 8713621226366194300}
   m_Layer: 0
   m_Name: Guard3
   m_TagString: Untagged
@@ -234,7 +235,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 9
-  viewAngle: 230
+  viewAngle: 130
+  meshResolution: 0.22
   targetMask:
     serializedVersion: 2
     m_Bits: 512
@@ -242,6 +244,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   agent: {fileID: 3690989282875342136}
+  viewMeshFilter: {fileID: 0}
   visibleTargets: []
   behindGuardTargets: []
 --- !u!114 &3690989282875342140
@@ -339,6 +342,14 @@ MonoBehaviour:
     type: 3}
   timerDisplayed: 0
   offset: {x: 0, y: 3, z: -0.1}
+--- !u!33 &8713621226366194300
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609556142392328302}
+  m_Mesh: {fileID: 0}
 --- !u!1 &7383316279528216252
 GameObject:
   m_ObjectHideFlags: 0

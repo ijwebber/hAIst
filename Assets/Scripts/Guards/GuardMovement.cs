@@ -4,6 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
+
+public enum State {
+    normal      = 0,
+    suspicious  = 1,
+    chase       = 2,
+    disabled    = 3
+}
 
 public class GuardMovement : MonoBehaviourPun
 {
@@ -16,6 +24,7 @@ public class GuardMovement : MonoBehaviourPun
 
     public List<Vector3> patrolPath = new List<Vector3> {new Vector3(-44.0f, 13.38f, 27.83f), new Vector3(-8.0f, 13.38f, 27.7f), new Vector3(-6.2f, 13.38f, 4.3f), new Vector3(-32.4f, 13.21f, 13.0f)};
     private int currDes = 0;
+    private State state;
     private bool start = true;
     public bool guardDisabled = false;
     private GameObject player;
@@ -23,6 +32,7 @@ public class GuardMovement : MonoBehaviourPun
     private bool onTheWay = false;
     private float xDir = 0;
     private float yDir = 0;
+    private FieldOfView fovScript;
     
 
     private bool timedOut = false;
@@ -39,21 +49,23 @@ public class GuardMovement : MonoBehaviourPun
     private void Start() {
         agent.SetDestination(patrolPath[currDes]);
         player = GameObject.Find("Timmy");
+        this.state = State.normal;
         this.guardController = GameObject.FindObjectOfType<GuardController>();
+        fovScript = GetComponent<FieldOfView>();
     }
     void Update()
     {
 
-        FieldOfView fovScript = GetComponent<FieldOfView>();
 
         //if a target is in fov then path to that target
-        if (fovScript.visibleTargets.Count != 0)
+        if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
         {
 
             GameObject playerToFollow = fovScript.visibleTargets[0];
 
             foreach (GameObject g in fovScript.visibleTargets)
             {
+                this.state = State.chase;
                 PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
 
                 if (!moveScript.disabled)
@@ -73,19 +85,16 @@ public class GuardMovement : MonoBehaviourPun
             }
         } else {
             // check for sound
-            if(guardController.localGrid.GetValue(transform.position) > 3 && listening) {
-                listening = false;
+            if(guardController.localGrid.GetValue(transform.position) > 3 && this.state != State.disabled) {
                 Vector3 playerPosition = player.transform.position;
                 Debug.Log("I hear a who at // " + playerPosition);
                 this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
-
             } else {
 
                 //if destination has been reached, the guard moves to the next cords in the patrol path
                 if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
                 {
-                    listening = true;
-                    onTheWay = false;
+                    state = State.normal;
 
                     if (currDes == patrolPath.Count - 1)
                     {
@@ -119,9 +128,8 @@ public class GuardMovement : MonoBehaviourPun
             }
         }
 
-        if(guardDisabled) //runs if guard is disabled
+        if(this.state == State.disabled || guardDisabled) //runs if guard is disabled
         {
-            
             //check if the timer has already been started, if so don't start it again
             if (!timedOut)
             {
@@ -138,7 +146,8 @@ public class GuardMovement : MonoBehaviourPun
     [PunRPC]
     void snitch(float x, float y, float z) {
         // receive new sound source and update local grid
-        if (!onTheWay) {
+        if (this.state == State.normal) {
+            this.state = State.suspicious;
             agent.SetDestination(new Vector3(x,y,z));
         }
     }
@@ -149,6 +158,7 @@ public class GuardMovement : MonoBehaviourPun
      
         yield return new WaitForSeconds(disableTime);
         guardDisabled = false;
+        this.state = State.normal;
         timedOut = false;
         agent.isStopped = false;
         

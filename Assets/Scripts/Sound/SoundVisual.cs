@@ -9,16 +9,21 @@ public class SoundVisual : MonoBehaviour
     public Grid grid;
     private Mesh mesh;
 
-    private void Awake() {
+    private void Start() {
+        Debug.Log("this is called");
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
     }
-    public void SetGrid(Grid grid) {
+
+    public void initGrid(Grid grid) {
         this.grid = grid;
+    }
+    public void SetGrid() {
         UpdateSoundVis();
     }
 
     private void UpdateSoundVis() {
+        mesh.Clear();
         CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
 
         for (int x = 0; x < grid.GetWidth(); x++) {
@@ -27,19 +32,19 @@ public class SoundVisual : MonoBehaviour
                 Vector3 quadSize = new Vector3(1,1,0) * grid.GetCellSize();
                 double gridValue = grid.GetValue(x,y);
                 float a = 0f;
-                if (gridValue != 0) {
-                    gridValue = 1/gridValue;
+                if (gridValue > 0) {
+                    gridValue = (gridValue/240);
                     // normalise transparency value
-                    if (1-gridValue < .2f) {
-                        a = .2f;
-                    } else if(1-gridValue > .6f) {
+                    if (gridValue < .15f) {
+                        a = .15f;
+                    } else if(gridValue > .6f) {
                         a = .6f;
                     } else {
-                        a = (float)(1-gridValue);
+                        a = (float)(gridValue);
                     }
                 }
                 // set color
-                Vector4 color = new Vector4(gradient.Evaluate((float)gridValue).r, gradient.Evaluate((float)gridValue).g, gradient.Evaluate((float)gridValue).b, a);
+                Vector4 color = new Vector4(1, 1, 1, a);
 
                 // set uv (deprecated, used to set colour from gradient)
                 Vector2 gridvalueUV = new Vector2((float)gridValue, 0);
@@ -48,11 +53,12 @@ public class SoundVisual : MonoBehaviour
             }
         }
 
+        mesh.Clear();
         // update mesh
         mesh.vertices = vertices;
+        mesh.colors = colors;
         mesh.triangles = triangles;
         // mesh.uv = uv;
-        mesh.colors = colors;
         mesh.RecalculateNormals();
     }
 

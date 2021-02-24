@@ -203,7 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 9
-  viewAngle: 230
+  viewAngle: 130
+  meshResolution: 0.22
   targetMask:
     serializedVersion: 2
     m_Bits: 512
@@ -211,6 +212,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   agent: {fileID: 3957590758831994677}
+  viewMeshFilter: {fileID: 0}
   visibleTargets: []
   behindGuardTargets: []
 --- !u!114 &3957590758831994673

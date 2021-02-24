@@ -8,7 +8,7 @@ public class GuardController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        localGrid = new Grid(110,60,1f);
+        this.localGrid = new Grid(110,60,1f);
     }
 
     public void setValue(Vector3 position, float intensity) {
