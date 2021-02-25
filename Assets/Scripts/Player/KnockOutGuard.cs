@@ -39,7 +39,7 @@ public class KnockOutGuard : MonoBehaviour
             inRangeOfGuard = false;
             guardViewID = -1;
         } 
-        else if (guard && !guard.GetComponent<GuardMovement>().guardDisabled && guardViewID != -1) //if not already disabled, display locally to the player "E" to say that the player should press E to disable this guard
+        else if (guard && !guard.GetComponent<GuardMovement>().guardDisabled && guardViewID != -1 && !GetComponent<PlayerMovement>().disabled) //if not already disabled, display locally to the player "E" to say that the player should press E to disable this guard
         {
             GuardKnockOutTimer knockoutscript = guard.GetComponent<GuardKnockOutTimer>();
             tt = Instantiate(knockoutscript.floatingTextPrefab, guard.transform.position + new Vector3(-0.1f, 3f, 0f), Quaternion.identity, guard.transform);
