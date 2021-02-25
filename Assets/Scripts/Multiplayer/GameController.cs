@@ -15,9 +15,6 @@ public class GameController : MonoBehaviourPunCallbacks
     public GUISkin myskin = null;
     public GameObject EscapeMenu;
 
-
-    private Inventory inventory;
-
     //just spawns in player object
     private void Awake()
     {
@@ -99,7 +96,6 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
-        //inventory.Hide();
     }
 
 
@@ -107,7 +103,9 @@ public class GameController : MonoBehaviourPunCallbacks
     void SetProps(int numOfSpecial) {
         Hashtable setScore = new Hashtable() {{"score", 0}};
 		PhotonNetwork.LocalPlayer.SetCustomProperties(setScore);
-        
+
+        Hashtable setPlayer = new Hashtable() {{"itemsStolen", 0}, {"specialStolen", 0}};
+        PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);
 
         Hashtable setSpecial = new Hashtable() {{"special", 0}, {"specialMax", numOfSpecial}};
 
@@ -129,7 +127,7 @@ public class GameController : MonoBehaviourPunCallbacks
                 int value = Random.Range(60, 100) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(true, value);
                 view.RPC("UpdateObject", RpcTarget.All, true, value);
-                Debug.Log("isaac" + objs[i].name);
+                Debug.Log("isaac " + objs[i].name);
             } else {
                 int value = Random.Range(10, 40) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(false, value);
@@ -150,5 +148,15 @@ public class GameController : MonoBehaviourPunCallbacks
         }
 
         return rand;
+    }
+
+    public override void OnRoomPropertiesUpdate(Hashtable changedProps) {
+        base.OnRoomPropertiesUpdate(changedProps);
+
+        if (changedProps["win"] != null) {
+            if ((bool) changedProps["win"]) {
+                PhotonNetwork.LoadLevel("EndScreen");
+            }
+        }
     }
 }

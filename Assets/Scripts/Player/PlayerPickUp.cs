@@ -267,13 +267,23 @@ public class PlayerPickUp : MonoBehaviourPun
         CollectableItem item = obj.GetComponent<CollectableItem>();
         int value = item.value;
 
+        Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
         // Increase the current score by the value
-        int currentPlayerScore = (int) PhotonNetwork.LocalPlayer.CustomProperties["score"]; 
+        int currentPlayerScore = (int) props["score"]; 
         int newPlayerScore = currentPlayerScore + value;
         
         // Create a hashtable entry with the new score
         Hashtable playerHash = new Hashtable();
         playerHash.Add("score", newPlayerScore);
+
+        int itemStolenCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["itemsStolen"];
+        playerHash.Add("itemsStolen", itemStolenCount + 1);
+
+        if (item.special) {
+            int specialStolenCount = (int) props["specialStolen"];
+            Debug.Log("isaac " + itemStolenCount);
+            playerHash.Add("specialStolen", specialStolenCount + 1);
+        }
 
         // Set the player property to the new score
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);

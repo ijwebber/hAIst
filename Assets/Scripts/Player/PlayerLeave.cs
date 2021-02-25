@@ -29,7 +29,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         base.OnRoomPropertiesUpdate(changedProps);  
         if (changedProps["win"] != null) {
             if ((bool) changedProps["win"]){
-                Debug.Log("winner");
+                Debug.Log("winner"); // TODO remove
             } 
         }
     }
