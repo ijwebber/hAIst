@@ -40,6 +40,7 @@ public class FieldOfView : MonoBehaviour
     void FindVisibleTargets()
     {
         visibleTargets.Clear();
+        behindGuardTargets.Clear();
         Collider[] targetsInView = Physics.OverlapSphere(transform.position, viewRadius, targetMask);
 
         //look through all the objects with target tag
@@ -55,7 +56,7 @@ public class FieldOfView : MonoBehaviour
                 float dstToTarget = Vector3.Distance(transform.position, target.transform.position);
 
                 //checks if obstacle is in way
-                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
+                if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) && !target.GetComponent<PlayerMovement>().disabled)
                 {
 
 

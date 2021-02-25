@@ -70,18 +70,20 @@ public class GuardMovement : MonoBehaviourPun
         else
         {
             //if a target is in fov then path to that target
-            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
+            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled && this.state != State.chase)
             {
 
                 GameObject playerToFollow = fovScript.visibleTargets[0];
 
                 foreach (GameObject g in fovScript.visibleTargets)
                 {
-                    this.state = State.chase;
+                    
                     PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
 
                     if (!moveScript.disabled)
-                    {
+                    {   
+                        this.state = State.chase;
+                        
                         playerToFollow = g;
                         agent.SetDestination(g.transform.position);
                         agent.speed = 6.0f;
@@ -95,6 +97,9 @@ public class GuardMovement : MonoBehaviourPun
                 if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1f && !playerMoveScript.disabled && !guardDisabled)
                 {
                     playerMoveScript.disabled = true;
+                    this.state = State.normal;
+                    agent.ResetPath();
+                    playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
 
                 }
             }
@@ -103,6 +108,7 @@ public class GuardMovement : MonoBehaviourPun
                 // check for sound
                 if (guardController.localGrid.GetValue(transform.position) > 3 && this.state != State.disabled)
                 {
+                    Debug.LogError(guardController.localGrid.GetValue(transform.position));
                     Vector3 playerPosition = player.transform.position;
                     Debug.Log("I hear a who at // " + playerPosition);
                     this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
