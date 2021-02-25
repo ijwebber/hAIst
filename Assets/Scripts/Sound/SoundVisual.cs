@@ -23,25 +23,23 @@ public class SoundVisual : MonoBehaviour
     }
 
     private void UpdateSoundVis() {
-        mesh.Clear();
         CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
 
         for (int x = 0; x < grid.GetWidth(); x++) {
             for (int y = 0; y < grid.GetHeight(); y++)  {
+                float gridValue = grid.GetValue(x,y);
                 int index = x * grid.GetHeight() + y;
                 Vector3 quadSize = new Vector3(1,1,0) * grid.GetCellSize();
-                double gridValue = grid.GetValue(x,y);
                 float a = 0f;
                 if (gridValue > 0) {
                     // normalise transparency value
-                    float newGridValue = Mathf.Sqrt((float)gridValue)/10;
-                    gridValue = newGridValue;
+                    gridValue = Mathf.Sqrt(gridValue)/10;
                     if (gridValue < .15f) {
                         a = .15f;
                     } else if(gridValue > .6f) {
                         a = .6f;
                     } else {
-                        a = (float)(gridValue);
+                        a = (gridValue);
                     }
                 }
                 // set color
@@ -54,7 +52,6 @@ public class SoundVisual : MonoBehaviour
             }
         }
 
-        mesh.Clear();
         // update mesh
         mesh.vertices = vertices;
         mesh.colors = colors;

@@ -72,7 +72,15 @@ public class GameplayUI : MonoBehaviourPunCallbacks
             if (remaining > 0) {
                 specialUpdateText.text = "Special Items Remaining: " + remaining.ToString();
             } else {
-                specialUpdateText.text = "Time to escape!";
+                specialUpdateText.text = "The escape has opened!";
+
+                GameObject[] objs = GameObject.FindGameObjectsWithTag("exit");
+                foreach (GameObject tag in objs)
+                {
+                    GameObject mainObj = tag.transform.parent.gameObject;
+                    mainObj.SetActive(false);
+                }
+
             }
         }
     }
