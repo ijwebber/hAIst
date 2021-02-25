@@ -32,10 +32,10 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
         // Set score custom props
-        SetProps(1);
+        SetProps(3);
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            SetupItems(1);
+            SetupItems(3);
         }
         
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
