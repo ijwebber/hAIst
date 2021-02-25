@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class KnockOutGuard : MonoBehaviour
 {   
 
     private bool inRangeOfGuard = false;
     private int guardViewID = -1;
-    private GameObject tt;
+    
+    private TextMeshProUGUI guardStatusText;
+    private GameObject guard;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,18 +21,19 @@ public class KnockOutGuard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        GameObject guard = null;
+        
 
         //if text object exists from previous frame, delete it as we need to update it for this frame
-        if (tt)
+        if (guardStatusText && guard && !guard.GetComponent<GuardMovement>().guardDisabled)
         {
-            Destroy(tt);
+            guardStatusText.text = "";
         }
 
         //if this player is behind a guard then get the guard gameobject using the id
         if (guardViewID != -1)
         {
             guard = PhotonNetwork.GetPhotonView(guardViewID).gameObject;
+            guardStatusText = guard.GetComponent<GuardKnockOutTimer>().statusText;
         }
 
         
@@ -38,18 +42,21 @@ public class KnockOutGuard : MonoBehaviour
         {
             inRangeOfGuard = false;
             guardViewID = -1;
+            guard = null;
         } 
         else if (guard && !guard.GetComponent<GuardMovement>().guardDisabled && guardViewID != -1 && !GetComponent<PlayerMovement>().disabled) //if not already disabled, display locally to the player "E" to say that the player should press E to disable this guard
         {
             GuardKnockOutTimer knockoutscript = guard.GetComponent<GuardKnockOutTimer>();
-            tt = Instantiate(knockoutscript.floatingTextPrefab, guard.transform.position + new Vector3(-0.1f, 3f, 0f), Quaternion.identity, guard.transform);
-            tt.GetComponent<TextMesh>().text = "E";
+
+            
+            guardStatusText.text = "E";
+            
 
             //if pressed destroy "E" text as timer text will take its place and set the guard's disabled flag to true
             if (Input.GetKeyDown(KeyCode.E))
             {
 
-                Destroy(tt);
+                guardStatusText.text = "";
                 guard.GetComponent<GuardMovement>().guardDisabled = true;
 
             }
