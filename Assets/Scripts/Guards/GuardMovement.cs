@@ -57,80 +57,7 @@ public class GuardMovement : MonoBehaviourPun
     void Update()
     {
 
-
-        //if a target is in fov then path to that target
-        if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
-        {
-
-            GameObject playerToFollow = fovScript.visibleTargets[0];
-
-            foreach (GameObject g in fovScript.visibleTargets)
-            {
-                this.state = State.chase;
-                PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
-
-                if (!moveScript.disabled)
-                {
-                    playerToFollow = g;
-                    agent.SetDestination(g.transform.position);
-
-                    break;
-                }
-            }
-            PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
-
-            //if guard is next to player then disable his ass
-            if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1f && !playerMoveScript.disabled && !guardDisabled)
-            {
-                playerMoveScript.disabled = true;
-                
-            }
-        } else {
-            // check for sound
-            if(guardController.localGrid.GetValue(transform.position) > 3 && this.state != State.disabled) {
-                Vector3 playerPosition = player.transform.position;
-                Debug.Log("I hear a who at // " + playerPosition);
-                this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
-            } else {
-
-                //if destination has been reached, the guard moves to the next cords in the patrol path
-                if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
-                {
-                    state = State.normal;
-
-                    if (currDes == patrolPath.Count - 1)
-                    {
-                        currDes = 0;
-                    }
-                    else currDes++;
-
-                    //Debug.Log(currDes);
-
-                    agent.SetDestination(patrolPath[currDes]);
-                }
-            }
-        }
-
-        //check if any players are behind this guard, if they are then notify the player via RPC that they can knock out this guard
-        if (fovScript.behindGuardTargets.Count != 0)
-        {
-            foreach (GameObject g in fovScript.behindGuardTargets)
-            {
-                if (Mathf.Abs(g.transform.position.x - transform.position.x) <= 1.5f && Mathf.Abs(g.transform.position.z - transform.position.z) <= 1.5f)
-                {
-
-
-                    PhotonView view = PhotonView.Get(this);
-                    Player p = g.GetComponent<PhotonView>().Controller;
-
-                    g.GetComponent<PhotonView>().RPC("KnockOut", p, view.ViewID);
-
-
-                }
-            }
-        }
-
-        if(this.state == State.disabled || guardDisabled) //runs if guard is disabled
+        if (this.state == State.disabled || guardDisabled) //runs if guard is disabled
         {
             //check if the timer has already been started, if so don't start it again
             if (!timedOut)
@@ -140,6 +67,91 @@ public class GuardMovement : MonoBehaviourPun
                 StartCoroutine(disableForTime(3.0f));
             }
         }
+        else
+        {
+            //if a target is in fov then path to that target
+            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
+            {
+
+                GameObject playerToFollow = fovScript.visibleTargets[0];
+
+                foreach (GameObject g in fovScript.visibleTargets)
+                {
+                    this.state = State.chase;
+                    PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
+
+                    if (!moveScript.disabled)
+                    {
+                        playerToFollow = g;
+                        agent.SetDestination(g.transform.position);
+                        agent.speed = 6.0f;
+
+                        break;
+                    }
+                }
+                PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
+
+                //if guard is next to player then disable his ass
+                if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1f && !playerMoveScript.disabled && !guardDisabled)
+                {
+                    playerMoveScript.disabled = true;
+
+                }
+            }
+            else
+            {
+                // check for sound
+                if (guardController.localGrid.GetValue(transform.position) > 3 && this.state != State.disabled)
+                {
+                    Vector3 playerPosition = player.transform.position;
+                    Debug.Log("I hear a who at // " + playerPosition);
+                    this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
+                }
+                else
+                {
+
+                    //if destination has been reached, the guard moves to the next cords in the patrol path
+                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
+                    {
+                        state = State.normal;
+                        agent.speed = 3.5f;
+
+                        if (currDes == patrolPath.Count - 1)
+                        {
+                            currDes = 0;
+                        }
+                        else currDes++;
+
+                        //Debug.Log(currDes);
+
+                        agent.SetDestination(patrolPath[currDes]);
+                    }
+                }
+            }
+
+            //check if any players are behind this guard, if they are then notify the player via RPC that they can knock out this guard
+            if (fovScript.behindGuardTargets.Count != 0)
+            {
+                foreach (GameObject g in fovScript.behindGuardTargets)
+                {
+                    if (Mathf.Abs(g.transform.position.x - transform.position.x) <= 1.5f && Mathf.Abs(g.transform.position.z - transform.position.z) <= 1.5f)
+                    {
+
+
+                        PhotonView view = PhotonView.Get(this);
+                        Player p = g.GetComponent<PhotonView>().Controller;
+
+                        g.GetComponent<PhotonView>().RPC("KnockOut", p, view.ViewID);
+
+
+                    }
+                }
+            }
+        }
+
+        
+
+        
 
        
         
