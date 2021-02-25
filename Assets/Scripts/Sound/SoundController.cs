@@ -64,7 +64,7 @@ public class SoundController : MonoBehaviourPun
         // this.photonView.RPC("newGrid", RpcTarget.Others, grid.getPressure(), grid.GetWidth(), grid.GetHeight());
     }
 
-    void sendGrid(Vector3 playerPosition, int intensity) {
+    public void sendGrid(Vector3 playerPosition, int intensity) {
         // send new sound source to other clients
         this.photonView.RPC("updateGrid", RpcTarget.All, playerPosition.x, playerPosition.y, playerPosition.z, intensity);
         // set value in local grid
