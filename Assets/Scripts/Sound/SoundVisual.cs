@@ -33,8 +33,9 @@ public class SoundVisual : MonoBehaviour
                 double gridValue = grid.GetValue(x,y);
                 float a = 0f;
                 if (gridValue > 0) {
-                    gridValue = (gridValue/240);
                     // normalise transparency value
+                    float newGridValue = Mathf.Sqrt((float)gridValue)/10;
+                    gridValue = newGridValue;
                     if (gridValue < .15f) {
                         a = .15f;
                     } else if(gridValue > .6f) {
