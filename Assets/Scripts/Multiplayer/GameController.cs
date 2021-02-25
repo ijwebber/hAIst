@@ -32,10 +32,10 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
         // Set score custom props
-        SetProps();
+        SetProps(1);
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            SetupItems();
+            SetupItems(1);
         }
         
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
@@ -104,12 +104,12 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
     // Set score to 0 && special item numbers
-    void SetProps() {
+    void SetProps(int numOfSpecial) {
         Hashtable setScore = new Hashtable() {{"score", 0}};
 		PhotonNetwork.LocalPlayer.SetCustomProperties(setScore);
         
 
-        Hashtable setSpecial = new Hashtable() {{"special", 0}, {"specialMax", 3}};
+        Hashtable setSpecial = new Hashtable() {{"special", 0}, {"specialMax", numOfSpecial}};
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
             PhotonNetwork.CurrentRoom.SetCustomProperties(setScore);
@@ -117,22 +117,20 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    void SetupItems() {
+    void SetupItems(int numOfSpecial) {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("steal");
 
         // Generate 3 random numbers within the range of the objects
-        List<int> rand = RandomExtension(0, objs.Length, 3);
+        List<int> rand = RandomExtension(0, objs.Length, numOfSpecial);
 
         for (int i = 0; i < objs.Length; i++){
             PhotonView view = objs[i].GetComponent<PhotonView>();
-            Debug.Log(view.ViewID.ToString() + "  " + view);
             if (rand.Contains(i)) {
-                Debug.Log(objs[i].GetComponent<CollectableItem>().itemName);
                 int value = Random.Range(60, 100) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(true, value);
                 view.RPC("UpdateObject", RpcTarget.All, true, value);
+                Debug.Log("isaac" + objs[i].name);
             } else {
-                Debug.Log(objs[i].GetComponent<CollectableItem>().itemName);
                 int value = Random.Range(10, 40) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(false, value);
                 view.RPC("UpdateObject", RpcTarget.All, false, value);
