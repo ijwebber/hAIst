@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - steal
   - exit
+  - grass
   layers:
   - Default
   - TransparentFX

@@ -82,6 +82,8 @@ public class GameplayUI : MonoBehaviourPunCallbacks
                 }
 
             }
+        } else if (changedProps["win"] != null) {
+            specialUpdateText.text = "Number 1 Victory Royale";
         }
     }
 }
