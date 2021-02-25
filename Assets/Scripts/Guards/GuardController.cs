@@ -5,10 +5,13 @@ using UnityEngine;
 public class GuardController : MonoBehaviour
 {
     public Grid localGrid;
+    private GuardMovement[] guardMovements;
+
     // Start is called before the first frame update
     void Start()
     {
         this.localGrid = new Grid(110,60,1f);
+        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
 
     public void setValue(Vector3 position, float intensity) {
@@ -25,4 +28,16 @@ public class GuardController : MonoBehaviour
     {
         localGrid.updateNodes();
     }
+
+    public bool inChase() {
+        foreach (GuardMovement guard in guardMovements) {
+            if (guard.state == State.chase) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
 }

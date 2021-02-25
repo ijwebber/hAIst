@@ -22,9 +22,10 @@ public class GuardMovement : MonoBehaviourPun
     public SoundVisual soundVis;
 
 
+
     public List<Vector3> patrolPath = new List<Vector3> {new Vector3(-44.0f, 13.38f, 27.83f), new Vector3(-8.0f, 13.38f, 27.7f), new Vector3(-6.2f, 13.38f, 4.3f), new Vector3(-32.4f, 13.21f, 13.0f)};
     private int currDes = 0;
-    private State state;
+    public State state;
     private bool start = true;
     public bool guardDisabled = false;
     private GameObject player;
@@ -72,8 +73,8 @@ public class GuardMovement : MonoBehaviourPun
                 {
                     playerToFollow = g;
                     agent.SetDestination(g.transform.position);
-                    break;
 
+                    break;
                 }
             }
             PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
