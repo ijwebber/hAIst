@@ -49,7 +49,7 @@ public class SoundController : MonoBehaviourPun
         }
 #endif
         if (Input.GetKeyDown("j")) {
-            localSoundGrid.setValue(player.transform.position, 240);
+            // localSoundGrid.setValue(player.transform.position, 240);
             sendGrid(player.transform.position, 240);
         }
         if (Input.GetKeyDown("k")) {
@@ -66,6 +66,7 @@ public class SoundController : MonoBehaviourPun
 
     public void sendGrid(Vector3 playerPosition, int intensity) {
         // send new sound source to other clients
+        localSoundGrid.setValue(playerPosition, intensity);
         this.photonView.RPC("updateGrid", RpcTarget.All, playerPosition.x, playerPosition.y, playerPosition.z, intensity);
         // set value in local grid
         // grid.SetValue(playerPosition, intensity);
