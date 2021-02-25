@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviourPun
 {
     public float speed = 5;
     [SerializeField] private Rigidbody rb;
+    
     //private TextMesh Caption = null;
     public bool disabled = false;
     
@@ -39,17 +40,12 @@ public class PlayerMovement : MonoBehaviourPun
             return;
         }
         
-        //starts disabled timer if knocked out
-        if (disabled)
-        {
-            this.photonView.RPC("syncDisabled", RpcTarget.All, true);
-            
-
-        }
+        
 
         //if not disabled then get keyboard input
         if (!disabled)
         {
+            
             // player movement - forward, backward, left, right
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");

@@ -3,21 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class PlayerRevive : MonoBehaviour
 {
     public LayerMask playerMask;
-    public GameObject floatingTextPrefab;
 
-    [HideInInspector]
-    public List<KeyValuePair<GameObject, GameObject>> disabledInRangePlayers = new List<KeyValuePair<GameObject, GameObject>>();
+    public TextMeshProUGUI downText;
+
+    
 
     private GameObject playerReference;
     public float holdTime = 3.0f;
     public float startTime = 0f;
 
-    private KeyValuePair<GameObject, GameObject> inProgressRess;
+    private GameObject inProgressRessPlayer;
     private bool inProgress = false;
+    private bool disabledPlayersInRange = false;
 
 
     void Start()
@@ -54,24 +56,25 @@ public class PlayerRevive : MonoBehaviour
                 //if in range and player is disabled then display E above their head
                 if (playerInView.GetComponent<PlayerMovement>().disabled && GetComponent<PhotonView>().IsMine)
                 {
-
-                    GameObject tt = Instantiate(floatingTextPrefab, playerInView.transform.position + new Vector3(0, -2f, 0), Quaternion.identity, playerInView.transform);
-                    tt.GetComponent<TextMesh>().text = "Hold E";
-                    Destroy(tt, 0.3f);
+                    disabledPlayersInRange = true;
+                    Debug.LogError("Disabled");
+                    playerInView.GetComponent<PlayerRevive>().downText.text = "Hold E";
+                    
 
                     if (Input.GetKey(KeyCode.E) && !inProgress)
                     {
-                        inProgressRess = new KeyValuePair<GameObject, GameObject>(playerInView, tt);
+                        inProgressRessPlayer = playerInView;
                         inProgress = true;
                         startTime = Time.time;
                     }
                     if (Input.GetKey(KeyCode.E) && inProgress)
                     {
-                        if (playerInView.GetInstanceID() == inProgressRess.Key.GetInstanceID())
+                        if (playerInView.GetInstanceID() == inProgressRessPlayer.GetInstanceID())
                         {
                             if (startTime + holdTime <= Time.time)
                             {
                                 playerInView.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, false);
+                                playerInView.GetComponent<PlayerRevive>().downText.text = "";
                             }
                         }
 
@@ -90,6 +93,13 @@ public class PlayerRevive : MonoBehaviour
             }
 
         }
+
+        if(GetComponent<PlayerMovement>().disabled && playersInView.Length == 1)
+        {
+            downText.text = "";
+        }
+
+        
     }
 
     
