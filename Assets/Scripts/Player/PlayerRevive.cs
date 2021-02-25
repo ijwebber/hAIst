@@ -20,28 +20,35 @@ public class PlayerRevive : MonoBehaviour
     private bool inProgress = false;
 
 
-    private void Start()
+    void Start()
     {
-        
+        StartCoroutine("FindReviveWithDelay", 0.2f);
     }
     // Update is called once per frame
-    void Update()
-    {
-       
 
-        
+    IEnumerator FindReviveWithDelay(float delay)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(delay);
+            checkForRevive();
+        }
+    }
+
+    public void checkForRevive()
+    {
         //check circle radius of player
         Collider[] playersInView = Physics.OverlapSphere(transform.position, 2.0f, playerMask);
         //if another player there, check if down
 
         for (int i = 0; i < playersInView.Length; i++)
-        {   
+        {
             GameObject playerInView = playersInView[i].gameObject;
 
             if (playerInView.gameObject.GetInstanceID() != this.gameObject.GetInstanceID())
             {
-                
-               
+
+
 
 
                 //if in range and player is disabled then display E above their head
@@ -50,7 +57,7 @@ public class PlayerRevive : MonoBehaviour
 
                     GameObject tt = Instantiate(floatingTextPrefab, playerInView.transform.position + new Vector3(0, -2f, 0), Quaternion.identity, playerInView.transform);
                     tt.GetComponent<TextMesh>().text = "Hold E";
-                    Destroy(tt, 0.2f);
+                    Destroy(tt, 0.3f);
 
                     if (Input.GetKey(KeyCode.E) && !inProgress)
                     {
@@ -59,34 +66,30 @@ public class PlayerRevive : MonoBehaviour
                         startTime = Time.time;
                     }
                     if (Input.GetKey(KeyCode.E) && inProgress)
-                    {   
-                        if(playerInView.GetInstanceID() == inProgressRess.Key.GetInstanceID())
+                    {
+                        if (playerInView.GetInstanceID() == inProgressRess.Key.GetInstanceID())
                         {
-                            if(startTime + holdTime <= Time.time)
+                            if (startTime + holdTime <= Time.time)
                             {
                                 playerInView.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, false);
                             }
                         }
-                        
+
                     }
 
                     if (!Input.GetKey(KeyCode.E))
                     {
                         startTime = 0f;
                         inProgress = false;
-                        
+
                     }
 
                 }
 
-                
+
             }
 
         }
-        //if down then show "hold E"
-        //check if E is held for 3 seconds
-        //change down value to false in player being revived
-        
     }
 
     
