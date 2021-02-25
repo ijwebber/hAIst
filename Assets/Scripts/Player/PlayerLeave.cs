@@ -49,13 +49,6 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 if (win) {
                     Hashtable winHash = new Hashtable() {{"win", true}};
                     PhotonNetwork.CurrentRoom.SetCustomProperties(winHash);
-
-                    GameObject[] objs = GameObject.FindGameObjectsWithTag("exit");
-                    foreach (GameObject tag in objs)
-                    {
-                        GameObject mainObj = tag.transform.parent.gameObject;
-                        mainObj.SetActive(true);
-                    }
                 }
             }
         }
