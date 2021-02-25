@@ -31,24 +31,22 @@ public class AnimationStateController : MonoBehaviourPun
         bool rightB = Input.GetKey(KeyCode.D);
         bool iscrouched = animator.GetBool("isCrouched");
         bool isdown = GetComponent<PlayerMovement>().disabled;
-        AnimatorStateInfo animatorState = animator.GetCurrentAnimatorStateInfo(0);
 
+        // do footsteps
+        AnimatorStateInfo animatorState = animator.GetCurrentAnimatorStateInfo(0);
         float currentFrame = animatorState.normalizedTime;
         if (currentFrame > 1) {
             currentFrame-=Mathf.FloorToInt(currentFrame);
         }
         if (animator.GetBool("isWalking") && (currentFrame >=0.2f && currentFrame <= 0.3f || currentFrame >= .7f && currentFrame <= .8f)) {
-            Debug.Log("frame " + currentFrame);
             int intensity = 20;
             if (Input.GetKey(KeyCode.LeftShift)) {
                 intensity = 30;
+            } else if (Input.GetKey(KeyCode.Space)) {
+                intensity = 0;
             }
             soundController.sendGrid(player.transform.position, intensity);
-            // this.photonView.RPC("updateGrid", RpcTarget.All, player.transform.position.x, player.transform.position.y, player.transform.position.z, 30);
         }
-        // if (currentFrame == 1) {
-        //     this.photonView.RPC("updateGrid", RpcTarget.All, player.transform.position.x, player.transform.position.y, player.transform.position.z, 30);
-        // }
 
         if(isdown){
             animator.SetBool("isDown",true);
