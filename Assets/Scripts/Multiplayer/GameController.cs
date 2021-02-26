@@ -28,7 +28,7 @@ public class GameController : MonoBehaviourPunCallbacks
         //PhotonNetwork.Instantiate(guardPrefab.name, new Vector3(-36.33f, 13.363f, 6.43f), Quaternion.identity);
 
         // Set custom props
-        int numOfSpecial = 3;
+        int numOfSpecial = 2;
         SetProps(numOfSpecial);
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
             SetupItems(numOfSpecial);
@@ -101,7 +101,9 @@ public class GameController : MonoBehaviourPunCallbacks
     // Set score to 0 && special item numbers
     void SetProps(int numOfSpecial) {
         Hashtable setPlayer = new Hashtable() {{"score", 0}, {"itemsStolen", 0}, {"specialStolen", 0}};
-		PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);        
+		PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);      
+
+        Debug.Log("steal it works");
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
             Hashtable setRoom = new Hashtable() {{"score", 0}, {"special", 0}, {"specialMax", numOfSpecial}, {"win", false}};
