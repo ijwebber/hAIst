@@ -37,7 +37,7 @@ public class POVMesh : MonoBehaviour
         List<Vector3> viewPoints = new List<Vector3>();
         for (int i = 0; i <= stepCount; i++)
         {
-            float angle = transform.eulerAngles.y - viewAngle/2 + stepAngleSize*i;
+            float angle = player.transform.eulerAngles.y - viewAngle/2 + stepAngleSize*i;
             ViewCastInfo newViewCast = viewCast(angle);
             viewPoints.Add(newViewCast.point);
         }
@@ -49,7 +49,7 @@ public class POVMesh : MonoBehaviour
         vertices[0] = Vector3.zero;
         for (int i = 0; i < vertexCount-1; i++)
         {
-            vertices[i+1] = transform.InverseTransformPoint(viewPoints[i]);
+            vertices[i+1] = player.transform.InverseTransformPoint(viewPoints[i]);
 
             if(i < vertexCount - 2){
                 triangles[i*3] = 0;
@@ -68,10 +68,10 @@ public class POVMesh : MonoBehaviour
         Vector3  dir = DirFromAngle(globalAngle, true);
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position, dir, out hit, viewRadius, obstacleMask)) {
+        if (Physics.Raycast(player.transform.position, dir, out hit, viewRadius, obstacleMask)) {
             return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
         } else {
-            return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, globalAngle);
+            return new ViewCastInfo(false, player.transform.position + dir * viewRadius, viewRadius, globalAngle);
         }
 
     }
@@ -81,7 +81,7 @@ public class POVMesh : MonoBehaviour
     {
         if (!angleIsGlobal)
         {
-            angleDegrees += transform.eulerAngles.y;
+            angleDegrees += player.transform.eulerAngles.y;
         }
         return new Vector3(Mathf.Sin(angleDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleDegrees * Mathf.Deg2Rad));
     }
