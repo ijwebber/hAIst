@@ -28,7 +28,7 @@ public class GameController : MonoBehaviourPunCallbacks
         //PhotonNetwork.Instantiate(guardPrefab.name, new Vector3(-36.33f, 13.363f, 6.43f), Quaternion.identity);
 
         // Set custom props
-        int numOfSpecial = 1;
+        int numOfSpecial = 3;
         SetProps(numOfSpecial);
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
             SetupItems(numOfSpecial);
