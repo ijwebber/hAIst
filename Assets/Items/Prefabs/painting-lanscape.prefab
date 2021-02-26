@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 5393143033522729230}
   - component: {fileID: 5393143033522729224}
   - component: {fileID: 5393143033522729231}
-  m_Layer: 0
-  m_Name: painting-lanscape (1)
+  m_Layer: 13
+  m_Name: painting-lanscape
   m_TagString: steal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,4 +132,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: TheLovelyOne
   value: 69
-  image: {fileID: 0}
+  special: 0
