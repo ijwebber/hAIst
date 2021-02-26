@@ -94,7 +94,7 @@ public class GuardMovement : MonoBehaviourPun
                 PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
 
                 //if guard is next to player then disable his ass
-                if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1f && !playerMoveScript.disabled && !guardDisabled)
+                if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1.5f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1.5f && !playerMoveScript.disabled && !guardDisabled)
                 {
                     playerMoveScript.disabled = true;
                     this.state = State.normal;

@@ -1139,7 +1139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 9
-  viewAngle: 130
+  viewAngle: 145
   meshResolution: 0.22
   targetMask:
     serializedVersion: 2

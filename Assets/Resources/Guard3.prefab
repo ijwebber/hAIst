@@ -1247,7 +1247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewRadius: 9
-  viewAngle: 130
+  viewAngle: 145
   meshResolution: 0.22
   targetMask:
     serializedVersion: 2
@@ -1276,6 +1276,8 @@ MonoBehaviour:
   soundVis: {fileID: 0}
   patrolPath:
   - {x: 4, y: 13.36, z: 34.8}
+  - {x: 36.8, y: 13.36, z: 27.1}
+  - {x: 41.2, y: 13.36, z: 4.8}
   state: 0
   guardDisabled: 0
 --- !u!195 &3690989282875342136
