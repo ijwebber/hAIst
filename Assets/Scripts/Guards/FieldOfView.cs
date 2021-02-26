@@ -150,7 +150,7 @@ public class FieldOfView : MonoBehaviour
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
-        StartCoroutine("FindTargetsWithDelay", 0.2f);
+        StartCoroutine("FindTargetsWithDelay", 0.03f);
     }
 
     // Update is called once per frame
