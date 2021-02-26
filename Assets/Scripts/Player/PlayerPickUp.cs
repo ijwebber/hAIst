@@ -30,12 +30,16 @@ public class PlayerPickUp : MonoBehaviourPun
     public float holdTime = 5.0f;
     private bool held = false;
 
+    public bool down;
 
     // Update is called once per frame
     void Update()
     {
         
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
+
+            down = GetComponent<PlayerMovement>().disabled;
+
             if(targetTime > 0){
                 displayCooldown();
             }
@@ -82,7 +86,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 if (gameSelection == 0) {
 
-                    if(Input.GetKey(KeyCode.E) && seconds == 0) {
+                    if(Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
                         keycodeGame.SetActive(true);
                         displayMessage(2);
                     } 
@@ -116,7 +120,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 else if (gameSelection == 1) {
 
-                    if (Input.GetKey(KeyCode.E) && seconds == 0) {
+                    if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
                         // whip out mini game
                         fixPaintingGame.SetActive(true);
                         displayMessage(2);
@@ -153,7 +157,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 else if(gameSelection == 2){        // hold down task
 
-                    if(seconds == 0){
+                    if(seconds == 0 && !down){
                         holdDownTask();
                     }
                     
@@ -234,7 +238,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     void holdDownTask(){
 
-        if(Input.GetKeyDown(KeyCode.E)){    // if player is holding down E, start a timer                     
+        if(Input.GetKeyDown(KeyCode.E) ){    // if player is holding down E, start a timer                     
             startTime = Time.time;
             timer = startTime;
             displayMessage(2);
