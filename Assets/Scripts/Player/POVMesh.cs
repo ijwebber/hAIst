@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class POVMesh : MonoBehaviour
 {
@@ -26,11 +27,11 @@ public class POVMesh : MonoBehaviour
 
     [HideInInspector]
     public List<GameObject> behindGuardTargets = new List<GameObject>();
+    GameObject player;
 
 
 
     void DrawFOV() {
-        Debug.Log("drawing");
         int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
         float stepAngleSize = viewAngle / stepCount;
         List<Vector3> viewPoints = new List<Vector3>();
@@ -87,6 +88,7 @@ public class POVMesh : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.Find("Timmy");
     }
 
     // Update is called once per frame
@@ -116,10 +118,10 @@ public class POVMesh : MonoBehaviour
             start = true;
         }
         if (start) {
-            viewMeshFilter.transform.position = new Vector3(transform.position.x, 16.5f, transform.position.z);
-            viewMeshFilter.transform.rotation = transform.rotation;
-            objectMeshFilter.transform.position = new Vector3(transform.position.x, 16.5f, transform.position.z);
-            objectMeshFilter.transform.rotation = transform.rotation;
+            viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+            viewMeshFilter.transform.rotation = player.transform.rotation;
+            objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+            objectMeshFilter.transform.rotation = player.transform.rotation;
             DrawFOV();
         }
         
