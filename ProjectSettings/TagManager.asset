@@ -23,11 +23,11 @@ TagManager:
   - Guards
   - SoundVisualiser
   - ObjectSprites
-  - 
+  - Stealables
   - ObjectPanel
-  - 
-  - 
-  - 
+  - Mask
+  - Black
+  - ObjMask
   - 
   - 
   - 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4722330839601297881}
   - component: {fileID: 4722330839601297880}
   - component: {fileID: 5568840787845940373}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: picture-portrait
   m_TagString: steal
   m_Icon: {fileID: 0}
@@ -132,4 +132,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: PaintingDeath
   value: 250
-  image: {fileID: 0}
+  special: 0

@@ -72,10 +72,10 @@ public class CameraControlPlayer : MonoBehaviourPun
             // only follow is explicitly declared
             if (isFollowing) {
 
-                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0F, 0F, 0));
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit))
+                if (Physics.Raycast(ray, out hit,Mathf.Infinity,(1<<8),QueryTriggerInteraction.UseGlobal))
                 {
 
                 obstruction = hit.transform.gameObject;
@@ -99,6 +99,7 @@ public class CameraControlPlayer : MonoBehaviourPun
                     currentObject[0] = name; // replace with new name
                 }
                 else if (obstruction.name == "Timmy" && currentObject[0] != "") {  
+                    Debug.Log(currentObject[0]);
                 // set previous object back to visible, need to have a way to specifically change the visibility of the previous object
                     GameObject prev = GameObject.Find(currentObject[0]);   
                     //prev.GetComponent<Renderer>().enabled = true; 

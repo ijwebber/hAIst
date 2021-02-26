@@ -692,7 +692,7 @@ GameObject:
   - component: {fileID: 5658618710535296559}
   - component: {fileID: 5013285909632980542}
   - component: {fileID: 6730067186203398082}
-  m_Layer: 9
+  m_Layer: 5
   m_Name: NameTag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1462,6 +1462,7 @@ GameObject:
   - component: {fileID: 8716035742239007946}
   - component: {fileID: 5924847607596515180}
   - component: {fileID: 1717361501374368153}
+  - component: {fileID: 4861733557302784337}
   m_Layer: 9
   m_Name: Timmy
   m_TagString: Untagged
@@ -1604,6 +1605,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashlight: {fileID: 7399234938613690600}
+  flashlight2: {fileID: 0}
 --- !u!114 &8228215103595943073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1679,8 +1681,8 @@ MonoBehaviour:
   prevObjectMaterial: {fileID: 0}
   currentObject:
   - 
-  distance: -8
-  height: 12
+  distance: -16
+  height: 24
   followOnStart: 0
 --- !u!136 &1717361501374368153
 CapsuleCollider:
@@ -1696,6 +1698,30 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
+--- !u!114 &4861733557302784337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7669125665307422165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb67c5a23931c6a69ab92a8698f17157, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewRadius: 15
+  viewAngle: 360
+  meshResolution: 1
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 256
+  agent: {fileID: 0}
+  visibleTargets: []
+  behindGuardTargets: []
 --- !u!1 &7687842578871561455
 GameObject:
   m_ObjectHideFlags: 0
@@ -1948,7 +1974,7 @@ GameObject:
   - component: {fileID: 181606778966534056}
   - component: {fileID: 5111053783673084887}
   - component: {fileID: 1025525250929518442}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: NameTag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
