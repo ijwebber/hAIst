@@ -27,8 +27,8 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
 
     public override void OnRoomPropertiesUpdate(Hashtable changedProps) {
         base.OnRoomPropertiesUpdate(changedProps);  
-        if (changedProps["win"] != null) {
-            if ((bool) changedProps["win"]){
+        if (changedProps["end"] != null) {
+            if ((bool) changedProps["end"]){
                 Debug.Log("winner"); // TODO remove
             } 
         }
@@ -47,8 +47,8 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 }
 
                 if (win) {
-                    Hashtable winHash = new Hashtable() {{"win", true}};
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(winHash);
+                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", true}};
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
                 }
             }
         }

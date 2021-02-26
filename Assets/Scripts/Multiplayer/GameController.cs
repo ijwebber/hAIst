@@ -27,12 +27,11 @@ public class GameController : MonoBehaviourPunCallbacks
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, SpawnPoint.transform.position, Quaternion.identity);
         //PhotonNetwork.Instantiate(guardPrefab.name, new Vector3(-36.33f, 13.363f, 6.43f), Quaternion.identity);
 
-
-        // Set score custom props
-        SetProps(3);
-
+        // Set custom props
+        int numOfSpecial = 1;
+        SetProps(numOfSpecial);
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            SetupItems(3);
+            SetupItems(numOfSpecial);
         }
         
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
@@ -101,17 +100,12 @@ public class GameController : MonoBehaviourPunCallbacks
 
     // Set score to 0 && special item numbers
     void SetProps(int numOfSpecial) {
-        Hashtable setScore = new Hashtable() {{"score", 0}};
-		PhotonNetwork.LocalPlayer.SetCustomProperties(setScore);
-
-        Hashtable setPlayer = new Hashtable() {{"itemsStolen", 0}, {"specialStolen", 0}};
-        PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);
-
-        Hashtable setSpecial = new Hashtable() {{"special", 0}, {"specialMax", numOfSpecial}};
+        Hashtable setPlayer = new Hashtable() {{"score", 0}, {"itemsStolen", 0}, {"specialStolen", 0}};
+		PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);        
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            PhotonNetwork.CurrentRoom.SetCustomProperties(setScore);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(setSpecial);
+            Hashtable setRoom = new Hashtable() {{"score", 0}, {"special", 0}, {"specialMax", numOfSpecial}, {"win", false}};
+            PhotonNetwork.CurrentRoom.SetCustomProperties(setRoom);
         }
     }
 
@@ -127,7 +121,7 @@ public class GameController : MonoBehaviourPunCallbacks
                 int value = Random.Range(60, 100) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(true, value);
                 view.RPC("UpdateObject", RpcTarget.All, true, value);
-                Debug.Log("isaac " + objs[i].name);
+                Debug.Log("item to steal: " + objs[i].name);
             } else {
                 int value = Random.Range(10, 40) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(false, value);
@@ -153,8 +147,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public override void OnRoomPropertiesUpdate(Hashtable changedProps) {
         base.OnRoomPropertiesUpdate(changedProps);
 
-        if (changedProps["win"] != null) {
-            if ((bool) changedProps["win"]) {
+        if (changedProps["end"] != null) {
+            if ((bool) changedProps["end"]) {
                 PhotonNetwork.LoadLevel("EndScreen");
             }
         }
