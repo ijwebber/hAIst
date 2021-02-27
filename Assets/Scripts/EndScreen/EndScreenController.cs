@@ -15,6 +15,10 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public GameObject winScreen;
     public GameObject lossScreen;
 
+    void Start() {
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
     private void Awake()
     {
         if (PhotonNetwork.CurrentRoom == null)
@@ -23,9 +27,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             return;
         }
 
-
         if (PhotonNetwork.IsMasterClient) {
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}});
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}, {"special", 0}});
         }
 
         bool wasWin = (bool) PhotonNetwork.CurrentRoom.CustomProperties["win"];
@@ -62,7 +65,6 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             totalRow.transform.Find("Special").gameObject.GetComponent<Text>().text = totalSpecial.ToString();
             totalRow.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
         } else {
-            Debug.Log("isaac wtf");
             winScreen.SetActive(false);
             lossScreen.SetActive(true);
         }
@@ -74,8 +76,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     }
 
     public void PlayAgainButton() {
-        PhotonNetwork.LoadLevel("PreGameLobby");
-        
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonNetwork.LoadLevel("PreGameLobby");
+        }  
     }
 
     public override void OnLeftRoom()

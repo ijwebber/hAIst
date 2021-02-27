@@ -11,11 +11,11 @@ public class GameplayUI : MonoBehaviourPunCallbacks
     public Text[] playerScores;
     public GameObject[] specialImages;
 
-    void Awake() {
+    void Start() {
         foreach (Text text in playerScores) {
             text.enabled = false;
         }
-
+        
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             Player player = PhotonNetwork.PlayerList[i];
@@ -30,6 +30,11 @@ public class GameplayUI : MonoBehaviourPunCallbacks
         foreach (GameObject image in specialImages) {
             image.SetActive(false);
         }
+
+        int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) PhotonNetwork.CurrentRoom.CustomProperties["special"];
+        Debug.Log("issue " + PhotonNetwork.CurrentRoom.CustomProperties["specialMax"]);
+        Debug.Log("issue2 " + PhotonNetwork.CurrentRoom.CustomProperties["special"]);
+        specialUpdateText.text = "Special Items Remaining: " + remaining.ToString();
 
     }
 
