@@ -15,10 +15,6 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public GameObject winScreen;
     public GameObject lossScreen;
 
-    void Start() {
-        PhotonNetwork.AutomaticallySyncScene = true;
-    }
-
     private void Awake()
     {
         if (PhotonNetwork.CurrentRoom == null)
@@ -76,9 +72,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     }
 
     public void PlayAgainButton() {
-        if (PhotonNetwork.IsMasterClient) {
-            PhotonNetwork.LoadLevel("PreGameLobby");
-        }  
+        PhotonNetwork.LoadLevel("PreGameLobby");
     }
 
     public override void OnLeftRoom()
