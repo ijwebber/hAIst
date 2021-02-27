@@ -9,7 +9,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
             if (other.gameObject.tag == "grass") {
-                Hashtable hash = new Hashtable() {{"leave", true}};
+                Hashtable hash = new Hashtable() {{"leave", true}, {"win", true}};
                 PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
             }
         }
@@ -19,18 +19,9 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
             if (other.gameObject.tag == "grass") {
-                Hashtable leaveHash = new Hashtable() {{"leave", false}};
+                Hashtable leaveHash = new Hashtable() {{"leave", false}, {"win", false}};
                 PhotonNetwork.LocalPlayer.SetCustomProperties(leaveHash);
             }
-        }
-    }
-
-    public override void OnRoomPropertiesUpdate(Hashtable changedProps) {
-        base.OnRoomPropertiesUpdate(changedProps);  
-        if (changedProps["end"] != null) {
-            if ((bool) changedProps["end"]){
-                Debug.Log("winner"); // TODO remove
-            } 
         }
     }
 
@@ -39,15 +30,21 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
 
         if (changedProps["leave"] != null) {
             if (PhotonNetwork.IsMasterClient) {
+                bool end = true;
                 bool win = true;
                 foreach (Player player in PhotonNetwork.PlayerList) {
                     if (! (bool) player.CustomProperties["leave"]) {
+                        end = false;
+                        break;
+                    }
+
+                    if (! (bool) player.CustomProperties["win"]) {
                         win = false;
                     }
                 }
 
-                if (win) {
-                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", true}};
+                if (end) {
+                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", win}};
                     PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
                 }
             }

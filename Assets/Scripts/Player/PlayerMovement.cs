@@ -2,6 +2,7 @@
 using Photon;
 using Photon.Pun;
 using System.Collections;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerMovement : MonoBehaviourPun
 {
@@ -87,5 +88,6 @@ public class PlayerMovement : MonoBehaviourPun
     void syncDisabled(bool disabledValue)
     {   
         disabled = disabledValue;
+        PhotonNetwork.SetPlayerCustomProperties(new Hashtable() {{"leave", disabledValue}});
     }
 }

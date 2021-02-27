@@ -12,6 +12,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public GameObject[] playerRows;
     public GameObject totalRow;
 
+    public GameObject winScreen;
+    public GameObject lossScreen;
+
     private void Awake()
     {
         if (PhotonNetwork.CurrentRoom == null)
@@ -25,34 +28,44 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}});
         }
 
-        foreach (GameObject row in playerRows) {
-            row.SetActive(false);
+        bool wasWin = (bool) PhotonNetwork.CurrentRoom.CustomProperties["win"];
+
+        if (wasWin) {
+            winScreen.SetActive(true);
+            lossScreen.SetActive(false);
+
+            foreach (GameObject row in playerRows) {
+                row.SetActive(false);
+            }
+
+            int totalItems = 0;
+            int totalSpecial = 0;
+
+            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            {
+                GameObject row = playerRows[i];
+                row.SetActive(true);
+
+                Player player = PhotonNetwork.PlayerList[i];
+                row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;;
+                row.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) player.CustomProperties["score"]).ToString();
+
+                int numItems = ((int) player.CustomProperties["itemsStolen"]);
+                totalItems += numItems;
+                row.transform.Find("Items").gameObject.GetComponent<Text>().text = numItems.ToString();
+                int numSpecial = ((int) player.CustomProperties["specialStolen"]);
+                totalSpecial += numSpecial;
+                row.transform.Find("Special").gameObject.GetComponent<Text>().text = numSpecial.ToString();
+            }
+            
+            totalRow.transform.Find("Items").gameObject.GetComponent<Text>().text = totalItems.ToString();
+            totalRow.transform.Find("Special").gameObject.GetComponent<Text>().text = totalSpecial.ToString();
+            totalRow.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
+        } else {
+            Debug.Log("isaac wtf");
+            winScreen.SetActive(false);
+            lossScreen.SetActive(true);
         }
-
-        int totalItems = 0;
-        int totalSpecial = 0;
-
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            GameObject row = playerRows[i];
-            row.SetActive(true);
-
-            Player player = PhotonNetwork.PlayerList[i];
-            row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;;
-            row.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) player.CustomProperties["score"]).ToString();
-
-            int numItems = ((int) player.CustomProperties["itemsStolen"]);
-            totalItems += numItems;
-            row.transform.Find("Items").gameObject.GetComponent<Text>().text = numItems.ToString();
-            int numSpecial = ((int) player.CustomProperties["specialStolen"]);
-            totalSpecial += numSpecial;
-            row.transform.Find("Special").gameObject.GetComponent<Text>().text = numSpecial.ToString();
-        }
-        
-        totalRow.transform.Find("Items").gameObject.GetComponent<Text>().text = totalItems.ToString();
-        totalRow.transform.Find("Special").gameObject.GetComponent<Text>().text = totalSpecial.ToString();
-        totalRow.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
-        
 
     }
 
