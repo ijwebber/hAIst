@@ -193,6 +193,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
                 fixPaintingGame.GetComponent<RotateTask>().win = false;
+                held = false;
 
                 displayMessage(2);
         }   
