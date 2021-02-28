@@ -41,7 +41,7 @@ public class GameController : MonoBehaviourPunCallbacks
         foreach (GameObject item in starItems)
         {
             Debug.Log("instantiated starsprite");
-            Instantiate(starSprite, new Vector3(item.transform.position.x, 16.1f, item.transform.position.z-1), Quaternion.Euler(90,0,0));
+            PhotonNetwork.InstantiateRoomObject(starSprite.name, new Vector3(item.transform.position.x, 16.1f, item.transform.position.z-1), Quaternion.Euler(90,0,0));
         }
         
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
