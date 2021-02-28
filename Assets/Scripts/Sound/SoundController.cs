@@ -7,6 +7,7 @@ using Photon.Pun;
 public class SoundController : MonoBehaviourPun
 {
     [SerializeField] public SoundVisual soundVis;
+    public PlayerController playerController;
     public Grid grid;
     public GuardController localSoundGrid;
     // public GuardMovement guardController;
@@ -30,9 +31,9 @@ public class SoundController : MonoBehaviourPun
 
     // on start
     void Start() {
-        player = GameObject.Find("Timmy");
         grid = new Grid(110,60,1f);
         soundVis.initGrid(grid);
+        this.playerController = GameObject.FindObjectOfType<PlayerController>();
         this.localSoundGrid = GameObject.FindObjectOfType<GuardController>();
         // guardController.setGrid(grid);
     }
@@ -44,7 +45,7 @@ public class SoundController : MonoBehaviourPun
         // send microphone volume if above threshold
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();
-        if (Microphone.volumes[0]*240 > 2) {
+        if (Microphone.volumes[0]*240 > 2 && !this.playerController.isDisabled) {
             sendGrid(player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*240));
         }
 #endif

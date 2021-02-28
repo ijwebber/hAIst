@@ -41,7 +41,7 @@ public class FollowPlayer : MonoBehaviour
         }
         
         
-        Ray ray = GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
+        Ray ray = GetComponent<Camera>().ViewportPointToRay(player.transform.position);
         RaycastHit hit;
 
         

@@ -7,6 +7,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerMovement : MonoBehaviourPun
 {
     public float speed = 5;
+    public PlayerController playerController;
     [SerializeField] private Rigidbody rb;
     
     //private TextMesh Caption = null;
@@ -26,6 +27,7 @@ public class PlayerMovement : MonoBehaviourPun
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraControlPlayer Component on playerPrefab.", this);
         }
+        playerController = GameObject.FindObjectOfType<PlayerController>();
     }
 
    
@@ -88,6 +90,7 @@ public class PlayerMovement : MonoBehaviourPun
     void syncDisabled(bool disabledValue)
     {   
         disabled = disabledValue;
+        playerController.isDisabled = disabledValue;
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true) {
             PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"leave", disabledValue}});
         }

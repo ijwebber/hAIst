@@ -7,6 +7,7 @@ using Photon.Pun;
 public class CameraControlPlayer : MonoBehaviourPun
 {
 
+    public GameObject player;
     public GameObject obstruction;  // global obstructions 
 
     public string name; // name of current object in view
@@ -49,6 +50,7 @@ public class CameraControlPlayer : MonoBehaviourPun
             {
                 OnStartFollowing();
             }
+            player = GameObject.Find("Timmy");
             
         }
 
@@ -72,10 +74,11 @@ public class CameraControlPlayer : MonoBehaviourPun
             // only follow is explicitly declared
             if (isFollowing) {
 
-                Ray ray = Camera.main.ViewportPointToRay(new Vector3(0F, 0F, 0));
+                // Ray ray = Camera.main.ViewportPointToRay(player.transform.position);
+                // Ray ray = Physics.Linecast(player.transform.position, cameraTransform.position,(1<<))
                 RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit,Mathf.Infinity,(1<<8),QueryTriggerInteraction.UseGlobal))
+                if (Physics.Linecast(player.transform.position, cameraTransform.position, out hit,(1<<8),QueryTriggerInteraction.UseGlobal))
                 {
 
                 obstruction = hit.transform.gameObject;
