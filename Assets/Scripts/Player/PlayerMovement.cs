@@ -90,8 +90,8 @@ public class PlayerMovement : MonoBehaviourPun
     void syncDisabled(bool disabledValue)
     {   
         disabled = disabledValue;
-        playerController.isDisabled = disabledValue;
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true) {
+            playerController.isDisabled = disabledValue;
             PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"leave", disabledValue}});
         }
     }
