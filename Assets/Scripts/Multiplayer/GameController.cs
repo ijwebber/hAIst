@@ -111,28 +111,29 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    void SetupItems(int numOfSpecial) {
+    List<GameObject> SetupItems(int numOfSpecial) {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("steal");
 
         // Generate 3 random numbers within the range of the objects
         List<int> rand = RandomExtension(0, objs.Length, numOfSpecial);
+        List<GameObject> specialObjs = new List<GameObject>();
 
         for (int i = 0; i < objs.Length; i++){
-
-            
             int gameSelection = r.Next(0,3);
             PhotonView view = objs[i].GetComponent<PhotonView>();
             if (rand.Contains(i)) {
                 int value = Random.Range(60, 100) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(true, value,gameSelection);
                 view.RPC("UpdateObject", RpcTarget.All, true, value,gameSelection);
-                Debug.Log("item to steal: " + objs[i].name);
+                specialObjs.Add(objs[i]);
             } else {
                 int value = Random.Range(10, 40) * 100;
                 objs[i].GetComponent<CollectableItem>().UpdateObject(false, value,gameSelection);
                 view.RPC("UpdateObject", RpcTarget.All, false, value,gameSelection);
             } 
         }
+
+        return specialObjs;
     }
 
     List<int> RandomExtension(int x, int y, int n) {
