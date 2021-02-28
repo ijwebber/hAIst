@@ -25,17 +25,7 @@ public class PlayerRevive : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine("FindReviveWithDelay", 0.2f);
-    }
-    
-    void Update() {
-        if (Input.GetKey(KeyCode.E) && inProgress) {
-            progressBar.Show();
-            progressBar.UpdateBar(Time.time - startTime, 0, holdTime);
-        } else if (!Input.GetKey(KeyCode.E)) {
-            progressBar.Hide();
-            progressBar.ResetBar();
-        }
+        StartCoroutine("FindReviveWithDelay", 0.01f);
     }
 
     IEnumerator FindReviveWithDelay(float delay)
