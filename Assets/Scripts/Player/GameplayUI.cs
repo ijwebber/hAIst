@@ -31,11 +31,6 @@ public class GameplayUI : MonoBehaviourPunCallbacks
             image.SetActive(false);
         }
 
-        int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) PhotonNetwork.CurrentRoom.CustomProperties["special"];
-        Debug.Log("issue " + PhotonNetwork.CurrentRoom.CustomProperties["specialMax"]);
-        Debug.Log("issue2 " + PhotonNetwork.CurrentRoom.CustomProperties["special"]);
-        specialUpdateText.text = "Special Items Remaining: " + remaining.ToString();
-
     }
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {

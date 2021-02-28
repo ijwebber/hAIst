@@ -4196,7 +4196,7 @@ GameObject:
   - component: {fileID: 1885766249382767473}
   - component: {fileID: 5753000181265987014}
   m_Layer: 9
-  m_Name: FlashLight2
+  m_Name: FlashLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4210,7 +4210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6161114500471060109}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.2, z: -0.22}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4783553250932223790}
@@ -4228,8 +4228,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 5
-  m_Range: 50
+  m_Intensity: 3
+  m_Range: 30
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -4394,6 +4394,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 4.49
       objectReference: {fileID: 0}
+    - target: {fileID: 7950917147821238678, guid: 6e811334a11215a4e8b9113fc2c60e33,
+        type: 3}
+      propertyPath: flashlight
+      value: 
+      objectReference: {fileID: 5753000181265987014}
     - target: {fileID: 7950917147821238678, guid: 6e811334a11215a4e8b9113fc2c60e33,
         type: 3}
       propertyPath: flashlight2
