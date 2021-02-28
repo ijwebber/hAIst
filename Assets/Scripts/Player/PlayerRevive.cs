@@ -27,7 +27,16 @@ public class PlayerRevive : MonoBehaviour
     {
         StartCoroutine("FindReviveWithDelay", 0.2f);
     }
-    // Update is called once per frame
+    
+    void Update() {
+        if (Input.GetKey(KeyCode.E) && inProgress) {
+            progressBar.Show();
+            progressBar.UpdateBar(Time.time - startTime, 0, holdTime);
+        } else if (!Input.GetKey(KeyCode.E)) {
+            progressBar.Hide();
+            progressBar.ResetBar();
+        }
+    }
 
     IEnumerator FindReviveWithDelay(float delay)
     {
@@ -50,10 +59,6 @@ public class PlayerRevive : MonoBehaviour
 
             if (playerInView.gameObject.GetInstanceID() != this.gameObject.GetInstanceID())
             {
-
-
-
-
                 //if in range and player is disabled then display E above their head
                 if (playerInView.GetComponent<PlayerMovement>().disabled && GetComponent<PhotonView>().IsMine)
                 {
