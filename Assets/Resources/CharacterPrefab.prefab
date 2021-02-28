@@ -4602,6 +4602,11 @@ PrefabInstance:
       objectReference: {fileID: 5753000181265987014}
     - target: {fileID: 8228215103595943073, guid: 6e811334a11215a4e8b9113fc2c60e33,
         type: 3}
+      propertyPath: cooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8228215103595943073, guid: 6e811334a11215a4e8b9113fc2c60e33,
+        type: 3}
       propertyPath: messageBox
       value: 
       objectReference: {fileID: 787848764101021837}
