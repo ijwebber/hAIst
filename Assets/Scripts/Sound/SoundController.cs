@@ -49,14 +49,14 @@ public class SoundController : MonoBehaviourPun
             sendGrid(player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*240));
         }
 #endif
-        if (Input.GetKeyDown("j")) {
+        if (Input.GetKeyDown("j") && !this.playerController.isDisabled) {
             // localSoundGrid.setValue(player.transform.position, 240);
             sendGrid(player.transform.position, 240);
         }
-        if (Input.GetKeyDown("k")) {
+        if (Input.GetKeyDown("k") && !this.playerController.isDisabled) {
             sendGrid(player.transform.position, 60);
         }
-        if (Input.GetKeyDown("l")) {
+        if (Input.GetKeyDown("l") && !this.playerController.isDisabled) {
             sendGrid(player.transform.position, 30);
         }
 
