@@ -57,7 +57,7 @@ public class PlayerRevive : MonoBehaviour
                 if (playerInView.GetComponent<PlayerMovement>().disabled && GetComponent<PhotonView>().IsMine)
                 {
                     disabledPlayersInRange = true;
-                    Debug.LogError("Disabled");
+                    Debug.Log("Disabled");
                     playerInView.GetComponent<PlayerRevive>().downText.text = "Hold E";
                     
 

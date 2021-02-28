@@ -113,7 +113,6 @@ public class GuardMovement : MonoBehaviourPun
                 // check for sound
                 if (guardController.localGrid.GetValue(transform.position) > 3 && this.state != State.disabled)
                 {
-                    Debug.LogError(guardController.localGrid.GetValue(transform.position));
                     Vector3 playerPosition = player.transform.position;
                     Debug.Log("I hear a who at // " + playerPosition);
                     this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
