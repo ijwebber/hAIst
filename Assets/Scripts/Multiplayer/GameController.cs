@@ -10,6 +10,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject guardPrefab;
     public GameObject guardPrefab2;
     public GameObject guardPrefab3;
+    public GameObject starSprite;
     public SoundVisual soundMesh;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
@@ -32,8 +33,15 @@ public class GameController : MonoBehaviourPunCallbacks
         // Set custom props
         int numOfSpecial = 3;
         SetProps(numOfSpecial);
+        List<GameObject> starItems = new List<GameObject>();
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            SetupItems(numOfSpecial);
+            starItems = SetupItems(numOfSpecial);
+        }
+
+        foreach (GameObject item in starItems)
+        {
+            Debug.Log("instantiated starsprite");
+            Instantiate(starSprite, new Vector3(item.transform.position.x, 16.1f, item.transform.position.z-1), Quaternion.Euler(90,0,0));
         }
         
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
