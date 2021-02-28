@@ -141,16 +141,16 @@ MonoBehaviour:
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 0
+    overrideDepthState: 1
     depthCompareFunction: 4
     enableWrite: 1
     stencilSettings:
       overrideStencilState: 1
       stencilReference: 0
       stencilCompareFunction: 8
-      passOperation: 2
+      passOperation: 0
       failOperation: 0
-      zFailOperation: 0
+      zFailOperation: 2
     cameraSettings:
       overrideCamera: 0
       restoreCamera: 1
@@ -215,20 +215,20 @@ MonoBehaviour:
       RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
-        m_Bits: 288
+        m_Bits: 12576
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 0
+    overrideDepthState: 1
     depthCompareFunction: 4
     enableWrite: 1
     stencilSettings:
       overrideStencilState: 1
-      stencilReference: 0
+      stencilReference: 1
       stencilCompareFunction: 8
-      passOperation: 2
+      passOperation: 0
       failOperation: 0
-      zFailOperation: 0
+      zFailOperation: 2
     cameraSettings:
       overrideCamera: 0
       restoreCamera: 1
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: Black
-    Event: 500
+    Event: 1000
     filterSettings:
       RenderQueueType: 1
       LayerMask:
