@@ -3900,6 +3900,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c659ffa9ef904752b700cb2c1ca5a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  front: {fileID: 6831218764209367113}
 --- !u!95 &3299198212630424153
 Animator:
   serializedVersion: 3
@@ -4002,6 +4003,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   downText: {fileID: 4871176673317979433}
+  progressBar: {fileID: 5692998265952435427}
   holdTime: 3
   startTime: 0
 --- !u!1 &5457571268068801780
@@ -4617,7 +4619,7 @@ PrefabInstance:
         type: 3}
       propertyPath: progressBar
       value: 
-      objectReference: {fileID: 5125864241291859169}
+      objectReference: {fileID: 5692998265952435427}
     - target: {fileID: 8228215103595943073, guid: 6e811334a11215a4e8b9113fc2c60e33,
         type: 3}
       propertyPath: fixPaintingGame

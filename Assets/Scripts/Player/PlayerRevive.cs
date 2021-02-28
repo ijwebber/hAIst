@@ -14,6 +14,7 @@ public class PlayerRevive : MonoBehaviour
     
 
     private GameObject playerReference;
+    public ProgressBarController progressBar;
     public float holdTime = 3.0f;
     public float startTime = 0f;
 
@@ -66,15 +67,21 @@ public class PlayerRevive : MonoBehaviour
                         inProgressRessPlayer = playerInView;
                         inProgress = true;
                         startTime = Time.time;
+                        progressBar.Show();
                     }
                     if (Input.GetKey(KeyCode.E) && inProgress)
                     {
                         if (playerInView.GetInstanceID() == inProgressRessPlayer.GetInstanceID())
                         {
+                            progressBar.UpdateBar(Time.time - startTime, 0, holdTime);
+
                             if (startTime + holdTime <= Time.time)
                             {
                                 playerInView.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, false);
                                 playerInView.GetComponent<PlayerRevive>().downText.text = "";
+                                
+                                progressBar.Hide();
+                                progressBar.ResetBar();
                             }
                         }
 
@@ -85,6 +92,8 @@ public class PlayerRevive : MonoBehaviour
                         startTime = 0f;
                         inProgress = false;
 
+                        progressBar.Hide();
+                        progressBar.ResetBar();
                     }
 
                 }
