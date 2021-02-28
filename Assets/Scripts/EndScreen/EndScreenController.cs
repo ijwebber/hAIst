@@ -27,6 +27,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}, {"special", 0}});
         }
 
+        PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"ready", false}});
+
         bool wasWin = (bool) PhotonNetwork.CurrentRoom.CustomProperties["win"];
 
         if (wasWin) {
