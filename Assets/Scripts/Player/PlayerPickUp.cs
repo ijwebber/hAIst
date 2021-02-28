@@ -32,6 +32,8 @@ public class PlayerPickUp : MonoBehaviourPun
 
     public bool down;
 
+    public GameObject progressBar;
+
     // Update is called once per frame
     void Update()
     {
@@ -99,6 +101,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
                         keycodeGame.SetActive(false);
                         held = false;
+                        
                     } 
                     else if (seconds != 0 ){
                         displayMessage(1);
@@ -135,6 +138,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
                         fixPaintingGame.SetActive(false);
                         held = false;
+                        
                     }
                     else if (seconds != 0 ){
                         displayMessage(1);
@@ -176,6 +180,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
 
                         held = false;
+                        
                           
                     }   
                 }
@@ -194,6 +199,8 @@ public class PlayerPickUp : MonoBehaviourPun
                 keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
                 fixPaintingGame.GetComponent<RotateTask>().win = false;
                 held = false;
+                progressBar.SetActive(false);
+                
 
                 displayMessage(2);
         }   
@@ -231,25 +238,34 @@ public class PlayerPickUp : MonoBehaviourPun
 
     void holdDownTask(){
 
-        if(Input.GetKeyDown(KeyCode.E) ){    // if player is holding down E, start a timer                     
+        if(Input.GetKeyDown(KeyCode.E)){    // if player is holding down E, start a timer                     
             startTime = Time.time;
             timer = startTime;
             displayMessage(2);
+            progressBar.SetActive(true);
+            progressBar.transform.Find("Front").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2 (0, 16);
         }
 
         if(Input.GetKey(KeyCode.E) && held == false && seconds == 0){   // for each time E is being held down, count/increment the timer and remove the onscreen text
-            timer += Time.deltaTime;                   
-            if(timer>(startTime + holdTime)){   // if the time reaches 5s, then set held to true, else set to false
+            timer += Time.deltaTime;
+            float width = ((timer - startTime) / 5) * 200;
+            progressBar.transform.Find("Front").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2 (width, 16);      
+
+
+            if(timer>(startTime + holdTime)) {   // if the time reaches 5s, then set held to true, else set to false
                 held = true;
                 displayMessage(2);
+                progressBar.SetActive(false);
+                progressBar.transform.Find("Front").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2 (0, 16);
             }
-            else{
+            else {
                 held = false;
             }
         }
 
         if(Input.GetKey(KeyCode.E) == false){ // if key is not being pressed, just set held to false
             held = false;
+            progressBar.SetActive(false);
             displayMessage(4);
         
         }
