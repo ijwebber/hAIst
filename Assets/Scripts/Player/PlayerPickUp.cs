@@ -22,7 +22,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     public bool paintingCorrect;
 
-    int gameSelection;
+    //int gameSelection;
     public float cooldown = 1;
 
     private float startTime = 0f;
@@ -61,17 +61,7 @@ public class PlayerPickUp : MonoBehaviourPun
     private void OnCollisionEnter(Collision other) {    // what to do once player enters
 
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
-
-            if(other.gameObject.tag == "steal"){            // check to see if item is stealable
-                                                        // pick random number here on first collision 
-            stealObject = true;        
-
-            currentObject = other.gameObject;
-
-        
-            System.Random r = new System.Random();
-            gameSelection = r.Next(0,3);
-            }                                              
+                                              
         }
     }
 
@@ -83,6 +73,8 @@ public class PlayerPickUp : MonoBehaviourPun
             if (other.gameObject.tag == "steal") {
 
                 currentObject = other.gameObject;  // added the current game object
+
+                int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
 
                 if (gameSelection == 0) {
 

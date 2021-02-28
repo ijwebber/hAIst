@@ -15,6 +15,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public GUISkin myskin = null;
     public GameObject EscapeMenu;
 
+    System.Random r = new System.Random();
+
     //just spawns in player object
     private void Awake()
     {
@@ -116,16 +118,19 @@ public class GameController : MonoBehaviourPunCallbacks
         List<int> rand = RandomExtension(0, objs.Length, numOfSpecial);
 
         for (int i = 0; i < objs.Length; i++){
+
+            
+            int gameSelection = r.Next(0,3);
             PhotonView view = objs[i].GetComponent<PhotonView>();
             if (rand.Contains(i)) {
                 int value = Random.Range(60, 100) * 100;
-                objs[i].GetComponent<CollectableItem>().UpdateObject(true, value);
-                view.RPC("UpdateObject", RpcTarget.All, true, value);
+                objs[i].GetComponent<CollectableItem>().UpdateObject(true, value,gameSelection);
+                view.RPC("UpdateObject", RpcTarget.All, true, value,gameSelection);
                 Debug.Log("item to steal: " + objs[i].name);
             } else {
                 int value = Random.Range(10, 40) * 100;
-                objs[i].GetComponent<CollectableItem>().UpdateObject(false, value);
-                view.RPC("UpdateObject", RpcTarget.All, false, value);
+                objs[i].GetComponent<CollectableItem>().UpdateObject(false, value,gameSelection);
+                view.RPC("UpdateObject", RpcTarget.All, false, value,gameSelection);
             } 
         }
     }

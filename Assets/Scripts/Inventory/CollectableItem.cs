@@ -7,10 +7,13 @@ public class CollectableItem : MonoBehaviourPun
     public int value;
     public bool special = false;
 
+    public int gameSelection;
+
     [PunRPC]
-    public void UpdateObject(bool newSpecial, int newValue) {
+    public void UpdateObject(bool newSpecial, int newValue, int chooseMinigame) {
         Debug.Log(itemName);
         this.value = newValue;
         this.special = newSpecial;
+        this.gameSelection = chooseMinigame;
     }
 }
