@@ -18,8 +18,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     [SerializeField] private GameObject UsernameMenu;
     [SerializeField] private GameObject StartMenu;
+    [SerializeField] private GameObject LobbyMenu;
+
 
     [SerializeField] private GameObject menu_script;
+    [SerializeField] private GameObject LobbyScript;
+
     [SerializeField] TMP_InputField UsernameInput;
     [SerializeField] private GameObject StartButton;
 
@@ -69,6 +73,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         UsernameMenu.SetActive(false);
         PhotonNetwork.NickName = UsernameInput.text;
         menu_script.SetActive(true);
+        LobbyScript.SetActive(true);
+        LobbyMenu.SetActive(true);
         
     }
     

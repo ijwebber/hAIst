@@ -73,15 +73,15 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
 
         
 
-        GUI.Label(new Rect(Screen.width-250, 35,200,25), "Players Ready: "+(int)PhotonNetwork.CurrentRoom.CustomProperties["num_ready"] + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
+        GUI.Label(new Rect(Screen.width-250, 35,200,40), "Players Ready: "+(int)PhotonNetwork.CurrentRoom.CustomProperties["num_ready"] + "/" + PhotonNetwork.CurrentRoom.MaxPlayers);
 
         //Show the list of the players connected to this Room
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             //Show if this player is a Master Client. There can only be one Master Client per Room so use this to define the authoritative logic etc.)
             //string isMasterClient = (PhotonNetwork.PlayerList[i].IsMasterClient ? ": MasterClient" : "");
-            GUI.Label(new Rect(5, 35 + 30 * i, 200, 25), PhotonNetwork.PlayerList[i].NickName);
-            GUI.Label(new Rect(135, 35 + 30 * i, 200, 25), (string) PhotonNetwork.PlayerList[i].CustomProperties["ready"] );
+            GUI.Label(new Rect(5, 35 + 30 * i, 200, 35), PhotonNetwork.PlayerList[i].NickName);
+            GUI.Label(new Rect(135, 35 + 30 * i, 200, 35), (string) PhotonNetwork.PlayerList[i].CustomProperties["ready"] );
 
         }
     }
