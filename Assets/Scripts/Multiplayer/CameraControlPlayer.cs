@@ -87,27 +87,27 @@ public class CameraControlPlayer : MonoBehaviourPun
                 
                 if(obstruction.tag == "hideObject" &&  currentObject[0] == name){   // case where we are hidden behind a wall but we don't move to another wall
                     //obstruction.GetComponent<Renderer>().enabled = false;  
-                    SetAlpha(0.5F);     
+                    // SetAlpha(0.5F);     
                 }
                 else if(obstruction.tag == "hideObject" &&  currentObject[0] == ""){ // case where we are hidden behind a wall but the array is "empty"
                     //obstruction.GetComponent<Renderer>().enabled = false;
-                    SetAlpha(0.5F);  
+                    // SetAlpha(0.5F);  
                     currentObject[0] = name;
                 }
                 else if (obstruction.tag == "hideObject" &&  currentObject[0] != name){ // case where we are hidden behind a new wall to the one in the array
                     GameObject prev = GameObject.Find(currentObject[0]);   // change prev wall to visible
                     //prev.GetComponent<Renderer>().enabled = true; 
                     prevObjectMaterial = prev.GetComponent<Renderer>().material; 
-                    SetAlpha1(1F); 
+                    // SetAlpha1(1F); 
                     currentObject[0] = name; // replace with new name
                 }
                 if (obstruction.name == "Timmy" && currentObject[0] != "") {  
                     Debug.Log(currentObject[0]);
-                // set previous object back to visible, need to have a way to specifically change the visibility of the previous object
+                    // set previous object back to visible, need to have a way to specifically change the visibility of the previous object
                     GameObject prev = GameObject.Find(currentObject[0]);   
                     //prev.GetComponent<Renderer>().enabled = true; 
                     prevObjectMaterial = prev.GetComponent<Renderer>().material; 
-                    SetAlpha1(1F); 
+                    // SetAlpha1(1F); 
                     currentObject[0] = "";
                 }
             }
