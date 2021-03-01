@@ -32,7 +32,7 @@ public class GuardController : MonoBehaviour
     public bool inChase() {
         foreach (GuardMovement guard in guardMovements) {
             if (guard.state == State.chase) {
-                return true;
+                //return true;
             }
         }
 
