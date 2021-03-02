@@ -50,6 +50,17 @@ public class LobbyScript : MonoBehaviourPunCallbacks
         StatusText.text = "Status: " + PhotonNetwork.NetworkClientState;
         PlayerName.text = "" + PhotonNetwork.NickName;
 
+
+
+        if (StatusText.text.Equals("Status: JoinedLobby"))
+        {
+            //CreateRoomButton.interactable = true;
+            RefreshButton.interactable = true;  
+        }
+        else{
+            CreateRoomButton.interactable = false;
+            RefreshButton.interactable = false;    
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
@@ -100,6 +111,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
+        joiningRoom = true;
         Debug.Log("ROOM NAME: "+ RoomName);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.IsOpen = true;

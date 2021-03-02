@@ -41,7 +41,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             // Connect to the photon master-server. We use the settings saved in PhotonServerSettings (a .asset file in this project)
             PhotonNetwork.ConnectUsingSettings();
         }
-        UsernameMenu.SetActive(true);
+        //UsernameMenu.SetActive(true);
 
     }
 
@@ -72,7 +72,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         UsernameMenu.SetActive(false);
         PhotonNetwork.NickName = UsernameInput.text;
-        menu_script.SetActive(true);
+        //menu_script.SetActive(true);
         LobbyScript.SetActive(true);
         LobbyMenu.SetActive(true);
         
