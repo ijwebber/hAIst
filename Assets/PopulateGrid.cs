@@ -55,7 +55,7 @@ public class PopulateGrid : MonoBehaviourPunCallbacks
 		{
 			 // Create new instances of our prefab until we've created as many as we specified
 			newObj = (GameObject)Instantiate(prefab, transform);
-            newObj.transform.Find("RoomNameScroll").GetComponent<Text>().text = createdRooms[i].Name;
+            newObj.transform.Find("RoomNameScroll").GetComponent<Text>().text = "  " + createdRooms[i].Name;
             newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = createdRooms[i].PlayerCount + "/" + createdRooms[i].MaxPlayers;
             string roomName = createdRooms[i].Name;
             newObj.transform.Find("JoinGameButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate {ButtonClick(roomName); });
