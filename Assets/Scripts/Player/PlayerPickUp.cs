@@ -184,6 +184,12 @@ public class PlayerPickUp : MonoBehaviourPun
                           
                     }   
                 }
+            }  else if (other.gameObject.tag == "button") {
+                displayMessage("Press E to press button");
+                if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
+                    int id = other.gameObject.GetComponent<PressButton>().id;
+                    other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
+                }
             }
         }      
     }
@@ -214,7 +220,9 @@ public class PlayerPickUp : MonoBehaviourPun
         else if(n==2){messageBox.text = "";}
         else if(n==3){messageBox.text = "Inventory Full";}
         else if(n==4){messageBox.text = "Hold E for 5 seconds to pick up";}
-
+    }
+    void displayMessage(string text){
+        messageBox.text = text;
     }
 
     void displayCooldown(){

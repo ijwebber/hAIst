@@ -9,6 +9,8 @@ TagManager:
   - steal
   - exit
   - grass
+  - Undefined
+  - button
   layers:
   - Default
   - TransparentFX
