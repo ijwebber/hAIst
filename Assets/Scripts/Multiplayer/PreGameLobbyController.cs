@@ -24,6 +24,7 @@ public class PreGameLobbyController : MonoBehaviourPunCallbacks
     void Start()
     {
         PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
 
         
     }

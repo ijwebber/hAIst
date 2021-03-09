@@ -117,6 +117,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
         roomOptions.IsOpen = true;
         roomOptions.IsVisible = true;
         roomOptions.MaxPlayers = (byte)4; //Set any number
+        roomOptions.PublishUserId = true;
         if (!customProperties.ContainsKey("num_ready"))
         {
             customProperties.Add("num_ready", 0);

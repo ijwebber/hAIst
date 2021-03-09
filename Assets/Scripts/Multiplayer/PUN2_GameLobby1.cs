@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+
 
 using Photon.Pun;
 using Photon.Realtime;
@@ -26,23 +28,26 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     [SerializeField] TMP_InputField UsernameInput;
     [SerializeField] private GameObject StartButton;
+    public string GetUsersURL = "http://brasspig.unaux.com/get_users.php";
+    private AuthenticationValues authValues;
 
 
 
     // Use this for initialization
     void Start()
     {
-        
+        StartCoroutine(GetRequest(GetUsersURL));
+    }
 
+    void Connect()
+    {
         if (!PhotonNetwork.IsConnected)
-        {
-            //Set the App version before connecting
-            PhotonNetwork.PhotonServerSettings.AppSettings.AppVersion = gameVersion;
-            // Connect to the photon master-server. We use the settings saved in PhotonServerSettings (a .asset file in this project)
-            PhotonNetwork.ConnectUsingSettings();
-        }
-        //UsernameMenu.SetActive(true);
-
+            {
+                //Set the App version before connecting
+                PhotonNetwork.PhotonServerSettings.AppSettings.AppVersion = gameVersion;
+                // Connect to the photon master-server. We use the settings saved in PhotonServerSettings (a .asset file in this project)
+                PhotonNetwork.ConnectUsingSettings();
+            }
     }
 
 
@@ -73,6 +78,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         UsernameMenu.SetActive(false);
         PhotonNetwork.NickName = UsernameInput.text;
         //menu_script.SetActive(true);
+        authValues = new AuthenticationValues();
+        authValues.UserId = UsernameInput.text;
+        PhotonNetwork.AuthValues = authValues;
+        Connect(); 
         LobbyScript.SetActive(true);
         LobbyMenu.SetActive(true);
         
@@ -87,6 +96,22 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         StartMenu.SetActive(false);
         UsernameMenu.SetActive(true);
+    }
+
+    IEnumerator GetRequest(string uri) {
+ 
+        using(UnityWebRequest webRequest = UnityWebRequest.Get(uri)) {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+        
+            if (webRequest.isNetworkError) {
+                Debug.Log(webRequest.error);
+                //or example
+            } else {
+                Debug.Log(webRequest.downloadHandler.text);
+
+            }
+        }
     }
 
 
