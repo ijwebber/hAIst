@@ -11,6 +11,8 @@ TagManager:
   - grass
   - Undefined
   - button
+  - keypad
+  - codedisplay
   layers:
   - Default
   - TransparentFX

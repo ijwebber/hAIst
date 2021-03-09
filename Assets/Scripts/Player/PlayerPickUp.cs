@@ -12,6 +12,8 @@ public class PlayerPickUp : MonoBehaviourPun
     public Text messageBox;
     public Text cooldownBox;
 
+    public GameObject codeDisplay;
+
     public GameObject keycodeGame;
 
     public GameObject fixPaintingGame;
@@ -47,7 +49,7 @@ public class PlayerPickUp : MonoBehaviourPun
             }
             else{cooldownBox.text = "";}
 
-            if(keycodeGame.active || fixPaintingGame.active){
+            if(codeDisplay.active || keycodeGame.active || fixPaintingGame.active){
                     displayMessage(2);
             }
        
@@ -71,7 +73,6 @@ public class PlayerPickUp : MonoBehaviourPun
 
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-
             if (other.gameObject.tag == "steal") {
 
                 currentObject = other.gameObject;  // added the current game object
@@ -80,12 +81,12 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 if (gameSelection == 0) {
 
-                    if(Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
+                    if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
                         keycodeGame.SetActive(true);
                         displayMessage(2);
-                    } 
-                    else if (keyCorrect && seconds == 0) {   
-                        
+                    }
+                    else if (keyCorrect && seconds == 0) {
+
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
@@ -101,13 +102,13 @@ public class PlayerPickUp : MonoBehaviourPun
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
                         keycodeGame.SetActive(false);
                         held = false;
-                        
-                    } 
-                    else if (seconds != 0 ){
+
+                    }
+                    else if (seconds != 0) {
                         displayMessage(1);
 
                     }
-                    else if (!Input.GetKey(KeyCode.E)){
+                    else if (!Input.GetKey(KeyCode.E)) {
                         displayMessage(0);
                     }
 
@@ -122,7 +123,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
                     else if (paintingCorrect && seconds == 0) {
 
-                        
+
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
@@ -138,9 +139,9 @@ public class PlayerPickUp : MonoBehaviourPun
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
                         fixPaintingGame.SetActive(false);
                         held = false;
-                        
+
                     }
-                    else if (seconds != 0 ){
+                    else if (seconds != 0) {
                         displayMessage(1);
 
                     }
@@ -151,18 +152,18 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 }
 
-                else if(gameSelection == 2){        // hold down task
+                else if (gameSelection == 2) {        // hold down task
 
-                    if(seconds == 0 && !down){
+                    if (seconds == 0 && !down) {
                         holdDownTask();
                     }
-                    
-                    else if(seconds != 0){
+
+                    else if (seconds != 0) {
                         displayMessage(1);
                     }
-                    
 
-                    if(held && seconds == 0){ // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+
+                    if (held && seconds == 0) { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
                         targetTime += cooldown;
 
                         //other.gameObject.SetActive(false);
@@ -171,7 +172,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-                        
+
                         // reset game components
                         keycodeGame.SetActive(false);
                         fixPaintingGame.SetActive(false);
@@ -180,15 +181,58 @@ public class PlayerPickUp : MonoBehaviourPun
                         fixPaintingGame.GetComponent<RotateTask>().win = false;
 
                         held = false;
-                        
-                          
-                    }   
+
+
+                    }
                 }
-            }  else if (other.gameObject.tag == "button") {
+            } else if (other.gameObject.tag == "button") {
                 displayMessage("Press E to press button");
                 if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
                     int id = other.gameObject.GetComponent<PressButton>().id;
                     other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
+                }
+            } else if (other.gameObject.tag == "codedisplay")
+            {
+                if (Input.GetKey(KeyCode.E))
+                {
+                    CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
+                    codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
+
+                    codeDisplay.SetActive(true);
+                }
+
+            } else if (other.gameObject.tag == "keypad")
+            {
+                KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
+                keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
+
+                if (Input.GetKey(KeyCode.E) && keypad.codeCorrect && seconds == 0 && !down)
+                {
+                    displayMessage("Code already entered.");
+                }
+                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                {
+                    keycodeGame.SetActive(true);
+                    displayMessage(2);
+                }
+                else if (keyCorrect && seconds == 0)
+                {
+
+                    targetTime += cooldown;
+
+                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                    keycodeGame.SetActive(false);
+                    held = false;
+
+                }
+                else if (seconds != 0)
+                {
+                    displayMessage(1);
+
+                }
+                else if (!Input.GetKey(KeyCode.E))
+                {
+                    displayMessage(0);
                 }
             }
         }      
@@ -201,6 +245,7 @@ public class PlayerPickUp : MonoBehaviourPun
                 currentObject = null;
                 keycodeGame.SetActive(false);
                 fixPaintingGame.SetActive(false);
+                codeDisplay.SetActive(false);
 
                 keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
                 fixPaintingGame.GetComponent<RotateTask>().win = false;
