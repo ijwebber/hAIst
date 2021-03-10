@@ -41,7 +41,7 @@ public class KeycodeTask : MonoBehaviour
                 {
                     // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
-                    player.RPC("updateKeyCode", RpcTarget.Others, keypadID);
+                    keypad.GetComponent<PhotonView>().RPC("updateKeyCode", RpcTarget.Others, keypadID);
                     //insert bool value to say successful if code was correct
                     StartCoroutine(ResetCode());
                     keypad.codeCorrect = true;
