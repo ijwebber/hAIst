@@ -37,20 +37,22 @@ public class KeyPad : MonoBehaviour
     }
 
     void Update() {
-        timeElapsed += Time.deltaTime;
-        if (timeElapsed > 5) {
-            timeElapsed -= 5;
-            code = string.Empty;
+        if(PhotonNetwork.IsMasterClient) {
+            timeElapsed += Time.deltaTime;
+            if (timeElapsed > 5) {
+                timeElapsed -= 5;
+                code = string.Empty;
 
-            for (int i = 0; i < keycodeGame.GetComponent<KeycodeTask>().codeLength; i++)
-            {
-                code += Random.Range(1, 10);
+                for (int i = 0; i < keycodeGame.GetComponent<KeycodeTask>().codeLength; i++)
+                {
+                    code += Random.Range(1, 10);
+                }
+                if (codeDisplay != null) {
+                    codeDisplay.keypad.code = code;
+                    // Debug.Log(id + " // " + code);
+                }
+                this.gameObject.GetComponent<PhotonView>().RPC("SendCode",RpcTarget.Others, id, code);
             }
-            if (codeDisplay != null) {
-                codeDisplay.keypad.code = code;
-                // Debug.Log(id + " // " + code);
-            }
-            this.gameObject.GetComponent<PhotonView>().RPC("SendCode",RpcTarget.Others, id, code);
         }
     }
 
