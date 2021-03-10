@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class KeycodeTask : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class KeycodeTask : MonoBehaviour
                 {
                     // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
+                    this.gameObject.GetComponent<PhotonView>().RPC("updateKeyCode", RpcTarget.Others, keypad, keypad.id);
                     //insert bool value to say successful if code was correct
                     StartCoroutine(ResetCode());
                     keypad.codeCorrect = true;
@@ -50,6 +52,19 @@ public class KeycodeTask : MonoBehaviour
         {
             _inputCode.text = "Failed";
             StartCoroutine(ResetCode());
+        }
+    }
+
+    [PunRPC]
+    void updateKeyCode(int id, KeyPad keyPad) {
+        KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
+        foreach (KeyPad keypad in keypads)
+        {
+            if (keypad.id == id)
+            {
+                keypad.codeCorrect = true;
+                codeCorrect = true;
+            }
         }
     }
 
