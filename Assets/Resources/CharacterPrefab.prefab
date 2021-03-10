@@ -1742,6 +1742,7 @@ MonoBehaviour:
   _inputCode: {fileID: 3273627292446641043}
   codeLength: 5
   codeReset: 0.5
+  player: {fileID: 6181234002884017710}
   codeCorrect: 0
   keypadID: 0
 --- !u!1 &3273627292271442325
@@ -4808,6 +4809,18 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7950917147821238678, guid: 6e811334a11215a4e8b9113fc2c60e33, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6e811334a11215a4e8b9113fc2c60e33, type: 3}
+--- !u!114 &6181234002884017710 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8543146254879155823, guid: 6e811334a11215a4e8b9113fc2c60e33,
+    type: 3}
+  m_PrefabInstance: {fileID: 2542138856328681537}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271825080736462228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4783553250932223790 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7000253552808081263, guid: 6e811334a11215a4e8b9113fc2c60e33,

@@ -8,6 +8,7 @@ public class KeycodeTask : MonoBehaviour
     public Text _inputCode;
     public int codeLength = 5;
     public float codeReset = 0.5f;  // code reset time in seconds
+    public PhotonView player;
     private bool isReset = false;
     public bool codeCorrect = false; // This code should be attached to the keycode task object in the canvas
 
