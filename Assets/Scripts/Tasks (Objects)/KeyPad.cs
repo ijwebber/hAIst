@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class KeyPad : MonoBehaviour
 {
@@ -24,8 +25,15 @@ public class KeyPad : MonoBehaviour
     void Update() {
         timeElapsed += Time.deltaTime;
         if (timeElapsed > 5) {
-            code = string.Empty;
             timeElapsed -= 5;
+            this.gameObject.GetComponent<PhotonView>().RPC("GetCode", RpcTarget.MasterClient, id);
+        }
+    }
+
+    [PunRPC]
+    void GetCode(int queryId) {
+        if (queryId == id) {
+            code = string.Empty;
 
             for (int i = 0; i < keycodeGame.GetComponent<KeycodeTask>().codeLength; i++)
             {
@@ -35,6 +43,14 @@ public class KeyPad : MonoBehaviour
                 codeDisplay.keypad.code = code;
                 // Debug.Log(id + " // " + code);
             }
+            this.gameObject.GetComponent<PhotonView>().RPC("SendCode",RpcTarget.Others, id, code);
+        }
+    }
+
+    [PunRPC]
+    void SendCode(int queryId, string code) {
+        if (queryId == id) {
+            this.code = code;
         }
     }
 
