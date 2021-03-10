@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5393143033522729230}
   - component: {fileID: 5393143033522729224}
   - component: {fileID: 5393143033522729231}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: painting-lanscape
   m_TagString: steal
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.012563054, y: 0.012800588, z: 0.012800586}
+  m_Size: {x: 0.005, y: 0.012800588, z: 0.012800586}
   m_Center: {x: 0, y: 0.00000035762787, z: 0.000000007683411}
 --- !u!114 &5393143033522729224
 MonoBehaviour:
@@ -133,3 +133,4 @@ MonoBehaviour:
   itemName: TheLovelyOne
   value: 69
   special: 0
+  gameSelection: 0
