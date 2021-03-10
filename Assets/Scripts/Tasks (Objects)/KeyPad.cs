@@ -57,6 +57,13 @@ public class KeyPad : MonoBehaviour
     }
 
     [PunRPC]
+    void updateKeyCode(int id) {
+        if (id == this.id) {
+            codeCorrect = true;
+        }
+    }
+
+    [PunRPC]
     void SendCode(int queryId, string code) {
         if (queryId == id) {
             this.code = code;

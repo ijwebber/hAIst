@@ -56,18 +56,6 @@ public class KeycodeTask : MonoBehaviour
         }
     }
 
-    [PunRPC]
-    void updateKeyCode(int id) {
-        KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
-        foreach (KeyPad keypad in keypads)
-        {
-            if (keypad.id == id)
-            {
-                keypad.codeCorrect = true;
-                codeCorrect = true;
-            }
-        }
-    }
 
     private IEnumerator ResetCode(){  // reset the text inputs
         isReset = true;
