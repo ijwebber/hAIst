@@ -41,7 +41,7 @@ public class KeycodeTask : MonoBehaviour
                 {
                     // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
-                    player.RPC("updateKeyCode", RpcTarget.Others, keypad, keypad.id);
+                    player.RPC("updateKeyCode", RpcTarget.Others, keypadID);
                     //insert bool value to say successful if code was correct
                     StartCoroutine(ResetCode());
                     keypad.codeCorrect = true;
@@ -57,7 +57,7 @@ public class KeycodeTask : MonoBehaviour
     }
 
     [PunRPC]
-    void updateKeyCode(int id, KeyPad keyPad) {
+    void updateKeyCode(int id) {
         KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
         foreach (KeyPad keypad in keypads)
         {
