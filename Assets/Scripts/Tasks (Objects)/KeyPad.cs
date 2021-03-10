@@ -33,7 +33,7 @@ public class KeyPad : MonoBehaviour
             }
             if (codeDisplay != null) {
                 codeDisplay.keypad.code = code;
-                Debug.Log(id + " // " + code);
+                // Debug.Log(id + " // " + code);
             }
         }
     }

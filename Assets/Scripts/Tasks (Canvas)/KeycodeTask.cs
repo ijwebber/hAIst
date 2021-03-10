@@ -37,7 +37,7 @@ public class KeycodeTask : MonoBehaviour
             {
                 if (keypad.id == keypadID && _inputCode.text == keypad.code)
                 {
-                    Debug.Log("code submitted: " + _inputCode.text);
+                    // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
                     //insert bool value to say successful if code was correct
                     StartCoroutine(ResetCode());
