@@ -11,23 +11,36 @@ public class KeyPad : MonoBehaviour
     public bool codeCorrect;
 
     public GameObject keycodeGame;
+    public CodeDisplayObject codeDisplay;
+    public float timeElapsed;
 
     // Start is called before the first frame update
     void Start()
     {
-        code = string.Empty;
         codeCorrect = false;
+        // StartCoroutine(getCode());
+    }
 
-        for (int i = 0; i < keycodeGame.GetComponent<KeycodeTask>().codeLength; i++)
-        {
-            code += Random.Range(1, 10);
+    void Update() {
+        timeElapsed += Time.deltaTime;
+        if (timeElapsed > 5) {
+            code = string.Empty;
+            timeElapsed -= 5;
+
+            for (int i = 0; i < keycodeGame.GetComponent<KeycodeTask>().codeLength; i++)
+            {
+                code += Random.Range(1, 10);
+            }
+            if (codeDisplay != null) {
+                codeDisplay.keypad.code = code;
+                Debug.Log(id + " // " + code);
+            }
         }
-        Debug.Log(code);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    IEnumerator getCode() {
+        yield return new WaitForSeconds(5);
+        StartCoroutine(getCode());
     }
+
 }

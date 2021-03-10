@@ -8,18 +8,34 @@ public class CodeDisplay : MonoBehaviour
 
     public Text _cardCode;
 
-    public int keypadID = 0;
+    public int keypadID;
 
-    private void OnEnable()
-    {
-        KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
+    // private void OnEnable()
+    // {
+    //     KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
 
-        foreach (KeyPad keypad in keypads)
-        {
-            if (keypad.id == keypadID)
+    //     foreach (KeyPad keypad in keypads)
+    //     {
+    //         if (keypad.id == keypadID)
+    //         {
+    //             _cardCode.text = keypad.code;
+    //         }
+    //     }
+    // }
+
+    void Update() {
+        if (this.enabled) {
+            // Debug.Log("THIS WAS CALLED");
+            KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
+
+            foreach (KeyPad keypad in keypads)
             {
-                _cardCode.text = keypad.code;
+                if (keypad.id == keypadID)
+                {
+                    _cardCode.text = keypad.code;
+                }
             }
         }
+
     }
 }

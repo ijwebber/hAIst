@@ -73,7 +73,8 @@ public class PlayerPickUp : MonoBehaviourPun
 
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            if (other.gameObject.tag == "steal") {
+            switch (other.gameObject.tag) {
+                case "steal":
 
                 currentObject = other.gameObject;  // added the current game object
 
@@ -185,14 +186,16 @@ public class PlayerPickUp : MonoBehaviourPun
 
                     }
                 }
-            } else if (other.gameObject.tag == "button") {
+                break;
+            case "button":
                 displayMessage("Press E to press button");
                 if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
                     int id = other.gameObject.GetComponent<PressButton>().id;
                     other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
                 }
-            } else if (other.gameObject.tag == "codedisplay")
-            {
+                break;
+            case "codedisplay":
+                displayMessage("Press E to see code");
                 if (Input.GetKey(KeyCode.E))
                 {
                     CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
@@ -200,9 +203,9 @@ public class PlayerPickUp : MonoBehaviourPun
 
                     codeDisplay.SetActive(true);
                 }
+                break;
 
-            } else if (other.gameObject.tag == "keypad")
-            {
+            case "keypad":
                 KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
                 keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
 
@@ -234,6 +237,7 @@ public class PlayerPickUp : MonoBehaviourPun
                 {
                     displayMessage(0);
                 }
+                break;
             }
         }      
     }

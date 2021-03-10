@@ -12,6 +12,9 @@ public class KeycodeTask : MonoBehaviour
 
     public int keypadID = 0;
 
+    void Update() {
+
+    }
     private void OnEnable()
     {       // when the UI is active, do the following
         codeCorrect = false;
@@ -34,6 +37,7 @@ public class KeycodeTask : MonoBehaviour
             {
                 if (keypad.id == keypadID && _inputCode.text == keypad.code)
                 {
+                    Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
                     //insert bool value to say successful if code was correct
                     StartCoroutine(ResetCode());
@@ -47,9 +51,6 @@ public class KeycodeTask : MonoBehaviour
             _inputCode.text = "Failed";
             StartCoroutine(ResetCode());
         }
-
-
-
     }
 
     private IEnumerator ResetCode(){  // reset the text inputs
