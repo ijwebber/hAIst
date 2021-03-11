@@ -137,15 +137,8 @@ public class FieldOfView : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        MeshFilter[] filters = GameObject.FindObjectsOfType<MeshFilter>();
-        MeshFilter ViewFilter = new MeshFilter();
-        foreach (MeshFilter filter in filters)
-        {
-            if(filter.name.Equals("ViewVis")) {
-                Debug.Log(filter.name);
-                ViewFilter = filter;
-            }
-        }
+        MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("ViewVis").GetComponent<MeshFilter>();
+        Debug.Log("!!!" + ViewFilter.name);
         viewMeshFilter = GameObject.Instantiate<MeshFilter>(ViewFilter);
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";

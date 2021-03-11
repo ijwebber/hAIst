@@ -24,7 +24,7 @@ public class SoundVisual : MonoBehaviour
 
     private void UpdateSoundVis() {
         CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
-
+        Debug.Log("!!!" + vertices.Length + " !! " + (grid.GetWidth() * grid.GetHeight()));
         for (int x = 0; x < grid.GetWidth(); x++) {
             for (int y = 0; y < grid.GetHeight(); y++)  {
                 float gridValue = grid.GetValue(x,y);

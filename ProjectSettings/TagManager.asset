@@ -9,6 +9,9 @@ TagManager:
   - steal
   - exit
   - grass
+  - ViewVis
+  - POVObjects
+  - POVGuards
   layers:
   - Default
   - TransparentFX

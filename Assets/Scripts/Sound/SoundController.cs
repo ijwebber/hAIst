@@ -30,7 +30,7 @@ public class SoundController : MonoBehaviourPun
 
     // on start
     void Start() {
-        grid = new Grid(110,60,1f);
+        grid = new Grid(202,122,1f);
         soundVis.initGrid(grid);
         this.playerController = GameObject.FindObjectOfType<PlayerController>();
         this.localSoundGrid = GameObject.FindObjectOfType<GuardController>();

@@ -94,20 +94,10 @@ public class POVMesh : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (SceneManager.GetActiveScene().name == "BuildScene" && !start) {
-            MeshFilter[] filters = GameObject.FindObjectsOfType<MeshFilter>();
-            MeshFilter ViewFilter3 = new MeshFilter();
-            MeshFilter ViewFilter = new MeshFilter();
-            foreach (MeshFilter filter in filters)
-            {
-                if(filter.name == "POVGuards") {
-                    Debug.Log(filter.name);
-                    ViewFilter3 = filter;
-                }
-                if(filter.name == "POVObjects") {
-                    ViewFilter = filter;
-                }
-            }
+        if (SceneManager.GetActiveScene().name == "BuildScene" || SceneManager.GetActiveScene().name == "ArtLevel" && !start) {
+            MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("POVObjects").GetComponent<MeshFilter>();
+            MeshFilter ViewFilter3 = GameObject.FindGameObjectWithTag("POVGuards").GetComponent<MeshFilter>();
+
             // viewMeshFilter = ViewFilter;
             viewMeshFilter = ViewFilter3;
             objectMeshFilter = ViewFilter;

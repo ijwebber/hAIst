@@ -16,7 +16,7 @@ public class Grid {
     private float speedOfSound = 343/10; // this isn't actually the speed of sound, but it's the one that works best
     private int[,] gridArray;
     private float cellSize;
-    public Vector3 offset = new Vector3(-50.4f,11f,0f); // offset for bottom left grid tile (dont change z for some reason idk why)
+    public Vector3 offset = new Vector3(-100.333f,11.7f,-60.3f); // offset for bottom left grid tile (dont change z for some reason idk why)
     // private TextMesh[,] debugTextArray;
     private float[,] currentPressure, previousPressure, nextPressure, velocities;
 
