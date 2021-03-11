@@ -209,7 +209,7 @@ public class PlayerPickUp : MonoBehaviourPun
                 KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
                 keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
 
-                if (Input.GetKey(KeyCode.E) && keypad.codeCorrect && seconds == 0 && !down)
+                if (keypad.codeCorrect && !down)
                 {
                     displayMessage("Code already entered.");
                 }
