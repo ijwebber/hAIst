@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/ArtMuseum.unity
     guid: 47c3c38f55659c447ba42e450c9c5b84
   - enabled: 0
-    path: Assets/Scenes/Lights.unity
+    path: Assets/Scenes/NewLevelWithLights.unity
     guid: 10121e7a673ca1b448814084a7f18044
   - enabled: 0
     path: Assets/Scenes/Sound.unity
