@@ -1457,6 +1457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
+  playerController: {fileID: 0}
   rb: {fileID: 7399234938034377431}
   disabled: 0
 --- !u!114 &7609276469978281886
@@ -1488,7 +1489,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashlight: {fileID: 0}
-  flashlight2: {fileID: 0}
 --- !u!114 &8228215103595943073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1511,6 +1511,7 @@ MonoBehaviour:
   cooldown: 1
   holdTime: 5
   down: 0
+  progressBar: {fileID: 0}
 --- !u!114 &8543146254879155823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1559,6 +1560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f125b3e31c52740a0b9675b5ad345d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   obstruction: {fileID: 0}
   name: 
   objectMaterial: {fileID: 0}

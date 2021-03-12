@@ -66,9 +66,9 @@ public class Grid {
                     velocities[i,j] = 343;
                     Collision = true;
                 }
-                Debug.DrawLine(point1, point2, c1,100);
-                Debug.DrawLine(point1, point3, c2,100);
-                Debug.DrawLine(point1, point4, c3,100);
+                // Debug.DrawLine(point1, point2, c1,100);
+                // Debug.DrawLine(point1, point3, c2,100);
+                // Debug.DrawLine(point1, point4, c3,100);
                 if (!Collision) {
                     velocities[i,j] = localVel;
                 }
@@ -111,7 +111,19 @@ public class Grid {
     }
 
     public float GetValue(int x, int y) {
-        return this.currentPressure[x,y];
+        try
+        {
+            return this.currentPressure[x,y];
+        }
+        catch (System.Exception)
+        {
+            Debug.Log("out of bounds");
+            Debug.Log(x + " // " + y);
+            Debug.Log(this.currentPressure.GetLength(0) + " // " + this.currentPressure.GetLength(1));
+            
+            
+            throw;
+        }
     }
 
     public float GetValue(Vector3 worldPosition) {

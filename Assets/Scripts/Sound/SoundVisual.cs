@@ -8,6 +8,7 @@ public class SoundVisual : MonoBehaviour
     public Gradient gradient;
     public Grid grid;
     private Mesh mesh;
+    public PlayerController playerController;
 
     private void Start() {
         Debug.Log("this is called");
@@ -23,12 +24,27 @@ public class SoundVisual : MonoBehaviour
     }
 
     private void UpdateSoundVis() {
-        CreateEmptyMeshArrays(grid.GetWidth() * grid.GetHeight(), out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
-        Debug.Log("!!!" + vertices.Length + " !! " + (grid.GetWidth() * grid.GetHeight()));
-        for (int x = 0; x < grid.GetWidth(); x++) {
-            for (int y = 0; y < grid.GetHeight(); y++)  {
+        CreateEmptyMeshArrays(100 * 100, out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
+        grid.getXY(playerController.player.transform.position, out int playerX, out int playerY);
+        int startX = Mathf.Max(0, playerX - 50);
+        int startY = Mathf.Max(0, playerY - 50);
+        int endX = Mathf.Min(grid.GetWidth(), playerX + 50);
+        int endY = Mathf.Min(grid.GetHeight(), playerY + 50);
+        if (playerX + 50 > grid.GetWidth()) {
+            endX = grid.GetWidth();
+            startX = grid.GetWidth() - 100;
+        }
+        if (playerY + 50 > grid.GetHeight()) {
+            endY = grid.GetHeight();
+            startY = grid.GetHeight() - 100;
+        }
+        // this.gameObject.transform.position = new Vector3(startX, this.gameObject.transform.position.y, startY);
+        Debug.Log("!!!" + startX + " // " + endX);
+        Debug.Log("!!!" + startY + " // " + endY);
+        for (int x = startX; x < endX; x++) {
+            for (int y = startY; y < endY; y++)  {  
                 float gridValue = grid.GetValue(x,y);
-                int index = x * grid.GetHeight() + y;
+                int index = ((x-startX) * 100 + (y-startY));
                 Vector3 quadSize = new Vector3(1,1,0) * grid.GetCellSize();
                 float a = 0f;
                 if (gridValue > 0) {
@@ -47,8 +63,9 @@ public class SoundVisual : MonoBehaviour
 
                 // set uv (deprecated, used to set colour from gradient)
                 Vector2 gridvalueUV = new Vector2((float)gridValue, 0);
-
-                MeshUtils.AddToMeshArrays(vertices, uv, colors, triangles, index, Quaternion.Euler(-90,0,0)*grid.GetWorldPosition(x,y), 0f, quadSize, gridvalueUV, gridvalueUV, color);
+                // if (index < 10000) {
+                    MeshUtils.AddToMeshArrays(vertices, uv, colors, triangles, index, Quaternion.Euler(-90,0,0)*grid.GetWorldPosition(x,y), 0f, quadSize, gridvalueUV, gridvalueUV, color);
+                // }
             }
         }
 
@@ -58,6 +75,7 @@ public class SoundVisual : MonoBehaviour
         mesh.triangles = triangles;
         // mesh.uv = uv;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
     }
 
 
