@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/ArtMuseum.unity
     guid: 47c3c38f55659c447ba42e450c9c5b84
   - enabled: 0
-    path: Assets/Scenes/Lights.unity
+    path: Assets/Scenes/NewLevelWithLights.unity
     guid: 10121e7a673ca1b448814084a7f18044
   - enabled: 0
     path: Assets/Scenes/Sound.unity
@@ -29,10 +29,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PreGameLobby.unity
     guid: 3fafd0e0696e7418083dbb9b0a13eba3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BuildScene.unity
     guid: 150773a73b2496a47a282d374185eded
   - enabled: 1
     path: Assets/Scenes/EndScreen.unity
     guid: 88db821de56894efeb25de13d02340fa
+  - enabled: 1
+    path: Assets/Scenes/ArtLevel.unity
+    guid: 460bbe152da29564480ef449f5152e9e
+  - enabled: 0
+    path: Assets/Scenes/LevelTest.unity
+    guid: 4a55fa60d1aa41e4aa6f3fc4359e4529
   m_configObjects: {}
