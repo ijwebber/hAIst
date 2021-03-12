@@ -39,8 +39,6 @@ public class SoundVisual : MonoBehaviour
             startY = grid.GetHeight() - 100;
         }
         // this.gameObject.transform.position = new Vector3(startX, this.gameObject.transform.position.y, startY);
-        Debug.Log("!!!" + startX + " // " + endX);
-        Debug.Log("!!!" + startY + " // " + endY);
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++)  {  
                 float gridValue = grid.GetValue(x,y);
