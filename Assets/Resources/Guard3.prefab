@@ -1152,7 +1152,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4609556142392328302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 13.363, z: 34.8}
+  m_LocalPosition: {x: 69, y: 12, z: 41.3}
   m_LocalScale: {x: 1, y: 1, z: 0.99577}
   m_Children:
   - {fileID: 6459891421261152905}
@@ -1275,9 +1275,9 @@ MonoBehaviour:
   agent: {fileID: 3690989282875342136}
   soundVis: {fileID: 0}
   patrolPath:
-  - {x: 4, y: 13.36, z: 34.8}
-  - {x: 36.8, y: 13.36, z: 27.1}
-  - {x: 41.2, y: 13.36, z: 4.8}
+  - {x: 69, y: 12, z: 41.3}
+  - {x: 53.7, y: 12, z: -9.3}
+  - {x: 88.2, y: 12, z: -45.2}
   state: 0
   chaseSpeed: 6.5
   walkSpeed: 3.5
