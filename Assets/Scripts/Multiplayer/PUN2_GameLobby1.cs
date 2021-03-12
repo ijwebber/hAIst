@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Networking;
 
 
@@ -13,30 +14,49 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
 
     string gameVersion = "0.9";
-    //The list of created rooms
-    List<RoomInfo> createdRooms = new List<RoomInfo>();
     bool joiningRoom = false;
+    public GameObject DB_Controller;
 
 
-    [SerializeField] private GameObject UsernameMenu;
+    // MENUS
+    [SerializeField] private GameObject GuestMenu;
     [SerializeField] private GameObject StartMenu;
+    [SerializeField] private GameObject UserManagerMenu;
+    [SerializeField] private GameObject ExistingUserMenu;
+    [SerializeField] private GameObject NewUserMenu;
     [SerializeField] private GameObject LobbyMenu;
 
-
+    // SCRIPTS
     [SerializeField] private GameObject menu_script;
     [SerializeField] private GameObject LobbyScript;
 
+    
+
+    // USER MANAGER GAMEOBJECTS
+    public GameObject StatusGuest;
+
+    // EXISTING USER GAMEOBJECTS
+    public TMP_InputField UsernameLoginInput;
+    [SerializeField] TMP_InputField PasswordLoginInput;
+    public GameObject Status;
+
+    // NEW USER GAMEOBJECTS
+    public GameObject NewStatus;
+    public TMP_InputField UsernameCreationInput;
+    [SerializeField] TMP_InputField PasswordCreationInput;
+
+    // GUEST GAMEOBJECTS
     [SerializeField] TMP_InputField UsernameInput;
     [SerializeField] private GameObject StartButton;
-    public string GetUsersURL = "http://brasspig.unaux.com/get_users.php";
     private AuthenticationValues authValues;
+
 
 
 
     // Use this for initialization
     void Start()
     {
-        StartCoroutine(GetRequest(GetUsersURL));
+        
     }
 
     void Connect()
@@ -51,6 +71,78 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
 
 
+    // USER MANAGER MENU
+    public void ExistingUser()
+    {
+        UserManagerMenu.SetActive(false);
+        ExistingUserMenu.SetActive(true);
+    }
+    public void Guest()
+    {
+        UserManagerMenu.SetActive(false);
+        GuestMenu.SetActive(true);
+    }
+    public void NewButton()
+    {
+        UserManagerMenu.SetActive(false);
+        NewUserMenu.SetActive(true);
+    }
+
+    // NEW USER MENU
+    public void NewAccount()
+    {
+        DB_Controller.GetComponent<DB_Controller>().Create(UsernameCreationInput.text, PasswordCreationInput.text);
+    }
+
+    // EXISTING USER MENU
+    public void SignIn()
+    {
+        DB_Controller.GetComponent<DB_Controller>().Login(UsernameLoginInput.text, PasswordLoginInput.text);
+    }
+
+    // GUEST MENU
+    public void SignInGuest()
+    {
+        DB_Controller.GetComponent<DB_Controller>().CheckUsername(UsernameInput.text);
+    }
+
+    // HELPER FUNCTIONS
+    public void ChangeUserNameInput()
+    {
+        Status.SetActive(false);
+        StatusGuest.SetActive(false);
+    }
+    public void SetUserName()
+    {
+        ExistingUserMenu.SetActive(false);
+        GuestMenu.SetActive(false);
+        PhotonNetwork.NickName = UsernameLoginInput.text;
+        //menu_script.SetActive(true);
+        authValues = new AuthenticationValues();
+        authValues.UserId = UsernameLoginInput.text;
+        PhotonNetwork.AuthValues = authValues;
+        Connect(); 
+        LobbyScript.SetActive(true);
+        LobbyMenu.SetActive(true);
+        
+    }
+    
+    
+    // START MENU
+    public void StartGame()
+    {
+        StartMenu.SetActive(false);
+        UserManagerMenu.SetActive(true);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+
+
+    #region Callbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log("OnFailedToConnectToPhoton. StatusCode: " + cause.ToString() + " ServerAddress: " + PhotonNetwork.ServerAddress);
@@ -62,61 +154,6 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //After we connected to Master server, join the Lobby
         PhotonNetwork.JoinLobby(TypedLobby.Default);
     }
-
-
-
-    public void ChangeUserNameInput()
-    {
-        if (UsernameInput.text.Length >= 4)
-        {
-            StartButton.SetActive(true);
-        }
-    }
-
-    public void SetUserName()
-    {
-        UsernameMenu.SetActive(false);
-        PhotonNetwork.NickName = UsernameInput.text;
-        //menu_script.SetActive(true);
-        authValues = new AuthenticationValues();
-        authValues.UserId = UsernameInput.text;
-        PhotonNetwork.AuthValues = authValues;
-        Connect(); 
-        LobbyScript.SetActive(true);
-        LobbyMenu.SetActive(true);
-        
-    }
-    
-    public void QuitGame()
-    {
-        Application.Quit();
-    }
-
-    public void StartGame()
-    {
-        StartMenu.SetActive(false);
-        UsernameMenu.SetActive(true);
-    }
-
-    IEnumerator GetRequest(string uri) {
- 
-        using(UnityWebRequest webRequest = UnityWebRequest.Get(uri)) {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-        
-            if (webRequest.isNetworkError) {
-                Debug.Log(webRequest.error);
-                //or example
-            } else {
-                Debug.Log(webRequest.downloadHandler.text);
-
-            }
-        }
-    }
-
-
-    
-
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log("OnJoinRandomFailed got called. This can happen if the room is not existing or full or closed.");
@@ -142,4 +179,5 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("PreGameLobby");
 
     }
+    #endregion
 }
