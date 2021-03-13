@@ -24,6 +24,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject UserManagerMenu;
     [SerializeField] private GameObject ExistingUserMenu;
     [SerializeField] private GameObject NewUserMenu;
+    [SerializeField] private GameObject HomeMenu;
+
+
     [SerializeField] private GameObject LobbyMenu;
 
     // SCRIPTS
@@ -49,6 +52,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField UsernameInput;
     [SerializeField] private GameObject StartButton;
     private AuthenticationValues authValues;
+
+    // HOME SCREEN GAMEOBJECTS
+    public Button BalanceButton;
 
 
 
@@ -121,9 +127,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         authValues = new AuthenticationValues();
         authValues.UserId = UsernameLoginInput.text;
         PhotonNetwork.AuthValues = authValues;
-        Connect(); 
-        LobbyScript.SetActive(true);
-        LobbyMenu.SetActive(true);
+        Connect();
+        HomeMenu.SetActive(true);
+        //LobbyScript.SetActive(true);
+        //LobbyMenu.SetActive(true);
+
         
     }
     
