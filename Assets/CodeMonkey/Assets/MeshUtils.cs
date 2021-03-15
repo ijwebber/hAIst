@@ -141,6 +141,10 @@ public static class MeshUtils {
 			vertices[vIndex1] = Quaternion.Euler(-90,0,0)*(pos)+GetQuaternionEuler(rot-180)*baseSize;
 			vertices[vIndex2] = Quaternion.Euler(-90,0,0)*(pos)+GetQuaternionEuler(rot- 90)*baseSize;
 			vertices[vIndex3] = Quaternion.Euler(-90,0,0)*(pos)+GetQuaternionEuler(rot-  0)*baseSize;
+			// vertices[vIndex0] = Quaternion.Euler(-90,0,0)*(pos+new Vector3(0,heights[3]*10,0))+GetQuaternionEuler(rot-270)*baseSize;
+			// vertices[vIndex1] = Quaternion.Euler(-90,0,0)*(pos+new Vector3(0,heights[0]*10,0))+GetQuaternionEuler(rot-180)*baseSize;
+			// vertices[vIndex2] = Quaternion.Euler(-90,0,0)*(pos+new Vector3(0,heights[1]*10,0))+GetQuaternionEuler(rot- 90)*baseSize;
+			// vertices[vIndex3] = Quaternion.Euler(-90,0,0)*(pos+ new Vector3(0,heights[2]*10,0))+GetQuaternionEuler(rot-  0)*baseSize;
 		}
 		
 		//Relocate UVs

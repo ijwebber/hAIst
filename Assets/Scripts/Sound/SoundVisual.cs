@@ -58,63 +58,40 @@ public class SoundVisual : MonoBehaviour
     }
 
     private void UpdateSoundVis() {
+        mesh.Clear();
         grid.getXY(playerController.player.transform.position, out int playerX, out int playerY);
-        int startX = Mathf.Max(1, playerX - 50);
-        int startY = Mathf.Max(1, playerY - 50);
-        int endX = Mathf.Min(grid.GetWidth(), playerX + 50);
-        int endY = Mathf.Min(grid.GetHeight(), playerY + 50);
-        if (playerX + 50 > grid.GetWidth()-1) {
+        int startX = Mathf.Max(1, playerX - Dimension/2);
+        int startY = Mathf.Max(1, playerY - Dimension/2);
+        int endX = Mathf.Min(grid.GetWidth(), playerX + Dimension/2);
+        int endY = Mathf.Min(grid.GetHeight(), playerY + Dimension/2);
+        if (playerX + Dimension/2 > grid.GetWidth()-1) {
             endX = grid.GetWidth()-1;
-            startX = grid.GetWidth() - 100;
+            startX = grid.GetWidth() - Dimension;
         }
-        if (playerY + 50 > grid.GetHeight()-1) {
+        if (playerY + Dimension/2 > grid.GetHeight()-1) {
             endY = grid.GetHeight()-1;
-            startY = grid.GetHeight() - 100;
+            startY = grid.GetHeight() - Dimension;
         }
         // this.gameObject.transform.position = new Vector3(startX, this.gameObject.transform.position.y, startY);
-        Debug.Log("!!!" + startX + " // " + endX);
-        Debug.Log("!!!" + startY + " // " + endY);
-        var verts = mesh.vertices;
-        CreateEmptyMeshArrays(100 * 100, out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
+        CreateEmptyMeshArrays(Dimension * Dimension, out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++)  {  
-                double gridValue = grid.GetValue(x,y);
-                if (gridValue > 240) {
-                    Debug.Log(gridValue);
-                }
-                int index = ((x-startX) * 100 + (y-startY));
+                // double gridValue = grid.GetValue(x,y);
+                int index = ((x-startX) * Dimension + (y-startY));
                 Vector3 quadSize = new Vector3(1,1,0) * grid.GetCellSize();
-                float a = 0f;
-                Vector4 color = new Vector4(1, 1, 1, a);
-                if (gridValue > 0) {
-                    // normalise transparency value
-                    gridValue = Math.Sqrt(gridValue)/10;
-                    if (gridValue < .15f) {
-                        a = .15f;
-                    } else if(gridValue > .6f) {
-                        a = .6f;
-                    } else {
-                        a = ((float)gridValue);
-                    }
-                    color = new Vector4(1, 1, 1, a);
-                } else {
-                    if (grid.getSpeed(x,y) == 343) {
-                        // a = 1;
-                        // color = new Vector4(1,0,0,a);
-                    }
-                }
-                // set color
-
-
-                float height0 = (float)Math.Sqrt(grid.GetAvgValue(x,y))/10;
-                float height1 = (float)Math.Sqrt(grid.GetAvgValue(x+1,y))/10;
-                float height2 = (float)Math.Sqrt(grid.GetAvgValue(x,y+1))/10;
-                float height3 = (float)Math.Sqrt(grid.GetAvgValue(x+1,y+1))/10;
+                double gridValue = grid.GetAvgValue(x,y);
+                double val2 = grid.GetAvgValue(x+1,y);
+                double val3 = grid.GetAvgValue(x+1,y+1);
+                double val4 = grid.GetAvgValue(x,y+1);
+                float height0 = process(gridValue, .15f, .6f);
+                float height1 = process(val2, .15f, .6f);
+                float height2 = process(val3, .15f, .6f);
+                float height3 = process(val4, .15f, .6f);
                 float[] heights = {height0, height1, height2, height3};
-                Color color0 = gradient.Evaluate((float)Math.Sqrt(grid.GetAvgValue(x,y))/3);
-                Color color1 = gradient.Evaluate((float)Math.Sqrt(grid.GetAvgValue(x+1,y))/3);
-                Color color2 = gradient.Evaluate((float)Math.Sqrt(grid.GetAvgValue(x,y+1))/3);
-                Color color3 = gradient.Evaluate((float)Math.Sqrt(grid.GetAvgValue(x+1,y+1))/3);
+                Color color0 = gradient.Evaluate(process(gridValue,0,1));
+                Color color1 = gradient.Evaluate(process(val2, 0, 1));
+                Color color2 = gradient.Evaluate(process(val3, 0, 1));
+                Color color3 = gradient.Evaluate(process(val4, 0, 1));
                 Color[] gradColors = {color0, color1, color2, color3};
                 // set uv (deprecated, used to set colour from gradient)
                 Vector2 gridvalueUV = new Vector2((float)gridValue, 0);
@@ -131,6 +108,13 @@ public class SoundVisual : MonoBehaviour
         // mesh.uv = uv;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
+    }
+
+    private float process(double val, float min, float max) {
+        if (val <= 0) {
+            return 0;
+        }
+        return Mathf.Clamp((float)Math.Sqrt(val)/3,min,max);
     }
 
 

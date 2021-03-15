@@ -61,6 +61,9 @@ public class SoundController : MonoBehaviourPun
         if (Input.GetKeyDown("l") && !this.playerController.isDisabled) {
             sendGrid(playerController.player.transform.position, 30);
         }
+        if (Input.GetKeyDown("m") && !this.playerController.isDisabled) {
+            this.grid.getAverages();
+        }
 
         //flatten array
         // sendGrid();

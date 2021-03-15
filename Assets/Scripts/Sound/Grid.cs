@@ -10,6 +10,7 @@ public class Node {
 public class Grid {
     private int width;
     private int obstacleMask = (1 << 8) | (1 << 12);
+    public int[] averages = new int[500];
     private int height;
     private float maxPressure = 240;
     private double deltaT = 0.02;
@@ -88,7 +89,10 @@ public class Grid {
         currentPressure  = new double[width,height];
         previousPressure = new double[width,height];
         velocities       = new double[width,height];
-
+        for (int i = 0; i < averages.Length; i++)
+        {
+            averages[i] = 0;
+        }
         updateWalls();
     }
 
@@ -188,10 +192,10 @@ public class Grid {
                         ((currentPressure[x+1,y] - 2*currentPressure[x,y] + currentPressure[x-1,y])
                             + (currentPressure[x,y+1] - 2*currentPressure[x,y] + currentPressure[x,y-1]));
                     // if the value is in a wall, don't propagate
-                    if (nextValue < 0) {
-                        nextPressure[x,y] = 0f;
-                    } else {
+                    if (nextValue > .1f) {
                         nextPressure[x,y] = nextValue;
+                    } else {
+                        nextPressure[x,y] = 0;
                     }
                 } else {
                     nextPressure[x,y] = 0;
@@ -201,6 +205,15 @@ public class Grid {
         // copy information for next timestep
         this.previousPressure = (double[,])currentPressure.Clone();
         this.currentPressure = (double[,])nextPressure.Clone();
+    }
+
+    public void getAverages() {
+        for (int i = 0; i < averages.Length; i++)
+        {
+            if (averages[i] > 0) {
+                Debug.Log(i + " // " + averages[i]);
+            }
+        }
     }
 
     public int GetWidth() {
