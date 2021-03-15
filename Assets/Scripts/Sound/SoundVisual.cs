@@ -73,10 +73,7 @@ public class SoundVisual : MonoBehaviour
             startY = grid.GetHeight() - Dimension;
         }
         // this.gameObject.transform.position = new Vector3(startX, this.gameObject.transform.position.y, startY);
-<<<<<<< HEAD
-=======
         CreateEmptyMeshArrays(Dimension * Dimension, out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
->>>>>>> sound-waves
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++)  {  
                 // double gridValue = grid.GetValue(x,y);

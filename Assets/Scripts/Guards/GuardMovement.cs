@@ -111,7 +111,7 @@ public class GuardMovement : MonoBehaviourPun
             else
             {
                 // check for sound
-                if (guardController.localGrid.GetValue(transform.position) > 3 && this.state != State.disabled)
+                if (guardController.localGrid.GetValue(transform.position) > 0 && this.state != State.disabled)
                 {
                     Vector3 playerPosition = player.transform.position;
                     Debug.Log("I hear a who at // " + playerPosition);
