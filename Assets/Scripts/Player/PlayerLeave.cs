@@ -1,16 +1,43 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerLeave : MonoBehaviourPunCallbacks
 {
+
+    GameObject messageBox;
+
+    void Awake() {
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("MessageBox"))
+        {
+            if (obj.name == "InfoMessage") {
+                messageBox = obj;
+            }
+        } 
+    }
+
+    void OnCollisionEnter(Collision other) {
+        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
+        {
+            if (other.gameObject.tag == "Van") {
+                messageBox.GetComponent<Text>().text = "Ready to leave? Press E";
+                messageBox.SetActive(true);
+            }
+        }
+    }
+
     void OnCollisionStay(Collision other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            if (other.gameObject.tag == "grass") {
-                Hashtable hash = new Hashtable() {{"leave", true}, {"win", true}};
-                PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+            if (other.gameObject.tag == "Van") {
+                if (Input.GetKeyDown(KeyCode.E)) {
+                    Hashtable hash = new Hashtable() {{"leave", true}, {"win", true}};
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+
+                    messageBox.GetComponent<Text>().text = "Ready 1/4"; // TODO replace this with a dynamic ready system
+                }
             }
         }
     }
@@ -18,7 +45,9 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
     void OnCollisionExit(Collision other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            if (other.gameObject.tag == "grass") {
+            if (other.gameObject.tag == "Van") {
+                messageBox.SetActive(false);
+
                 Hashtable leaveHash = new Hashtable() {{"leave", false}, {"win", false}};
                 PhotonNetwork.LocalPlayer.SetCustomProperties(leaveHash);
             }

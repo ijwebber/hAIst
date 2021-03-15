@@ -12,6 +12,8 @@ TagManager:
   - ViewVis
   - POVObjects
   - POVGuards
+  - Van
+  - MessageBox
   layers:
   - Default
   - TransparentFX
