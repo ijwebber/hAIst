@@ -10,7 +10,8 @@ public class GuardController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.localGrid = new Grid(202,122,1f);
+        // this.localGrid = new Grid(202,122,.5f);
+        this.localGrid = new Grid(202,122,1);
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
 

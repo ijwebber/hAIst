@@ -120,7 +120,7 @@ public static class MeshUtils {
         return mesh;
     }
 
-    public static void AddToMeshArrays(Vector3[] vertices, Vector2[] uvs, Color[] colors, int[] triangles, int index, Vector3 pos, float rot, Vector3 baseSize, Vector2 uv00, Vector2 uv11, Vector4 color) {
+    public static void AddToMeshArrays(Vector3[] vertices, Vector2[] uvs, Color[] colors, int[] triangles, int index, Vector3 pos, float rot, Vector3 baseSize, Vector2 uv00, Vector2 uv11, Color[] gradColors, float[] heights) {
 		//Relocate vertices
 		int vIndex = index*4;
 		int vIndex0 = vIndex;
@@ -137,10 +137,14 @@ public static class MeshUtils {
 			vertices[vIndex2] = pos+GetQuaternionEuler(rot)*new Vector3( baseSize.x, -baseSize.y);
 			vertices[vIndex3] = pos+GetQuaternionEuler(rot)*baseSize;
 		} else {
-			vertices[vIndex0] = pos+GetQuaternionEuler(rot-270)*baseSize;
-			vertices[vIndex1] = pos+GetQuaternionEuler(rot-180)*baseSize;
-			vertices[vIndex2] = pos+GetQuaternionEuler(rot- 90)*baseSize;
-			vertices[vIndex3] = pos+GetQuaternionEuler(rot-  0)*baseSize;
+			vertices[vIndex0] = Quaternion.Euler(-90,0,0)*(pos)+GetQuaternionEuler(rot-270)*baseSize;
+			vertices[vIndex1] = Quaternion.Euler(-90,0,0)*(pos)+GetQuaternionEuler(rot-180)*baseSize;
+			vertices[vIndex2] = Quaternion.Euler(-90,0,0)*(pos)+GetQuaternionEuler(rot- 90)*baseSize;
+			vertices[vIndex3] = Quaternion.Euler(-90,0,0)*(pos)+GetQuaternionEuler(rot-  0)*baseSize;
+			// vertices[vIndex0] = Quaternion.Euler(-90,0,0)*(pos+new Vector3(0,heights[3]*10,0))+GetQuaternionEuler(rot-270)*baseSize;
+			// vertices[vIndex1] = Quaternion.Euler(-90,0,0)*(pos+new Vector3(0,heights[0]*10,0))+GetQuaternionEuler(rot-180)*baseSize;
+			// vertices[vIndex2] = Quaternion.Euler(-90,0,0)*(pos+new Vector3(0,heights[1]*10,0))+GetQuaternionEuler(rot- 90)*baseSize;
+			// vertices[vIndex3] = Quaternion.Euler(-90,0,0)*(pos+ new Vector3(0,heights[2]*10,0))+GetQuaternionEuler(rot-  0)*baseSize;
 		}
 		
 		//Relocate UVs
@@ -149,10 +153,17 @@ public static class MeshUtils {
 		uvs[vIndex2] = new Vector2(uv11.x, uv00.y);
 		uvs[vIndex3] = new Vector2(uv11.x, uv11.y);
 
-		colors[vIndex0] = color;
-		colors[vIndex1] = color;
-		colors[vIndex2] = color;
-		colors[vIndex3] = color;
+		colors[vIndex0] = new Vector4(gradColors[3].r,gradColors[3].g,gradColors[3].b,heights[3]);
+		colors[vIndex1] = new Vector4(gradColors[0].r,gradColors[0].g,gradColors[0].b,heights[0]);
+		colors[vIndex2] = new Vector4(gradColors[1].r,gradColors[1].g,gradColors[1].b,heights[1]);
+		colors[vIndex3] = new Vector4(gradColors[2].r,gradColors[2].g,gradColors[2].b,heights[2]);
+		// colors[vIndex1] = new Vector4(0,1,0,heights[2]);
+		// colors[vIndex2] = new Vector4(0,0,1,heights[3]);
+		// colors[vIndex3] = new Vector4(1,0,0,heights[0]);
+		// colors[vIndex0] = new Vector4(1,0,0,1);
+		// colors[vIndex1] = new Vector4(0,1,0,1);
+		// colors[vIndex2] = new Vector4(0,0,1,1);
+		// colors[vIndex3] = new Vector4(0,0,0,1);
 		
 		//Create triangles
 		int tIndex = index*6;

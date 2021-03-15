@@ -13,6 +13,7 @@ public class SoundController : MonoBehaviourPun
     // public GuardMovement guardController;
     public GameObject gridContainer;
     public int maxVolume;
+    float timeElapsed;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
         void Awake()
@@ -34,11 +35,13 @@ public class SoundController : MonoBehaviourPun
         soundVis.initGrid(grid);
         this.playerController = GameObject.FindObjectOfType<PlayerController>();
         this.localSoundGrid = GameObject.FindObjectOfType<GuardController>();
+        InvokeRepeating("timer", 0.01f, 0.02f);
+        // StartCoroutine(timer());
         // guardController.setGrid(grid);
     }
 
     //function done every frame
-    void LateUpdate() {
+    void Update() {
         // update sound visualisation
         soundVis.SetGrid();
         // send microphone volume if above threshold
@@ -50,13 +53,16 @@ public class SoundController : MonoBehaviourPun
 #endif
         if (Input.GetKeyDown("j") && !this.playerController.isDisabled) {
             // localSoundGrid.setValue(player.transform.position, 240);
-            sendGrid(playerController.player.transform.position, 240);
+            sendGrid(playerController.player.transform.position, (int)(240));
         }
         if (Input.GetKeyDown("k") && !this.playerController.isDisabled) {
             sendGrid(playerController.player.transform.position, 60);
         }
         if (Input.GetKeyDown("l") && !this.playerController.isDisabled) {
             sendGrid(playerController.player.transform.position, 30);
+        }
+        if (Input.GetKeyDown("m") && !this.playerController.isDisabled) {
+            this.grid.getAverages();
         }
 
         //flatten array
@@ -81,8 +87,7 @@ public class SoundController : MonoBehaviourPun
     }
 
     // every time step (every 50th of a second)
-    void FixedUpdate() {
-        // call propagation step
+    private void timer() {
         grid.updateNodes();
     }
 }

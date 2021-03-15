@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using CodeMonkey.Utils;
 
@@ -8,6 +9,7 @@ public class SoundVisual : MonoBehaviour
     public Gradient gradient;
     public Grid grid;
     private Mesh mesh;
+    private int Dimension = 100;
     public PlayerController playerController;
 
     private void Start() {
@@ -23,46 +25,81 @@ public class SoundVisual : MonoBehaviour
         UpdateSoundVis();
     }
 
-    private void UpdateSoundVis() {
-        CreateEmptyMeshArrays(100 * 100, out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
-        grid.getXY(playerController.player.transform.position, out int playerX, out int playerY);
-        int startX = Mathf.Max(0, playerX - 50);
-        int startY = Mathf.Max(0, playerY - 50);
-        int endX = Mathf.Min(grid.GetWidth(), playerX + 50);
-        int endY = Mathf.Min(grid.GetHeight(), playerY + 50);
-        if (playerX + 50 > grid.GetWidth()) {
-            endX = grid.GetWidth();
-            startX = grid.GetWidth() - 100;
+    private Vector3[] GenerateVerts() {
+        var verts = new Vector3[(Dimension + 1) * (Dimension + 1)];
+
+        for (int x = 0; x <= 100; x++) {
+            for(int z = 0; z <= 100; z++) {
+                verts[index(x, z)] =  new Vector3(x, 0, z);
+            }
         }
-        if (playerY + 50 > grid.GetHeight()) {
-            endY = grid.GetHeight();
-            startY = grid.GetHeight() - 100;
+        return verts;
+    }
+
+    private int index(int x, int z) {
+        return x * (Dimension + 1) + z;
+    }
+
+    private int[] GenerateTries() {
+        var tries = new int[mesh.vertices.Length*6];
+
+        for (int x = 0; x < Dimension; x++) {
+            for (int z = 0; z < Dimension; z++) {
+                tries[index(x,z) * 6 + 0] = index(x,z);
+                tries[index(x,z) * 6 + 1] = index(x+1,z+1);
+                tries[index(x,z) * 6 + 2] = index(x+1,z);
+                tries[index(x,z) * 6 + 3] = index(x,z);
+                tries[index(x,z) * 6 + 4] = index(x,z+1);
+                tries[index(x,z) * 6 + 5] = index(x+1,z+1);
+            }
+        }
+
+        return tries;
+    }
+
+    private void UpdateSoundVis() {
+        mesh.Clear();
+        grid.getXY(playerController.player.transform.position, out int playerX, out int playerY);
+        int startX = Mathf.Max(1, playerX - Dimension/2);
+        int startY = Mathf.Max(1, playerY - Dimension/2);
+        int endX = Mathf.Min(grid.GetWidth(), playerX + Dimension/2);
+        int endY = Mathf.Min(grid.GetHeight(), playerY + Dimension/2);
+        if (playerX + Dimension/2 > grid.GetWidth()-1) {
+            endX = grid.GetWidth()-1;
+            startX = grid.GetWidth() - Dimension;
+        }
+        if (playerY + Dimension/2 > grid.GetHeight()-1) {
+            endY = grid.GetHeight()-1;
+            startY = grid.GetHeight() - Dimension;
         }
         // this.gameObject.transform.position = new Vector3(startX, this.gameObject.transform.position.y, startY);
+<<<<<<< HEAD
+=======
+        CreateEmptyMeshArrays(Dimension * Dimension, out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
+>>>>>>> sound-waves
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++)  {  
-                float gridValue = grid.GetValue(x,y);
-                int index = ((x-startX) * 100 + (y-startY));
+                // double gridValue = grid.GetValue(x,y);
+                int index = ((x-startX) * Dimension + (y-startY));
                 Vector3 quadSize = new Vector3(1,1,0) * grid.GetCellSize();
-                float a = 0f;
-                if (gridValue > 0) {
-                    // normalise transparency value
-                    gridValue = Mathf.Sqrt(gridValue)/10;
-                    if (gridValue < .15f) {
-                        a = .15f;
-                    } else if(gridValue > .6f) {
-                        a = .6f;
-                    } else {
-                        a = (gridValue);
-                    }
-                }
-                // set color
-                Vector4 color = new Vector4(1, 1, 1, a);
-
+                double gridValue = grid.GetAvgValue(x,y);
+                double val2 = grid.GetAvgValue(x+1,y);
+                double val3 = grid.GetAvgValue(x+1,y+1);
+                double val4 = grid.GetAvgValue(x,y+1);
+                float height0 = process(gridValue, .15f, .6f);
+                float height1 = process(val2, .15f, .6f);
+                float height2 = process(val3, .15f, .6f);
+                float height3 = process(val4, .15f, .6f);
+                float[] heights = {height0, height1, height2, height3};
+                Color color0 = gradient.Evaluate(process(gridValue,0,1));
+                Color color1 = gradient.Evaluate(process(val2, 0, 1));
+                Color color2 = gradient.Evaluate(process(val3, 0, 1));
+                Color color3 = gradient.Evaluate(process(val4, 0, 1));
+                Color[] gradColors = {color0, color1, color2, color3};
                 // set uv (deprecated, used to set colour from gradient)
                 Vector2 gridvalueUV = new Vector2((float)gridValue, 0);
                 // if (index < 10000) {
-                    MeshUtils.AddToMeshArrays(vertices, uv, colors, triangles, index, Quaternion.Euler(-90,0,0)*grid.GetWorldPosition(x,y), 0f, quadSize, gridvalueUV, gridvalueUV, color);
+                MeshUtils.AddToMeshArrays(vertices, uv, colors, triangles, index, (grid.GetWorldPosition(x,y)), 0f, quadSize, gridvalueUV, gridvalueUV, gradColors, heights);
                 // }
             }
         }
@@ -74,6 +111,13 @@ public class SoundVisual : MonoBehaviour
         // mesh.uv = uv;
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
+    }
+
+    private float process(double val, float min, float max) {
+        if (val <= 0) {
+            return 0;
+        }
+        return Mathf.Clamp((float)Math.Sqrt(val)/3,min,max);
     }
 
 
