@@ -25,7 +25,7 @@ MonoBehaviour:
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
     overrideDepthState: 0
-    depthCompareFunction: 4
+    depthCompareFunction: 5
     enableWrite: 1
     stencilSettings:
       overrideStencilState: 1
@@ -71,6 +71,45 @@ MonoBehaviour:
       stencilReference: 1
       stencilCompareFunction: 8
       passOperation: 2
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
+--- !u!114 &-8239736324157454034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: NewRenderObjects
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: RenderObjectsFeature
+    Event: 300
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 0
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
@@ -145,7 +184,7 @@ MonoBehaviour:
     depthCompareFunction: 4
     enableWrite: 1
     stencilSettings:
-      overrideStencilState: 1
+      overrideStencilState: 0
       stencilReference: 0
       stencilCompareFunction: 8
       passOperation: 0
@@ -223,7 +262,7 @@ MonoBehaviour:
     depthCompareFunction: 4
     enableWrite: 1
     stencilSettings:
-      overrideStencilState: 1
+      overrideStencilState: 0
       stencilReference: 1
       stencilCompareFunction: 8
       passOperation: 0
@@ -252,11 +291,11 @@ MonoBehaviour:
   - {fileID: -2120419675862890358}
   - {fileID: -6262859972001139826}
   - {fileID: -8516966259462577537}
+  - {fileID: 2750721533087398524}
   - {fileID: -7071447176035468431}
   - {fileID: 5040595360857737103}
-  - {fileID: 2750721533087398524}
   - {fileID: 324828869978818790}
-  m_RendererFeatureMap: 2a9c0042fea9db89c2f18675a76b4fce8a88710d8ac192e28ef3db9a09da15a97fe2bed44fa8cd89717b7770422cdd9d8f476844c6caf3457c3ab10fa9862c26e608e1df22068204
+  m_RendererFeatureMap: 2a9c0042fea9db89c2f18675a76b4fce8a88710d8ac192e28ef3db9a09da15a97fe2bed44fa8cd897c3ab10fa9862c26717b7770422cdd9d8f476844c6caf345e608e1df22068204
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -328,35 +367,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: RenderNameTag
+  m_Name: WallTest
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: RenderNameTag
-    Event: 1000
+    passTag: WallTest
+    Event: 500
     filterSettings:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
-        m_Bits: 32
+        m_Bits: 256
       PassNames: []
-    overrideMaterial: {fileID: 0}
-    overrideMaterialPassIndex: 0
+    overrideMaterial: {fileID: 5561349426305759274, guid: 6baada13d5ed1eb4abb64f8d32cc77e7,
+      type: 3}
+    overrideMaterialPassIndex: 1
     overrideDepthState: 0
     depthCompareFunction: 4
     enableWrite: 1
     stencilSettings:
-      overrideStencilState: 1
+      overrideStencilState: 0
       stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 2
+      stencilCompareFunction: 5
+      passOperation: 0
       failOperation: 0
-      zFailOperation: 0
+      zFailOperation: 2
     cameraSettings:
       overrideCamera: 0
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
+      cameraFieldOfView: 4
 --- !u!114 &5040595360857737103
 MonoBehaviour:
   m_ObjectHideFlags: 0
