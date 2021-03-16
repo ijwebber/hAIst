@@ -7,10 +7,7 @@ using Photon.Pun;
 
 public class POVMesh : MonoBehaviour
 {
-    public float viewRadius;
-
-    [Range(0,360)]
-    public float viewAngle;
+    public PlayerController playerController;
     public float meshResolution;
 
     public LayerMask targetMask;
@@ -32,12 +29,12 @@ public class POVMesh : MonoBehaviour
 
 
     void DrawFOV() {
-        int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
-        float stepAngleSize = viewAngle / stepCount;
+        int stepCount = Mathf.RoundToInt(playerController.viewAngle * meshResolution);
+        float stepAngleSize = playerController.viewAngle / stepCount;
         List<Vector3> viewPoints = new List<Vector3>();
         for (int i = 0; i <= stepCount; i++)
         {
-            float angle = player.transform.eulerAngles.y - viewAngle/2 + stepAngleSize*i;
+            float angle = player.transform.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;
             ViewCastInfo newViewCast = viewCast(angle);
             viewPoints.Add(newViewCast.point);
         }
@@ -68,10 +65,10 @@ public class POVMesh : MonoBehaviour
         Vector3  dir = DirFromAngle(globalAngle, true);
         RaycastHit hit;
 
-        if (Physics.Raycast(player.transform.position, dir, out hit, viewRadius, obstacleMask)) {
+        if (Physics.Raycast(player.transform.position, dir, out hit, playerController.viewRadius, obstacleMask)) {
             return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
         } else {
-            return new ViewCastInfo(false, player.transform.position + dir * viewRadius, viewRadius, globalAngle);
+            return new ViewCastInfo(false, player.transform.position + dir * playerController.viewRadius, playerController.viewRadius, globalAngle);
         }
 
     }
@@ -89,6 +86,7 @@ public class POVMesh : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Timmy");
+        playerController = GameObject.FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
