@@ -55,6 +55,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     // HOME SCREEN GAMEOBJECTS
     public Button BalanceButton;
     public GameObject thief_1;
+    public GameObject thief_1_home;
+
     public GameObject thief_2;
     public GameObject thief_3;
     public GameObject thief_4;
@@ -229,11 +231,48 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     }
 
+    public void ThiefController()
+    {
+        if (PhotonNetwork.PlayerListOthers.Length == 0)
+        {
+            thief_2.SetActive(false);
+            thief_3.SetActive(false);
+            thief_4.SetActive(false);
+
+        }
+        if (PhotonNetwork.PlayerListOthers.Length == 1)
+        {
+            thief_2.GetComponentInChildren<Text>().text = PhotonNetwork.PlayerListOthers[0].NickName;
+            thief_2.SetActive(true);
+            thief_3.SetActive(false);
+            thief_4.SetActive(false);
+
+        }
+        else if (PhotonNetwork.PlayerListOthers.Length == 2)
+        {
+            thief_2.GetComponentInChildren<Text>().text = PhotonNetwork.PlayerListOthers[0].NickName;
+            thief_3.GetComponentInChildren<Text>().text = PhotonNetwork.PlayerListOthers[1].NickName;
+            thief_2.SetActive(true);
+            thief_3.SetActive(true);
+            thief_4.SetActive(false);
+        }
+        else if (PhotonNetwork.PlayerListOthers.Length == 3)
+        {
+            thief_2.GetComponentInChildren<Text>().text = PhotonNetwork.PlayerListOthers[0].NickName;
+            thief_3.GetComponentInChildren<Text>().text = PhotonNetwork.PlayerListOthers[1].NickName;
+            thief_4.GetComponentInChildren<Text>().text = PhotonNetwork.PlayerListOthers[2].NickName;
+            thief_2.SetActive(true);
+            thief_3.SetActive(true);
+            thief_4.SetActive(true);
+        }
+    }
 
 
 
-    // HELPER FUNCTIONS
-    public void ChangeUserNameInput()
+
+
+        // HELPER FUNCTIONS
+        public void ChangeUserNameInput()
     {
         Status.SetActive(false);
         StatusGuest.SetActive(false);
@@ -248,9 +287,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         authValues.UserId = UsernameLoginInput.text;
         PhotonNetwork.AuthValues = authValues;
         Connect();
-        HomeMenu.SetActive(true);
         thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
-        
+        thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+
+        Debug.Log("NICKNAME: " + PhotonNetwork.NickName);
+
+        HomeMenu.SetActive(true);
         //LobbyScript.SetActive(true);
         //LobbyMenu.SetActive(true);
     }
@@ -323,12 +365,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player player)
     {
         Debug.Log("PLAYER ENTERED ROOM");
-        ThiefControllerJoined(player.NickName);
+        ThiefController();
     }
 
     public override void OnPlayerLeftRoom(Player player)
     {
-        ThiefControllerLeft(player.NickName);
+        ThiefController();
     }
 
     public override void OnJoinedRoom()
@@ -337,6 +379,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PreGameMenu.SetActive(true);
         RoomNameButton.GetComponentInChildren<Text>().text = "Room: " + PhotonNetwork.CurrentRoom.Name;
         StopCoroutine(UpdateFriendList());
+        ThiefController();
         //PhotonNetwork.LoadLevel("PreGameLobby");
 
     }
