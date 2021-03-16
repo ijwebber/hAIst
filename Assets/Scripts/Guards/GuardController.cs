@@ -36,7 +36,7 @@ public class GuardController : MonoBehaviour
     
     void Update() {
         foreach (GuardMovement guard in guardMovements) {
-            if (Physics.Raycast(guard.gameObject.transform.position, (playerController.player.transform.position - guard.gameObject.transform.position).normalized, playerController.viewRadius+2,obstacleMask)) {
+            // if (Physics.Raycast(guard.gameObject.transform.position, (playerController.player.transform.position - guard.gameObject.transform.position).normalized, playerController.viewRadius+2,obstacleMask)) {
                 switch (guard.state)
                 {
                     case State.normal:
@@ -49,9 +49,9 @@ public class GuardController : MonoBehaviour
                         guard.sprite.sprite = exclamation;
                         break;
                 }
-            } else {
-                guard.sprite.sprite = null;
-            }
+            // } else {
+            //     guard.sprite.sprite = null;
+            // }
         }
     }
 
