@@ -29,6 +29,12 @@ public class AnimationStateController : MonoBehaviourPun
         bool backB = Input.GetKey(KeyCode.S);
         bool leftB = Input.GetKey(KeyCode.A);
         bool rightB = Input.GetKey(KeyCode.D);
+
+        bool upArrow = Input.GetKey(KeyCode.UpArrow);
+        bool downArrow = Input.GetKey(KeyCode.DownArrow);
+        bool leftArrow = Input.GetKey(KeyCode.LeftArrow);
+        bool rightArrow = Input.GetKey(KeyCode.RightArrow);
+
         bool iscrouched = animator.GetBool("isCrouched");
         bool isdown = GetComponent<PlayerMovement>().disabled;
 
@@ -63,19 +69,19 @@ public class AnimationStateController : MonoBehaviourPun
                 animator.SetBool("isCrouched",false);
             }
 
-            if(iscrouched && (forwardB || backB || leftB || rightB)){
+            if(iscrouched && (forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow)){
                 animator.SetBool("isCrouchWalk",true);
             }
 
-            if(!(iscrouched && (forwardB || backB || leftB || rightB))){
+            if(!(iscrouched && (forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow))){
                 animator.SetBool("isCrouchWalk",false);
             }
 
-            if(Input.GetKey(KeyCode.W) ||Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)  || Input.GetKey(KeyCode.A)  ){
+            if(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow){
                 animator.SetBool("isWalking",true);
             }
 
-            if(!(forwardB || backB || leftB || rightB)){
+            if(!(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow)){
                 animator.SetBool("isWalking",false);
             }
 
