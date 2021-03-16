@@ -11,6 +11,8 @@ using System;
 public class PopulateGridFriends : MonoBehaviourPunCallbacks
 {
     List<FriendInfo> FriendList = new List<FriendInfo>();
+    List<RoomInfo> createdRooms = new List<RoomInfo>();
+
 
     public ScrollView scrollView;
     public GameObject prefab; // This is our prefab object that will be exposed in the inspector
@@ -20,7 +22,7 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsConnected)
         {
             //Re-join Lobby to get the latest Room list
-            PhotonNetwork.JoinLobby(TypedLobby.Default);
+            //PhotonNetwork.JoinLobby(TypedLobby.Default);
         }
         else
         {
@@ -39,13 +41,47 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
         Debug.Log("Updated friend list");
         base.OnFriendListUpdate(friendList);
         FriendList = friendList;
+        Refresh();
         DestroyChildren();
         Populate();
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        Debug.Log("We have received the Room list");
+        //After this callback, update the room list
+        createdRooms = roomList;
+    }
+
+    public void Refresh()
+    {
+        if (PhotonNetwork.IsConnected)
+            {
+                //Re-join Lobby to get the latest Room list
+                PhotonNetwork.JoinLobby(TypedLobby.Default);
+            }
+            else
+            {
+                //We are not connected, estabilish a new connection
+                PhotonNetwork.ConnectUsingSettings();
+            }
     }
 
     public void ButtonClick(string i)
     {
         PhotonNetwork.JoinRoom(i);
+    }
+
+    public int GetRoomCount(string roomName)
+    {
+        for (int i = 0; i < createdRooms.Count; i++)
+        {
+            if (createdRooms[i].Name.Equals(roomName))
+            {
+                return createdRooms[i].PlayerCount;
+            }
+        }
+        return -1;
     }
 
     void Populate()
@@ -61,7 +97,12 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
             {
                 Debug.Log(FriendList[i].UserId + " Is online.");
                 newObj.transform.Find("Offline").gameObject.SetActive(false);
-                newObj.transform.Find("RoomInfoScroll").gameObject.SetActive(true);
+                if (FriendList[i].IsInRoom)
+                {
+                    int playerCount = GetRoomCount(FriendList[i].Room);
+                    newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = playerCount+ "/" + createdRooms[i].MaxPlayers;
+                    newObj.transform.Find("RoomInfoScroll").gameObject.SetActive(true);
+                }   
                 newObj.transform.Find("JoinGameButton").gameObject.SetActive(true);
 
             }

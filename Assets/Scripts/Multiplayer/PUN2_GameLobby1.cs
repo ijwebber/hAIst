@@ -25,14 +25,13 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject ExistingUserMenu;
     [SerializeField] private GameObject NewUserMenu;
     [SerializeField] private GameObject HomeMenu;
-
-
     [SerializeField] private GameObject LobbyMenu;
+    [SerializeField] private GameObject PreGameMenu;
 
     // SCRIPTS
     [SerializeField] private GameObject menu_script;
     [SerializeField] private GameObject LobbyScript;
-
+    [SerializeField] private GameObject Content;
     
 
     // USER MANAGER GAMEOBJECTS
@@ -62,24 +61,30 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject FriendsMenu;
     public string[] FriendList;
 
+
+    // PRE GAME OBJECTS
+    public GameObject RoomNameButton;
+    public GameObject LobbyScreen;
+
     // PHOTON NETWORK GAMEOBJECTS 
 
     // Use this for initialization
     void Start()
     {
         
-        StartCoroutine(UpdateFriendList());
     }
 
     void Connect()
     {
         if (!PhotonNetwork.IsConnected)
-            {
+        {
                 //Set the App version before connecting
                 PhotonNetwork.PhotonServerSettings.AppSettings.AppVersion = gameVersion;
                 // Connect to the photon master-server. We use the settings saved in PhotonServerSettings (a .asset file in this project)
                 PhotonNetwork.ConnectUsingSettings();
-            }
+        }
+
+
     }
 
 
@@ -147,6 +152,86 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         DB_Controller.GetComponent<DB_Controller>().GetFriends(UsernameLoginInput.text);
     }
 
+    public void PlayButton()
+    {
+        LobbyScript.SetActive(true);
+        LobbyMenu.SetActive(true);
+
+    }
+
+    // PRE GAME MENU
+    public void EnableLobbyScreen()
+    {
+        LobbyScreen.SetActive(true);
+        Content.GetComponent<PopulateGridLobby>().OnRefresh();
+    }
+
+    public void EnableHomeScreen()
+    {
+        LobbyScreen.SetActive(false);
+
+    }
+
+    public void ThiefControllerJoined(string playerName)
+    {
+        
+        if (PhotonNetwork.PlayerList.Length == 2)
+        {
+            
+            thief_2.GetComponentInChildren<Text>().text = playerName;
+                
+            
+            thief_2.SetActive(true);
+            thief_3.SetActive(false);
+            thief_4.SetActive(false);
+        }
+        else if (PhotonNetwork.PlayerList.Length == 3)
+        {
+            thief_3.GetComponentInChildren<Text>().text = playerName;
+
+            
+            thief_2.SetActive(true);
+            thief_3.SetActive(true);
+            thief_4.SetActive(false);
+        }
+        else if (PhotonNetwork.PlayerList.Length == 4)
+        {
+            thief_4.GetComponentInChildren<Text>().text = playerName;
+            thief_2.SetActive(true);
+            thief_3.SetActive(true);
+            thief_4.SetActive(true);
+        }
+
+    }
+
+    public void ThiefControllerLeft(string playerName)
+    {
+        if (PhotonNetwork.PlayerList.Length == 1)
+        {
+            thief_2.SetActive(false);
+            thief_3.SetActive(false);
+            thief_4.SetActive(false);
+        }
+        if (PhotonNetwork.PlayerList.Length == 2)
+        {            
+            thief_2.SetActive(true);
+            thief_3.SetActive(false);
+            thief_4.SetActive(false);
+        }
+        else if (PhotonNetwork.PlayerList.Length == 3)
+        {
+            
+            thief_2.SetActive(true);
+            thief_3.SetActive(true);
+            thief_4.SetActive(false);
+        }
+        
+
+    }
+
+
+
+
     // HELPER FUNCTIONS
     public void ChangeUserNameInput()
     {
@@ -169,6 +254,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //LobbyScript.SetActive(true);
         //LobbyMenu.SetActive(true);
     }
+
 
     public void JoinNewRooom()
     {
@@ -228,13 +314,29 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         GetFriends();
+        StartCoroutine(UpdateFriendList());
+
         //JoinNewRooom();
         //PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
+    public override void OnPlayerEnteredRoom(Player player)
+    {
+        Debug.Log("PLAYER ENTERED ROOM");
+        ThiefControllerJoined(player.NickName);
+    }
+
+    public override void OnPlayerLeftRoom(Player player)
+    {
+        ThiefControllerLeft(player.NickName);
     }
 
     public override void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom");
+        PreGameMenu.SetActive(true);
+        RoomNameButton.GetComponentInChildren<Text>().text = "Room: " + PhotonNetwork.CurrentRoom.Name;
+        StopCoroutine(UpdateFriendList());
         //PhotonNetwork.LoadLevel("PreGameLobby");
 
     }
