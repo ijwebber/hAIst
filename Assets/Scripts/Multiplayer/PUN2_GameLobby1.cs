@@ -16,7 +16,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     string gameVersion = "0.9";
     bool joiningRoom = false;
     public GameObject DB_Controller;
-
+    private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
 
     // MENUS
     [SerializeField] private GameObject GuestMenu;
@@ -55,14 +55,20 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     // HOME SCREEN GAMEOBJECTS
     public Button BalanceButton;
+    public GameObject thief_1;
+    public GameObject thief_2;
+    public GameObject thief_3;
+    public GameObject thief_4;
+    public GameObject FriendsMenu;
+    public string[] FriendList;
 
-
-
+    // PHOTON NETWORK GAMEOBJECTS 
 
     // Use this for initialization
     void Start()
     {
         
+        StartCoroutine(UpdateFriendList());
     }
 
     void Connect()
@@ -112,6 +118,35 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         DB_Controller.GetComponent<DB_Controller>().CheckUsername(UsernameInput.text);
     }
 
+    // HOME MENU
+    public void EnableFriendsMenu()
+    {
+        FriendsMenu.SetActive(true);
+    }
+
+    public void EnableLobbyMenu()
+    {
+        FriendsMenu.SetActive(false);
+    }
+
+    IEnumerator UpdateFriendList()
+    {
+        for (; ; )
+        {
+            if (PhotonNetwork.IsConnected & FriendList.Length != 0)
+            {
+            PhotonNetwork.FindFriends(FriendList);
+            }
+            yield return new WaitForSeconds(1f);
+
+        }
+    }
+
+    public void GetFriends()
+    {
+        DB_Controller.GetComponent<DB_Controller>().GetFriends(UsernameLoginInput.text);
+    }
+
     // HELPER FUNCTIONS
     public void ChangeUserNameInput()
     {
@@ -129,10 +164,26 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PhotonNetwork.AuthValues = authValues;
         Connect();
         HomeMenu.SetActive(true);
+        thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+        
         //LobbyScript.SetActive(true);
         //LobbyMenu.SetActive(true);
+    }
 
-        
+    public void JoinNewRooom()
+    {
+        RoomOptions roomOptions = new RoomOptions();
+        roomOptions.IsOpen = true;
+        roomOptions.IsVisible = false;
+        roomOptions.MaxPlayers = (byte)4;
+        roomOptions.PublishUserId = true;
+        if (!customProperties.ContainsKey("num_ready"))
+        {
+            customProperties.Add("num_ready", 0);
+        }
+        roomOptions.CustomRoomProperties = customProperties;
+        PhotonNetwork.CreateRoom(PhotonNetwork.NickName, roomOptions, TypedLobby.Default);
+
     }
     
     
@@ -161,6 +212,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         Debug.Log("OnConnectedToMaster");
         //After we connected to Master server, join the Lobby
         PhotonNetwork.JoinLobby(TypedLobby.Default);
+        
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -171,21 +223,25 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         Debug.Log("OnCreatedRoom");
-        //Set our player name
-        //PhotonNetwork.NickName = playerName;
-        //Load the Scene called GameLevel (Make sure it's added to build settings)
-        //PhotonNetwork.LoadLevel("PreGameLobby");
+        
     }
-    public void OnJoinedLobby()
+    public override void OnJoinedLobby()
     {
-        PhotonNetwork.AutomaticallySyncScene = true;
+        GetFriends();
+        //JoinNewRooom();
+        //PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom");
-        PhotonNetwork.LoadLevel("PreGameLobby");
+        //PhotonNetwork.LoadLevel("PreGameLobby");
 
+    }
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("OnJoinRoomFailed got called. This can happen if the room is not existing or full or closed.");
+    
     }
     #endregion
 }

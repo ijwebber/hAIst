@@ -17,6 +17,8 @@ public class DB_Controller : MonoBehaviour
     string user_url = "https://brasspig.online/get_users.php";
     string create_url = "https://brasspig.online/put_test.php";
     string get_balance_url = "https://brasspig.online/get_balance.php?";
+    string get_friends_url = "https://brasspig.online/get_friends.php?";
+
     private void Start()
     {
     }
@@ -42,6 +44,10 @@ public class DB_Controller : MonoBehaviour
         StartCoroutine(CoinBalance(username));
     }
 
+    public void GetFriends(string username)
+    {
+        StartCoroutine(Friends(username));
+    }
 
     IEnumerator CheckLogin(string username, string password)
     {
@@ -166,6 +172,8 @@ public class DB_Controller : MonoBehaviour
             }
             else
             {
+                Debug.Log(uri);
+                Debug.Log(webRequest.downloadHandler.text);
                 //Debug.Log(webRequest.downloadHandler.text);
                 if (webRequest.downloadHandler.text == "true")
                 {
@@ -192,7 +200,7 @@ public class DB_Controller : MonoBehaviour
     {
         string uri = get_balance_url + "user=" + username;
         Debug.Log(uri);
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(user_url))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
@@ -205,6 +213,33 @@ public class DB_Controller : MonoBehaviour
                 string balance = webRequest.downloadHandler.text;
                 Debug.Log("BALANCE SET: "+balance);
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = balance;
+            }
+        }
+
+    }
+
+    IEnumerator Friends(string username)
+    {
+        string uri = get_friends_url + "user=" + username;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string friends = webRequest.downloadHandler.text.Trim();
+                Debug.Log("Friends: " + friends);
+                if (!friends.Equals(" "))
+                {
+                    char[] delimiterChars = { ',' };
+                    string[] friendList = friends.Split(delimiterChars);
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().FriendList = friendList;
+                }
+                
             }
         }
 
