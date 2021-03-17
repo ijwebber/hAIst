@@ -7,46 +7,39 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerLeave : MonoBehaviourPunCallbacks
 {
 
-    GameObject messageBox;
+    UIController uiController;
 
-    void Awake() {
-        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("MessageBox"))
-        {
-            if (obj.name == "InfoMessage") {
-                messageBox = obj;
-            }
-        } 
+    void Start() {
+        uiController = GameObject.FindObjectOfType<UIController>();
     }
 
-    void OnCollisionEnter(Collision other) {
+    void OnTriggerEnter(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            if (other.gameObject.tag == "Van") {
-                messageBox.GetComponent<Text>().text = "Ready to leave? Press E";
-                messageBox.SetActive(true);
+            if (other.gameObject.CompareTag("ExitBox")) {
+                uiController.UpdateInfoText("Ready to leave? Press E");
             }
         }
     }
 
-    void OnCollisionStay(Collision other) {
+    void OnTriggerStay(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            if (other.gameObject.tag == "Van") {
+            if (other.gameObject.CompareTag("ExitBox")) {
                 if (Input.GetKeyDown(KeyCode.E)) {
                     Hashtable hash = new Hashtable() {{"leave", true}, {"win", true}};
                     PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-
-                    messageBox.GetComponent<Text>().text = "Ready 1/4"; // TODO replace this with a dynamic ready system
+                    uiController.UpdateInfoText("Waiting for others"); // TODO replace this with a dynamic ready system
                 }
             }
         }
     }
 
-    void OnCollisionExit(Collision other) {
+    void OnTriggerExit(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
-            if (other.gameObject.tag == "Van") {
-                messageBox.SetActive(false);
+            if (other.gameObject.CompareTag("ExitBox")) {
+                uiController.HideInfoBox();
 
                 Hashtable leaveHash = new Hashtable() {{"leave", false}, {"win", false}};
                 PhotonNetwork.LocalPlayer.SetCustomProperties(leaveHash);
