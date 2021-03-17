@@ -28,7 +28,7 @@ public class GameController : MonoBehaviourPunCallbacks
             return;
         }
 
-        float xSpawnPos = SpawnPoint.transform.position.x + (float) (PhotonNetwork.LocalPlayer.ActorNumber * 1.2);
+        float xSpawnPos = SpawnPoint.transform.position.x + (float) (PhotonNetwork.LocalPlayer.ActorNumber * 0.6);
         Vector3 spawnpoint = SpawnPoint.transform.position;
         spawnpoint.x = xSpawnPos;
 
