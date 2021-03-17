@@ -113,7 +113,7 @@ public class GuardMovement : MonoBehaviourPun
                 {
                     Vector3 playerPosition = player.transform.position;
                     Debug.Log("I hear a who at // " + playerPosition);
-                    this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
+                    this.photonView.RPC("snitch", RpcTarget.All, playerPosition.x, playerPosition.y, playerPosition.z);
                 }
                 else
                 {
@@ -156,13 +156,6 @@ public class GuardMovement : MonoBehaviourPun
                 }
             }
         }
-
-        
-
-        
-
-       
-        
     }
 
     [PunRPC]
@@ -170,7 +163,10 @@ public class GuardMovement : MonoBehaviourPun
         // receive new sound source and update local grid
         if (this.state == State.normal) {
             this.state = State.suspicious;
-            agent.SetDestination(new Vector3(x,y,z));
+
+            if (PhotonNetwork.IsMasterClient) {
+                agent.SetDestination(new Vector3(x,y,z));
+            }
         }
     }
 

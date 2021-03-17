@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class GuardController : MonoBehaviour
+public class GuardController : MonoBehaviourPun
 {
     public LayerMask obstacleMask;
     public Grid localGrid;
@@ -14,7 +15,6 @@ public class GuardController : MonoBehaviour
     {
         // this.localGrid = new Grid(202,122,.5f);
         this.localGrid = new Grid(202,122,1);
-        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
 
     public void setValue(Vector3 position, float intensity) {
@@ -29,6 +29,9 @@ public class GuardController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (guardMovements.Length == 0) {
+            guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+        }
         localGrid.updateNodes();
     }
     
