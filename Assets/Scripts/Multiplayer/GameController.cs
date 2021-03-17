@@ -47,6 +47,8 @@ public class GameController : MonoBehaviourPunCallbacks
             Debug.Log("instantiated starsprite");
             PhotonNetwork.InstantiateRoomObject("StarItem", new Vector3(item.transform.position.x, 16.1f, item.transform.position.z-1), Quaternion.Euler(90,0,0));
         }
+
+        SetSpotted();
         
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
@@ -110,7 +112,15 @@ public class GameController : MonoBehaviourPunCallbacks
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
     }
-
+    // Set spotted to false as the players have not been seen by any guards, if a player is seen guard calls police and players have to escape in a set time.
+    void SetSpotted()
+    {
+        if (PhotonNetwork.LocalPlayer.IsMasterClient)
+        {
+            Hashtable setSpotted = new Hashtable() { { "spotted", false }, {"spottingGuardLocation", null }, {"cutSceneDone", false } };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
+        }
+    }
 
     // Set score to 0 && special item numbers
     void SetProps(int numOfSpecial) {
@@ -171,4 +181,6 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+
 }

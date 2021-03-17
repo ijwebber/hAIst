@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviourPun
     
     //private TextMesh Caption = null;
     public bool disabled = false;
+    public bool paused = false;
     
     private void Start()
     {
@@ -46,7 +47,7 @@ public class PlayerMovement : MonoBehaviourPun
         
 
         //if not disabled then get keyboard input
-        if (!disabled)
+        if (!disabled && !paused)
         {
             
             // player movement - forward, backward, left, right

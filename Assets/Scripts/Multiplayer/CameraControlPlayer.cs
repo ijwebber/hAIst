@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using System;
 
-public class CameraControlPlayer : MonoBehaviourPun
+public class CameraControlPlayer : MonoBehaviourPunCallbacks
 {
 
     public GameObject player;
@@ -36,6 +37,9 @@ public class CameraControlPlayer : MonoBehaviourPun
 
         // maintain a flag internally to reconnect if target is lost or camera is switched
         bool isFollowing;
+        bool isCutScene = false;
+        private Vector3 guardPos;
+        bool cutSceneDone = false;
         
         // Cache for camera offset
         Vector3 cameraOffset = Vector3.zero;
@@ -118,6 +122,11 @@ public class CameraControlPlayer : MonoBehaviourPun
 
                 Follow ();
             }
+
+        if(isCutScene && !isFollowing)
+        {
+            cutScene();
+        }
     }
 
     void Follow() 
@@ -138,6 +147,82 @@ public class CameraControlPlayer : MonoBehaviourPun
         color.a = alpha;
         prevObjectMaterial.color = color;
     }
+
+
+    public override void OnRoomPropertiesUpdate(Hashtable setSpotted)
+    {
+        base.OnRoomPropertiesUpdate(setSpotted);
+
+        if(setSpotted["spotted"] != null)
+        {
+            if ((bool)setSpotted["spotted"])
+            {
+                if (this.photonView.IsMine)
+                {   
+                    //freeze local player so they can't move during cutscene
+                    this.GetComponent<PlayerMovement>().paused = true;
+
+                    //start cutScene corountine
+                    isCutScene = true;
+                    guardPos = (Vector3)setSpotted["spottingGuardLocation"];
+                    guardPos.z = guardPos.z + distance-3;
+                    guardPos.y = guardPos.y + height-8;
+                    isFollowing = false;
+                    //Debug.LogError(guardPos.z);
+
+
+                }
+
+            }
+            
+        }
+    }
+
+
+    public void cutScene()
+    {
+
+        //once corountine is finished free local player, bring camera back and free local player
+        //if master client set cutscene to finished and free guards.
+
+        BarController.Instance.ShowBars();
+
+        Vector3 playerCamPos = this.transform.position;
+        playerCamPos.z = playerCamPos.z + distance;
+        playerCamPos.y = playerCamPos.y + height;
+
+        Debug.LogError(cameraTransform.position.z);
+
+        if(Math.Abs(cameraTransform.position.x - guardPos.x) < 1.5 && Math.Abs(cameraTransform.position.z - guardPos.z) < 1.5 && !cutSceneDone)
+        {
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, playerCamPos, Time.deltaTime * 1);
+
+            cutSceneDone = true;
+            
+          
+        }
+        else if (cutSceneDone)
+        {
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, playerCamPos, Time.deltaTime * 2);
+            if (Math.Abs(cameraTransform.position.x - playerCamPos.x) < 1 && Math.Abs(cameraTransform.position.z - playerCamPos.z) < 1)
+            {
+                this.GetComponent<PlayerMovement>().paused = false;
+                isCutScene = false;
+                isFollowing = true;
+                //renable guards
+                GuardController.Instance.disableAllguards(false);
+                BarController.Instance.HideBars();
+            }
+
+        }
+        else
+        {
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, guardPos, Time.deltaTime * 1);
+        }
+
+
+    }
+    
 
 }
 
