@@ -11,8 +11,15 @@ public class PreGame : MonoBehaviourPunCallbacks
 {
 
     public Button StartGameButton;
+    public Button SetReadyButton;
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
     private ExitGames.Client.Photon.Hashtable customPropertiesRoom = new ExitGames.Client.Photon.Hashtable();
+
+    public GameObject thief_1;
+    public GameObject thief_2;
+    public GameObject thief_3;
+    public GameObject thief_4;
+
 
 
 
@@ -57,12 +64,14 @@ public class PreGame : MonoBehaviourPunCallbacks
             customProperties["ready"] = "true";
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
             Debug.Log("Ready state has beed updated to :" + (string)customProperties["ready"]);
+            SetReadyButton.GetComponent<Image>().color = Color.green;
         }
         else
         {
             customProperties["ready"] = "false";
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
             Debug.Log("Ready state has beed updated to :" + (string)customProperties["ready"]);
+            SetReadyButton.GetComponent<Image>().color = Color.red;
         }
         
         
@@ -75,6 +84,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         int num_ready = GetNumReady();
         customPropertiesRoom["num_ready"] = num_ready;
         PhotonNetwork.CurrentRoom.SetCustomProperties(customPropertiesRoom);
+        SetReadyChecks();
         CheckAllReady();
 
     }
@@ -100,6 +110,62 @@ public class PreGame : MonoBehaviourPunCallbacks
             }
        }
         return total_ready;
+    }
+
+
+    public void SetReadyChecks()
+    {
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_1.GetComponentInChildren<Text>().text))
+            {
+              if (PhotonNetwork.PlayerList[i].CustomProperties["ready"].Equals("true"))
+              {
+                  Debug.Log("READY CHECK");
+                  thief_1.transform.GetChild(1).gameObject.SetActive(true);
+              }
+              else
+              {
+                  thief_1.transform.GetChild(1).gameObject.SetActive(false);
+              }
+            }
+            else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_2.GetComponentInChildren<Text>().text))
+            {
+              if (PhotonNetwork.PlayerList[i].CustomProperties["ready"].Equals("true"))
+              {
+                  Debug.Log("READY CHECK");
+                  thief_2.transform.GetChild(1).gameObject.SetActive(true);
+              }
+              else
+              {
+                  thief_2.transform.GetChild(1).gameObject.SetActive(false);
+              }
+            }
+            else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_3.GetComponentInChildren<Text>().text))
+            {
+              if (PhotonNetwork.PlayerList[i].CustomProperties["ready"].Equals("true"))
+              {
+                  Debug.Log("READY CHECK");
+                  thief_3.transform.GetChild(1).gameObject.SetActive(true);
+              }
+              else
+              {
+                  thief_3.transform.GetChild(1).gameObject.SetActive(false);
+              }
+            }
+            else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_4.GetComponentInChildren<Text>().text))
+            {
+              if (PhotonNetwork.PlayerList[i].CustomProperties["ready"].Equals("true"))
+              {
+                  Debug.Log("READY CHECK");
+                  thief_4.transform.GetChild(1).gameObject.SetActive(true);
+              }
+              else
+              {
+                  thief_4.transform.GetChild(1).gameObject.SetActive(false);
+              }
+            }
+        }
     }
 
     public bool CheckAllReady() 
