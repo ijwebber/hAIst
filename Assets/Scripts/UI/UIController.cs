@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     public GameObject infoMessage;
+    public GameObject locationText;
 
     void Start()
     {
@@ -28,5 +29,9 @@ public class UIController : MonoBehaviour
 
     public void ShowInfoBox() {
         infoMessage.SetActive(true);
+    }
+
+    public void UpdateLocationText(string text) {
+        locationText.GetComponent<Text>().text = text;
     }
 }

@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviourPun
     
     //private TextMesh Caption = null;
     public bool disabled = false;
+
+    UIController uiController;
     
     private void Start()
     {
@@ -27,14 +29,10 @@ public class PlayerMovement : MonoBehaviourPun
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraControlPlayer Component on playerPrefab.", this);
         }
+
+        uiController = GameObject.FindObjectOfType<UIController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
     }
-
-   
-
-  
-
-    
  
     void FixedUpdate()
     {
@@ -93,6 +91,15 @@ public class PlayerMovement : MonoBehaviourPun
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true) {
             playerController.isDisabled = disabledValue;
             PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"leave", disabledValue}});
+        }
+    }
+
+    void OnTriggerEnter(Collider other) {
+        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
+        {
+            if (other.gameObject.CompareTag("LocatorColliders")) {
+                uiController.UpdateLocationText("Location: " + other.gameObject.name);
+            }
         }
     }
 }

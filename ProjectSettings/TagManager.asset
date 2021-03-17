@@ -15,6 +15,7 @@ TagManager:
   - Van
   - MessageBox
   - ExitBox
+  - LocatorColliders
   layers:
   - Default
   - TransparentFX
