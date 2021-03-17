@@ -213,6 +213,7 @@ public class DB_Controller : MonoBehaviour
                 string balance = webRequest.downloadHandler.text;
                 Debug.Log("BALANCE SET: "+balance);
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = balance;
+                _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = balance;
             }
         }
 

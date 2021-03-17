@@ -30,6 +30,9 @@ EditorBuildSettings:
     path: Assets/Scenes/PreGameLobby.unity
     guid: 3fafd0e0696e7418083dbb9b0a13eba3
   - enabled: 1
+    path: Assets/Scenes/ArtLevel.unity
+    guid: 460bbe152da29564480ef449f5152e9e
+  - enabled: 1
     path: Assets/Scenes/BuildScene.unity
     guid: 150773a73b2496a47a282d374185eded
   - enabled: 1

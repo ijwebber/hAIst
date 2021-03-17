@@ -31,8 +31,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     // SCRIPTS
     [SerializeField] private GameObject menu_script;
     [SerializeField] private GameObject LobbyScript;
-    [SerializeField] private GameObject Content;
-    
+    [SerializeField] private GameObject ContentLobby;
+    [SerializeField] private GameObject ContentFriends;
+
+
 
     // USER MANAGER GAMEOBJECTS
     public GameObject StatusGuest;
@@ -65,6 +67,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
 
     // PRE GAME OBJECTS
+    public Button BalanceButtonPreGame;
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
 
@@ -129,6 +132,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableFriendsMenu()
     {
         FriendsMenu.SetActive(true);
+        ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
     }
 
     public void EnableLobbyMenu()
@@ -165,7 +169,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableLobbyScreen()
     {
         LobbyScreen.SetActive(true);
-        Content.GetComponent<PopulateGridLobby>().OnRefresh();
+        ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
     }
 
     public void EnableHomeScreen()
@@ -356,10 +360,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         GetFriends();
-        StartCoroutine(UpdateFriendList());
+        StartCoroutine("UpdateFriendList");
 
         //JoinNewRooom();
-        //PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnPlayerEnteredRoom(Player player)
@@ -378,7 +382,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         Debug.Log("OnJoinedRoom");
         PreGameMenu.SetActive(true);
         RoomNameButton.GetComponentInChildren<Text>().text = "Room: " + PhotonNetwork.CurrentRoom.Name;
-        StopCoroutine(UpdateFriendList());
+        StopCoroutine("UpdateFriendList");
         ThiefController();
         //PhotonNetwork.LoadLevel("PreGameLobby");
 

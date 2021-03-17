@@ -41,7 +41,7 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
         Debug.Log("Updated friend list");
         base.OnFriendListUpdate(friendList);
         FriendList = friendList;
-        Refresh();
+        //Refresh();
         DestroyChildren();
         Populate();
     }
@@ -52,8 +52,7 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
         //After this callback, update the room list
         createdRooms = roomList;
     }
-
-    public void Refresh()
+    public void OnRefresh()
     {
         if (PhotonNetwork.IsConnected)
             {
@@ -65,6 +64,7 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
                 //We are not connected, estabilish a new connection
                 PhotonNetwork.ConnectUsingSettings();
             }
+        
     }
 
     public void ButtonClick(string i)
@@ -100,10 +100,13 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
                 if (FriendList[i].IsInRoom)
                 {
                     int playerCount = GetRoomCount(FriendList[i].Room);
-                    newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = playerCount+ "/" + createdRooms[i].MaxPlayers;
+                    newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = playerCount+ "/" + 4;
                     newObj.transform.Find("RoomInfoScroll").gameObject.SetActive(true);
-                }   
-                newObj.transform.Find("JoinGameButton").gameObject.SetActive(true);
+                    newObj.transform.Find("JoinGameButton").gameObject.SetActive(true);
+                    string roomName = FriendList[i].Room;
+                    newObj.transform.Find("JoinGameButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate { ButtonClick(roomName); });
+                }
+
 
             }
             else
