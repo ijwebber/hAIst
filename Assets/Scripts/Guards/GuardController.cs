@@ -6,8 +6,6 @@ public class GuardController : MonoBehaviour
 {
     public LayerMask obstacleMask;
     public Grid localGrid;
-    public Sprite sus;
-    public Sprite exclamation;
     public GuardMovement[] guardMovements;
     public PlayerController playerController;
 
@@ -34,27 +32,6 @@ public class GuardController : MonoBehaviour
         localGrid.updateNodes();
     }
     
-    void Update() {
-        foreach (GuardMovement guard in guardMovements) {
-            if (Physics.Raycast(guard.gameObject.transform.position, (playerController.player.transform.position - guard.gameObject.transform.position).normalized, playerController.viewRadius+2,obstacleMask)) {
-                switch (guard.state)
-                {
-                    case State.normal:
-                        guard.sprite.sprite = null;
-                        break;
-                    case State.suspicious:
-                        guard.sprite.sprite = sus;
-                        break;
-                    case State.chase:
-                        guard.sprite.sprite = exclamation;
-                        break;
-                }
-            } else {
-                guard.sprite.sprite = null;
-            }
-        }
-    }
-
     public bool inChase() {
         foreach (GuardMovement guard in guardMovements) {
             if (guard.state == State.chase) {

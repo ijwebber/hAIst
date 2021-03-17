@@ -45,6 +45,7 @@ public class Window_QuestPointer : MonoBehaviour
             pointerRectTransform.localEulerAngles = new Vector3(0,0,0);
             pointerImage.sprite = crossSprite;
             pointerRectTransform.anchoredPosition = new Vector2(targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x / canvas.scaleFactor, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y) + 60);
+            // pointerRectTransform.anchoredPosition = new Vector2(Screen.width - targetPositionScreenPoint.x / canvas.scaleFactor, (Screen.height - targetPositionScreenPoint.y) + 60);
         }
     }
 }
