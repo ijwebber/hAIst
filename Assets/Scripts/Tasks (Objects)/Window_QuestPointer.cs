@@ -8,6 +8,7 @@ public class Window_QuestPointer : MonoBehaviour
 {
 
     public GameObject targetObject;
+    public Vector3 offset;
     public Canvas canvas;
     private Vector3 targetPosition;
     public PlayerController playerController;
@@ -23,7 +24,7 @@ public class Window_QuestPointer : MonoBehaviour
         pointerImage = transform.Find("Pointer").GetComponent<Image>();
     }
 
-    void Update()
+    void LateUpdate()
     {
         targetPosition = new Vector3(targetObject.transform.position.x, targetObject.transform.position.z);
         Vector3 toPosition = targetPosition;
@@ -33,7 +34,7 @@ public class Window_QuestPointer : MonoBehaviour
         float angle = UtilsClass.GetAngleFromVectorFloat(dir);
         pointerRectTransform.localEulerAngles = new Vector3(0,0,angle);
         
-        Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObject.transform.position);
+        Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObject.transform.position + offset);
         bool isOffScreen = !playerController.isInView(targetObject.transform.position);
 
         if (isOffScreen) {
@@ -41,10 +42,10 @@ public class Window_QuestPointer : MonoBehaviour
             pointerImage.sprite = arrowSprite;
             pointerRectTransform.localPosition = new Vector3(100*dir.x,100*dir.y);
         } else {
-            pointerRectTransform.sizeDelta = new Vector2(20,45);
+            pointerRectTransform.sizeDelta = new Vector2(35,30);
             pointerRectTransform.localEulerAngles = new Vector3(0,0,0);
             pointerImage.sprite = crossSprite;
-            pointerRectTransform.anchoredPosition = new Vector2(targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x / canvas.scaleFactor, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y) + 60);
+            pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x) / canvas.scaleFactor, ((targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor + 30));
             // pointerRectTransform.anchoredPosition = new Vector2(Screen.width - targetPositionScreenPoint.x / canvas.scaleFactor, (Screen.height - targetPositionScreenPoint.y) + 60);
         }
     }
