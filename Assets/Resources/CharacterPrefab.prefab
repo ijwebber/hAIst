@@ -4522,6 +4522,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Timmy
       objectReference: {fileID: 0}
+    - target: {fileID: 7669125665307422165, guid: 6e811334a11215a4e8b9113fc2c60e33,
+        type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 7671080284491397526, guid: 6e811334a11215a4e8b9113fc2c60e33,
         type: 3}
       propertyPath: m_AnchoredPosition.y
