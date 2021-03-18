@@ -21,6 +21,8 @@ public class GuardMovement : MonoBehaviourPun
     public NavMeshAgent agent;
     public SoundVisual soundVis;
 
+    public SpriteRenderer sprite;
+
     public List<Vector3> patrolPath = new List<Vector3> {new Vector3(-44.0f, 13.38f, 27.83f), new Vector3(-8.0f, 13.38f, 27.7f), new Vector3(-6.2f, 13.38f, 4.3f), new Vector3(-32.4f, 13.21f, 13.0f)};
     private int currDes = 0;
     public State state;
@@ -54,9 +56,11 @@ public class GuardMovement : MonoBehaviourPun
         this.state = State.normal;
         this.guardController = GameObject.FindObjectOfType<GuardController>();
         fovScript = GetComponent<FieldOfView>();
+        sprite = PhotonNetwork.InstantiateRoomObject("GuardState", this.transform.position, Quaternion.Euler(0,0,0)).GetComponent<SpriteRenderer>();
     }
     void Update()
     {
+        sprite.transform.position = this.transform.position + new Vector3(0,6,0);
         if (this.state == State.disabled || guardDisabled) //runs if guard is disabled
         {
             //check if the timer has already been started, if so don't start it again
@@ -113,7 +117,7 @@ public class GuardMovement : MonoBehaviourPun
                 {
                     Vector3 playerPosition = player.transform.position;
                     Debug.Log("I hear a who at // " + playerPosition);
-                    this.photonView.RPC("snitch", RpcTarget.All, playerPosition.x, playerPosition.y, playerPosition.z);
+                    this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
                 }
                 else
                 {
@@ -156,6 +160,13 @@ public class GuardMovement : MonoBehaviourPun
                 }
             }
         }
+
+        
+
+        
+
+       
+        
     }
 
     [PunRPC]
@@ -163,10 +174,7 @@ public class GuardMovement : MonoBehaviourPun
         // receive new sound source and update local grid
         if (this.state == State.normal) {
             this.state = State.suspicious;
-
-            if (PhotonNetwork.IsMasterClient) {
-                agent.SetDestination(new Vector3(x,y,z));
-            }
+            agent.SetDestination(new Vector3(x,y,z));
         }
     }
 
