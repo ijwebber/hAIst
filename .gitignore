@@ -82,7 +82,8 @@ crashlytics-build.properties
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -149,5 +150,8 @@ $RECYCLE.BIN/
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
 
+# Isaac's fun and exciting scenes because he can't be bothered to load the game to test something
 Temp.unity
 Temp.unity.meta
+IsaacScene.unity
+IsaacScene.unity.meta

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.AI;
 using UnityEngine;
 
 public class GuardController : MonoBehaviour
@@ -63,6 +64,31 @@ public class GuardController : MonoBehaviour
         }
 
         return false;
+    }
+
+    public bool MoveAgent(NavMeshAgent agent, Vector3 position) {
+        return agent.SetDestination(position);
+    }
+
+    public void MoveClosestGuard(Vector3 targetPosition) {
+        GetClosestGuard(targetPosition).SetDestination(targetPosition);
+    }
+
+    // Returns closest guard to a position
+    public NavMeshAgent GetClosestGuard(Vector3 targetPosition) {
+        NavMeshAgent closestGuard = null;
+        float closestDistance = 1000;
+        foreach (GuardMovement guard in guardMovements) {
+            Vector3 agentPos = guard.agent.transform.position;
+            float distance = Vector3.Distance(agentPos, targetPosition);
+
+            if (distance < closestDistance && guard.state != State.chase) {
+                closestDistance = distance;
+                closestGuard = guard.agent;
+            }
+        }
+
+        return closestGuard;
     }
 
 
