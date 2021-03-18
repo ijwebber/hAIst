@@ -9,6 +9,7 @@ public class GuardCanvas : MonoBehaviour
     public Sprite exclamation;
     public Sprite hat;
     public GuardController guardController;
+    public Vector3 offset;
     public PlayerController playerController;
     public Canvas canvas;
     public List<Image> guardIndicators;
@@ -31,14 +32,13 @@ public class GuardCanvas : MonoBehaviour
                 guardIndicator = guardIndicators[i];
             }
             if (playerController.isInView(guard.gameObject.transform.position)) {
-                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position);
+                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position + offset);
                 RectTransform pointerRectTransform = guardIndicator.GetComponent<RectTransform>();
-                pointerRectTransform.anchoredPosition = new Vector2(targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y) + 60);
                 switch (guard.state)
                 {
                     case State.normal:
                         guardIndicator.sprite = hat;
-                        guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(20,30);
+                        guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
                         break;
                     case State.suspicious:
                         guardIndicator.sprite = sus;
@@ -49,6 +49,7 @@ public class GuardCanvas : MonoBehaviour
                         guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(10,30);
                         break;
                 }
+                pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x)/canvas.scaleFactor, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor+guardIndicator.GetComponent<RectTransform>().sizeDelta.y);
             } else {
                 guardIndicator.sprite = null;
                 guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(0,0);
