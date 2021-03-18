@@ -269,6 +269,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
 
 
+    public void BackToUserManager()
+    {
+        ExistingUserMenu.SetActive(false);
+        NewUserMenu.SetActive(false);
+        GuestMenu.SetActive(false);
+        UserManagerMenu.SetActive(true);
+    }
+
+
     public void JoinNewRooom()
     {
         RoomOptions roomOptions = new RoomOptions();
