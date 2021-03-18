@@ -60,8 +60,8 @@ public class SoundVisual : MonoBehaviour
     private void UpdateSoundVis() {
         mesh.Clear();
         grid.getXY(playerController.player.transform.position, out int playerX, out int playerY);
-        int startX = Mathf.Max(1, playerX - Dimension/2);
-        int startY = Mathf.Max(1, playerY - Dimension/2);
+        int startX = Mathf.Max(0, playerX - Dimension/2);
+        int startY = Mathf.Max(0, playerY - Dimension/2);
         int endX = Mathf.Min(grid.GetWidth(), playerX + Dimension/2);
         int endY = Mathf.Min(grid.GetHeight(), playerY + Dimension/2);
         if (playerX + Dimension/2 > grid.GetWidth()-1) {
@@ -77,16 +77,22 @@ public class SoundVisual : MonoBehaviour
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++)  {  
                 // double gridValue = grid.GetValue(x,y);
+                // if (grid.getVelocity(x,y) != 0) {
                 int index = ((x-startX) * Dimension + (y-startY));
                 Vector3 quadSize = new Vector3(1,1,0) * grid.GetCellSize();
                 double gridValue = grid.GetAvgValue(x,y);
                 double val2 = grid.GetAvgValue(x+1,y);
                 double val3 = grid.GetAvgValue(x+1,y+1);
                 double val4 = grid.GetAvgValue(x,y+1);
-                float height0 = process(gridValue, .15f, .6f);
-                float height1 = process(val2, .15f, .6f);
-                float height2 = process(val3, .15f, .6f);
-                float height3 = process(val4, .15f, .6f);
+                float height0, height1, height2, height3;
+                if (grid.getVelocity(x,y) != 0) { height0 = process(gridValue, .15f, .6f);} else {height0 = 0;}
+                if (grid.getVelocity(x,y) != 0) { height1 = process(val2, .15f, .6f);} else {height1 = 0;}
+                if (grid.getVelocity(x,y) != 0) { height2 = process(val3, .15f, .6f);} else {height2 = 0;}
+                if (grid.getVelocity(x,y) != 0) { height3 = process(val4, .15f, .6f);} else {height3 = 0;}
+                // float height0 = process(gridValue, .15f, .6f);
+                // float height1 = process(val2, .15f, .6f);
+                // float height2 = process(val3, .15f, .6f);
+                // float height3 = process(val4, .15f, .6f);
                 float[] heights = {height0, height1, height2, height3};
                 Color color0 = gradient.Evaluate(process(gridValue,0,1));
                 Color color1 = gradient.Evaluate(process(val2, 0, 1));
@@ -96,7 +102,8 @@ public class SoundVisual : MonoBehaviour
                 // set uv (deprecated, used to set colour from gradient)
                 Vector2 gridvalueUV = new Vector2((float)gridValue, 0);
                 // if (index < 10000) {
-                MeshUtils.AddToMeshArrays(vertices, uv, colors, triangles, index, (grid.GetWorldPosition(x,y)), 0f, quadSize, gridvalueUV, gridvalueUV, gradColors, heights);
+                MeshUtils.AddToMeshArrays(vertices, uv, colors, triangles, index, (grid.GetWorldPosition(x,y)+new Vector3(.4f,0,.3f)), 0f, quadSize, gridvalueUV, gridvalueUV, gradColors, heights);
+                // }
                 // }
             }
         }

@@ -16,6 +16,13 @@ TagManager:
   - MessageBox
   - ExitBox
   - LocatorColliders
+  - Undefined
+  - button
+  - keypad
+  - codedisplay
+  - wires
+  - wiremanual
+  - SeeThrough
   layers:
   - Default
   - TransparentFX
@@ -37,7 +44,7 @@ TagManager:
   - ObjMask
   - Icons
   - WallGraphics
-  - 
+  - SeeThroughWalls
   - 
   - 
   - 
