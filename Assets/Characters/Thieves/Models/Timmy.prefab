@@ -1596,8 +1596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb67c5a23931c6a69ab92a8698f17157, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 15
-  viewAngle: 360
+  playerController: {fileID: 0}
   meshResolution: 1
   targetMask:
     serializedVersion: 2

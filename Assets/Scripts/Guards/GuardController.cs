@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine.AI;
 using UnityEngine;
+using Photon.Realtime;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Pun;
 
 public class GuardController : MonoBehaviour
 {
@@ -9,9 +12,22 @@ public class GuardController : MonoBehaviour
     public Grid localGrid;
     public Sprite sus;
     public Sprite exclamation;
-    private GuardMovement[] guardMovements;
+    public GuardMovement[] guardMovements;
     public PlayerController playerController;
+    private bool playersSpotted = false;
+    public static GuardController Instance { get; private set; }
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +49,12 @@ public class GuardController : MonoBehaviour
     void FixedUpdate()
     {
         localGrid.updateNodes();
+
+        if (PhotonNetwork.LocalPlayer.IsMasterClient && !playersSpotted)
+        {
+            cutSceneIfSpotted();
+        }
+        
     }
     
     void Update() {
@@ -90,6 +112,38 @@ public class GuardController : MonoBehaviour
 
         return closestGuard;
     }
+
+    public void cutSceneIfSpotted()
+    {
+        foreach (GuardMovement guard in guardMovements)
+        {
+            if (guard.state == State.chase)
+            {   
+                
+                //update room properties with the guard that found a player so we know where to cutscene to
+                Vector3 guardPos = guard.gameObject.transform.position;
+                Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", new Vector3 (guardPos.x, guardPos.y, guardPos.z) }, { "cutSceneDone", false} };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
+                
+                //freeze all guards
+                disableAllguards(true);
+
+                playersSpotted = true;
+            }
+        }
+
+        
+    }
+
+
+    public void disableAllguards(bool value)
+    {
+        foreach(GuardMovement guard in guardMovements) {
+            guard.agent.isStopped = value;
+        }
+    }
+
+
 
 
 }
