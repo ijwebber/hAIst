@@ -91,6 +91,11 @@ public class AnimationStateController : MonoBehaviourPun
 
 
         }
+
+        if (GetComponent<PlayerMovement>().paused)
+        {
+            animator.SetBool("isWalking", false);
+        }
         
     }
     
