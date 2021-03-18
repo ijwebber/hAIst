@@ -88,6 +88,11 @@ public class GuardController : MonoBehaviour
         return false;
     }
 
+    public bool getSpotted()
+    {
+        return playersSpotted;
+    }
+
     public bool MoveAgent(NavMeshAgent agent, Vector3 position) {
         return agent.SetDestination(position);
     }
