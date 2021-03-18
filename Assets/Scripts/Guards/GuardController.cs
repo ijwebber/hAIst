@@ -58,6 +58,7 @@ public class GuardController : MonoBehaviour
     }
     
     void Update() {
+        localGrid.updateWalls();
         foreach (GuardMovement guard in guardMovements) {
             // if (Physics.Raycast(guard.gameObject.transform.position, (playerController.player.transform.position - guard.gameObject.transform.position).normalized, playerController.viewRadius+2,obstacleMask)) {
                 switch (guard.state)
