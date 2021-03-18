@@ -165,7 +165,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void AddFriend()
     {
-        DB_Controller.GetComponent<DB_Controller>().CheckIfExists(AddFriendInput.text);
+        DB_Controller.GetComponent<DB_Controller>().CheckIfExists(PhotonNetwork.NickName, AddFriendInput.text);
+    }
+
+    public void ChangeAddFriendInput()
+    {
+        AddFriendStatus.SetActive(false);
     }
 
     public void PlayButton()
@@ -188,63 +193,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     }
 
-    public void ThiefControllerJoined(string playerName)
-    {
-        
-        if (PhotonNetwork.PlayerList.Length == 2)
-        {
-            
-            thief_2.GetComponentInChildren<Text>().text = playerName;
-                
-            
-            thief_2.SetActive(true);
-            thief_3.SetActive(false);
-            thief_4.SetActive(false);
-        }
-        else if (PhotonNetwork.PlayerList.Length == 3)
-        {
-            thief_3.GetComponentInChildren<Text>().text = playerName;
-
-            
-            thief_2.SetActive(true);
-            thief_3.SetActive(true);
-            thief_4.SetActive(false);
-        }
-        else if (PhotonNetwork.PlayerList.Length == 4)
-        {
-            thief_4.GetComponentInChildren<Text>().text = playerName;
-            thief_2.SetActive(true);
-            thief_3.SetActive(true);
-            thief_4.SetActive(true);
-        }
-
-    }
-
-    public void ThiefControllerLeft(string playerName)
-    {
-        if (PhotonNetwork.PlayerList.Length == 1)
-        {
-            thief_2.SetActive(false);
-            thief_3.SetActive(false);
-            thief_4.SetActive(false);
-        }
-        if (PhotonNetwork.PlayerList.Length == 2)
-        {            
-            thief_2.SetActive(true);
-            thief_3.SetActive(false);
-            thief_4.SetActive(false);
-        }
-        else if (PhotonNetwork.PlayerList.Length == 3)
-        {
-            
-            thief_2.SetActive(true);
-            thief_3.SetActive(true);
-            thief_4.SetActive(false);
-        }
-        
-
-    }
-
+    
     public void ThiefController()
     {
         if (PhotonNetwork.PlayerListOthers.Length == 0)

@@ -18,6 +18,7 @@ public class DB_Controller : MonoBehaviour
     string create_url = "https://brasspig.online/put_test.php";
     string get_balance_url = "https://brasspig.online/get_balance.php?";
     string get_friends_url = "https://brasspig.online/get_friends.php?";
+    string add_friend_url = "https://brasspig.online/add_friend.php?";
 
     private void Start()
     {
@@ -50,9 +51,14 @@ public class DB_Controller : MonoBehaviour
         StartCoroutine(Friends(username));
     }
 
-    public void CheckIfExists(string username)
+    public void CheckIfExists(string username, string friend)
     {
-        StartCoroutine(CheckIfUserExists(username));
+        StartCoroutine(CheckIfUserExists(username, friend));
+    }
+
+    public void AddFriend(string username, string friend)
+    {
+        StartCoroutine(Add(username, friend));
     }
 
     IEnumerator CheckLogin(string username, string password)
@@ -155,7 +161,7 @@ public class DB_Controller : MonoBehaviour
         }
     }
 
-    IEnumerator CheckIfUserExists(string username)
+    IEnumerator CheckIfUserExists(string username, string friend)
     {
         bool Exists = false;
 
@@ -174,7 +180,7 @@ public class DB_Controller : MonoBehaviour
                 string[] user_list = users.Split(delimiterChars);
                 foreach (var user in user_list)
                 {
-                    if (username.Equals(user))
+                    if (friend.Equals(user))
                     {
                         Exists = true;
                         break;
@@ -183,16 +189,58 @@ public class DB_Controller : MonoBehaviour
                 if (Exists)
                 {
                     Debug.Log("User exists.");
-                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(false);
+                    int pos = Array.IndexOf(_GameLobby.GetComponent<PUN2_GameLobby1>().FriendList, friend);
+                    if (pos > -1)
+                    {
+                        Debug.Log("Friend is already added.");
+                        _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.GetComponent<Text>().text = "Friend already added.";
+                        _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
+
+                    }
+                    else
+                    {
+                        AddFriend(username,friend);
+                    }
+                    
                 
 
                 }
                 else
                 {
                     Debug.Log("User doesnt exist.");
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.GetComponent<Text>().text = "User doesnt exist";
                     _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
 
 
+                }
+            }
+        }
+    }
+    IEnumerator Add(string username, string friend)
+    {
+        string uri = add_friend_url + "user=" + username + "&friend=" + friend;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Friend added succesfully.");
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.GetComponent<Text>().text = "Friend added succesfully";
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().GetFriends();
+                }
+                else
+                {
+                    Debug.Log(webRequest.downloadHandler.text);
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.GetComponent<Text>().text = "An error occured";
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
                 }
             }
         }
@@ -204,7 +252,6 @@ public class DB_Controller : MonoBehaviour
         string hashed_password = SecurePasswordHasher.Hash(password);
         string post_data = "{ \"username\": \"" + username + "\", \"password\": \"" + hashed_password + "\", \"balance\": 0 }";
 
-        Debug.Log(hashed_password);
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, "POST"))
         {
             byte[] bodyRaw = Encoding.UTF8.GetBytes(post_data);
