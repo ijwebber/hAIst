@@ -24,6 +24,7 @@ public class DB_Controller : MonoBehaviour
     }
 
 
+
     public void CheckUsername(string username)
     {
         StartCoroutine(GetUsers(username));
@@ -47,6 +48,11 @@ public class DB_Controller : MonoBehaviour
     public void GetFriends(string username)
     {
         StartCoroutine(Friends(username));
+    }
+
+    public void CheckIfExists(string username)
+    {
+        StartCoroutine(CheckIfUserExists(username));
     }
 
     IEnumerator CheckLogin(string username, string password)
@@ -149,6 +155,48 @@ public class DB_Controller : MonoBehaviour
         }
     }
 
+    IEnumerator CheckIfUserExists(string username)
+    {
+        bool Exists = false;
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(user_url))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                char[] delimiterChars = { ',' };
+                users = webRequest.downloadHandler.text;
+                string[] user_list = users.Split(delimiterChars);
+                foreach (var user in user_list)
+                {
+                    if (username.Equals(user))
+                    {
+                        Exists = true;
+                        break;
+                    }
+                }
+                if (Exists)
+                {
+                    Debug.Log("User exists.");
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(false);
+                
+
+                }
+                else
+                {
+                    Debug.Log("User doesnt exist.");
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
+
+
+                }
+            }
+        }
+    }
 
     IEnumerator CreateUser(string username, string password)
     {
@@ -182,6 +230,7 @@ public class DB_Controller : MonoBehaviour
                     _GameLobby.GetComponent<PUN2_GameLobby1>().Status.GetComponent<Text>().color = new Color(0, 1, 0, 1);
                     _GameLobby.GetComponent<PUN2_GameLobby1>().NewStatus.SetActive(true);
                     _GameLobby.GetComponent<PUN2_GameLobby1>().UsernameLoginInput.text = username;
+                    GetCoinBalance(username);
                     _GameLobby.GetComponent<PUN2_GameLobby1>().SetUserName();
                 }
                 else

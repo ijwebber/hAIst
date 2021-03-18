@@ -58,12 +58,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public Button BalanceButton;
     public GameObject thief_1;
     public GameObject thief_1_home;
-
     public GameObject thief_2;
     public GameObject thief_3;
     public GameObject thief_4;
     public GameObject FriendsMenu;
+    public GameObject Home_Home;
     public string[] FriendList;
+    public GameObject AddFriendStatus;
+    public TMP_InputField AddFriendInput;
 
 
     // PRE GAME OBJECTS
@@ -72,6 +74,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject LobbyScreen;
 
     // PHOTON NETWORK GAMEOBJECTS 
+
 
     // Use this for initialization
     void Start()
@@ -132,12 +135,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableFriendsMenu()
     {
         FriendsMenu.SetActive(true);
+        Home_Home.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
     }
 
     public void EnableLobbyMenu()
     {
         FriendsMenu.SetActive(false);
+        Home_Home.SetActive(true);
     }
 
     IEnumerator UpdateFriendList()
@@ -156,6 +161,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void GetFriends()
     {
         DB_Controller.GetComponent<DB_Controller>().GetFriends(UsernameLoginInput.text);
+    }
+
+    public void AddFriend()
+    {
+        DB_Controller.GetComponent<DB_Controller>().CheckIfExists(AddFriendInput.text);
     }
 
     public void PlayButton()

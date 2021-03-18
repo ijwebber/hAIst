@@ -63,8 +63,7 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
             {
                 //We are not connected, estabilish a new connection
                 PhotonNetwork.ConnectUsingSettings();
-            }
-        
+            }    
     }
 
     public void ButtonClick(string i)

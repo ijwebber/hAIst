@@ -168,6 +168,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         }
     }
 
+
     public bool CheckAllReady() 
     {
         int total_ready = 0;
