@@ -12,8 +12,10 @@ public class PlayerPickUp : MonoBehaviourPun
     public Text messageBox;
     public Text cooldownBox;
 
-    public GameObject codeDisplay;
+    public GameObject wireManual;
+    public GameObject wireGame;
 
+    public GameObject codeDisplay;
     public GameObject keycodeGame;
 
     public GameObject fixPaintingGame;
@@ -211,7 +213,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 if (keypad.codeCorrect && !down)
                 {
-                    displayMessage("Code already entered.");
+                    displayMessage("Code already entered");
                 }
                 else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
                 {
@@ -238,6 +240,53 @@ public class PlayerPickUp : MonoBehaviourPun
                     displayMessage(0);
                 }
                 break;
+            case "wiremanual":
+                displayMessage("Press E to read manual");
+                if (Input.GetKey(KeyCode.E))
+                {
+                    WireManualObject manual = other.gameObject.GetComponent<WireManualObject>();
+                    wireManual.GetComponent<WireManual>().wiresID = manual.wires.id;
+
+                    wireManual.SetActive(true);
+                }
+                break;
+
+            case "wires":
+                Wires wires = other.gameObject.GetComponent<Wires>();
+                wireGame.GetComponent<WireTask>().wiresID = wires.id;
+
+                if (wires.complete && !down)
+                {
+                    wireGame.SetActive(false);
+                    if (wires.correct) displayMessage("Correct wire");
+                    else displayMessage("Wrong wire");
+                }
+                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                {
+                    wireGame.SetActive(true);
+                    displayMessage(2);
+                }
+                else if (keyCorrect && seconds == 0)
+                {
+
+                    targetTime += cooldown;
+
+                    wireGame.GetComponent<WireTask>().complete = false;
+                    wireGame.SetActive(false);
+                    held = false;
+
+                }
+                else if (seconds != 0)
+                {
+                    displayMessage(1);
+
+                }
+                else if (!Input.GetKey(KeyCode.E))
+                {
+                    displayMessage(0);
+                }
+                break;
+
             }
         }      
     }
@@ -246,18 +295,20 @@ public class PlayerPickUp : MonoBehaviourPun
 
         if(photonView.IsMine == true && PhotonNetwork.IsConnected == true){
                 
-                currentObject = null;
-                keycodeGame.SetActive(false);
-                fixPaintingGame.SetActive(false);
-                codeDisplay.SetActive(false);
+            currentObject = null;
+            keycodeGame.SetActive(false);
+            fixPaintingGame.SetActive(false);
+            codeDisplay.SetActive(false);
+            wireGame.SetActive(false);
+            wireManual.SetActive(false);
 
-                keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                fixPaintingGame.GetComponent<RotateTask>().win = false;
-                held = false;
-                progressBar.Hide();
-                
+            wireGame.GetComponent<WireTask>().complete = false;
+            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+            fixPaintingGame.GetComponent<RotateTask>().win = false;
+            held = false;
+            progressBar.Hide();
 
-                displayMessage(2);
+            displayMessage(2);
         }   
     }
 
