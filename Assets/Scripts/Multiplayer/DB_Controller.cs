@@ -339,7 +339,6 @@ public class DB_Controller : MonoBehaviour
                 
             }
         }
-
     }
 
     public static class SecurePasswordHasher

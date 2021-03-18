@@ -142,6 +142,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableLobbyMenu()
     {
         FriendsMenu.SetActive(false);
+        AddFriendStatus.SetActive(false);
         Home_Home.SetActive(true);
     }
 
@@ -149,9 +150,16 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         for (; ; )
         {
-            if (PhotonNetwork.IsConnected & FriendList.Length != 0)
+            if (PhotonNetwork.IsConnectedAndReady & FriendList != null)
             {
-            PhotonNetwork.FindFriends(FriendList);
+                if (FriendList.Length == 1 & FriendList[0] == "")
+                {
+                }
+                else
+                {
+                    PhotonNetwork.FindFriends(FriendList);
+                }
+                
             }
             yield return new WaitForSeconds(1f);
 

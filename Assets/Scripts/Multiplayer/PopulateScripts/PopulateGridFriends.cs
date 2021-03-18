@@ -55,15 +55,17 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
     public void OnRefresh()
     {
         if (PhotonNetwork.IsConnected)
-            {
-                //Re-join Lobby to get the latest Room list
-                PhotonNetwork.JoinLobby(TypedLobby.Default);
-            }
-            else
-            {
-                //We are not connected, estabilish a new connection
-                PhotonNetwork.ConnectUsingSettings();
-            }    
+        {
+           //Re-join Lobby to get the latest Room list
+            PhotonNetwork.JoinLobby(TypedLobby.Default);
+        }
+         else
+         {
+             //We are not connected, estabilish a new connection
+             PhotonNetwork.ConnectUsingSettings();
+         } 
+
+        
     }
 
     public void ButtonClick(string i)
@@ -94,7 +96,7 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
             newObj.transform.Find("FriendName").GetComponent<Text>().text = FriendList[i].UserId;
             if (FriendList[i].IsOnline)
             {
-                Debug.Log(FriendList[i].UserId + " Is online.");
+                //Debug.Log(FriendList[i].UserId + " Is online.");
                 newObj.transform.Find("Offline").gameObject.SetActive(false);
                 if (FriendList[i].IsInRoom)
                 {
@@ -110,7 +112,7 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
             }
             else
             {
-                Debug.Log(FriendList[i].UserId + "Is offline.");
+                //Debug.Log(FriendList[i].UserId + "Is offline.");
             }
             //newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = createdRooms[i].PlayerCount + "/" + createdRooms[i].MaxPlayers;
             //string roomName = createdRooms[i].Name;
