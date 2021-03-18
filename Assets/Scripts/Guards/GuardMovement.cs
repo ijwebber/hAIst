@@ -21,14 +21,13 @@ public class GuardMovement : MonoBehaviourPun
     public NavMeshAgent agent;
     public SoundVisual soundVis;
 
-
-
     public List<Vector3> patrolPath = new List<Vector3> {new Vector3(-44.0f, 13.38f, 27.83f), new Vector3(-8.0f, 13.38f, 27.7f), new Vector3(-6.2f, 13.38f, 4.3f), new Vector3(-32.4f, 13.21f, 13.0f)};
     private int currDes = 0;
     public State state;
     public float chaseSpeed;
     public float walkSpeed;
     private bool start = true;
+    private float guardReach = 2f; //reach length of guards
     public bool guardDisabled = false;
     private GameObject player;
     private bool listening = true;
@@ -58,7 +57,6 @@ public class GuardMovement : MonoBehaviourPun
     }
     void Update()
     {
-
         if (this.state == State.disabled || guardDisabled) //runs if guard is disabled
         {
             //check if the timer has already been started, if so don't start it again
@@ -99,7 +97,7 @@ public class GuardMovement : MonoBehaviourPun
                 PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
 
                 //if guard is next to player then disable his ass
-                if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= 1.0f && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= 1.0f && !playerMoveScript.disabled && !guardDisabled)
+                if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= guardReach && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= guardReach && !playerMoveScript.disabled && !guardDisabled)
                 {
                     playerMoveScript.disabled = true;
                     this.state = State.normal;
@@ -115,7 +113,7 @@ public class GuardMovement : MonoBehaviourPun
                 {
                     Vector3 playerPosition = player.transform.position;
                     Debug.Log("I hear a who at // " + playerPosition);
-                    this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
+                    this.photonView.RPC("snitch", RpcTarget.All, playerPosition.x, playerPosition.y, playerPosition.z);
                 }
                 else
                 {
@@ -158,13 +156,6 @@ public class GuardMovement : MonoBehaviourPun
                 }
             }
         }
-
-        
-
-        
-
-       
-        
     }
 
     [PunRPC]
@@ -172,7 +163,10 @@ public class GuardMovement : MonoBehaviourPun
         // receive new sound source and update local grid
         if (this.state == State.normal) {
             this.state = State.suspicious;
-            agent.SetDestination(new Vector3(x,y,z));
+
+            if (PhotonNetwork.IsMasterClient) {
+                agent.SetDestination(new Vector3(x,y,z));
+            }
         }
     }
 

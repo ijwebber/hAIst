@@ -14,6 +14,8 @@ TagManager:
   - POVGuards
   - Van
   - MessageBox
+  - ExitBox
+  - LocatorColliders
   layers:
   - Default
   - TransparentFX

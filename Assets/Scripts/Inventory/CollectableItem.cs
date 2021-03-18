@@ -11,7 +11,6 @@ public class CollectableItem : MonoBehaviourPun
 
     [PunRPC]
     public void UpdateObject(bool newSpecial, int newValue, int chooseMinigame) {
-        Debug.Log(itemName);
         this.value = newValue;
         this.special = newSpecial;
         this.gameSelection = chooseMinigame;

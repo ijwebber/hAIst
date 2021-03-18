@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Realtime;
-using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Pun;
 
-public class GuardController : MonoBehaviour
+public class GuardController : MonoBehaviourPun
 {
+    public LayerMask obstacleMask;
     public Grid localGrid;
-    public static GuardController Instance { get; private set; }
-    private GuardMovement[] guardMovements;
-    
-    //this is an event that only happens once per round
+    public GuardMovement[] guardMovements;
+    public PlayerController playerController;
     private bool playersSpotted = false;
+    public static GuardController Instance { get; private set; }
 
     private void Awake()
     {
@@ -30,7 +30,6 @@ public class GuardController : MonoBehaviour
     {
         // this.localGrid = new Grid(202,122,.5f);
         this.localGrid = new Grid(202,122,1);
-        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
 
     public void setValue(Vector3 position, float intensity) {
@@ -45,6 +44,9 @@ public class GuardController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (guardMovements.Length == 0) {
+            guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+        }
         localGrid.updateNodes();
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient && !playersSpotted)
@@ -53,7 +55,7 @@ public class GuardController : MonoBehaviour
         }
         
     }
-
+    
     public bool inChase() {
         foreach (GuardMovement guard in guardMovements) {
             if (guard.state == State.chase) {
