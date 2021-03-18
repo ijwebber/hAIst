@@ -66,6 +66,11 @@ public class GuardController : MonoBehaviourPun
         return false;
     }
 
+    public bool getSpotted()
+    {
+        return playersSpotted;
+    }
+
     public void cutSceneIfSpotted()
     {
         foreach (GuardMovement guard in guardMovements)

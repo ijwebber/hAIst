@@ -21,29 +21,33 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
 
 
-        [SerializeField]
-        private float distance = 0.0f;
+    [SerializeField]
+    private float distance = 0.0f;
         
-        [SerializeField]
-        private float height = 12.0f;
+    [SerializeField]
+    private float height = 12.0f;
         
 
-        [SerializeField]
-        private bool followOnStart = false;
+    [SerializeField]
+    private bool followOnStart = false;
 
 
-        // cached transform of the target
-        Transform cameraTransform;
+    // cached transform of the target
+    Transform cameraTransform;
 
-        // maintain a flag internally to reconnect if target is lost or camera is switched
-        bool isFollowing;
-        bool isCutScene = false;
-        private Vector3 guardCamPos;
-        bool cutSceneDone = false;
-        bool obsecured = false;
+    // maintain a flag internally to reconnect if target is lost or camera is switched
+    bool isFollowing;
+    bool isCutScene = false;
+    private Vector3 guardCamPos;
+    private Vector3 spottingGuardLocation;
+    bool cutSceneDone = false;
+    bool obsecured = false;
+    private float rotateCounter = 0;
+
+    
         
-        // Cache for camera offset
-        Vector3 cameraOffset = Vector3.zero;
+    // Cache for camera offset
+    Vector3 cameraOffset = Vector3.zero;
 
 
 
@@ -172,20 +176,16 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
                     //start cutScene corountine
                     isCutScene = true;
+                    spottingGuardLocation = (Vector3)setSpotted["spottingGuardLocation"];
                     guardCamPos = (Vector3)setSpotted["spottingGuardLocation"];
-                    guardCamPos.z = guardCamPos.z + distance-7;
-                    guardCamPos.y = guardCamPos.y + height-8;
+                    //guardCamPos.z = guardCamPos.z + distance-4;
+                    guardCamPos.y = guardCamPos.y + height-5;
                     isFollowing = false;
 
                     //cameraTransform.Rotate(0, 30, 0, Space.World);
                     
 
-                    RaycastHit hit;
-
-                    if (Physics.Linecast((Vector3)setSpotted["spottingGuardLocation"], guardCamPos, out hit, (1 << 8), QueryTriggerInteraction.UseGlobal))
-                    {
-                        //obsecured = true;
-                    }
+                    
 
 
                 }
@@ -209,13 +209,16 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         playerCamPos.z = playerCamPos.z + distance;
         playerCamPos.y = playerCamPos.y + height;
 
+
         
 
-        if(Math.Abs(cameraTransform.position.x - guardCamPos.x) < 1.5 && Math.Abs(cameraTransform.position.z - guardCamPos.z) < 1.5 && !cutSceneDone)
+        
+        if (Math.Abs(cameraTransform.position.x - guardCamPos.x) < 1.5 && Math.Abs(cameraTransform.position.z - guardCamPos.z) < 1.5 && !cutSceneDone)
         {
-            cameraTransform.position = Vector3.Lerp(cameraTransform.position, playerCamPos, Time.deltaTime * 1);
+
             
 
+            
             cutSceneDone = true;
             
           
@@ -224,14 +227,11 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         {
             cameraTransform.position = Vector3.Lerp(cameraTransform.position, playerCamPos, Time.deltaTime * 2);
 
-            if (obsecured)
-            {
-                if (cameraTransform.rotation.y > 0)
-                {   
-                    
-                    cameraTransform.Rotate(0, -4f, -4f, Space.World);
-                }
-            }
+            float angle = Mathf.LerpAngle(52.883f, 75, rotateCounter);
+            cameraTransform.eulerAngles = new Vector3(angle, 0, 0);
+            rotateCounter -= 0.1f;
+
+
             if (Math.Abs(cameraTransform.position.x - playerCamPos.x) < 1 && Math.Abs(cameraTransform.position.z - playerCamPos.z) < 1)
             {
                 
@@ -244,19 +244,22 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
                 //renable guards
                 GuardController.Instance.disableAllguards(false);
                 BarController.Instance.HideBars();
+
+               
             }
 
         }
         else
         {
+            
             cameraTransform.position = Vector3.Lerp(cameraTransform.position, guardCamPos, Time.deltaTime * 1);
 
-            if (cameraTransform.rotation.y < 90 && obsecured)
-            {
-                cameraTransform.Rotate(0, 2f, 2f, Space.World);
-                cameraTransform.LookAt(guardCamPos);
-            }
-            
+            float angle = Mathf.LerpAngle(52.883f, 75, rotateCounter);
+            cameraTransform.eulerAngles = new Vector3(angle, 0, 0);
+            rotateCounter += 0.05f;
+
+           
+
         }
 
 
