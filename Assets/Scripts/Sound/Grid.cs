@@ -9,7 +9,7 @@ public class Node {
 
 public class Grid {
     private int width;
-    private int obstacleMask = (1 << 8) | (1 << 12);
+    private int obstacleMask = (1 << 8) | (1 << 12) | (1 << 20);
     public int[] averages = new int[500];
     private int height;
     private float maxPressure = 240;
@@ -18,7 +18,7 @@ public class Grid {
     private double speedOfSound = 343/10; // this isn't actually the speed of sound, but it's the one that works best
     private int[,] gridArray;
     private float cellSize;
-    public Vector3 offset = new Vector3(-100.333f,11.7f,-60.3f); // offset for bottom left grid tile (dont change z for some reason idk why)
+    public Vector3 offset = new Vector3(-100.5f,11.7f,-60f); // offset for bottom left grid tile (dont change z for some reason idk why)
     // private TextMesh[,] debugTextArray;
     private double[,] currentPressure, previousPressure, nextPressure, velocities;
 
@@ -46,16 +46,9 @@ public class Grid {
             for (int j = 0; j < gridArray.GetLength(1) - 2; j++) {
                 double localVel = speedOfSound;
                 bool Collision = false;
-                Vector3 point1 = new Vector3(i*cellSize + cellSize/2, 1, j*cellSize + cellSize/2) + offset;
-                Vector3 point2 = new Vector3((i+1)*cellSize, 1, j*cellSize) + offset;
-                Vector3 point3 = new Vector3(i*cellSize, 1, (j+1)*cellSize) + offset;
-                Vector3 point4 = new Vector3((i+1)*cellSize, 1, (j+1)*cellSize) + offset;
-                Color c1 = Color.green;
-                Color c2 = Color.green;
-                Color c3 = Color.green;
-                if (Physics.CheckSphere(point1, cellSize/2, obstacleMask)) {
-                    velocities[i,j] = 343;
-                    c1 = Color.red;
+                Vector3 point1 = new Vector3(i*cellSize, 1, j*cellSize) + offset;
+                if (Physics.CheckSphere(point1, cellSize/4, obstacleMask)) {
+                    velocities[i,j] = 0;
                     Collision = true;
                 }
                 // if (Physics.Linecast(point3, point1, obstacleMask)) {
@@ -148,10 +141,10 @@ public class Grid {
         if (x+1 < gridArray.GetLength(0)) {
             value += 2*this.currentPressure[x+1,y];
             if (y-1 > 0) {
-                value += this.currentPressure[x-1,y-1];
+                value += this.currentPressure[x+1,y-1];
             }
             if (y+1 < gridArray.GetLength(1)) {
-                value += this.currentPressure[x-1,y+1];
+                value += this.currentPressure[x+1,y+1];
             }
         }
         if (y-1 > 0) {
@@ -170,6 +163,9 @@ public class Grid {
         Vector3 position = (new Vector3(x,0,y) * cellSize);
         position += offset;
         return position;
+    }
+    public float getVelocity(int x, int y) {
+        return (float)this.velocities[x,y];
     }
     
     public void FixedUpdate() {

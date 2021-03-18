@@ -21,28 +21,33 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
 
 
-        [SerializeField]
-        private float distance = 0.0f;
+    [SerializeField]
+    private float distance = 0.0f;
         
-        [SerializeField]
-        private float height = 12.0f;
+    [SerializeField]
+    private float height = 12.0f;
         
 
-        [SerializeField]
-        private bool followOnStart = false;
+    [SerializeField]
+    private bool followOnStart = false;
 
 
-        // cached transform of the target
-        Transform cameraTransform;
+    // cached transform of the target
+    Transform cameraTransform;
 
-        // maintain a flag internally to reconnect if target is lost or camera is switched
-        bool isFollowing;
-        bool isCutScene = false;
-        private Vector3 guardPos;
-        bool cutSceneDone = false;
+    // maintain a flag internally to reconnect if target is lost or camera is switched
+    bool isFollowing;
+    bool isCutScene = false;
+    private Vector3 guardCamPos;
+    private Vector3 spottingGuardLocation;
+    bool cutSceneDone = false;
+    bool obsecured = false;
+    private float rotateCounter = 0;
+
+    
         
-        // Cache for camera offset
-        Vector3 cameraOffset = Vector3.zero;
+    // Cache for camera offset
+    Vector3 cameraOffset = Vector3.zero;
 
 
 
@@ -125,7 +130,14 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
         if(isCutScene && !isFollowing)
         {
-            cutScene();
+            if (BarController.Instance != null)
+            {
+                cutScene();
+            } else
+            {
+                isCutScene = false;
+                isFollowing = true;
+            }
         }
     }
 
@@ -155,7 +167,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
         if(setSpotted["spotted"] != null)
         {
-            if ((bool)setSpotted["spotted"])
+            if ((bool)setSpotted["spotted"] && !(bool)setSpotted["cutSceneDone"])
             {
                 if (this.photonView.IsMine)
                 {   
@@ -164,11 +176,16 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
                     //start cutScene corountine
                     isCutScene = true;
-                    guardPos = (Vector3)setSpotted["spottingGuardLocation"];
-                    guardPos.z = guardPos.z + distance-3;
-                    guardPos.y = guardPos.y + height-8;
+                    spottingGuardLocation = (Vector3)setSpotted["spottingGuardLocation"];
+                    guardCamPos = (Vector3)setSpotted["spottingGuardLocation"];
+                    //guardCamPos.z = guardCamPos.z + distance-4;
+                    guardCamPos.y = guardCamPos.y + height-5;
                     isFollowing = false;
-                    //Debug.LogError(guardPos.z);
+
+                    //cameraTransform.Rotate(0, 30, 0, Space.World);
+                    
+
+                    
 
 
                 }
@@ -185,18 +202,23 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         //once corountine is finished free local player, bring camera back and free local player
         //if master client set cutscene to finished and free guards.
 
+
         BarController.Instance.ShowBars();
 
         Vector3 playerCamPos = this.transform.position;
         playerCamPos.z = playerCamPos.z + distance;
         playerCamPos.y = playerCamPos.y + height;
 
-        Debug.LogError(cameraTransform.position.z);
 
-        if(Math.Abs(cameraTransform.position.x - guardPos.x) < 1.5 && Math.Abs(cameraTransform.position.z - guardPos.z) < 1.5 && !cutSceneDone)
+        
+
+        
+        if (Math.Abs(cameraTransform.position.x - guardCamPos.x) < 1.5 && Math.Abs(cameraTransform.position.z - guardCamPos.z) < 1.5 && !cutSceneDone)
         {
-            cameraTransform.position = Vector3.Lerp(cameraTransform.position, playerCamPos, Time.deltaTime * 1);
 
+            
+
+            
             cutSceneDone = true;
             
           
@@ -204,20 +226,40 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         else if (cutSceneDone)
         {
             cameraTransform.position = Vector3.Lerp(cameraTransform.position, playerCamPos, Time.deltaTime * 2);
+
+            float angle = Mathf.LerpAngle(52.883f, 75, rotateCounter);
+            cameraTransform.eulerAngles = new Vector3(angle, 0, 0);
+            rotateCounter -= 0.1f;
+
+
             if (Math.Abs(cameraTransform.position.x - playerCamPos.x) < 1 && Math.Abs(cameraTransform.position.z - playerCamPos.z) < 1)
             {
+                
+                Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null}, { "cutSceneDone", true } };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
+
                 this.GetComponent<PlayerMovement>().paused = false;
                 isCutScene = false;
                 isFollowing = true;
                 //renable guards
                 GuardController.Instance.disableAllguards(false);
                 BarController.Instance.HideBars();
+
+               
             }
 
         }
         else
         {
-            cameraTransform.position = Vector3.Lerp(cameraTransform.position, guardPos, Time.deltaTime * 1);
+            
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, guardCamPos, Time.deltaTime * 1);
+
+            float angle = Mathf.LerpAngle(52.883f, 75, rotateCounter);
+            cameraTransform.eulerAngles = new Vector3(angle, 0, 0);
+            rotateCounter += 0.05f;
+
+           
+
         }
 
 

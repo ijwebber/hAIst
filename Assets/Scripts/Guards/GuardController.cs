@@ -58,6 +58,7 @@ public class GuardController : MonoBehaviour
     }
     
     void Update() {
+        localGrid.updateWalls();
         foreach (GuardMovement guard in guardMovements) {
             // if (Physics.Raycast(guard.gameObject.transform.position, (playerController.player.transform.position - guard.gameObject.transform.position).normalized, playerController.viewRadius+2,obstacleMask)) {
                 switch (guard.state)
@@ -91,26 +92,31 @@ public class GuardController : MonoBehaviour
     public bool MoveAgent(NavMeshAgent agent, Vector3 position) {
         return agent.SetDestination(position);
     }
-
     public void MoveClosestGuard(Vector3 targetPosition) {
+
         GetClosestGuard(targetPosition).SetDestination(targetPosition);
     }
 
-    // Returns closest guard to a position
     public NavMeshAgent GetClosestGuard(Vector3 targetPosition) {
+    // Returns closest guard to a position
         NavMeshAgent closestGuard = null;
         float closestDistance = 1000;
         foreach (GuardMovement guard in guardMovements) {
             Vector3 agentPos = guard.agent.transform.position;
-            float distance = Vector3.Distance(agentPos, targetPosition);
 
+            float distance = Vector3.Distance(agentPos, targetPosition);
             if (distance < closestDistance && guard.state != State.chase) {
                 closestDistance = distance;
-                closestGuard = guard.agent;
             }
+                closestGuard = guard.agent;
         }
 
         return closestGuard;
+    }
+
+    public bool getSpotted()
+    {
+        return playersSpotted;
     }
 
     public void cutSceneIfSpotted()

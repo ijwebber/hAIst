@@ -22,6 +22,7 @@ TagManager:
   - codedisplay
   - wires
   - wiremanual
+  - SeeThrough
   layers:
   - Default
   - TransparentFX
@@ -43,7 +44,7 @@ TagManager:
   - ObjMask
   - Icons
   - WallGraphics
-  - 
+  - SeeThroughWalls
   - 
   - 
   - 
