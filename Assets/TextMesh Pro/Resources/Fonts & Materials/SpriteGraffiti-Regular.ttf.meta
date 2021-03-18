@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 142028ef9b1c496e1a127c8b0de0be74
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Sprite Graffiti
+  fontNames:
+  - Sprite Graffiti
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 12d0cad558fe8512f957f822e09c9c02, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
