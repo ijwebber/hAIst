@@ -42,6 +42,7 @@ public class PopulateGrid : MonoBehaviourPunCallbacks
 
     }
 
+
     public void ButtonClick(string i)
     {
         PhotonNetwork.JoinRoom(i);

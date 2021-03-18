@@ -121,7 +121,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
         if (!customProperties.ContainsKey("num_ready"))
         {
             customProperties.Add("num_ready", 0);
-        }
+        } 
         roomOptions.CustomRoomProperties = customProperties;
         PhotonNetwork.CreateRoom(RoomName, roomOptions, TypedLobby.Default);
     }
