@@ -119,11 +119,6 @@ public class GuardController : MonoBehaviour
         return closestGuard;
     }
 
-    public bool getSpotted()
-    {
-        return playersSpotted;
-    }
-
     public void cutSceneIfSpotted()
     {
         foreach (GuardMovement guard in guardMovements)
