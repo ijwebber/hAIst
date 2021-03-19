@@ -27,7 +27,11 @@ public class Window_QuestPointer : MonoBehaviourPun
 
     [PunRPC]
     void updateTarget(string gameName) {
-        targetObject = GameObject.Find(gameName);
+        if (gameName == "null") {
+            targetObject = null;
+        } else {
+            targetObject = GameObject.Find(gameName);
+        }
     }
 
     void LateUpdate()

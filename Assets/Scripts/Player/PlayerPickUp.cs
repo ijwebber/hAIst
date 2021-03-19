@@ -136,6 +136,8 @@ public class PlayerPickUp : MonoBehaviourPun
                     displayMessage("This door requires a code");
                     GameObject targetObject = GameObject.Find("Entrance code display");
                     setNewQuest(targetObject);
+                } else {
+                    setNewQuest(null);
                 }
                 break;
             }
