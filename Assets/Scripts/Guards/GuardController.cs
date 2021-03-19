@@ -12,6 +12,7 @@ public class GuardController : MonoBehaviour
     public Grid localGrid;
     public Sprite sus;
     public Sprite exclamation;
+    public SoundController soundController;
     public GuardMovement[] guardMovements;
     public PlayerController playerController;
     private bool playersSpotted = false;
@@ -58,7 +59,7 @@ public class GuardController : MonoBehaviour
     }
     
     void Update() {
-        localGrid.updateWalls();
+        localGrid.velocities = soundController.grid.velocities;
         foreach (GuardMovement guard in guardMovements) {
             // if (Physics.Raycast(guard.gameObject.transform.position, (playerController.player.transform.position - guard.gameObject.transform.position).normalized, playerController.viewRadius+2,obstacleMask)) {
                 switch (guard.state)

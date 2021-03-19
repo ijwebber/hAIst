@@ -1661,11 +1661,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d79d6e7dfa0b2a341ad61b960d0eb211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cardCode: {fileID: 3273627292633164724}
   _inputCode: {fileID: 3273627292446641043}
   codeLength: 5
   codeReset: 0.5
+  player: {fileID: 0}
   codeCorrect: 0
+  keypadID: 0
 --- !u!1 &3273627292271442325
 GameObject:
   m_ObjectHideFlags: 0

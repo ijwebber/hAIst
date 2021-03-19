@@ -20,7 +20,7 @@ public class Grid {
     private float cellSize;
     public Vector3 offset = new Vector3(-100.5f,11.7f,-60f); // offset for bottom left grid tile (dont change z for some reason idk why)
     // private TextMesh[,] debugTextArray;
-    private double[,] currentPressure, previousPressure, nextPressure, velocities;
+    public double[,] currentPressure, previousPressure, nextPressure, velocities;
 
     public double[,] getPressure() {
         return this.currentPressure;
@@ -32,36 +32,14 @@ public class Grid {
     // update walls (will need to be implemented for moving walls or obstacles)
     public void updateWalls() {
         // populate grid
-        for (int i = 0; i < gridArray.GetLength(0); i++) {
-            for (int j = 0; j < gridArray.GetLength(1); j++) {
-                velocities[i,j] = speedOfSound;
-                // debugTextArray[i,j] = UtilsClass.CreateWorldText(gridArray[i,j].ToString(), null, (offset + (Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize))) + new Vector3(cellSize, cellSize) *.5f, 5, Color.white, TextAnchor.MiddleCenter);
-                // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j+1)*cellSize), Color.white, 100f);
-                // Debug.DrawLine(offset + Quaternion.Euler(90,0,0) * (new Vector3(i,j)*cellSize), offset + Quaternion.Euler(90,0,0) * (new Vector3(i+1,j)*cellSize), Color.white, 100f);
-            }
-            // Debug.DrawLine(new Vector3(0,height)*cellSize, new Vector3(width, height), Color.white, 100f);
-            // Debug.DrawLine(new Vector3(width,0)*cellSize, new Vector3(width, height), Color.white, 100f);
-        }
         for (int i = 0; i < gridArray.GetLength(0)-2; i++) {
             for (int j = 0; j < gridArray.GetLength(1) - 2; j++) {
-                double localVel = speedOfSound;
-                bool Collision = false;
                 Vector3 point1 = new Vector3(i*cellSize, 1, j*cellSize) + offset;
                 if (Physics.CheckSphere(point1, cellSize/4, obstacleMask)) {
                     velocities[i,j] = 0;
-                    Collision = true;
+                } else {
+                    velocities[i,j] = speedOfSound;
                 }
-                // if (Physics.Linecast(point3, point1, obstacleMask)) {
-                //     c2 = Color.red;
-                //     velocities[i,j] = 343;
-                //     Collision = true;
-                // }
-                if (!Collision) {
-                    velocities[i,j] = localVel;
-                }
-                // Debug.DrawLine(point1, point2, c1,100);
-                // Debug.DrawLine(point1, point3, c2,100);
-                // Debug.DrawLine(point1, point4, c3,100);
             }
         }
     }
