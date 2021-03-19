@@ -14,14 +14,10 @@ public class DoorHandlerKey : MonoBehaviourPun
     public DoorScript doorleft, doorright;
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.name == "Timmy" && keyPad.codeCorrect && !opened) {
-            this.gameObject.GetComponent<PhotonView>().RPC("EnterMetal", RpcTarget.MasterClient);
+            this.gameObject.GetComponent<PhotonView>().RPC("EnterMetal", RpcTarget.All);
         }
     }
 
-    [PunRPC]
-    void EnterMetalDone() {
-        opened = true;
-    }
 
     [PunRPC]
     void EnterMetal() {
@@ -29,7 +25,6 @@ public class DoorHandlerKey : MonoBehaviourPun
             StartCoroutine(openDoor(doorleft));
             StartCoroutine(openDoor(doorright));
             opened = true;
-            this.gameObject.GetComponent<PhotonView>().RPC("EnterMetalDone", RpcTarget.Others);
         }
     }
 
