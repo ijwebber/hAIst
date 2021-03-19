@@ -149,6 +149,7 @@ public class DB_Controller : MonoBehaviour
                     Debug.Log("login succesfull");
 
                     _GameLobby.GetComponent<PUN2_GameLobby1>().UsernameLoginInput.text = username;
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().IsGuest = true;
                     _GameLobby.GetComponent<PUN2_GameLobby1>().SetUserName();
                 }
                 else

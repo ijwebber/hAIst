@@ -66,6 +66,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public string[] FriendList;
     public GameObject AddFriendStatus;
     public TMP_InputField AddFriendInput;
+    public bool IsGuest = false;
+    public Button FriendsMenuButton;
 
 
     // PRE GAME OBJECTS
@@ -264,9 +266,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         Debug.Log("NICKNAME: " + PhotonNetwork.NickName);
 
         HomeMenu.SetActive(true);
+        if (IsGuest)
+        {
+            FriendsMenuButton.interactable = false;
+        }
         //LobbyScript.SetActive(true);
         //LobbyMenu.SetActive(true);
     }
+
 
 
     public void BackToUserManager()
