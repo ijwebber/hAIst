@@ -74,7 +74,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     }
 
     public void PlayAgainButton() {
-        PhotonNetwork.LoadLevel("PreGameLobby");
+        PhotonNetwork.LoadLevel("GameLobby 1");
     }
 
     public override void OnLeftRoom()
