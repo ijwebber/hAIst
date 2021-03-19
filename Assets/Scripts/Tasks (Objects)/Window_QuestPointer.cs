@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using CodeMonkey.Utils;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class Window_QuestPointer : MonoBehaviour
+public class Window_QuestPointer : MonoBehaviourPun
 {
 
     public GameObject targetObject;
@@ -22,6 +23,11 @@ public class Window_QuestPointer : MonoBehaviour
         Debug.Log(targetPosition);
         pointerRectTransform = transform.Find("Pointer").GetComponent<RectTransform>();
         pointerImage = transform.Find("Pointer").GetComponent<Image>();
+    }
+
+    [PunRPC]
+    void updateTarget(string gameName) {
+        targetObject = GameObject.Find(gameName);
     }
 
     void LateUpdate()

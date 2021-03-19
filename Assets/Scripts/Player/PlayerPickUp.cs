@@ -134,11 +134,16 @@ public class PlayerPickUp : MonoBehaviourPun
             case "MetalDoorHandle":
                 if (!other.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
                     displayMessage("This door requires a code");
-                    questPointer.targetObject = GameObject.Find("Entrance code display");
+                    GameObject targetObject = GameObject.Find("Entrance code display");
+                    setNewQuest(targetObject);
                 }
                 break;
             }
         }
+    }
+
+    private void setNewQuest(GameObject obj) {
+        questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name);
     }
     private void OnTriggerExit(Collider other) {    // what to do once player leaves
 
