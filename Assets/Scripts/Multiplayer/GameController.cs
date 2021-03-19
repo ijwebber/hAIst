@@ -37,7 +37,7 @@ public class GameController : MonoBehaviourPunCallbacks
         // Set custom props
         int numOfSpecial = 0;
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            numOfSpecial = SetupItems(numOfSpecial);
+            numOfSpecial = SetupItems();
         }
         SetProps(numOfSpecial);
 
@@ -138,7 +138,7 @@ public class GameController : MonoBehaviourPunCallbacks
             int value;
             if (objs[i].GetComponent<CollectableItem>().special) {
                 value = Random.Range(60, 100) * 100;
-                special += 1;
+                totalSpecial += 1;
             } else {
                 value = Random.Range(10, 40) * 100;                
             }
