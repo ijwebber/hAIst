@@ -70,6 +70,41 @@ public class PlayerPickUp : MonoBehaviourPun
                                               
         }
     }
+    private void OnTriggerStay(Collider other)  {
+        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
+        {
+            switch (other.gameObject.tag) {
+
+            case "button":
+                displayMessage("Press E to press button");
+                if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
+                    int id = other.gameObject.GetComponent<PressButton>().id;
+                    other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
+                }
+                break;
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other) {    // what to do once player leaves
+
+        if(photonView.IsMine == true && PhotonNetwork.IsConnected == true){
+                
+            currentObject = null;
+            keycodeGame.SetActive(false);
+            fixPaintingGame.SetActive(false);
+            codeDisplay.SetActive(false);
+            wireGame.SetActive(false);
+            wireManual.SetActive(false);
+
+            wireGame.GetComponent<WireTask>().complete = false;
+            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+            fixPaintingGame.GetComponent<RotateTask>().win = false;
+            held = false;
+            progressBar.Hide();
+
+            displayMessage(2);
+        }   
+    }
 
     private void OnCollisionStay(Collision other) {    // what to do whilst players are in range of object
 
