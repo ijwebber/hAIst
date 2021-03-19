@@ -10,9 +10,8 @@ public class CollectableItem : MonoBehaviourPun
     public int gameSelection;
 
     [PunRPC]
-    public void UpdateObject(bool newSpecial, int newValue, int chooseMinigame) {
+    public void UpdateObject(int newValue, int chooseMinigame) {
         this.value = newValue;
-        this.special = newSpecial;
         this.gameSelection = chooseMinigame;
     }
 }

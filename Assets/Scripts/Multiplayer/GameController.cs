@@ -35,18 +35,11 @@ public class GameController : MonoBehaviourPunCallbacks
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnpoint, Quaternion.identity);
 
         // Set custom props
-        int numOfSpecial = 3;
-        SetProps(numOfSpecial);
-        List<GameObject> starItems = new List<GameObject>();
+        int numOfSpecial = 0;
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            starItems = SetupItems(numOfSpecial);
+            numOfSpecial = SetupItems(numOfSpecial);
         }
-
-        foreach (GameObject item in starItems)
-        {
-            Debug.Log("instantiated starsprite");
-            PhotonNetwork.InstantiateRoomObject("StarItem", new Vector3(item.transform.position.x, 16.1f, item.transform.position.z-1), Quaternion.Euler(90,0,0));
-        }
+        SetProps(numOfSpecial);
 
         SetSpotted();
         
@@ -133,43 +126,28 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    List<GameObject> SetupItems(int numOfSpecial) {
+    // Returns number of special items
+    int SetupItems() {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("steal");
-
-        // Generate 3 random numbers within the range of the objects
-        List<int> rand = RandomExtension(0, objs.Length, numOfSpecial);
-        List<GameObject> specialObjs = new List<GameObject>();
+        
+        int totalSpecial = 0;
 
         for (int i = 0; i < objs.Length; i++){
             int gameSelection = r.Next(0,3);
             PhotonView view = objs[i].GetComponent<PhotonView>();
-            if (rand.Contains(i)) {
-                int value = Random.Range(60, 100) * 100;
-                objs[i].GetComponent<CollectableItem>().UpdateObject(true, value,gameSelection);
-                view.RPC("UpdateObject", RpcTarget.All, true, value,gameSelection);
-                specialObjs.Add(objs[i]);
+            int value;
+            if (objs[i].GetComponent<CollectableItem>().special) {
+                value = Random.Range(60, 100) * 100;
+                special += 1;
             } else {
-                int value = Random.Range(10, 40) * 100;
-                objs[i].GetComponent<CollectableItem>().UpdateObject(false, value,gameSelection);
-                view.RPC("UpdateObject", RpcTarget.All, false, value,gameSelection);
-            } 
-        }
-
-        return specialObjs;
-    }
-
-    List<int> RandomExtension(int x, int y, int n) {
-        List<int> rand = new List<int>();
-
-        while (rand.Count < n)
-        {
-            int num = Random.Range(x, y);
-            if (!rand.Contains(num)) {
-                rand.Add(num);
+                value = Random.Range(10, 40) * 100;                
             }
+
+            objs[i].GetComponent<CollectableItem>().UpdateObject(value, gameSelection);
+            view.RPC("UpdateObject", RpcTarget.All, false, value, gameSelection);
         }
 
-        return rand;
+        return totalSpecial;
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable changedProps) {
