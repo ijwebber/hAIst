@@ -145,7 +145,11 @@ public class PlayerPickUp : MonoBehaviourPun
     }
 
     private void setNewQuest(GameObject obj) {
-        questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name);
+        if (obj == null) {
+            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null");
+        } else {
+            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name);
+        }
     }
     private void OnTriggerExit(Collider other) {    // what to do once player leaves
 

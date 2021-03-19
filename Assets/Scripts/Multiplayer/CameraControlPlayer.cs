@@ -146,6 +146,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         cameraOffset.z = distance;
         cameraOffset.y = height;
         cameraTransform.position = this.transform.position + cameraOffset;
+       
     }
 
     void SetAlpha(float alpha){            // need to merge these together by creating maybe just one object material class?

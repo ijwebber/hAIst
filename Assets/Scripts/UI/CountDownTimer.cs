@@ -9,7 +9,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 {
 
     public Text timerText;
-    private float timeLeftOnceSpotted = 5f;
+    private float timeLeftOnceSpotted = 240f;
 
     private bool timerStarted = false;
 
@@ -37,7 +37,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         
         if (timeLeftOnceSpotted > 0 && timerStarted)
         {
-            timeLeftOnceSpotted -= Time.deltaTime;
+            
 
             float minutes = Mathf.FloorToInt(timeLeftOnceSpotted / 60);
             float seconds = Mathf.FloorToInt(timeLeftOnceSpotted % 60);
@@ -49,6 +49,8 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
             {
                 timerText.text = "0" + minutes + ":" +  "0" + seconds;
             }
+
+            timeLeftOnceSpotted -= Time.deltaTime;
         }
         else if(timerStarted)
         {
