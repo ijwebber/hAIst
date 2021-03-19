@@ -32,7 +32,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     private float startTime = 0f;
     private float timer = 0f;
-    public float holdTime = 5.0f;
+    public float holdTime = 3.0f;
     private bool held = false;
 
     public bool down;
@@ -42,7 +42,7 @@ public class PlayerPickUp : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-        
+        holdTime = 3.0f;
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
 
             down = GetComponent<PlayerMovement>().disabled;
@@ -183,113 +183,149 @@ public class PlayerPickUp : MonoBehaviourPun
 
                 int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
 
-                if (gameSelection == 0) {
+                if (seconds == 0 && !down)
+                {
+                    holdDownTask();
+                }
 
-                    if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
-                        keycodeGame.SetActive(true);
-                        displayMessage(2);
-                    }
-                    else if (keyCorrect && seconds == 0) {
+                else if (seconds != 0)
+                {
+                    displayMessage(1);
+                }
 
-                        targetTime += cooldown;
 
-                        //other.gameObject.SetActive(false);
-                        UpdateScore(currentObject);
-                        CheckIfSpecial(currentObject);
+                if (held && seconds == 0)
+                { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+                    targetTime += cooldown;
 
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-                        keycodeGame.SetActive(false);
-                        fixPaintingGame.SetActive(false);
+                    //other.gameObject.SetActive(false);
+                    UpdateScore(currentObject);
+                    CheckIfSpecial(currentObject);
 
-                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                        fixPaintingGame.GetComponent<RotateTask>().win = false;
-                        keycodeGame.SetActive(false);
-                        held = false;
+                    int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                    gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
 
-                    }
-                    else if (seconds != 0) {
-                        displayMessage(1);
+                    // reset game components
+                    keycodeGame.SetActive(false);
+                    fixPaintingGame.SetActive(false);
 
-                    }
-                    else if (!Input.GetKey(KeyCode.E)) {
-                        displayMessage(0);
-                    }
+                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                    fixPaintingGame.GetComponent<RotateTask>().win = false;
+
+                    held = false;
+
 
                 }
 
-                else if (gameSelection == 1) {
+                    /*
+                    if (gameSelection == 0) {
 
-                    if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
-                        // whip out mini game
-                        fixPaintingGame.SetActive(true);
-                        displayMessage(2);
-                    }
-                    else if (paintingCorrect && seconds == 0) {
+                        if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
+                            keycodeGame.SetActive(true);
+                            displayMessage(2);
+                        }
+                        else if (keyCorrect && seconds == 0) {
 
+                            targetTime += cooldown;
 
-                        targetTime += cooldown;
+                            //other.gameObject.SetActive(false);
+                            UpdateScore(currentObject);
+                            CheckIfSpecial(currentObject);
 
-                        //other.gameObject.SetActive(false);
-                        UpdateScore(currentObject);
-                        CheckIfSpecial(currentObject);
+                            int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                            gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+                            keycodeGame.SetActive(false);
+                            fixPaintingGame.SetActive(false);
 
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-                        keycodeGame.SetActive(false);
-                        fixPaintingGame.SetActive(false);
+                            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                            fixPaintingGame.GetComponent<RotateTask>().win = false;
+                            keycodeGame.SetActive(false);
+                            held = false;
 
-                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                        fixPaintingGame.GetComponent<RotateTask>().win = false;
-                        fixPaintingGame.SetActive(false);
-                        held = false;
+                        }
+                        else if (seconds != 0) {
+                            displayMessage(1);
 
-                    }
-                    else if (seconds != 0) {
-                        displayMessage(1);
-
-                    }
-                    else if (!Input.GetKey(KeyCode.E)) {
-                        displayMessage(0);
-                        // check cool down
-                    }
-
-                }
-
-                else if (gameSelection == 2) {        // hold down task
-
-                    if (seconds == 0 && !down) {
-                        holdDownTask();
-                    }
-
-                    else if (seconds != 0) {
-                        displayMessage(1);
-                    }
-
-
-                    if (held && seconds == 0) { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
-                        targetTime += cooldown;
-
-                        //other.gameObject.SetActive(false);
-                        UpdateScore(currentObject);
-                        CheckIfSpecial(currentObject);
-
-                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-
-                        // reset game components
-                        keycodeGame.SetActive(false);
-                        fixPaintingGame.SetActive(false);
-
-                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                        fixPaintingGame.GetComponent<RotateTask>().win = false;
-
-                        held = false;
-
+                        }
+                        else if (!Input.GetKey(KeyCode.E)) {
+                            displayMessage(0);
+                        }
 
                     }
-                }
-                break;
+
+                    else if (gameSelection == 1) {
+
+                        if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
+                            // whip out mini game
+                            fixPaintingGame.SetActive(true);
+                            displayMessage(2);
+                        }
+                        else if (paintingCorrect && seconds == 0) {
+
+
+                            targetTime += cooldown;
+
+                            //other.gameObject.SetActive(false);
+                            UpdateScore(currentObject);
+                            CheckIfSpecial(currentObject);
+
+                            int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                            gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+                            keycodeGame.SetActive(false);
+                            fixPaintingGame.SetActive(false);
+
+                            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                            fixPaintingGame.GetComponent<RotateTask>().win = false;
+                            fixPaintingGame.SetActive(false);
+                            held = false;
+
+                        }
+                        else if (seconds != 0) {
+                            displayMessage(1);
+
+                        }
+                        else if (!Input.GetKey(KeyCode.E)) {
+                            displayMessage(0);
+                            // check cool down
+                        }
+
+                    }
+
+                    else if (gameSelection == 2) {        // hold down task
+
+                        if (seconds == 0 && !down) {
+                            holdDownTask();
+                        }
+
+                        else if (seconds != 0) {
+                            displayMessage(1);
+                        }
+
+
+                        if (held && seconds == 0) { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+                            targetTime += cooldown;
+
+                            //other.gameObject.SetActive(false);
+                            UpdateScore(currentObject);
+                            CheckIfSpecial(currentObject);
+
+                            int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                            gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+
+                            // reset game components
+                            keycodeGame.SetActive(false);
+                            fixPaintingGame.SetActive(false);
+
+                            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                            fixPaintingGame.GetComponent<RotateTask>().win = false;
+
+                            held = false;
+
+
+                        }
+                    }
+                    */
+                    break;
             case "button":
                 displayMessage("Press E to press button");
                 if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
