@@ -29,7 +29,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 if (Input.GetKeyDown(KeyCode.E)) {
                     Hashtable hash = new Hashtable() {{"leave", true}, {"win", true}};
                     PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
-                    uiController.UpdateInfoText("Waiting for others"); // TODO replace this with a dynamic ready system
+                    UpdateWaitingText();
                 }
             }
         }
@@ -68,10 +68,27 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 if (end) {
                     Hashtable endHash = new Hashtable() {{"end", true}, {"win", win}};
                     PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+                } else {
+                    UpdateWaitingText();
                 }
             }
         }
         
+    }
+
+    void UpdateWaitingText() {
+        int total = 0;
+        int length = PhotonNetwork.PlayerList.Length;
+        if ((bool) PhotonNetwork.LocalPlayer.CustomProperties["leave"]) {
+            foreach (Player player in PhotonNetwork.PlayerList) {
+                if ((bool) player.CustomProperties["leave"]) {
+                    total += 1;
+                }
+            }
+        }
+
+        uiController.UpdateInfoText("Waiting for others " + total.ToString() + "/" + length.ToString());
+
     }
 
 
