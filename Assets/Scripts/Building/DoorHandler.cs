@@ -16,7 +16,7 @@ public class DoorHandler : MonoBehaviourPun
             StartCoroutine(openDoor(doorleft));
             StartCoroutine(openDoor(doorright));
 
-            this.gameObject.GetComponent<PhotonView>().RPC("Enter", RpcTarget.Others);
+            this.gameObject.GetComponent<PhotonView>().RPC("Enter", RpcTarget.MasterClient);
         }
     }
 
@@ -33,7 +33,7 @@ public class DoorHandler : MonoBehaviourPun
     void OnTriggerExit(Collider other) {
         if (other.gameObject.name == "Timmy" && button.done) {
 
-            this.gameObject.GetComponent<PhotonView>().RPC("Exit", RpcTarget.Others);
+            this.gameObject.GetComponent<PhotonView>().RPC("Exit", RpcTarget.MasterClient);
         }
     }
 

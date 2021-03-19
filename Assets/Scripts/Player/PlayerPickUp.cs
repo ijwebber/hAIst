@@ -13,6 +13,7 @@ public class PlayerPickUp : MonoBehaviourPun
     public Text cooldownBox;
 
     public GameObject wireManual;
+    private Window_QuestPointer questPointer;
     public GameObject wireGame;
 
     public GameObject codeDisplay;
@@ -61,6 +62,10 @@ public class PlayerPickUp : MonoBehaviourPun
 
         }
         
+    }
+
+    void Awake() {
+        questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
     }
 
 
@@ -124,6 +129,12 @@ public class PlayerPickUp : MonoBehaviourPun
                 else if (!Input.GetKey(KeyCode.E))
                 {
                     displayMessage("Press E to enter code.");
+                }
+                break;
+            case "MetalDoorHandle":
+                if (!other.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
+                    displayMessage("This door requires a code");
+                    questPointer.targetObject = GameObject.Find("Entrance code display");
                 }
                 break;
             }
