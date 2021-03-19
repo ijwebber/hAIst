@@ -11,6 +11,7 @@ public class KeycodeTask : MonoBehaviour
     public PhotonView player;
     private bool isReset = false;
     public bool codeCorrect = false; // This code should be attached to the keycode task object in the canvas
+    public AudioSource buttonNoise;
 
     public int keypadID = 0;
 
@@ -30,6 +31,8 @@ public class KeycodeTask : MonoBehaviour
         }*/
 
         _inputCode.text += num;             // set inputcode box to what ever buttom input it is
+
+        buttonNoise.Play();
 
         KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
 
