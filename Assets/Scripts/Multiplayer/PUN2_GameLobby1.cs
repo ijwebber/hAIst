@@ -74,6 +74,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public Button BalanceButtonPreGame;
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
+    public GameObject MapScreen;
 
     // PHOTON NETWORK GAMEOBJECTS 
 
@@ -191,19 +192,31 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
 
     // PRE GAME MENU
-    public void EnableLobbyScreen()
-    {
-        LobbyScreen.SetActive(true);
-        ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
-    }
 
     public void EnableHomeScreen()
     {
         LobbyScreen.SetActive(false);
+        MapScreen.SetActive(false);
 
     }
 
-    
+
+    public void EnableMapScreen()
+    {
+        MapScreen.SetActive(true);
+        LobbyScreen.SetActive(false);
+    }
+
+    public void EnableLobbyScreen()
+    {
+        MapScreen.SetActive(false);
+        LobbyScreen.SetActive(true);
+        ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+    }
+
+
+
+
     public void ThiefController()
     {
         if (PhotonNetwork.PlayerListOthers.Length == 0)

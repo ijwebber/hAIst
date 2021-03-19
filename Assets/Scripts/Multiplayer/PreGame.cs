@@ -168,6 +168,10 @@ public class PreGame : MonoBehaviourPunCallbacks
         }
     }
 
+    public void ShowMap()
+    {
+
+    }
 
     public bool CheckAllReady() 
     {
