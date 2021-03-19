@@ -13,6 +13,7 @@ public class PlayerPickUp : MonoBehaviourPun
     public Text cooldownBox;
 
     public GameObject wireManual;
+    private Window_QuestPointer questPointer;
     public GameObject wireGame;
 
     public GameObject codeDisplay;
@@ -63,12 +64,101 @@ public class PlayerPickUp : MonoBehaviourPun
         
     }
 
+    void Awake() {
+        questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
+    }
+
 
     private void OnCollisionEnter(Collision other) {    // what to do once player enters
 
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
                                               
         }
+    }
+    private void OnTriggerStay(Collider other)  {
+        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
+        {
+            switch (other.gameObject.tag) {
+
+            case "button":
+                displayMessage("Press E to press button");
+                if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
+                    int id = other.gameObject.GetComponent<PressButton>().id;
+                    other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
+                }
+                break;
+            case "codedisplay":
+                displayMessage("Press E to see code");
+                if (Input.GetKey(KeyCode.E))
+                {
+                    CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
+                    codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
+
+                    codeDisplay.SetActive(true);
+                }
+                break;
+
+            case "keypad":
+                KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
+                keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
+
+                if (keypad.codeCorrect && !down)
+                {
+                    displayMessage("Code already entered");
+                }
+                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                {
+                    keycodeGame.SetActive(true);
+                    displayMessage(2);
+                }
+                else if (keyCorrect && seconds == 0)
+                {
+
+                    targetTime += cooldown;
+
+                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                    keycodeGame.SetActive(false);
+                    held = false;
+
+                }
+                else if (seconds != 0)
+                {
+                    displayMessage(1);
+
+                }
+                else if (!Input.GetKey(KeyCode.E))
+                {
+                    displayMessage("Press E to enter code.");
+                }
+                break;
+            case "MetalDoorHandle":
+                if (!other.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
+                    displayMessage("This door requires a code");
+                    questPointer.targetObject = GameObject.Find("Entrance code display");
+                }
+                break;
+            }
+        }
+    }
+    private void OnTriggerExit(Collider other) {    // what to do once player leaves
+
+        if(photonView.IsMine == true && PhotonNetwork.IsConnected == true){
+                
+            currentObject = null;
+            keycodeGame.SetActive(false);
+            fixPaintingGame.SetActive(false);
+            codeDisplay.SetActive(false);
+            wireGame.SetActive(false);
+            wireManual.SetActive(false);
+
+            wireGame.GetComponent<WireTask>().complete = false;
+            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+            fixPaintingGame.GetComponent<RotateTask>().win = false;
+            held = false;
+            progressBar.Hide();
+
+            displayMessage(2);
+        }   
     }
 
     private void OnCollisionStay(Collision other) {    // what to do whilst players are in range of object
@@ -196,50 +286,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
                 }
                 break;
-            case "codedisplay":
-                displayMessage("Press E to see code");
-                if (Input.GetKey(KeyCode.E))
-                {
-                    CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
-                    codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
-
-                    codeDisplay.SetActive(true);
-                }
-                break;
-
-            case "keypad":
-                KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
-                keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
-
-                if (keypad.codeCorrect && !down)
-                {
-                    displayMessage("Code already entered");
-                }
-                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
-                {
-                    keycodeGame.SetActive(true);
-                    displayMessage(2);
-                }
-                else if (keyCorrect && seconds == 0)
-                {
-
-                    targetTime += cooldown;
-
-                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                    keycodeGame.SetActive(false);
-                    held = false;
-
-                }
-                else if (seconds != 0)
-                {
-                    displayMessage(1);
-
-                }
-                else if (!Input.GetKey(KeyCode.E))
-                {
-                    displayMessage(0);
-                }
-                break;
+            
             case "wiremanual":
                 displayMessage("Press E to read manual");
                 if (Input.GetKey(KeyCode.E))

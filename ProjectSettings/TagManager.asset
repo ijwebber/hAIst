@@ -23,6 +23,7 @@ TagManager:
   - wires
   - wiremanual
   - SeeThrough
+  - MetalDoorHandle
   layers:
   - Default
   - TransparentFX

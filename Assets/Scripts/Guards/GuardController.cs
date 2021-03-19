@@ -60,24 +60,6 @@ public class GuardController : MonoBehaviour
     
     void Update() {
         localGrid.velocities = soundController.grid.velocities;
-        foreach (GuardMovement guard in guardMovements) {
-            // if (Physics.Raycast(guard.gameObject.transform.position, (playerController.player.transform.position - guard.gameObject.transform.position).normalized, playerController.viewRadius+2,obstacleMask)) {
-                switch (guard.state)
-                {
-                    case State.normal:
-                        guard.sprite.sprite = null;
-                        break;
-                    case State.suspicious:
-                        guard.sprite.sprite = sus;
-                        break;
-                    case State.chase:
-                        guard.sprite.sprite = exclamation;
-                        break;
-                }
-            // } else {
-            //     guard.sprite.sprite = null;
-            // }
-        }
     }
 
     public bool inChase() {
