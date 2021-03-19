@@ -82,6 +82,50 @@ public class PlayerPickUp : MonoBehaviourPun
                     other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
                 }
                 break;
+            case "codedisplay":
+                displayMessage("Press E to see code");
+                if (Input.GetKey(KeyCode.E))
+                {
+                    CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
+                    codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
+
+                    codeDisplay.SetActive(true);
+                }
+                break;
+
+            case "keypad":
+                KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
+                keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
+
+                if (keypad.codeCorrect && !down)
+                {
+                    displayMessage("Code already entered");
+                }
+                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                {
+                    keycodeGame.SetActive(true);
+                    displayMessage(2);
+                }
+                else if (keyCorrect && seconds == 0)
+                {
+
+                    targetTime += cooldown;
+
+                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                    keycodeGame.SetActive(false);
+                    held = false;
+
+                }
+                else if (seconds != 0)
+                {
+                    displayMessage(1);
+
+                }
+                else if (!Input.GetKey(KeyCode.E))
+                {
+                    displayMessage("Press E to enter code.");
+                }
+                break;
             }
         }
     }
@@ -231,50 +275,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
                 }
                 break;
-            case "codedisplay":
-                displayMessage("Press E to see code");
-                if (Input.GetKey(KeyCode.E))
-                {
-                    CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
-                    codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
-
-                    codeDisplay.SetActive(true);
-                }
-                break;
-
-            case "keypad":
-                KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
-                keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
-
-                if (keypad.codeCorrect && !down)
-                {
-                    displayMessage("Code already entered");
-                }
-                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
-                {
-                    keycodeGame.SetActive(true);
-                    displayMessage(2);
-                }
-                else if (keyCorrect && seconds == 0)
-                {
-
-                    targetTime += cooldown;
-
-                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                    keycodeGame.SetActive(false);
-                    held = false;
-
-                }
-                else if (seconds != 0)
-                {
-                    displayMessage(1);
-
-                }
-                else if (!Input.GetKey(KeyCode.E))
-                {
-                    displayMessage(0);
-                }
-                break;
+            
             case "wiremanual":
                 displayMessage("Press E to read manual");
                 if (Input.GetKey(KeyCode.E))
