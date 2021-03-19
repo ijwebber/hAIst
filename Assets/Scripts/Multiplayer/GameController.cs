@@ -144,7 +144,7 @@ public class GameController : MonoBehaviourPunCallbacks
             }
 
             objs[i].GetComponent<CollectableItem>().UpdateObject(value, gameSelection);
-            view.RPC("UpdateObject", RpcTarget.All, false, value, gameSelection);
+            view.RPC("UpdateObject", RpcTarget.All, value, gameSelection);
         }
 
         return totalSpecial;
