@@ -41,13 +41,13 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
             float minutes = Mathf.FloorToInt(timeLeftOnceSpotted / 60);
             float seconds = Mathf.FloorToInt(timeLeftOnceSpotted % 60);
-            if (seconds > 10)
+            if (seconds >= 10)
             {
-                timerText.text = "0" + minutes + ":" + seconds;
+                timerText.text = "Police will arrive in " + "0" + minutes + ":" + seconds;
             }
             else
-            {
-                timerText.text = "0" + minutes + ":" +  "0" + seconds;
+            {   
+                timerText.text = "Police will arrive in " + "0" + minutes + ":" +  "0" + seconds;
             }
 
             timeLeftOnceSpotted -= Time.deltaTime;
