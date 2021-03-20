@@ -85,11 +85,8 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                     total += 1;
                 }
             }
+
+            uiController.UpdateInfoText("Waiting for others " + total.ToString() + "/" + length.ToString());
         }
-
-        uiController.UpdateInfoText("Waiting for others " + total.ToString() + "/" + length.ToString());
-
     }
-
-
 }
