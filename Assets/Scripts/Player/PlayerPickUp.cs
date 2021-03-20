@@ -467,8 +467,7 @@ public class PlayerPickUp : MonoBehaviourPun
             held = false;
             progressBar.ResetBar();
             progressBar.Hide();
-            displayMessage(4);
-        
+            displayMessage("Hold E for " + holdTime.ToString() + " seconds to pick up");
         }
 
     }
