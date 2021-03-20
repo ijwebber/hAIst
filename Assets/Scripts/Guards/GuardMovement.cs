@@ -156,19 +156,10 @@ public class GuardMovement : MonoBehaviourPun
                         Player p = g.GetComponent<PhotonView>().Controller;
 
                         g.GetComponent<PhotonView>().RPC("KnockOut", p, view.ViewID);
-
-
                     }
                 }
             }
-        }
-
-        
-
-        
-
-       
-        
+        }        
     }
 
     [PunRPC]
@@ -183,12 +174,10 @@ public class GuardMovement : MonoBehaviourPun
     //timer coroutine
     IEnumerator disableForTime(float disableTime)
     {
-     
         yield return new WaitForSeconds(disableTime);
         guardDisabled = false;
         this.state = State.normal;
         timedOut = false;
         agent.isStopped = false;
-        
     }
 }

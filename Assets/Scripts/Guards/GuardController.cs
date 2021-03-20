@@ -54,8 +54,7 @@ public class GuardController : MonoBehaviour
         if (PhotonNetwork.LocalPlayer.IsMasterClient && !playersSpotted)
         {
             cutSceneIfSpotted();
-        }
-        
+        }  
     }
     
     void Update() {

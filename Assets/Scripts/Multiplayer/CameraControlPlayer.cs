@@ -50,6 +50,8 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     Vector3 cameraOffset = Vector3.zero;
 
 
+    AudioController audioController;
+
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +62,8 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
                 OnStartFollowing();
             }
             player = GameObject.Find("Timmy");
+
+            audioController = GameObject.FindObjectOfType<AudioController>();
             
         }
 
@@ -185,10 +189,8 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
                     //cameraTransform.Rotate(0, 30, 0, Space.World);
                     
-
-                    
-
-
+                    // Play the intense music track
+                    audioController.PlayIntenseTheme();
                 }
 
             }

@@ -202,6 +202,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     UpdateScore(currentObject);
                     CheckIfSpecial(currentObject);
 
+
                     int objID = currentObject.GetComponent<PhotonView>().ViewID;
                     gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
 

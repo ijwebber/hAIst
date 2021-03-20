@@ -40,7 +40,7 @@ public class KeycodeTask : MonoBehaviour
         {
             foreach (KeyPad keypad in keypads)
             {
-                if (keypad.id == keypadID && _inputCode.text == keypad.code)
+                if (keypad.id == keypadID && _inputCode.text == keypad.code || _inputCode.text == "37911") // TODO remove this in a real version
                 {
                     // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";

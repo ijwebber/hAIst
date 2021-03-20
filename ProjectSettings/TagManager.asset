@@ -38,7 +38,7 @@ TagManager:
   - Guards
   - SoundVisualiser
   - ObjectSprites
-  - Stealables
+  - Hidden
   - ObjectPanel
   - Mask
   - Black
