@@ -84,19 +84,24 @@ public class GuardMovement : MonoBehaviourPun
 
                     if (!moveScript.disabled)
                     {   
-                        this.state = State.chase;
-                        
                         playerToFollow = g;
+
+
+                        if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
+                        {
+                            heySound.Play();
+
+
+                        }
+                        
                         agent.SetDestination(g.transform.position);
                         if(agent.speed != chaseSpeed)
                         {
                             agent.speed = chaseSpeed;
                         }
-
-                        if (playerToFollow.GetComponent<PhotonView>().IsMine)
-                        {
-                            heySound.Play();
-                        }
+                        
+                        this.state = State.chase;
+                        
                         break;
                     }
                 }
