@@ -235,7 +235,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             rotateCounter -= 0.1f;
 
 
-            if (Math.Abs(cameraTransform.position.x - playerCamPos.x) < 1 && Math.Abs(cameraTransform.position.z - playerCamPos.z) < 1)
+            if (Math.Abs(cameraTransform.position.x - playerCamPos.x) < 1 && Math.Abs(cameraTransform.position.z - playerCamPos.z) < 1 && cameraTransform.rotation.x < 54)
             {
                 
                 Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null}, { "cutSceneDone", true } };
