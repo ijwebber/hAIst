@@ -14,6 +14,8 @@ public class Laser : MonoBehaviourPun
 
     GameObject character;
 
+    public AudioController song;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +39,7 @@ public class Laser : MonoBehaviourPun
 
                 Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
                 PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
-
+                song.PlayIntenseTheme();
             }
         }
 
