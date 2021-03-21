@@ -114,7 +114,7 @@ public class CameraFOV : MonoBehaviour {
         }
 
         // Fixing the y coord of the 0 vector
-        vertices[0].y = vertices[1].y;
+        // vertices[0].y = vertices[1].y;
 
         viewMesh.Clear();
         viewMesh.vertices = vertices;
