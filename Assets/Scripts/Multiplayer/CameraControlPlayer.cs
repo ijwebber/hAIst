@@ -183,8 +183,8 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
                     isCutScene = true;
                     spottingGuardLocation = (Vector3)setSpotted["spottingGuardLocation"];
                     guardCamPos = (Vector3)setSpotted["spottingGuardLocation"];
-                    //guardCamPos.z = guardCamPos.z + distance-4;
-                    guardCamPos.y = guardCamPos.y + height-5;
+                    guardCamPos.z = guardCamPos.z - 4;
+                    guardCamPos.y = guardCamPos.y + height-4;
                     isFollowing = false;
 
                     //cameraTransform.Rotate(0, 30, 0, Space.World);
