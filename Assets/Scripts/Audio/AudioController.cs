@@ -12,7 +12,11 @@ public class AudioController : MonoBehaviour
 
     public void PlayIntenseTheme() {
         audioSource.clip = intenseTheme;
-        PlayMusic();
+
+        if(!audioSource.isPlaying){
+            PlayMusic();
+        }
+        //PlayMusic();
     }
 
     public void PlayMusic() {
