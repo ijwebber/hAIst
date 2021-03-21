@@ -49,16 +49,18 @@ public class Window_QuestPointer : MonoBehaviourPun
             bool isOffScreen = !playerController.isInView(targetObject.transform.position);
 
             if (isOffScreen) {
-                pointerRectTransform.sizeDelta = new Vector2(30,20);
+                pointerRectTransform.sizeDelta = new Vector2(40,30);
                 pointerImage.sprite = arrowSprite;
                 pointerRectTransform.localPosition = new Vector3(100*dir.x,100*dir.y);
             } else {
-                    pointerRectTransform.sizeDelta = new Vector2(35,30);
+                    pointerRectTransform.sizeDelta = new Vector2(45,35);
                     pointerRectTransform.localEulerAngles = new Vector3(0,0,0);
                     pointerImage.sprite = crossSprite;
                     pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x) / canvas.scaleFactor, ((targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor + 30));
                     // pointerRectTransform.anchoredPosition = new Vector2(Screen.width - targetPositionScreenPoint.x / canvas.scaleFactor, (Screen.height - targetPositionScreenPoint.y) + 60);
             }
+        } else {
+            pointerRectTransform.sizeDelta = new Vector2(0,0);
         }
     }
 }
