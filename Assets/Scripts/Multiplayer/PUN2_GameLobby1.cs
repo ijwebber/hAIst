@@ -16,6 +16,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     string gameVersion = "0.9";
     bool joiningRoom = false;
     public GameObject DB_Controller;
+    public GameObject PreGameScript;
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
 
     // MENUS
@@ -83,6 +84,19 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     void Start()
     {
         
+    }
+
+    void Awake()
+    {
+        if (PhotonNetwork.IsConnected)
+        {
+            thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+            thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+            PreGameMenu.SetActive(true);
+            ThiefController();
+            PreGameScript.GetComponent<PreGame>().SetReadyChecks();
+
+        }
     }
 
     void Connect()
@@ -258,7 +272,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
 
         // HELPER FUNCTIONS
-        public void ChangeUserNameInput()
+    public void ChangeUserNameInput()
     {
         Status.SetActive(false);
         StatusGuest.SetActive(false);

@@ -15,6 +15,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public GameObject winScreen;
     public GameObject lossScreen;
 
+    public Button PlayAgainWin;
+    public Button PlayAgainLose;
+
     private void Awake()
     {
         if (PhotonNetwork.CurrentRoom == null)
@@ -25,6 +28,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.IsMasterClient) {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}, {"special", 0}});
+            PlayAgainWin.interactable = true;
+            PlayAgainLose.interactable = true;
         }
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"ready", false}});
