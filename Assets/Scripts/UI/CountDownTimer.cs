@@ -25,7 +25,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
         if (setSpotted["spotted"] != null)
         {
-            if ((bool)setSpotted["cutSceneDone"])
+            if ((bool)setSpotted["cutSceneDone"] && !timerStarted)
             {
                 StartCoroutine(endTimer());
             }
