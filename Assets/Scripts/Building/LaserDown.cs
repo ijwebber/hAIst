@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine;
 
 public class LaserDown : MonoBehaviourPun
@@ -34,8 +35,8 @@ public class LaserDown : MonoBehaviourPun
                 character = hit.collider.gameObject;
 
                 PlayerMovement playerMoveScript = character.GetComponent<PlayerMovement>();
-                playerMoveScript.disabled = true;
-                character.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);  
+                Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);  
                 
             }
         }
