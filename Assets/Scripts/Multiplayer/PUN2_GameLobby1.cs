@@ -96,6 +96,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             ThiefController();
             PreGameScript.GetComponent<PreGame>().SetReadyChecks();
 
+            DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
+
         }
     }
 
