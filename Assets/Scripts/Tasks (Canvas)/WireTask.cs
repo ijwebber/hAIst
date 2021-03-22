@@ -29,6 +29,31 @@ public class WireTask : MonoBehaviour
                 wires.correct = ( wires.wire == n );
 
                 complete = true;
+
+                if (wires.correct)
+                {
+                    Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
+                    foreach (Laser laser in lasers)
+                    {
+                        if (laser.wiresID == wiresID)
+                        {
+                            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.Others);
+                            laser.GetComponent<LineRenderer>().enabled = false;
+                            laser.disabled = true;
+                        }
+                    }
+
+                    LaserDown[] downLasers = GameObject.FindObjectsOfType<LaserDown>();
+                    foreach (LaserDown laser in downLasers)
+                    {
+                        if (laser.wiresID == wiresID)
+                        {
+                            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.Others);
+                            laser.GetComponent<LineRenderer>().enabled = false;
+                            laser.disabled = true;
+                        }
+                    }
+                }
             }
         }
     }

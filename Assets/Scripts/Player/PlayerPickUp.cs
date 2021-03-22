@@ -80,66 +80,112 @@ public class PlayerPickUp : MonoBehaviourPun
         {
             switch (other.gameObject.tag) {
 
-            case "button":
-                displayMessage("Press E to press button");
-                if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
-                    int id = other.gameObject.GetComponent<PressButton>().id;
-                    other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
-                }
-                break;
-            case "codedisplay":
-                displayMessage("Press E to see code");
-                if (Input.GetKey(KeyCode.E))
-                {
-                    CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
-                    codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
+                case "button":
+                    displayMessage("Press E to press button");
+                    if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
+                        int id = other.gameObject.GetComponent<PressButton>().id;
+                        other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
+                    }
+                    break;
+                case "codedisplay":
+                    displayMessage("Press E to see code");
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
+                        codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
 
-                    codeDisplay.SetActive(true);
-                }
-                break;
+                        codeDisplay.SetActive(true);
+                    }
+                    break;
 
-            case "keypad":
-                KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
-                keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
+                case "keypad":
+                    KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
+                    keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
 
-                if (keypad.codeCorrect && !down)
-                {
-                    displayMessage("Code already entered");
-                }
-                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
-                {
-                    keycodeGame.SetActive(true);
-                    displayMessage(2);
-                }
-                else if (keyCorrect && seconds == 0)
-                {
+                    if (keypad.codeCorrect && !down)
+                    {
+                        displayMessage("Code already entered");
+                    }
+                    else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                    {
+                        keycodeGame.SetActive(true);
+                        displayMessage(2);
+                    }
+                    else if (keyCorrect && seconds == 0)
+                    {
 
-                    targetTime += cooldown;
+                        targetTime += cooldown;
 
-                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                    keycodeGame.SetActive(false);
-                    held = false;
+                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                        keycodeGame.SetActive(false);
+                        held = false;
 
-                }
-                else if (seconds != 0)
-                {
-                    displayMessage(1);
+                    }
+                    else if (seconds != 0)
+                    {
+                        displayMessage(1);
 
-                }
-                else if (!Input.GetKey(KeyCode.E))
-                {
-                    displayMessage("Press E to enter code.");
-                }
-                break;
-            case "MetalDoorHandle":
-                if (!other.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
-                    displayMessage("This door requires a code");
-                    GameObject targetObject = GameObject.Find("Entrance code display");
-                    setNewQuest(targetObject);
-                } else {
-                    setNewQuest(null);
-                }
-                break;
+                    }
+                    else if (!Input.GetKey(KeyCode.E))
+                    {
+                        displayMessage("Press E to enter code.");
+                    }
+                    break;
+                case "wiremanual":
+                    displayMessage("Press E to read manual");
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        WireManualObject manual = other.gameObject.GetComponent<WireManualObject>();
+                        wireManual.GetComponent<WireManual>().wiresID = manual.wires.id;
+
+                        wireManual.SetActive(true);
+                    }
+                    break;
+
+                case "wires":
+                    Wires wires = other.gameObject.GetComponent<Wires>();
+                    wireGame.GetComponent<WireTask>().wiresID = wires.id;
+
+                    if (wires.complete && !down)
+                    {
+                        wireGame.SetActive(false);
+                        if (wires.correct) displayMessage("Correct wire");
+                        else displayMessage("Wrong wire");
+                    }
+                    else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                    {
+                        wireGame.SetActive(true);
+                        displayMessage(2);
+                    }
+                    else if (keyCorrect && seconds == 0)
+                    {
+
+                        targetTime += cooldown;
+
+                        wireGame.GetComponent<WireTask>().complete = false;
+                        wireGame.SetActive(false);
+                        held = false;
+
+                    }
+                    else if (seconds != 0)
+                    {
+                        displayMessage(1);
+
+                    }
+                    else if (!Input.GetKey(KeyCode.E))
+                    {
+                        displayMessage("Press E to open electrical box");
+                    }
+                    break;
+                case "MetalDoorHandle":
+                    if (!other.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
+                        displayMessage("This door requires a code");
+                        GameObject targetObject = GameObject.Find("Entrance code display");
+                        setNewQuest(targetObject);
+                    } else {
+                        setNewQuest(null);
+                    }
+                    break;
             }
         }
     }
@@ -179,208 +225,45 @@ public class PlayerPickUp : MonoBehaviourPun
             switch (other.gameObject.tag) {
                 case "steal":
 
-                currentObject = other.gameObject;  // added the current game object
+                    currentObject = other.gameObject;  // added the current game object
 
-                int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
+                    int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
 
-                if (seconds == 0 && !down)
-                {
-                    holdDownTask();
-                }
-
-                else if (seconds != 0)
-                {
-                    displayMessage(1);
-                }
-
-
-                if (held && seconds == 0)
-                { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
-                    targetTime += cooldown;
-
-                    //other.gameObject.SetActive(false);
-                    UpdateScore(currentObject);
-                    CheckIfSpecial(currentObject);
-
-
-                    int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                    gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-
-                    // reset game components
-                    keycodeGame.SetActive(false);
-                    fixPaintingGame.SetActive(false);
-
-                    keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                    fixPaintingGame.GetComponent<RotateTask>().win = false;
-
-                    held = false;
-
-
-                }
-
-                    /*
-                    if (gameSelection == 0) {
-
-                        if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
-                            keycodeGame.SetActive(true);
-                            displayMessage(2);
-                        }
-                        else if (keyCorrect && seconds == 0) {
-
-                            targetTime += cooldown;
-
-                            //other.gameObject.SetActive(false);
-                            UpdateScore(currentObject);
-                            CheckIfSpecial(currentObject);
-
-                            int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                            gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-                            keycodeGame.SetActive(false);
-                            fixPaintingGame.SetActive(false);
-
-                            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                            fixPaintingGame.GetComponent<RotateTask>().win = false;
-                            keycodeGame.SetActive(false);
-                            held = false;
-
-                        }
-                        else if (seconds != 0) {
-                            displayMessage(1);
-
-                        }
-                        else if (!Input.GetKey(KeyCode.E)) {
-                            displayMessage(0);
-                        }
-
+                    if (seconds == 0 && !down)
+                    {
+                        holdDownTask();
                     }
 
-                    else if (gameSelection == 1) {
-
-                        if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
-                            // whip out mini game
-                            fixPaintingGame.SetActive(true);
-                            displayMessage(2);
-                        }
-                        else if (paintingCorrect && seconds == 0) {
-
-
-                            targetTime += cooldown;
-
-                            //other.gameObject.SetActive(false);
-                            UpdateScore(currentObject);
-                            CheckIfSpecial(currentObject);
-
-                            int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                            gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-                            keycodeGame.SetActive(false);
-                            fixPaintingGame.SetActive(false);
-
-                            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                            fixPaintingGame.GetComponent<RotateTask>().win = false;
-                            fixPaintingGame.SetActive(false);
-                            held = false;
-
-                        }
-                        else if (seconds != 0) {
-                            displayMessage(1);
-
-                        }
-                        else if (!Input.GetKey(KeyCode.E)) {
-                            displayMessage(0);
-                            // check cool down
-                        }
-
+                    else if (seconds != 0)
+                    {
+                        displayMessage(1);
                     }
 
-                    else if (gameSelection == 2) {        // hold down task
 
-                        if (seconds == 0 && !down) {
-                            holdDownTask();
-                        }
+                    if (held && seconds == 0)
+                    { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+                        targetTime += cooldown;
 
-                        else if (seconds != 0) {
-                            displayMessage(1);
-                        }
-
-
-                        if (held && seconds == 0) { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
-                            targetTime += cooldown;
-
-                            //other.gameObject.SetActive(false);
-                            UpdateScore(currentObject);
-                            CheckIfSpecial(currentObject);
-
-                            int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                            gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-
-                            // reset game components
-                            keycodeGame.SetActive(false);
-                            fixPaintingGame.SetActive(false);
-
-                            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                            fixPaintingGame.GetComponent<RotateTask>().win = false;
-
-                            held = false;
+                        //other.gameObject.SetActive(false);
+                        UpdateScore(currentObject);
+                        CheckIfSpecial(currentObject);
 
 
-                        }
+                        int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                        gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+
+                        // reset game components
+                        keycodeGame.SetActive(false);
+                        fixPaintingGame.SetActive(false);
+
+                        keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                        fixPaintingGame.GetComponent<RotateTask>().win = false;
+
+                        held = false;
+
+
                     }
-                    */
                     break;
-            case "button":
-                displayMessage("Press E to press button");
-                if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
-                    int id = other.gameObject.GetComponent<PressButton>().id;
-                    other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
-                }
-                break;
-            
-            case "wiremanual":
-                displayMessage("Press E to read manual");
-                if (Input.GetKey(KeyCode.E))
-                {
-                    WireManualObject manual = other.gameObject.GetComponent<WireManualObject>();
-                    wireManual.GetComponent<WireManual>().wiresID = manual.wires.id;
-
-                    wireManual.SetActive(true);
-                }
-                break;
-
-            case "wires":
-                Wires wires = other.gameObject.GetComponent<Wires>();
-                wireGame.GetComponent<WireTask>().wiresID = wires.id;
-
-                if (wires.complete && !down)
-                {
-                    wireGame.SetActive(false);
-                    if (wires.correct) displayMessage("Correct wire");
-                    else displayMessage("Wrong wire");
-                }
-                else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
-                {
-                    wireGame.SetActive(true);
-                    displayMessage(2);
-                }
-                else if (keyCorrect && seconds == 0)
-                {
-
-                    targetTime += cooldown;
-
-                    wireGame.GetComponent<WireTask>().complete = false;
-                    wireGame.SetActive(false);
-                    held = false;
-
-                }
-                else if (seconds != 0)
-                {
-                    displayMessage(1);
-
-                }
-                else if (!Input.GetKey(KeyCode.E))
-                {
-                    displayMessage(0);
-                }
-                break;
 
             }
         }      
@@ -414,7 +297,7 @@ public class PlayerPickUp : MonoBehaviourPun
         else if(n==1){messageBox.text = "Wait for Cooldown";}
         else if(n==2){messageBox.text = "";}
         else if(n==3){messageBox.text = "Inventory Full";}
-        else if(n==4){messageBox.text = "Hold E for 5 seconds to pick up";}
+        else if(n==4){messageBox.text = "Hold E for " + holdTime.ToString() + " seconds to pick up"; }
     }
     void displayMessage(string text){
         messageBox.text = text;

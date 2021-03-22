@@ -16,6 +16,9 @@ public class Laser : MonoBehaviourPun
 
     public AudioController song;
 
+    public int wiresID;
+    public bool disabled = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,26 +29,40 @@ public class Laser : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-        lr.SetPosition(0,startPoint.position);
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position, -transform.right,out hit)){
-            if(hit.collider){
-                lr.SetPosition(1,hit.point);
+        if (!disabled)
+        {
+            lr.SetPosition(0, startPoint.position);
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, -transform.right, out hit))
+            {
+                if (hit.collider)
+                {
+                    lr.SetPosition(1, hit.point);
 
+                }
+                if (hit.transform.tag == "Player")
+                {
+
+                    character = hit.collider.gameObject;
+
+                    Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
+                    song.PlayIntenseTheme();
+                }
             }
-            if(hit.transform.tag == "Player"){
-                
-                character = hit.collider.gameObject;
 
-                Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
-                PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
-                song.PlayIntenseTheme();
+            else
+            {
+                lr.SetPosition(1, -transform.right * 5000);
             }
-        }
-
-        else{
-            lr.SetPosition(1,-transform.right * 5000);
         }
         
+    }
+
+    [PunRPC]
+    void disableLaser()
+    {
+        this.disabled = true;
+        this.GetComponent<LineRenderer>().enabled = false;
     }
 }

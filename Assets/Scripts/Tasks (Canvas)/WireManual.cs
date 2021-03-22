@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class WireManual : MonoBehaviour
 {
     public Image wire;
+    public Text colour;
 
     public int wiresID;
 
     public Color[] colours = { Color.red, Color.green, Color.blue, Color.yellow };
-    
+    public string[] strColour = { "RED", "GREEN", "BLUE", "YELLOW" };
+
     private void OnEnable()
     {
         Wires[] wiress = GameObject.FindObjectsOfType<Wires>();
@@ -20,6 +22,7 @@ public class WireManual : MonoBehaviour
             if (wires.id == wiresID)
             {
                 wire.color = colours[wires.wire];
+                colour.text = "To cut the power to the lasers cut the " + strColour[wires.wire] + " wire.";
             }
         }
     }
