@@ -8,9 +8,11 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
 {
 
     UIController uiController;
+    PlayerMovement playerMovement;
 
     void Start() {
         uiController = GameObject.FindObjectOfType<UIController>();
+        playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
     }
 
     void OnTriggerEnter(Collider other) {
@@ -52,15 +54,15 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
 
         if (changedProps["leave"] != null) {
             if (PhotonNetwork.IsMasterClient) {
-                bool end = true;
+                bool end = true; // Set end & win to true
                 bool win = true;
-                foreach (Player player in PhotonNetwork.PlayerList) {
+                foreach (Player player in PhotonNetwork.PlayerList) { // Check if all players want to win
                     if (! (bool) player.CustomProperties["leave"]) {
                         end = false;
                         break;
                     }
 
-                    if (! (bool) player.CustomProperties["win"]) {
+                    if (! (bool) player.CustomProperties["win"]) { // If all players don't have a win prop then win is false
                         win = false;
                     }
                 }
@@ -70,6 +72,20 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                     PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
                 } else {
                     UpdateWaitingText();
+                }
+            }
+        } else if (changedProps["disabled"] != null) {
+            if (PhotonNetwork.IsMasterClient) {
+                bool end = true;
+                foreach (Player player in PhotonNetwork.PlayerList) {
+                    if (!(bool) player.CustomProperties["disabled"]) {
+                        end = false;
+                    }
+                }
+
+                if (end) {
+                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
                 }
             }
         }
