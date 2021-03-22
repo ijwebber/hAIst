@@ -65,7 +65,9 @@ public class UIController : MonoBehaviourPunCallbacks
             if (PhotonNetwork.LocalPlayer.IsMasterClient) {
                 int total = 0;
                 foreach (Player player in PhotonNetwork.PlayerList) {
-                    total += (int) player.CustomProperties["score"];
+                    if (player.CustomProperties["score"] != null) {
+                        total += (int) player.CustomProperties["score"];
+                    }
                 }
 
                 Hashtable roomScore = new Hashtable();
