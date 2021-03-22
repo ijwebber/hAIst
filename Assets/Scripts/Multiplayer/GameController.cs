@@ -7,14 +7,17 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class GameController : MonoBehaviourPunCallbacks
 {
     public GameObject playerPrefab;
+    public int gameState = 0;
     public GameObject guardPrefab;
     public GameObject guardPrefab2;
     public GameObject guardPrefab3;
-    public GameObject starSprite;
+    public GameObject starSprite
     public SoundVisual soundMesh;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
     public GameObject EscapeMenu;
+    private List<GameObject> specialItems = new List<GameObject>();
+    private Window_QuestPointer questPointer;
 
     System.Random r = new System.Random();
 
@@ -27,6 +30,7 @@ public class GameController : MonoBehaviourPunCallbacks
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
+        questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
 
         float xSpawnPos = SpawnPoint.transform.position.x + (float) (PhotonNetwork.LocalPlayer.ActorNumber * 0.6);
         Vector3 spawnpoint = SpawnPoint.transform.position;
@@ -68,6 +72,26 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 EscapeMenu.SetActive(false);
             }
+        }
+        switch (gameState)
+        {
+            case 0: // starting state
+                break;
+            case 1: // point to code
+                GameObject targetObject = GameObject.Find("Entrance code display");
+                setNewQuest(targetObject);
+                break;
+            case 2: // point to key object 1
+                setNewQuest(specialItems[0]);
+                break;
+            case 3: // point to key object 2
+                setNewQuest(specialItems[1]);
+                break;
+            case 4: // point to exit
+                setNewQuest(GameObject.Find("Van"));
+                break;
+            default:
+                break;
         }
     }
 
@@ -138,6 +162,7 @@ public class GameController : MonoBehaviourPunCallbacks
             int value;
             if (objs[i].GetComponent<CollectableItem>().special) {
                 value = Random.Range(60, 100) * 100;
+                specialItems.Add(objs[i]);
                 totalSpecial += 1;
             } else {
                 value = Random.Range(10, 40) * 100;                
@@ -157,6 +182,13 @@ public class GameController : MonoBehaviourPunCallbacks
             if ((bool) changedProps["end"]) {
                 PhotonNetwork.LoadLevel("EndScreen");
             }
+        }
+    }
+    private void setNewQuest(GameObject obj) {
+        if (obj == null) {
+            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null");
+        } else {
+            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name);
         }
     }
 

@@ -13,13 +13,13 @@ public class PlayerPickUp : MonoBehaviourPun
     public Text cooldownBox;
 
     public GameObject wireManual;
-    private Window_QuestPointer questPointer;
     public GameObject wireGame;
 
     public GameObject codeDisplay;
     public GameObject keycodeGame;
 
     public GameObject fixPaintingGame;
+    [SerializeField] private GameController gameController;
 
     private GameObject currentObject;
 
@@ -64,9 +64,6 @@ public class PlayerPickUp : MonoBehaviourPun
         
     }
 
-    void Awake() {
-        questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
-    }
 
 
     private void OnCollisionEnter(Collision other) {    // what to do once player enters
@@ -180,23 +177,15 @@ public class PlayerPickUp : MonoBehaviourPun
                 case "MetalDoorHandle":
                     if (!other.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
                         displayMessage("This door requires a code");
-                        GameObject targetObject = GameObject.Find("Entrance code display");
-                        setNewQuest(targetObject);
+                        gameController.gameState = 1;
                     } else {
-                        setNewQuest(null);
+                        gameController.gameState = 2;
                     }
                     break;
             }
         }
     }
 
-    private void setNewQuest(GameObject obj) {
-        if (obj == null) {
-            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null");
-        } else {
-            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name);
-        }
-    }
     private void OnTriggerExit(Collider other) {    // what to do once player leaves
 
         if(photonView.IsMine == true && PhotonNetwork.IsConnected == true){
@@ -393,6 +382,7 @@ public class PlayerPickUp : MonoBehaviourPun
             int currentFound = (int) PhotonNetwork.CurrentRoom.CustomProperties["special"];
             Hashtable hash = new Hashtable();
             hash.Add("special", currentFound + 1);
+            gameController.gameState++;
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
         }
