@@ -117,7 +117,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     // Set score to 0 && special item numbers
     void SetProps(int numOfSpecial) {
-        Hashtable setPlayer = new Hashtable() {{"score", 0}, {"itemsStolen", 0}, {"specialStolen", 0}, {"leave", false}, {"win", false}};
+        Hashtable setPlayer = new Hashtable() {{"score", 0}, {"itemsStolen", 0}, {"specialStolen", 0}, {"leave", false}, {"win", false}, {"disabled", false}};
 		PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);      
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
