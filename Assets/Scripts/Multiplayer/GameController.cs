@@ -91,7 +91,6 @@ public class GameController : MonoBehaviourPunCallbacks
                 setNewQuest(GameObject.Find("Van"));
                 break;
             default:
-                setNewQuest(null);
                 break;
         }
     }
