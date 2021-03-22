@@ -9,6 +9,7 @@ public class CodeDisplay : MonoBehaviour
     public Text _cardCode;
 
     public int keypadID;
+    public KeyPad myKeypad;
 
     // private void OnEnable()
     // {
@@ -32,6 +33,7 @@ public class CodeDisplay : MonoBehaviour
             {
                 if (keypad.id == keypadID)
                 {
+                    myKeypad = keypad;
                     _cardCode.text = keypad.code;
                 }
             }

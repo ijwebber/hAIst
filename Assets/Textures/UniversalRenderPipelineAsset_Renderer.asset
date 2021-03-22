@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: WallGraphics
-    Event: 1000
+    Event: 500
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -297,8 +297,8 @@ MonoBehaviour:
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
-    overrideDepthState: 0
-    depthCompareFunction: 4
+    overrideDepthState: 1
+    depthCompareFunction: 0
     enableWrite: 1
     stencilSettings:
       overrideStencilState: 1

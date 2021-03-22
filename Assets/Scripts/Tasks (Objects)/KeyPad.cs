@@ -14,6 +14,7 @@ public class KeyPad : MonoBehaviour
     public GameObject keycodeGame;
     public CodeDisplayObject codeDisplay;
     public float timeElapsed;
+    public float resetTime = 7;
 
     // Start is called before the first frame update
     void Start()
@@ -39,8 +40,8 @@ public class KeyPad : MonoBehaviour
     void Update() {
         if(PhotonNetwork.IsMasterClient) {
             timeElapsed += Time.deltaTime;
-            if (timeElapsed > 5) {
-                timeElapsed -= 5;
+            if (timeElapsed > resetTime) {
+                timeElapsed -= resetTime;
                 code = string.Empty;
 
                 for (int i = 0; i < keycodeGame.GetComponent<KeycodeTask>().codeLength; i++)
