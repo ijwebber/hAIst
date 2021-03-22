@@ -12,10 +12,17 @@ public class DoorHandlerKey : MonoBehaviourPun
 
     // Start is called before the first frame update
     public DoorScript doorleft, doorright;
-    void OnTriggerEnter(Collider other) {
-        if (other.gameObject.name == "Timmy" && keyPad.codeCorrect && !opened) {
+    // void OnTriggerEnter(Collider other) {
+    //     if (other.gameObject.name == "Timmy" && keyPad.codeCorrect && !opened) {
+    //         this.gameObject.GetComponent<PhotonView>().RPC("EnterMetal", RpcTarget.All);
+    //     }
+    // }
+
+    void Update() {
+        if (keyPad.codeCorrect && !opened) {
             this.gameObject.GetComponent<PhotonView>().RPC("EnterMetal", RpcTarget.All);
         }
+
     }
 
 

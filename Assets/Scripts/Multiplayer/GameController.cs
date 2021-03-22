@@ -76,21 +76,22 @@ public class GameController : MonoBehaviourPunCallbacks
         switch (gameState)
         {
             case 0: // starting state
+                setNewQuest(GameObject.Find("MetalDoorHandler"));
                 break;
             case 1: // point to code
-                GameObject targetObject = GameObject.Find("Entrance code display");
-                setNewQuest(targetObject);
+                setNewQuest(GameObject.Find("Entrance code display"));
                 break;
             case 2: // point to key object 1
-                setNewQuest(specialItems[0]);
+                setNewQuest(specialItems[1]);
                 break;
             case 3: // point to key object 2
-                setNewQuest(specialItems[1]);
+                setNewQuest(specialItems[0]);
                 break;
             case 4: // point to exit
                 setNewQuest(GameObject.Find("Van"));
                 break;
             default:
+                setNewQuest(null);
                 break;
         }
     }

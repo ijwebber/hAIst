@@ -51,11 +51,13 @@ public class Window_QuestPointer : MonoBehaviourPun
             if (isOffScreen) {
                 pointerRectTransform.sizeDelta = new Vector2(40,30);
                 pointerImage.sprite = arrowSprite;
+                pointerImage.color = Color.yellow;
                 pointerRectTransform.localPosition = new Vector3(100*dir.x,100*dir.y);
             } else {
-                    pointerRectTransform.sizeDelta = new Vector2(45,35);
-                    pointerRectTransform.localEulerAngles = new Vector3(0,0,0);
-                    pointerImage.sprite = crossSprite;
+                    pointerRectTransform.sizeDelta = new Vector2(40,30);
+                    pointerRectTransform.localEulerAngles = new Vector3(0,0,-90);
+                    pointerImage.color = Color.green;
+                    // pointerImage.sprite = crossSprite;
                     pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x) / canvas.scaleFactor, ((targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor + 30));
                     // pointerRectTransform.anchoredPosition = new Vector2(Screen.width - targetPositionScreenPoint.x / canvas.scaleFactor, (Screen.height - targetPositionScreenPoint.y) + 60);
             }
