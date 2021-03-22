@@ -186,9 +186,9 @@ public class GameController : MonoBehaviourPunCallbacks
     }
     private void setNewQuest(GameObject obj) {
         if (obj == null) {
-            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null");
+            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null", gameState);
         } else {
-            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name);
+            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name, gameState);
         }
     }
 
