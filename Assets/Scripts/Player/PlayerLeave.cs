@@ -8,9 +8,11 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
 {
 
     UIController uiController;
+    PlayerMovement playerMovement;
 
     void Start() {
         uiController = GameObject.FindObjectOfType<UIController>();
+        playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
     }
 
     void OnTriggerEnter(Collider other) {
@@ -79,7 +81,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
     void UpdateWaitingText() {
         int total = 0;
         int length = PhotonNetwork.PlayerList.Length;
-        if ((bool) PhotonNetwork.LocalPlayer.CustomProperties["leave"]) {
+        if ((bool) PhotonNetwork.LocalPlayer.CustomProperties["leave"] && playerMovement.disabled) {
             foreach (Player player in PhotonNetwork.PlayerList) {
                 if ((bool) player.CustomProperties["leave"]) {
                     total += 1;
