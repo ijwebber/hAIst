@@ -39,6 +39,10 @@ public class PlayerPickUp : MonoBehaviourPun
 
     public ProgressBarController progressBar;
 
+    void Awake() {
+        gameController = GameObject.FindObjectOfType<GameController>();
+    }
+
     // Update is called once per frame
     void Update()
     {

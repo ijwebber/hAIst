@@ -11,7 +11,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject guardPrefab;
     public GameObject guardPrefab2;
     public GameObject guardPrefab3;
-    public GameObject starSprite
+    public GameObject starSprite;
     public SoundVisual soundMesh;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
