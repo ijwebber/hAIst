@@ -80,12 +80,13 @@ public class GuardController : MonoBehaviour
         return agent.SetDestination(position);
     }
     public void MoveClosestGuard(Vector3 targetPosition) {
-
-        GetClosestGuard(targetPosition).SetDestination(targetPosition);
+        this.GetComponent<PhotonView>().RPC("GetClosestGuard", RpcTarget.MasterClient, targetPosition.x, targetPosition.y, targetPosition.z);
     }
 
-    public NavMeshAgent GetClosestGuard(Vector3 targetPosition) {
+    [PunRPC]
+    public void GetClosestGuard(float x, float y, float z) {
     // Returns closest guard to a position
+        Vector3 targetPosition = new Vector3(x, y, z);
         NavMeshAgent closestGuard = null;
         float closestDistance = 1000;
         foreach (GuardMovement guard in guardMovements) {
@@ -98,7 +99,7 @@ public class GuardController : MonoBehaviour
                 closestGuard = guard.agent;
         }
 
-        return closestGuard;
+        closestGuard.SetDestination(targetPosition);
     }
 
     public void cutSceneIfSpotted()
