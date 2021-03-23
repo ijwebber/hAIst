@@ -604,13 +604,13 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8748892135801146194, guid: c7a50c5de973b924faa438dc61d1d3f3, type: 3}
-  - {fileID: 8368722655750445499, guid: c7a50c5de973b924faa438dc61d1d3f3, type: 3}
-  - {fileID: -4612162990109294230, guid: c7a50c5de973b924faa438dc61d1d3f3, type: 3}
-  - {fileID: 6034957751646507721, guid: c7a50c5de973b924faa438dc61d1d3f3, type: 3}
-  - {fileID: 5775865398287329665, guid: c7a50c5de973b924faa438dc61d1d3f3, type: 3}
-  - {fileID: -8255497921437555292, guid: c7a50c5de973b924faa438dc61d1d3f3, type: 3}
-  - {fileID: -4597107667637640440, guid: c7a50c5de973b924faa438dc61d1d3f3, type: 3}
+  - {fileID: 2100000, guid: e67c0f12fbb278b439ef66c4e6b7705b, type: 2}
+  - {fileID: 2100000, guid: 8872df736fd3a2a46895f6d2ca928933, type: 2}
+  - {fileID: 2100000, guid: 3673131894e6c14439d2c1add22a3fe8, type: 2}
+  - {fileID: 2100000, guid: 3830a7beff75d334baeacd906010b442, type: 2}
+  - {fileID: 2100000, guid: ca1f5cc94eab48c498729d0b1553a26c, type: 2}
+  - {fileID: 2100000, guid: e67c0f12fbb278b439ef66c4e6b7705b, type: 2}
+  - {fileID: 2100000, guid: ca1f5cc94eab48c498729d0b1553a26c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1595,7 +1595,7 @@ GameObject:
   - component: {fileID: 7271688021759073494}
   - component: {fileID: 2902699712482634368}
   - component: {fileID: 5887656442319114651}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: statusText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1874,7 +1874,7 @@ GameObject:
   - component: {fileID: 6614934943177887459}
   - component: {fileID: 3191035509408005934}
   - component: {fileID: 3447887746930278509}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: statusText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
