@@ -40,7 +40,7 @@ public class PlayerRevive : MonoBehaviour
     public void checkForRevive()
     {
         //check circle radius of player
-        Collider[] playersInView = Physics.OverlapSphere(transform.position, 2.0f, playerMask);
+        Collider[] playersInView = Physics.OverlapSphere(transform.position, 3.0f, playerMask);
         //if another player there, check if down
 
         for (int i = 0; i < playersInView.Length; i++)
