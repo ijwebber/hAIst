@@ -27,8 +27,7 @@ public class Window_QuestPointer : MonoBehaviourPun
         // pointerImage = transform.Find("Pointer").GetComponent<Image>();
     }
 
-    [PunRPC]
-    void updateTarget(string[] gameNames, int gameState) {
+    public void updateTarget(string[] gameNames, int gameState) {
         foreach (GameObject pointer in pointers)
         {
             Destroy(pointer);

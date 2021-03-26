@@ -205,12 +205,6 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
     private void setNewQuest(List<GameObject> objs, List<string> objectives) {
-        string newObjectives = "";
-        foreach (string objective in objectives)
-        {
-            newObjectives += objective + "\n";
-        }
-        objectiveText.text = newObjectives;
         if (objs == null) {
             // questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null", gameState);
         } else {
@@ -219,8 +213,19 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 serialisedObjects[i] = objs[i].name;
             }
-            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, serialisedObjects, gameState);
+            this.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, serialisedObjects, gameState, objectives.ToArray());
         }
+    }
+
+    [PunRPC]
+    void updateTarget(string[] gameNames, int gameState, string[] objectives) {
+        string newObjectives = "";
+        foreach (string objective in objectives)
+        {
+            newObjectives += objective + "\n";
+        }
+        objectiveText.text = newObjectives;
+        questPointer.updateTarget(gameNames, gameState);
     }
 
 
