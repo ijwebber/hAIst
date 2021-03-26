@@ -262,7 +262,6 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         {
             if ((bool)setSpotted["spotted"] && !(bool)setSpotted["cutSceneDone"])
             {
-                viewRadius = 20;
                 if (this.photonView.IsMine)
                 {   
                     //freeze local player so they can't move during cutscene
@@ -270,6 +269,8 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
                     //start cutScene corountine
                     isCutScene = true;
+                    viewRadius = 15;
+                    this.GetComponent<PhotonView>().RPC("setCut", RpcTarget.Others);
                     spottingGuardLocation = (Vector3)setSpotted["spottingGuardLocation"];
                     cutscenePosition = spottingGuardLocation;
                     guardCamPos = (Vector3)setSpotted["spottingGuardLocation"];
@@ -287,6 +288,11 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
+    void setCut() {
+        viewRadius = 15;
+        isCutScene = true;
+    }
 
     public void cutScene()
     {
