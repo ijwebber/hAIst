@@ -46,6 +46,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     private float rotateCounter = 0;
     private MeshFilter viewMeshFilter, objectMeshFilter;
     private float viewRadius;
+    private bool cutTime = false;
     private Mesh viewMesh;
     private bool start = false;
     public PlayerController playerController;
@@ -157,7 +158,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             objectMeshFilter.mesh = viewMesh;
             start = true;
         }
-        if (start && isCutScene) {
+        if (start && cutTime) {
             viewMeshFilter.transform.position = new Vector3(cutscenePosition.x, 16.5f, cutscenePosition.z);
             viewMeshFilter.transform.rotation = player.transform.rotation;
             objectMeshFilter.transform.position = new Vector3(cutscenePosition.x, 16.5f, cutscenePosition.z);
@@ -228,6 +229,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             } else
             {
                 isCutScene = false;
+                cutTime = false;
                 isFollowing = true;
             }
         }
@@ -269,8 +271,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
                     //start cutScene corountine
                     isCutScene = true;
-                    viewRadius = 15;
-                    this.GetComponent<PhotonView>().RPC("setCut", RpcTarget.Others);
+                    this.GetComponent<PhotonView>().RPC("setCut", RpcTarget.All);
                     spottingGuardLocation = (Vector3)setSpotted["spottingGuardLocation"];
                     cutscenePosition = spottingGuardLocation;
                     guardCamPos = (Vector3)setSpotted["spottingGuardLocation"];
@@ -291,7 +292,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     [PunRPC]
     void setCut() {
         viewRadius = 15;
-        isCutScene = true;
+        cutTime = true;
     }
 
     public void cutScene()
@@ -332,6 +333,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
                 this.GetComponent<PlayerMovement>().paused = false;
                 isCutScene = false;
+                cutTime = false;
                 viewRadius = 0;
                 isFollowing = true;
                 //renable guards
