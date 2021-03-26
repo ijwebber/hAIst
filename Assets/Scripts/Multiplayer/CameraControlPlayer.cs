@@ -158,9 +158,9 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             start = true;
         }
         if (start && isCutScene) {
-            viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+            viewMeshFilter.transform.position = new Vector3(cutscenePosition.x, 16.5f, cutscenePosition.z);
             viewMeshFilter.transform.rotation = player.transform.rotation;
-            objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+            objectMeshFilter.transform.position = new Vector3(cutscenePosition.x, 16.5f, cutscenePosition.z);
             objectMeshFilter.transform.rotation = player.transform.rotation;
             DrawFOV();
         } else {
