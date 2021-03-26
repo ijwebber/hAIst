@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -11,10 +12,12 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject guardPrefab;
     public GameObject guardPrefab2;
     public GameObject guardPrefab3;
+    public TextMeshProUGUI objectiveText;
     public GameObject starSprite;
     public SoundVisual soundMesh;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
+    private int updatedGameState = -1;
     public GameObject EscapeMenu;
     private List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
@@ -73,25 +76,42 @@ public class GameController : MonoBehaviourPunCallbacks
                 EscapeMenu.SetActive(false);
             }
         }
-        switch (gameState)
-        {
-            case 0: // starting state
-                setNewQuest(GameObject.Find("MetalDoorHandler"));
-                break;
-            case 1: // point to code
-                setNewQuest(GameObject.Find("Entrance code display"));
-                break;
-            case 2: // point to key object 1
-                setNewQuest(specialItems[1]);
-                break;
-            case 3: // point to key object 2
-                setNewQuest(specialItems[0]);
-                break;
-            case 4: // point to exit
-                setNewQuest(GameObject.Find("Van"));
-                break;
-            default:
-                break;
+        if (gameState != updatedGameState) {
+            updatedGameState = gameState;
+            List <string> newText = new List<string>();
+            switch (gameState)
+            {
+                case 0: // starting state
+                    setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"});
+                    break;
+                case 1: // point to code
+                    setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"});
+                    break;
+                case 2: // point to key objects
+                    foreach (var item in specialItems) {
+                        newText.Add("Steal " + item.name);
+                    }
+                    setNewQuest(specialItems, newText);
+                    break;
+                case 3: // point to key object 2
+                    List <GameObject> toSteal = new List<GameObject>();
+                    foreach (var item in specialItems)
+                    {
+                        if (!item.GetComponent<CollectableItem>().stolen) {
+                            toSteal.Add(item);
+                            newText.Add("Steal " + item.name);
+                        } else {
+                            newText.Add("<s>Steal " + item.name + "</s>");
+                        }
+                    }
+                    setNewQuest(toSteal, newText);
+                    break;
+                case 4: // point to exit
+                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -184,11 +204,22 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
-    private void setNewQuest(GameObject obj) {
-        if (obj == null) {
-            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null", gameState);
+    private void setNewQuest(List<GameObject> objs, List<string> objectives) {
+        string newObjectives = "";
+        foreach (string objective in objectives)
+        {
+            newObjectives += objective + "\n";
+        }
+        objectiveText.text = newObjectives;
+        if (objs == null) {
+            // questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null", gameState);
         } else {
-            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, obj.name, gameState);
+            string[] serialisedObjects = new string[objs.Count];
+            for (int i = 0; i < objs.Count; i++)
+            {
+                serialisedObjects[i] = objs[i].name;
+            }
+            questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, serialisedObjects, gameState);
         }
     }
 

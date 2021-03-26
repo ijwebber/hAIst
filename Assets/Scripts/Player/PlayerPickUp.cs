@@ -387,6 +387,7 @@ public class PlayerPickUp : MonoBehaviourPun
             Hashtable hash = new Hashtable();
             hash.Add("special", currentFound + 1);
             gameController.gameState++;
+            item.stolen = true;
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
         }
