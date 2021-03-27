@@ -200,7 +200,9 @@ public class GameController : MonoBehaviourPunCallbacks
 
         if (changedProps["end"] != null) {
             if ((bool) changedProps["end"]) {
-                PhotonNetwork.LoadLevel("EndScreen");
+                if (PhotonNetwork.IsMasterClient) {
+                    PhotonNetwork.LoadLevel("EndScreen");
+                }
             }
         }
     }
