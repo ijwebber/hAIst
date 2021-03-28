@@ -60,7 +60,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     public float meshResolution = 1;
 
     AudioController audioController;
-
+    /*
     void DrawFOV() {
         int stepCount = Mathf.RoundToInt(360 * meshResolution);
         if (stepCount == 0) {
@@ -96,8 +96,9 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         viewMesh.vertices = vertices;
         viewMesh.triangles = triangles;
         viewMesh.RecalculateNormals();
-    }
+    }*/
 
+    /*
     ViewCastInfo viewCast(float globalAngle) {
         Vector3  dir = DirFromAngle(globalAngle, true);
         RaycastHit hit;
@@ -108,7 +109,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             return new ViewCastInfo(false, cutscenePosition + dir * viewRadius, viewRadius, globalAngle);
         }
 
-    }
+    }*/
 
     //takes in an angle and gives its direction 
     public Vector3 DirFromAngle(float angleDegrees, bool angleIsGlobal)
@@ -144,7 +145,8 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
     // Update is called once per frame
     void Update()
-    {
+    {   
+        /*
         if (SceneManager.GetActiveScene().name == "BuildScene" || SceneManager.GetActiveScene().name == "ArtLevel" && !start) {
             MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("POVObjectsCutScene").GetComponent<MeshFilter>();
             MeshFilter ViewFilter3 = GameObject.FindGameObjectWithTag("POVGuardsCutScene").GetComponent<MeshFilter>();
@@ -168,6 +170,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             viewMeshFilter.mesh.Clear();
             objectMeshFilter.mesh.Clear();
         }
+        */
         if (cameraTransform == null && isFollowing)
             {
                 OnStartFollowing();
@@ -220,7 +223,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
                 Follow ();
             }
-
+            /*
         if(isCutScene && !isFollowing)
         {
             if (BarController.Instance != null)
@@ -232,7 +235,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
                 cutTime = false;
                 isFollowing = true;
             }
-        }
+        }*/
     }
 
     void Follow() 
@@ -256,6 +259,104 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     }
 
 
+    //Recieves CutScene data
+    [PunRPC]
+    void RpcCutScene(object location, int distanceOffset, int heightOffset, object cameraRotation, string customMessage)
+    {   
+        //stop camera following player
+        isFollowing = false;
+
+        //reset rotationCounter
+        rotateCounter = 0f;
+
+        //freeze player
+        this.GetComponent<PlayerMovement>().paused = true;
+
+        //freeze guards, will only work if player is master
+        GuardController.Instance.disableAllguards(true);
+
+        //this starts the incremental camera updates to the desired location (the cutscene)
+        StartCoroutine(cameraCutSceneUpdates(0.03f, location, distanceOffset, heightOffset, cameraRotation, customMessage));
+
+    }
+
+    //This calls the incremental update function, 0.03 works for 30 frames per second
+    IEnumerator cameraCutSceneUpdates(float delay, object location, int distanceOffset, int heightOffset, object cameraRotation, string customMessage)
+    {
+        
+
+        while (!isFollowing)
+        {
+            yield return new WaitForSeconds(delay);
+            cutSceneUpdate((Vector3)location, distanceOffset, heightOffset, (Vector3)cameraRotation, customMessage);
+        }
+
+        cutSceneDone = false;
+    }
+
+    //Updates camera positioning and rotation incrementally, the location and cameraRotation parameters will be the end location/rotation for the camera.
+    void cutSceneUpdate(Vector3 location, int distanceOffset, int heightOffset, Vector3 cameraRotation, string customMessage)
+    {
+        //We show the cutScene Bars and set the text to the desired message
+        BarController.Instance.ShowBars();
+        BarController.Instance.SetText(customMessage);
+
+
+        //if the camera has reached the desired location, we set the cutSceneDone flag to true and start bringing the camera back to the original position
+        if (Math.Abs(cameraTransform.position.x - location.x) < 1.5 && Math.Abs(cameraTransform.position.z - (location.z + distanceOffset)) < 1.5 && !cutSceneDone)
+        {
+            cutSceneDone = true;
+        }
+        else if (cutSceneDone)
+        {
+            //player cam info, we will bring camera back to here
+            Vector3 playerCamPos = new Vector3(this.transform.position.x, this.transform.position.y + height, this.transform.position.z + distance);
+            
+
+            //update using linear interpolation between current cam pos and player cam pos.
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, playerCamPos, Time.deltaTime * 2);
+
+            //updating rotation back to old one (53.883, 0, 0)
+            float angleX = Mathf.LerpAngle(52.883f, cameraRotation.x, rotateCounter);
+            float angleY = Mathf.LerpAngle(0f, cameraRotation.y, rotateCounter);
+            float angleZ = Mathf.LerpAngle(0f, cameraRotation.z, rotateCounter);
+            cameraTransform.eulerAngles = new Vector3(angleX, angleY, angleZ);
+            //counter decreases
+            rotateCounter -= 0.1f;
+
+
+            //if old cam location and rotation have been reached end the cutScene
+            if (Math.Abs(cameraTransform.position.x - playerCamPos.x) < 1 && Math.Abs(cameraTransform.position.z - playerCamPos.z) < 1 && cameraTransform.rotation.x < 54)
+            {
+                //unpause player, turn on cam following player, unpause guards and hide blackbars
+
+                this.GetComponent<PlayerMovement>().paused = false;
+                isFollowing = true;
+                GuardController.Instance.disableAllguards(false);
+                BarController.Instance.HideBars();
+
+
+            }
+
+        }
+        else
+        {
+            //update using linear interpolation between current cam pos and the desired end location for the scene
+            cameraTransform.position = Vector3.Lerp(cameraTransform.position, new Vector3(location.x, location.y+heightOffset, location.z+distanceOffset), Time.deltaTime * 1);
+
+            //updating rotation to desired rotation, counter increases
+            float angleX = Mathf.LerpAngle(52.883f, cameraRotation.x, rotateCounter);
+            float angleY = Mathf.LerpAngle(0f, cameraRotation.y, rotateCounter);
+            float angleZ = Mathf.LerpAngle(0f, cameraRotation.z, rotateCounter);
+            cameraTransform.eulerAngles = new Vector3(angleX, angleY, angleZ);
+            //counter increases
+            rotateCounter += 0.05f;
+        }
+    }
+
+
+
+    /*
     public override void OnRoomPropertiesUpdate(Hashtable setSpotted)
     {
         base.OnRoomPropertiesUpdate(setSpotted);
@@ -288,13 +389,18 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             
         }
     }
-
+    
     [PunRPC]
     void setCut() {
         viewRadius = 15;
         cutTime = true;
-    }
+    }*/
 
+
+
+
+
+    /*
     public void cutScene()
     {
 
@@ -366,5 +472,5 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             distance = _distance;
             angle = _angle;
         }
-    }
+    }*/
 }

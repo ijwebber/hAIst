@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BarController : MonoBehaviour
 {
     public static BarController Instance { get; private set; }
     [SerializeField] private GameObject barContainer;
     [SerializeField] private Animator barAnimator;
+    [SerializeField] private Text cutSceneText;
 
     private void Awake()
     {
@@ -28,6 +30,11 @@ public class BarController : MonoBehaviour
         {
             StartCoroutine(HideBarsAndDisable());
         }
+    }
+
+    public void SetText(string Message)
+    {
+        cutSceneText.text = Message;
     }
 
 

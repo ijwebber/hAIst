@@ -111,13 +111,21 @@ public class GuardController : MonoBehaviour
                 
                 //update room properties with the guard that found a player so we know where to cutscene to
                 Vector3 guardPos = guard.gameObject.transform.position;
-                Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", new Vector3 (guardPos.x, guardPos.y, guardPos.z) }, { "cutSceneDone", false} };
-                PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
+
+                CameraControlPlayer[] players = GameObject.FindObjectsOfType<CameraControlPlayer>();
                 
-                //freeze all guards
-                disableAllguards(true);
+                
+                foreach(CameraControlPlayer g in players)
+                {
+                    PhotonView v = g.gameObject.GetComponent<PhotonView>();
+                    
+                    v.RPC("RpcCutScene", v.Controller, (object)guardPos, -4, 8, (object)(new Vector3(75, 0, 0)), "The Police have been alerted!");
+                }
+
+                //g.GetComponent<PhotonView>().RPC("RpcCutScene", g.GetComponent<PhotonView>().Controller, (object)guardPos, -4, 8, (object)(new Vector3(75, 0, 0)), "The Police have been alerted");
 
                 playersSpotted = true;
+                break;
             }
         }
 
