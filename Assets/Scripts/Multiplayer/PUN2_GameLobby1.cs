@@ -28,6 +28,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject HomeMenu;
     [SerializeField] private GameObject LobbyMenu;
     [SerializeField] private GameObject PreGameMenu;
+    [SerializeField] private GameObject CreditsMenu;
 
     // SCRIPTS
     [SerializeField] private GameObject menu_script;
@@ -341,6 +342,19 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void BackToHome()
+    {
+        CreditsMenu.SetActive(false);
+        StartMenu.SetActive(true);
+    }
+
+    public void OpenCredits()
+    {
+        CreditsMenu.SetActive(true);
+        StartMenu.SetActive(false);
+
     }
 
 
