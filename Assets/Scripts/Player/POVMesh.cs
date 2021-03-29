@@ -88,7 +88,14 @@ public class POVMesh : MonoBehaviourPun
     {
         playerController = GameObject.FindObjectOfType<PlayerController>();
         player = GameObject.Find("Timmy");
-        cameraControlPlayer = GameObject.FindObjectOfType<CameraControlPlayer>();
+        var cameraControlPlayers = GameObject.FindObjectsOfType<CameraControlPlayer>();
+        foreach (var ccm in cameraControlPlayers)
+        {
+            if (ccm.photonView.IsMine) {
+                cameraControlPlayer = ccm;
+            }
+        }
+        // cameraControlPlayer = GameObject.FindObjectsOfType<CameraControlPlayer>();
     }
 
     // Update is called once per frame
