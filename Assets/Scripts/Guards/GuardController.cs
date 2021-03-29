@@ -51,6 +51,7 @@ public class GuardController : MonoBehaviour
     {
         localGrid.updateNodes();
 
+        //we only want to run this once, every client shouldn't run this otherwise we would get multiple rpc calls
         if (PhotonNetwork.LocalPlayer.IsMasterClient && !playersSpotted)
         {
             cutSceneIfSpotted();
@@ -109,12 +110,14 @@ public class GuardController : MonoBehaviour
             if (guard.state == State.chase)
             {   
                 
-                //update room properties with the guard that found a player so we know where to cutscene to
+                //this is the cutscene location
                 Vector3 guardPos = guard.gameObject.transform.position;
 
+                //get list of players
                 CameraControlPlayer[] players = GameObject.FindObjectsOfType<CameraControlPlayer>();
                 
                 
+                //each player needs to run the cutscene code on their own 'CameraControl' script, so we send a targeted rpc to each individual player and the target photonview is owned by that specfic player.
                 foreach(CameraControlPlayer g in players)
                 {
                     PhotonView v = g.gameObject.GetComponent<PhotonView>();
@@ -122,8 +125,8 @@ public class GuardController : MonoBehaviour
                     v.RPC("RpcCutScene", v.Controller, (object)guardPos, -4, 8, (object)(new Vector3(75, 0, 0)), "The Police have been alerted!");
                 }
 
-                //g.GetComponent<PhotonView>().RPC("RpcCutScene", g.GetComponent<PhotonView>().Controller, (object)guardPos, -4, 8, (object)(new Vector3(75, 0, 0)), "The Police have been alerted");
-
+                
+                //set to true so it doesn't run again when guards spot players
                 playersSpotted = true;
                 break;
             }
