@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 
-public class POVMesh : MonoBehaviour
+public class POVMesh : MonoBehaviourPun
 {
     public PlayerController playerController;
     public float meshResolution;
@@ -21,6 +21,7 @@ public class POVMesh : MonoBehaviour
 
     [HideInInspector]
     public List<GameObject> visibleTargets = new List<GameObject>();
+    private CameraControlPlayer cameraControlPlayer;
 
     [HideInInspector]
     public List<GameObject> behindGuardTargets = new List<GameObject>();
@@ -85,8 +86,9 @@ public class POVMesh : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Timmy");
         playerController = GameObject.FindObjectOfType<PlayerController>();
+        player = GameObject.Find("Timmy");
+        cameraControlPlayer = GameObject.FindObjectOfType<CameraControlPlayer>();
     }
 
     // Update is called once per frame
@@ -106,13 +108,19 @@ public class POVMesh : MonoBehaviour
             start = true;
         }
         if (start) {
-            viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-            viewMeshFilter.transform.rotation = player.transform.rotation;
-            objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-            objectMeshFilter.transform.rotation = player.transform.rotation;
+            if (!cameraControlPlayer.isFollowing) {
+                viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
+                viewMeshFilter.transform.rotation = player.transform.rotation;
+                objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
+                objectMeshFilter.transform.rotation = player.transform.rotation;
+            } else {
+                viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+                viewMeshFilter.transform.rotation = player.transform.rotation;
+                objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+                objectMeshFilter.transform.rotation = player.transform.rotation;
+            }
             DrawFOV();
         }
-        
     }
 
     public struct ViewCastInfo {

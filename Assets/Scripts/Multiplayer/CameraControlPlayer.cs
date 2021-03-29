@@ -37,7 +37,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     Transform cameraTransform;
 
     // maintain a flag internally to reconnect if target is lost or camera is switched
-    bool isFollowing;
+    public bool isFollowing;
     bool isCutScene = false;
     private Vector3 guardCamPos;
     private Vector3 spottingGuardLocation;
@@ -50,7 +50,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     private Mesh viewMesh;
     private bool start = false;
     public PlayerController playerController;
-    private Vector3 cutscenePosition;
+    public Vector3 cutscenePosition;
 
     
         
@@ -60,6 +60,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     public float meshResolution = 1;
 
     AudioController audioController;
+    /*
     void DrawFOV() {
         int stepCount = Mathf.RoundToInt(360 * meshResolution);
         if (stepCount == 0) {
@@ -95,8 +96,9 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         viewMesh.vertices = vertices;
         viewMesh.triangles = triangles;
         viewMesh.RecalculateNormals();
-    }
+    }*/
 
+    /*
     ViewCastInfo viewCast(float globalAngle) {
         Vector3  dir = DirFromAngle(globalAngle, true);
         RaycastHit hit;
@@ -107,7 +109,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             return new ViewCastInfo(false, cutscenePosition + dir * viewRadius, viewRadius, globalAngle);
         }
 
-    }
+    }*/
 
     //takes in an angle and gives its direction 
     public Vector3 DirFromAngle(float angleDegrees, bool angleIsGlobal)
@@ -144,6 +146,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {   
+        /*
         if (SceneManager.GetActiveScene().name == "BuildScene" || SceneManager.GetActiveScene().name == "ArtLevel" && !start) {
             MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("POVObjectsCutScene").GetComponent<MeshFilter>();
             MeshFilter ViewFilter3 = GameObject.FindGameObjectWithTag("POVGuardsCutScene").GetComponent<MeshFilter>();
@@ -157,16 +160,17 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             objectMeshFilter.mesh = viewMesh;
             start = true;
         }
-        if (start && !isFollowing) {
+        if (start && cutTime) {
             viewMeshFilter.transform.position = new Vector3(cutscenePosition.x, 16.5f, cutscenePosition.z);
-            // viewMeshFilter.transform.rotation = player.transform.rotation;
+            viewMeshFilter.transform.rotation = player.transform.rotation;
             objectMeshFilter.transform.position = new Vector3(cutscenePosition.x, 16.5f, cutscenePosition.z);
-            // objectMeshFilter.transform.rotation = player.transform.rotation;
+            objectMeshFilter.transform.rotation = player.transform.rotation;
             DrawFOV();
         } else {
             viewMeshFilter.mesh.Clear();
             objectMeshFilter.mesh.Clear();
         }
+        */
         if (cameraTransform == null && isFollowing)
             {
                 OnStartFollowing();
@@ -257,13 +261,13 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
     //Recieves CutScene data
     [PunRPC]
-    void RpcCutScene(object location, int distanceOffset, int heightOffset, object cameraRotation, string customMessage)
+    void RpcCutScene(float x, float y, float z, int distanceOffset, int heightOffset, float rotx, float roty, float rotz, string customMessage)
     {   
+        Vector3 location = new Vector3(x,y,z);
+        Vector3 cameraRotation = new Vector3(rotx,roty,rotz);
+        cutscenePosition = location;
         //stop camera following player
         isFollowing = false;
-
-        cutscenePosition = (Vector3) location;
-        viewRadius = 15;
 
         //reset rotationCounter
         rotateCounter = 0f;
@@ -459,7 +463,6 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             rotateCounter += 0.05f;
         }
     }
-    */
     public struct ViewCastInfo {
         public bool hit;
         public Vector3 point;
@@ -472,5 +475,5 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
             distance = _distance;
             angle = _angle;
         }
-    }
+    }*/
 }
