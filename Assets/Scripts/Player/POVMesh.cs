@@ -27,7 +27,7 @@ public class POVMesh : MonoBehaviourPun
 
 
 
-    void DrawFOV() {
+    void DrawFOV(Vector3 fromPoint) {
         int stepCount = Mathf.RoundToInt(playerController.viewAngle * meshResolution);
         float stepAngleSize = playerController.viewAngle / stepCount;
         List<Vector3> viewPoints = new List<Vector3>();
@@ -35,7 +35,7 @@ public class POVMesh : MonoBehaviourPun
         for (int i = 0; i <= stepCount; i++)
         {
             float angle = player.transform.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;
-            ViewCastInfo newViewCast = viewCast(angle);
+            ViewCastInfo newViewCast = viewCast(angle, fromPoint);
             viewPoints.Add(newViewCast.point);
         }
 
@@ -61,14 +61,14 @@ public class POVMesh : MonoBehaviourPun
         viewMesh.triangles = triangles;
         viewMesh.RecalculateNormals();
     }
-    ViewCastInfo viewCast(float globalAngle) {
+    ViewCastInfo viewCast(float globalAngle, Vector3 fromPoint) {
         Vector3  dir = DirFromAngle(globalAngle, true);
         RaycastHit hit;
 
-        if (Physics.Raycast(player.transform.position, dir, out hit, playerController.viewRadius, obstacleMask)) {
+        if (Physics.Raycast(fromPoint, dir, out hit, playerController.viewRadius, obstacleMask)) {
             return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
         } else {
-            return new ViewCastInfo(false, player.transform.position + dir * playerController.viewRadius, playerController.viewRadius, globalAngle);
+            return new ViewCastInfo(false, fromPoint + dir * playerController.viewRadius, playerController.viewRadius, globalAngle);
         }
 
     }
@@ -114,18 +114,19 @@ public class POVMesh : MonoBehaviourPun
             start = true;
         }
         if (start) {
+            Vector3 fromPoint = player.transform.position;
             if (!cameraControlPlayer.isFollowing) {
-                viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                viewMeshFilter.transform.rotation = player.transform.rotation;
-                objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                objectMeshFilter.transform.rotation = player.transform.rotation;
-            } else {
-                viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-                viewMeshFilter.transform.rotation = player.transform.rotation;
-                objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-                objectMeshFilter.transform.rotation = player.transform.rotation;
+                fromPoint = cameraControlPlayer.cutscenePosition;
+                // viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
+                // viewMeshFilter.transform.rotation = player.transform.rotation;
+                // objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
+                // objectMeshFilter.transform.rotation = player.transform.rotation;
             }
-            DrawFOV();
+            viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+            viewMeshFilter.transform.rotation = player.transform.rotation;
+            objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+            objectMeshFilter.transform.rotation = player.transform.rotation;
+            DrawFOV(fromPoint);
         }
     }
 
