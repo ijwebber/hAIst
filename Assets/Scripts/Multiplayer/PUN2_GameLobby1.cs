@@ -65,6 +65,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject thief_4;
     public GameObject FriendsMenu;
     public GameObject Home_Home;
+    public GameObject UpgradeMenu;
+
     public string[] FriendList;
     public GameObject AddFriendStatus;
     public TMP_InputField AddFriendInput;
@@ -156,14 +158,26 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         FriendsMenu.SetActive(true);
         Home_Home.SetActive(false);
+        UpgradeMenu.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
+
     }
 
     public void EnableLobbyMenu()
     {
         FriendsMenu.SetActive(false);
+        UpgradeMenu.SetActive(false);
+
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(true);
+    }
+
+    public void EnableUpgradeMenu()
+    {
+        FriendsMenu.SetActive(false);
+        AddFriendStatus.SetActive(false);
+        Home_Home.SetActive(false);
+        UpgradeMenu.SetActive(true);
     }
 
     IEnumerator UpdateFriendList()
@@ -207,6 +221,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         LobbyMenu.SetActive(true);
 
     }
+
 
     // PRE GAME MENU
 
