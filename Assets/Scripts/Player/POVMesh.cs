@@ -87,7 +87,7 @@ public class POVMesh : MonoBehaviourPun
     void Start()
     {
         playerController = GameObject.FindObjectOfType<PlayerController>();
-        player = GameObject.Find("Timmy");
+        player = playerController.getPlayer();
         var cameraControlPlayers = GameObject.FindObjectsOfType<CameraControlPlayer>();
         foreach (var ccm in cameraControlPlayers)
         {
