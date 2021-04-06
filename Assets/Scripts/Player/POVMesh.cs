@@ -19,8 +19,6 @@ public class POVMesh : MonoBehaviourPun
     private Mesh viewMesh;
     private bool start = false;
 
-    [HideInInspector]
-    public List<GameObject> visibleTargets = new List<GameObject>();
     private CameraControlPlayer cameraControlPlayer;
 
     [HideInInspector]
@@ -33,6 +31,7 @@ public class POVMesh : MonoBehaviourPun
         int stepCount = Mathf.RoundToInt(playerController.viewAngle * meshResolution);
         float stepAngleSize = playerController.viewAngle / stepCount;
         List<Vector3> viewPoints = new List<Vector3>();
+        Debug.Log("!!!! 1");
         for (int i = 0; i <= stepCount; i++)
         {
             float angle = player.transform.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;
