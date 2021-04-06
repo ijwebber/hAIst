@@ -1341,7 +1341,6 @@ GameObject:
   - component: {fileID: 7399234938034377430}
   - component: {fileID: 7609276469978281886}
   - component: {fileID: 7950917147821238678}
-  - component: {fileID: 8228215103595943073}
   - component: {fileID: 8543146254879155823}
   - component: {fileID: 8716035742239007946}
   - component: {fileID: 5924847607596515180}
@@ -1460,6 +1459,7 @@ MonoBehaviour:
   playerController: {fileID: 0}
   rb: {fileID: 7399234938034377431}
   disabled: 0
+  paused: 0
 --- !u!114 &7609276469978281886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1489,29 +1489,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashlight: {fileID: 0}
---- !u!114 &8228215103595943073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7669125665307422165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df8c7292b53586c41b62a843e5e38aa0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seconds: 0
-  messageBox: {fileID: 0}
-  cooldownBox: {fileID: 0}
-  keycodeGame: {fileID: 0}
-  fixPaintingGame: {fileID: 0}
-  keyCorrect: 0
-  paintingCorrect: 0
-  cooldown: 1
-  holdTime: 5
-  down: 0
-  progressBar: {fileID: 0}
 --- !u!114 &8543146254879155823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1570,6 +1547,10 @@ MonoBehaviour:
   distance: -16
   height: 24
   followOnStart: 0
+  isFollowing: 0
+  playerController: {fileID: 0}
+  cutscenePosition: {x: 0, y: 0, z: 0}
+  meshResolution: 1
 --- !u!136 &1717361501374368153
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1605,7 +1586,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   agent: {fileID: 0}
-  visibleTargets: []
   behindGuardTargets: []
 --- !u!1 &7687842578871561455
 GameObject:

@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 7ec92752200fca8d7803d4ed1a84bdb3
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Government Agent BB
+  fontNames:
+  - Government Agent BB
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3a56824000b4b772cac56043f78e0326, type: 3}
+  - {fileID: 12800000, guid: 76f1312128be6324291a51373d1332d5, type: 3}
+  - {fileID: 12800000, guid: 99e7ffa8423ac6536806612852ea9636, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
