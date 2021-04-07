@@ -14,6 +14,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
 
     string gameVersion = "0.9";
+    public Animator backgroundAnimator;
     bool joiningRoom = false;
     public GameObject DB_Controller;
     public GameObject PreGameScript;
@@ -64,6 +65,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject thief_3;
     public GameObject thief_4;
     public GameObject FriendsMenu;
+    public GameObject MicMenu;
     public GameObject Home_Home;
     public string[] FriendList;
     public GameObject AddFriendStatus;
@@ -155,13 +157,23 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableFriendsMenu()
     {
         FriendsMenu.SetActive(true);
+        MicMenu.SetActive(false);
         Home_Home.SetActive(false);
+        AddFriendStatus.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
+    }
+
+    public void EnableMicThreshold() {
+        MicMenu.SetActive(true);
+        Home_Home.SetActive(false);
+        FriendsMenu.SetActive(false);
+        AddFriendStatus.SetActive(false);
     }
 
     public void EnableLobbyMenu()
     {
         FriendsMenu.SetActive(false);
+        MicMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(true);
     }
@@ -221,6 +233,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableMapScreen()
     {
         MapScreen.SetActive(true);
+        backgroundAnimator.SetTrigger("Zoom");
         LobbyScreen.SetActive(false);
     }
 

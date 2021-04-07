@@ -83,11 +83,14 @@ public class PlayerPickUp : MonoBehaviourPun
                     KeyPad keypad = inTrigger.gameObject.GetComponent<KeyPad>();
                     keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
 
-                    if (keypad.codeCorrect && !down)
+                    if (Input.GetKeyDown(KeyCode.E) && keycodeGame.activeInHierarchy) {
+                        keycodeGame.SetActive(false);
+                    }
+                    else if (keypad.codeCorrect && !down)
                     {
                         displayMessage("Code already entered");
                     }
-                    else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                    else if (Input.GetKeyDown(KeyCode.E) && seconds == 0 && !down)
                     {
                         keycodeGame.SetActive(true);
                         displayMessage(2);
@@ -162,9 +165,9 @@ public class PlayerPickUp : MonoBehaviourPun
                     if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
                         displayMessage("This door requires a code");
                         gameController.gameState = 1;
-                    } else {
-                        gameController.gameState = 2;
                     }
+                        // gameController.gameState = 2;
+                    // }
                     break;
             }
         }
