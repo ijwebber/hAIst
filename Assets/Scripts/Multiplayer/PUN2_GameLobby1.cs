@@ -18,7 +18,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject DB_Controller;
     public GameObject PreGameScript;
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+
     public int PlayerBalance;
+    public Dictionary<string, int> PlayerInventory = new Dictionary<string, int>();
 
     // MENUS
     [SerializeField] private GameObject GuestMenu;
@@ -67,16 +69,34 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject FriendsMenu;
     public GameObject Home_Home;
     public GameObject UpgradeMenu;
+    public GameObject InventoryMenu;
+
+    public GameObject UnlockPanel;
+    public GameObject InventoryWaitPanel;
 
     public string[] FriendList;
     public GameObject AddFriendStatus;
     public TMP_InputField AddFriendInput;
     public bool IsGuest = false;
     public Button FriendsMenuButton;
+    public Button UpgradesMenuButton;
+    public GameObject BalanceInfoHome;
+
+    public TMP_Text speed_boots_Inventory;
+    public TMP_Text shield_Inventory;
+    public TMP_Text vision_Inventory;
+    public TMP_Text self_revive_Inventory;
+    public TMP_Text fast_hands_Inventory;
+
+
+
+
+
 
 
     // PRE GAME OBJECTS
     public Button BalanceButtonPreGame;
+    public GameObject BalanceInfoPre;
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
     public GameObject MapScreen;
@@ -101,8 +121,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             PreGameScript.GetComponent<PreGame>().SetReadyChecks();
 
             DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
-
         }
+
     }
 
     void Connect()
@@ -160,6 +180,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         FriendsMenu.SetActive(true);
         Home_Home.SetActive(false);
         UpgradeMenu.SetActive(false);
+        InventoryMenu.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
     }
 
@@ -167,6 +188,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         FriendsMenu.SetActive(false);
         UpgradeMenu.SetActive(false);
+        InventoryMenu.SetActive(false);
+
 
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(true);
@@ -177,7 +200,22 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(false);
+        InventoryMenu.SetActive(false);
+
         UpgradeMenu.SetActive(true);
+    }
+
+
+    public void EnableInventoryMenu()
+    {
+        FriendsMenu.SetActive(false);
+        AddFriendStatus.SetActive(false);
+        Home_Home.SetActive(false);
+        UpgradeMenu.SetActive(false);
+
+        InventoryMenu.SetActive(true);
+        GetInventory();
+
     }
 
     IEnumerator UpdateFriendList()
@@ -222,17 +260,75 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         LobbyMenu.SetActive(true);
     }
 
-    public void BuyUpgrade(int price)
-    {
-        PlayerBalance = PlayerBalance - price;
-        DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance);
+    // UPGRADES
 
+    public void BuyUpgradeSpeedBoots()
+    {
+        if (PlayerBalance > 2000)
+        {
+            PlayerBalance = PlayerBalance - 2000;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "speed_boots");
+
+        }
     }
 
-    public void TestEditBalance()
+    public void BuyUpgradeShield()
     {
-        DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, 6300);
+        if (PlayerBalance > 2000)
+        {
+            PlayerBalance = PlayerBalance - 2000;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "shield");
+
+        }
     }
+
+    public void BuyUpgradeVision()
+    {
+        if (PlayerBalance > 2000)
+        {
+            PlayerBalance = PlayerBalance - 2000;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "vision");
+
+        }
+    }
+
+
+    public void BuyUpgradeSelfRevive()
+    {
+        if (PlayerBalance > 5000)
+        {
+            PlayerBalance = PlayerBalance - 5000;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "self_revive");
+
+        }
+    }
+
+    public void BuyUpgradeFastHands()
+    {
+        if (PlayerBalance > 5000)
+        {
+            PlayerBalance = PlayerBalance - 5000;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "fast_hands");
+        }
+    }
+
+    public void GetInventory()
+    {
+        List<string> keys = new List<string>(PlayerInventory.Keys);
+        foreach (string key in keys)
+        {
+            PlayerInventory[key] = 0;
+        }
+        DB_Controller.GetComponent<DB_Controller>().GetUpgradeList(PhotonNetwork.NickName);
+        
+    }
+
+
 
 
     // PRE GAME MENU
@@ -322,13 +418,22 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
         Debug.Log("NICKNAME: " + PhotonNetwork.NickName);
 
-        HomeMenu.SetActive(true);
         if (IsGuest)
         {
             FriendsMenuButton.interactable = false;
+            UpgradesMenuButton.interactable = false;
+            BalanceInfoHome.SetActive(false);
+            BalanceInfoPre.SetActive(false);
+
         }
-        //LobbyScript.SetActive(true);
-        //LobbyMenu.SetActive(true);
+        // ADD NEW UPGRADES HERE
+        PlayerInventory.Add("speed_boots", 0);
+        PlayerInventory.Add("shield", 0);
+        PlayerInventory.Add("vision", 0);
+        PlayerInventory.Add("self_revive", 0);
+        PlayerInventory.Add("fast_hands", 0);
+        HomeMenu.SetActive(true);
+
     }
 
 

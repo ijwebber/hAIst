@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using System.Text;
 using System.Security.Cryptography;
 
@@ -22,6 +24,8 @@ public class DB_Controller : MonoBehaviour
     string edit_balance_url = "https://brasspig.online/edit_balance.php";
     string get_threshold_url = "https://brasspig.online/get_mic_threshold.php?";
     string edit_threshold_url = "https://brasspig.online/set_mic_threshold.php?";
+    string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
+    string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
 
     private void Start()
     {
@@ -49,9 +53,9 @@ public class DB_Controller : MonoBehaviour
         StartCoroutine(CoinBalance(username));
     }
 
-    public void EditCoinBalance(string username, int new_balance)
+    public void EditCoinBalance(string username, int new_balance, int type)
     {
-        StartCoroutine(EditBalance(username,new_balance));
+        StartCoroutine(EditBalance(username,new_balance,type));
     }
 
     public void EditMicThreshold(string username, int value)
@@ -62,6 +66,16 @@ public class DB_Controller : MonoBehaviour
     public void GetMicThreshold(string username)
     {
         StartCoroutine(GetThreshold(username));
+    }
+
+    public void GetUpgradeList(string username)
+    {
+        StartCoroutine(UpgradeList(username));
+    }
+
+    public void AddUpgrade(string username, string upgrade)
+    {
+        StartCoroutine(Add_Upgrade(username, upgrade));
     }
 
 
@@ -337,9 +351,12 @@ public class DB_Controller : MonoBehaviour
 
     }
 
-    IEnumerator EditBalance(string username, int new_balance)
+    IEnumerator EditBalance(string username, int new_balance,int type)
     {
-
+        if (type == 10)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanel.SetActive(true);
+        }
         string uri = edit_balance_url;
         string post_data = "{ \"username\": \"" + username + "\", \"new_balance\": " + new_balance + "  }";
 
@@ -363,6 +380,7 @@ public class DB_Controller : MonoBehaviour
                     Debug.Log("Balance edited succesfully.");
                     _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = new_balance.ToString();
                     _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = new_balance.ToString();
+                    
                 }
                 else
                 {
@@ -372,7 +390,105 @@ public class DB_Controller : MonoBehaviour
 
             }
         }
+        if (type == 10)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanel.SetActive(false);
+        }
     }
+
+    IEnumerator UpgradeList(string username)
+    {
+        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
+        string uri = get_upgrades_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no upgrades");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+                    
+                    string[] upgrade_list = result.Split(delimiterChars);
+                    foreach (var upgrade in upgrade_list)
+                    {
+                        Debug.Log(upgrade);
+
+                        _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory[upgrade] += 1;
+
+                    }
+                    foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
+                    {
+                        switch (kvp.Key)
+                        {
+                            case "speed_boots":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_Inventory.text = kvp.Value.ToString();
+                                break;
+                            case "shield":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().shield_Inventory.text = kvp.Value.ToString();
+                                break;
+                            case "vision":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().vision_Inventory.text = kvp.Value.ToString();
+                                break;
+                            case "self_revive":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_Inventory.text = kvp.Value.ToString();
+                                break;
+                            case "fast_hands":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_Inventory.text = kvp.Value.ToString();
+                                break;
+                            default:
+                                break;
+                        }
+                        Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
+                    }
+
+                }
+            }
+        }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
+
+
+
+    }
+
+    IEnumerator Add_Upgrade(string username, string upgrade)
+    {
+        string uri = add_upgrade_url + "user=" + username + "&upgrade=" + upgrade;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Upgrade added succesfully.");
+
+                }
+                else
+                {
+                    Debug.Log("Upgrade NOT added succesfully.");
+
+                }
+            }
+        }
+    }
+
 
     IEnumerator EditThreshold(string username, int value)
     {
@@ -421,7 +537,7 @@ public class DB_Controller : MonoBehaviour
 
 
 
-        IEnumerator Friends(string username)
+    IEnumerator Friends(string username)
     {
         string uri = get_friends_url + "user=" + username;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
