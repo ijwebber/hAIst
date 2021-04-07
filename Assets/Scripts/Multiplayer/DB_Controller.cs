@@ -19,6 +19,9 @@ public class DB_Controller : MonoBehaviour
     string get_balance_url = "https://brasspig.online/get_balance.php?";
     string get_friends_url = "https://brasspig.online/get_friends.php?";
     string add_friend_url = "https://brasspig.online/add_friend.php?";
+    string edit_balance_url = "https://brasspig.online/edit_balance.php";
+    string get_threshold_url = "https://brasspig.online/get_mic_threshold.php?";
+    string edit_threshold_url = "https://brasspig.online/set_mic_threshold.php?";
 
     private void Start()
     {
@@ -45,6 +48,22 @@ public class DB_Controller : MonoBehaviour
     {
         StartCoroutine(CoinBalance(username));
     }
+
+    public void EditCoinBalance(string username, int new_balance)
+    {
+        StartCoroutine(EditBalance(username,new_balance));
+    }
+
+    public void EditMicThreshold(string username, int value)
+    {
+        StartCoroutine(EditThreshold(username, value));
+    }
+
+    public void GetMicThreshold(string username)
+    {
+        StartCoroutine(GetThreshold(username));
+    }
+
 
     public void GetFriends(string username)
     {
@@ -217,6 +236,7 @@ public class DB_Controller : MonoBehaviour
             }
         }
     }
+
     IEnumerator Add(string username, string friend)
     {
         string uri = add_friend_url + "user=" + username + "&friend=" + friend;
@@ -309,6 +329,7 @@ public class DB_Controller : MonoBehaviour
             {
                 string balance = webRequest.downloadHandler.text;
                 Debug.Log("BALANCE SET: "+balance);
+                _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerBalance = Int32.Parse(balance);
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = balance;
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = balance;
             }
@@ -316,7 +337,91 @@ public class DB_Controller : MonoBehaviour
 
     }
 
-    IEnumerator Friends(string username)
+    IEnumerator EditBalance(string username, int new_balance)
+    {
+
+        string uri = edit_balance_url;
+        string post_data = "{ \"username\": \"" + username + "\", \"new_balance\": " + new_balance + "  }";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(post_data);
+            webRequest.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+            webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+                //Debug.Log(webRequest.error);
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text == "true")
+                {
+                    Debug.Log("Balance edited succesfully.");
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = new_balance.ToString();
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = new_balance.ToString();
+                }
+                else
+                {
+                    Debug.Log("Balance edit unsuccesful.");
+                }
+
+
+            }
+        }
+    }
+
+    IEnumerator EditThreshold(string username, int value)
+    {
+        string uri = edit_threshold_url + "user=" + username + "&value=" + value;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Mic threshold changed succesfully.");
+                    
+                }
+                else
+                {
+                    Debug.Log("Mic threshold change failed.");
+                }
+            }
+        }
+    }
+
+    IEnumerator GetThreshold(string username)
+    {
+        string uri = get_threshold_url + "user=" + username;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string threshold = webRequest.downloadHandler.text;
+
+            }
+        }
+    }
+
+
+
+        IEnumerator Friends(string username)
     {
         string uri = get_friends_url + "user=" + username;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))

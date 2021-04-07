@@ -18,6 +18,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject DB_Controller;
     public GameObject PreGameScript;
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+    public int PlayerBalance;
 
     // MENUS
     [SerializeField] private GameObject GuestMenu;
@@ -160,7 +161,6 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         Home_Home.SetActive(false);
         UpgradeMenu.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
-
     }
 
     public void EnableLobbyMenu()
@@ -208,6 +208,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void AddFriend()
     {
         DB_Controller.GetComponent<DB_Controller>().CheckIfExists(PhotonNetwork.NickName, AddFriendInput.text);
+        
     }
 
     public void ChangeAddFriendInput()
@@ -219,7 +220,18 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         LobbyScript.SetActive(true);
         LobbyMenu.SetActive(true);
+    }
 
+    public void BuyUpgrade(int price)
+    {
+        PlayerBalance = PlayerBalance - price;
+        DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance);
+
+    }
+
+    public void TestEditBalance()
+    {
+        DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, 6300);
     }
 
 
