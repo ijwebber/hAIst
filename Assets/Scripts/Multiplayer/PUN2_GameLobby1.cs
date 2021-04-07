@@ -14,7 +14,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
 
     string gameVersion = "0.9";
-    public Animator backgroundAnimator;
+    public Slider slider;
+    public TextMeshProUGUI textAsset;
+    public Slider Multiplier;
+    private bool MapMenu = false;
     bool joiningRoom = false;
     public GameObject DB_Controller;
     public GameObject PreGameScript;
@@ -170,6 +173,35 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         AddFriendStatus.SetActive(false);
     }
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+    void Update() {
+        if (MapMenu) {
+            Microphone.Update();
+        }
+        string[] devices = Microphone.devices;
+
+        float[] volumes = Microphone.volumes;
+
+        if (devices.Length > 1) {
+            int index = 0;
+            string deviceName = devices[index];
+            if (deviceName == null)
+            {
+                deviceName = string.Empty;
+            }
+
+            float volume = 0;
+            if (Multiplier.value != null) {
+                volume = volumes[index]*Multiplier.value;
+            }
+            slider.value = volume;
+        }
+    }
+#endif
+    public void updateSlider() {
+        textAsset.text = Multiplier.value + " \n(Default = 240)";
+    }
+
     public void EnableLobbyMenu()
     {
         FriendsMenu.SetActive(false);
@@ -233,9 +265,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableMapScreen()
     {
         MapScreen.SetActive(true);
-        backgroundAnimator.SetTrigger("Zoom");
+        // backgroundAnimator.SetTrigger("Zoom");
         LobbyScreen.SetActive(false);
+        MapMenu = true;
     }
+
 
     public void EnableLobbyScreen()
     {
