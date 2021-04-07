@@ -101,7 +101,7 @@ public class GameController : MonoBehaviourPunCallbacks
                             toSteal.Add(item);
                             newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
                         } else {
-                            newText.Add("<s>Steal " + item.name + "</s>");
+                            newText.Add("<s>Steal " + item.GetComponent<CollectableItem>().itemName + "</s>");
                         }
                     }
                     setNewQuest(toSteal, newText);
