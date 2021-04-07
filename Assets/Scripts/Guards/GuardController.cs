@@ -128,6 +128,10 @@ public class GuardController : MonoBehaviour
                 
                 //set to true so it doesn't run again when guards spot players
                 playersSpotted = true;
+
+                Hashtable endTriggered = new Hashtable() { { "triggered", true } };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(endTriggered);
+
                 break;
             }
         }
