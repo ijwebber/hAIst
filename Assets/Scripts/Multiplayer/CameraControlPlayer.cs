@@ -18,7 +18,9 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
     public Material prevObjectMaterial;
 
-    public string[] currentObject = {""}; 
+    public string[] currentObject = {""};
+
+    public AudioSource audioSource;
 
 
 
@@ -261,7 +263,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
     //Recieves CutScene data
     [PunRPC]
-    void RpcCutScene(float x, float y, float z, int distanceOffset, int heightOffset, float rotx, float roty, float rotz, string customMessage)
+    void RpcCutScene(float x, float y, float z, int distanceOffset, int heightOffset, float rotx, float roty, float rotz, string customMessage, int code)
     {   
         Vector3 location = new Vector3(x,y,z);
         Vector3 cameraRotation = new Vector3(rotx,roty,rotz);
@@ -275,30 +277,36 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         //freeze player
         this.GetComponent<PlayerMovement>().paused = true;
 
+        if(code == 1)
+        {
+            audioSource = FindObjectOfType<AudioController>().gameObject.GetComponent<AudioSource>();
+            audioSource.PlayOneShot(FindObjectOfType<AudioController>().alertedSound);
+            
+        }
         //freeze guards, will only work if player is master
         GuardController.Instance.disableAllguards(true);
 
         //this starts the incremental camera updates to the desired location (the cutscene)
-        StartCoroutine(cameraCutSceneUpdates(0.03f, location, distanceOffset, heightOffset, cameraRotation, customMessage));
+        StartCoroutine(cameraCutSceneUpdates(0.03f, location, distanceOffset, heightOffset, cameraRotation, customMessage, code));
 
     }
 
     //This calls the incremental update function, 0.03 works for 30 frames per second
-    IEnumerator cameraCutSceneUpdates(float delay, object location, int distanceOffset, int heightOffset, object cameraRotation, string customMessage)
+    IEnumerator cameraCutSceneUpdates(float delay, object location, int distanceOffset, int heightOffset, object cameraRotation, string customMessage, int code)
     {
         
 
         while (!isFollowing)
         {
             yield return new WaitForSeconds(delay);
-            cutSceneUpdate((Vector3)location, distanceOffset, heightOffset, (Vector3)cameraRotation, customMessage);
+            cutSceneUpdate((Vector3)location, distanceOffset, heightOffset, (Vector3)cameraRotation, customMessage, code);
         }
 
         cutSceneDone = false;
     }
 
     //Updates camera positioning and rotation incrementally, the location and cameraRotation parameters will be the end location/rotation for the camera.
-    void cutSceneUpdate(Vector3 location, int distanceOffset, int heightOffset, Vector3 cameraRotation, string customMessage)
+    void cutSceneUpdate(Vector3 location, int distanceOffset, int heightOffset, Vector3 cameraRotation, string customMessage, int code)
     {
         //We show the cutScene Bars and set the text to the desired message
         BarController.Instance.ShowBars();

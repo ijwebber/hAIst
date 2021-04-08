@@ -4,6 +4,7 @@ public class AudioController : MonoBehaviour
 {
     AudioSource audioSource;
     public AudioClip intenseTheme;
+    public AudioClip alertedSound;
 
     void Start()
     {
