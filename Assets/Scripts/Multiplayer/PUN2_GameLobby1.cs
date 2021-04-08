@@ -15,9 +15,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     string gameVersion = "0.9";
     public Slider slider;
+    public AnimateBG bg;
     public TextMeshProUGUI textAsset;
     public Slider Multiplier;
-    private bool MapMenu = false;
     bool joiningRoom = false;
     public GameObject DB_Controller;
     public GameObject PreGameScript;
@@ -33,6 +33,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject LobbyMenu;
     [SerializeField] private GameObject PreGameMenu;
     [SerializeField] private GameObject CreditsMenu;
+    [SerializeField] private GameObject PreGameHome;
+    [SerializeField] private GameObject MapScreen;
 
     // SCRIPTS
     [SerializeField] private GameObject menu_script;
@@ -69,6 +71,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject thief_4;
     public GameObject FriendsMenu;
     public GameObject MicMenu;
+    private bool MicCheck;
     public GameObject Home_Home;
     public string[] FriendList;
     public GameObject AddFriendStatus;
@@ -81,9 +84,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public Button BalanceButtonPreGame;
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
-    public GameObject MapScreen;
 
     // PHOTON NETWORK GAMEOBJECTS 
+
+    // MAP SCREEN OBJECTS
+    [SerializeField] private GameObject Notes;
 
 
     // Use this for initialization
@@ -161,6 +166,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         FriendsMenu.SetActive(true);
         MicMenu.SetActive(false);
+        MicCheck = false;
         Home_Home.SetActive(false);
         AddFriendStatus.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
@@ -168,6 +174,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void EnableMicThreshold() {
         MicMenu.SetActive(true);
+        MicCheck = true;
         Home_Home.SetActive(false);
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
@@ -175,7 +182,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     void Update() {
-        if (MapMenu) {
+        if (MicMenu) {
             Microphone.Update();
         }
         string[] devices = Microphone.devices;
@@ -206,6 +213,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         FriendsMenu.SetActive(false);
         MicMenu.SetActive(false);
+        MicCheck = false;
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(true);
     }
@@ -256,26 +264,45 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void EnableHomeScreen()
     {
-        LobbyScreen.SetActive(false);
-        MapScreen.SetActive(false);
+        if (!bg.animating) {
+            LobbyScreen.SetActive(false);
+            if (MapScreen.activeInHierarchy) {
+                MapScreen.SetActive(false);
+                bg.unZoom(PreGameHome);
+            } else {
+                PreGameHome.SetActive(true);
+            }
+        }
 
     }
 
 
+    // zoom in (make sure to call unzoom if map is active when navigating away)
     public void EnableMapScreen()
     {
-        MapScreen.SetActive(true);
-        // backgroundAnimator.SetTrigger("Zoom");
+        bg.zoom();
         LobbyScreen.SetActive(false);
-        MapMenu = true;
+        PreGameHome.SetActive(false);
+        // MapScreen.SetActive(true);
+    }
+
+    public void ToggleNotes() {
+        Notes.SetActive(!Notes.activeInHierarchy);
     }
 
 
     public void EnableLobbyScreen()
     {
-        MapScreen.SetActive(false);
-        LobbyScreen.SetActive(true);
-        ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        if (!bg.animating) {
+            PreGameHome.SetActive(false);
+            if (MapScreen.activeInHierarchy) {
+                MapScreen.SetActive(false);
+                bg.unZoom(LobbyScreen);
+            } else {
+                LobbyScreen.SetActive(true);
+            }
+            ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        }
     }
 
 
