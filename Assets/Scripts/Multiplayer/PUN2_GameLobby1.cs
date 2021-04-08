@@ -39,6 +39,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject LobbyMenu;
     [SerializeField] private GameObject PreGameMenu;
     [SerializeField] private GameObject CreditsMenu;
+    [SerializeField] private GameObject RejoinWaitPanel;
+
 
     // SCRIPTS
     [SerializeField] private GameObject menu_script;
@@ -122,13 +124,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //DontDestroyOnLoad(this);
         if (PhotonNetwork.IsConnected)
         {
-            thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
-            thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
-            PreGameMenu.SetActive(true);
-            ThiefController();
-            PreGameScript.GetComponent<PreGame>().SetReadyChecks();
-
-            DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
+            Debug.Log("IsConnectedRejoin");
+            ReJoinAfterLeave();
         }
 
     }
@@ -246,9 +243,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         }
     }
 
-    public void GetFriends()
+    public void GetFriends(string username)
     {
-        DB_Controller.GetComponent<DB_Controller>().GetFriends(UsernameLoginInput.text);
+        DB_Controller.GetComponent<DB_Controller>().GetFriends(username);
     }
 
     public void AddFriend()
@@ -444,16 +441,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     }
 
-    public void ReJoinAfterLeave(string username)
+    public void ReJoinAfterLeave()
     {
-        ExistingUserMenu.SetActive(false);
-        GuestMenu.SetActive(false);
-        PhotonNetwork.NickName = username;
-        //menu_script.SetActive(true);
-        authValues = new AuthenticationValues();
-        authValues.UserId = username;
-        PhotonNetwork.AuthValues = authValues;
-        Connect();
+        StartMenu.SetActive(false);
+        RejoinWaitPanel.SetActive(true);
+        DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
+        PhotonNetwork.JoinLobby(TypedLobby.Default);
+        
+
         thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
         thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
 
@@ -555,11 +550,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
-        GetFriends();
+        GetFriends(PhotonNetwork.NickName);
         StartCoroutine("UpdateFriendList");
 
         //JoinNewRooom();
         PhotonNetwork.AutomaticallySyncScene = true;
+        //RejoinWaitPanel.SetActive(false);
     }
 
     public override void OnPlayerEnteredRoom(Player player)

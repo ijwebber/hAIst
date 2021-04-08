@@ -281,7 +281,7 @@ public class DB_Controller : MonoBehaviour
                     Debug.Log("Friend added succesfully.");
                     _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.GetComponent<Text>().text = "Friend added succesfully";
                     _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
-                    _GameLobby.GetComponent<PUN2_GameLobby1>().GetFriends();
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().GetFriends(username);
                 }
                 else
                 {

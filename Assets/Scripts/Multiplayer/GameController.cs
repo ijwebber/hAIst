@@ -132,13 +132,20 @@ public class GameController : MonoBehaviourPunCallbacks
     //Go back to main meny when you leave game
     public override void OnLeftRoom()
     {
-        //We have left the Room, return back to the GameLobby
+        Debug.Log("On left Room callback");
+        
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log("OnConnectedToMaster");
         PhotonNetwork.LoadLevel("GameLobby 1");
-        //SceneManager.LoadScene("GameLobby 1");    
+        Debug.Log("gamelobby 1 loaded");
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+
         PhotonNetwork.LoadLevel("GameLobby 1");
          //SceneManager.LoadScene("GameLobby 1");
 
