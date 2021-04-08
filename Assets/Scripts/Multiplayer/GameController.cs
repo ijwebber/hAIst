@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
+
+    public PUN2_GameLobby1 GameLobbyScript;
+
     public GameObject playerPrefab;
     public int gameState = 0;
     public GameObject guardPrefab;
@@ -22,17 +27,21 @@ public class GameController : MonoBehaviourPunCallbacks
     private List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
 
+    public string playerUsername;
+
     System.Random r = new System.Random();
 
     //just spawns in player object
     private void Awake()
     {
+        //GameLobbyScript = GameObject.Find("_GameLobby").GetComponent<PUN2_GameLobby1>();
         if (PhotonNetwork.CurrentRoom == null)
         {
             Debug.Log("Is not in the room, returning back to Lobby");
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
+        playerUsername = PhotonNetwork.NickName;
         questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
 
         float xSpawnPos = SpawnPoint.transform.position.x + (float) (PhotonNetwork.LocalPlayer.ActorNumber * 0.6);
@@ -120,35 +129,21 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();   
     }
 
-
-
-    // Leave Game button
-    /*void OnGUI()
-    {
-        GUI.skin = myskin;
-
-        if (PhotonNetwork.CurrentRoom == null)
-            return;
-
-
-        //Show the Room name
-        //GUI.Label(new Rect(135, 5, 200, 25), PhotonNetwork.CurrentRoom.Name);
-
-        //Show the list of the players connected to this Room
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            //Show if this player is a Master Client. There can only be one Master Client per Room so use this to define the authoritative logic etc.)
-            //string isMasterClient = (PhotonNetwork.PlayerList[i].IsMasterClient ? ": MasterClient" : "");
-            GUI.Label(new Rect(5, 35 + 30 * i, 200, 25), PhotonNetwork.PlayerList[i].NickName);
-        }
-    }*/
-
     //Go back to main meny when you leave game
     public override void OnLeftRoom()
     {
         //We have left the Room, return back to the GameLobby
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
+        PhotonNetwork.Disconnect();
     }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        //PhotonNetwork.LoadLevel("Game Lobby 1");
+         SceneManager.LoadScene("Game Lobby 1");
+
+
+    }
+
     // Set spotted to false as the players have not been seen by any guards, if a player is seen guard calls police and players have to escape in a set time.
     void SetSpotted()
     {

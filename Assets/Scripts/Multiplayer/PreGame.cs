@@ -20,6 +20,8 @@ public class PreGame : MonoBehaviourPunCallbacks
     public GameObject thief_3;
     public GameObject thief_4;
 
+    public GameObject StartGameWaitPanel;
+
 
 
 
@@ -95,6 +97,7 @@ public class PreGame : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
+        StartGameWaitPanel.SetActive(true);
         PhotonNetwork.LoadLevel("ArtLevel");
     }
     
@@ -200,9 +203,10 @@ public class PreGame : MonoBehaviourPunCallbacks
 
 
     //Go back to main meny when you leave game
-    public override void OnLeftRoom()
+    /*public override void OnLeftRoom()
     {
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
     }
+    */
 }

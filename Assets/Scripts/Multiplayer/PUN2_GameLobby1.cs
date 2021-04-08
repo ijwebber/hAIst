@@ -119,6 +119,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     void Awake()
     {
+        //DontDestroyOnLoad(this);
         if (PhotonNetwork.IsConnected)
         {
             thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
@@ -441,6 +442,36 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PlayerInventory.Add("fast_hands", 0);
         HomeMenu.SetActive(true);
 
+    }
+
+    public void ReJoinAfterLeave(string username)
+    {
+        ExistingUserMenu.SetActive(false);
+        GuestMenu.SetActive(false);
+        PhotonNetwork.NickName = username;
+        //menu_script.SetActive(true);
+        authValues = new AuthenticationValues();
+        authValues.UserId = username;
+        PhotonNetwork.AuthValues = authValues;
+        Connect();
+        thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+        thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+
+        if (IsGuest)
+        {
+            FriendsMenuButton.interactable = false;
+            UpgradesMenuButton.interactable = false;
+            BalanceInfoHome.SetActive(false);
+            BalanceInfoPre.SetActive(false);
+
+        }
+        // ADD NEW UPGRADES HERE
+        PlayerInventory.Add("speed_boots", 0);
+        PlayerInventory.Add("shield", 0);
+        PlayerInventory.Add("vision", 0);
+        PlayerInventory.Add("self_revive", 0);
+        PlayerInventory.Add("fast_hands", 0);
+        HomeMenu.SetActive(true);
     }
 
 
