@@ -25,7 +25,7 @@ public class DB_Controller : MonoBehaviour
     string get_threshold_url = "https://brasspig.online/get_mic_threshold.php?";
     string edit_threshold_url = "https://brasspig.online/set_mic_threshold.php?";
     string get_multiplier_url = "https://brasspig.online/get_mic_multiplier.php?";
-    string set_multiplier_url = "https://brasspig.online/set_mic_multiplier.php?";
+    string edit_multiplier_url = "https://brasspig.online/set_mic_multiplier.php?";
     string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
     string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
 
@@ -549,7 +549,7 @@ public class DB_Controller : MonoBehaviour
 
     IEnumerator EditMultiplier(string username, int value)
     {
-        string uri = set_multiplier_url + "user=" + username + "&value=" + value;
+        string uri = edit_multiplier_url + "user=" + username + "&value=" + value;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
