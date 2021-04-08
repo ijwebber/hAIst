@@ -97,7 +97,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
-    - _IndirectLightMinColor: {r: 1, g: 0.995283, b: 0.995283, a: 1}
+    - _IndirectLightMinColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowMapColor: {r: 1, g: 1, b: 1, a: 1}

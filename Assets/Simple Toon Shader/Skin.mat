@@ -65,11 +65,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _AdditionalLightIgnoreCelShade: 0.9
+    - _AdditionalLightIgnoreCelShade: 0.789
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
-    - _CelShadeMidPoint: 0.27
+    - _CelShadeMidPoint: 0.28
     - _CelShadeSoftness: 0.05
     - _Cull: 2
     - _Cutoff: 0.244
@@ -80,9 +80,9 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _IndirectLightMultiplier: 0.609
+    - _IndirectLightMultiplier: 0.622
     - _IsFace: 0
-    - _MainLightIgnoreCelShade: 0
+    - _MainLightIgnoreCelShade: 0.398
     - _Metallic: 0
     - _OcclusionRemapEnd: 1
     - _OcclusionRemapStart: 0.342
@@ -110,7 +110,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
-    - _IndirectLightMinColor: {r: 1, g: 1, b: 1, a: 1}
+    - _IndirectLightMinColor: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadowMapColor: {r: 1, g: 1, b: 1, a: 1}
