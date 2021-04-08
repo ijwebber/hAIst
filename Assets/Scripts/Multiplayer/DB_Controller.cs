@@ -24,6 +24,8 @@ public class DB_Controller : MonoBehaviour
     string edit_balance_url = "https://brasspig.online/edit_balance.php";
     string get_threshold_url = "https://brasspig.online/get_mic_threshold.php?";
     string edit_threshold_url = "https://brasspig.online/set_mic_threshold.php?";
+    string get_multiplier_url = "https://brasspig.online/get_mic_multiplier.php?";
+    string set_multiplier_url = "https://brasspig.online/set_mic_multiplier.php?";
     string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
     string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
 
@@ -66,6 +68,16 @@ public class DB_Controller : MonoBehaviour
     public void GetMicThreshold(string username)
     {
         StartCoroutine(GetThreshold(username));
+    }
+
+    public void EditMicMultiplier(string username, int value)
+    {
+        StartCoroutine(EditMultiplier(username, value));
+    }
+
+    public void GetMicMultiplier(string username)
+    {
+        StartCoroutine(GetMultiplier(username));
     }
 
     public void GetUpgradeList(string username)
@@ -535,6 +547,50 @@ public class DB_Controller : MonoBehaviour
         }
     }
 
+    IEnumerator EditMultiplier(string username, int value)
+    {
+        string uri = set_multiplier_url + "user=" + username + "&value=" + value;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Mic multiplier changed succesfully.");
+
+                }
+                else
+                {
+                    Debug.Log("Mic threshold change failed.");
+                }
+            }
+        }
+    }
+
+    IEnumerator GetMultiplier(string username)
+    {
+        string uri = get_multiplier_url + "user=" + username;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string multiplier = webRequest.downloadHandler.text;
+
+            }
+        }
+    }
 
 
     IEnumerator Friends(string username)
