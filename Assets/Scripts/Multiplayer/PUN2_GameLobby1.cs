@@ -9,7 +9,14 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 
-
+/* PLACES TO ADD NEW UPGRADES:
+1. BuyUpgrade function
+2. Upgrade image in upgrade menu (and description)
+3. Image in inventory
+4. Text object in pregamelobby script
+5. Switch statement in DB_Controller
+6. SetUsername function
+*/
 public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
 
