@@ -133,13 +133,14 @@ public class GameController : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         //We have left the Room, return back to the GameLobby
-        PhotonNetwork.Disconnect();
+        PhotonNetwork.LoadLevel("GameLobby 1");
+        //SceneManager.LoadScene("GameLobby 1");    
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        //PhotonNetwork.LoadLevel("Game Lobby 1");
-         SceneManager.LoadScene("Game Lobby 1");
+        PhotonNetwork.LoadLevel("GameLobby 1");
+         //SceneManager.LoadScene("GameLobby 1");
 
 
     }
