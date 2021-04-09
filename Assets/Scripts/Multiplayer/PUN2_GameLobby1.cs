@@ -49,6 +49,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject LobbyScript;
     [SerializeField] private GameObject ContentLobby;
     [SerializeField] private GameObject ContentFriends;
+    [SerializeField] public GameObject ContentFriendsNew;
+
 
 
 
@@ -79,6 +81,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject thief_4;
     public GameObject FriendsMenu;
     public GameObject Home_Home;
+    public GameObject NewHome;
     public GameObject UpgradeMenu;
     public GameObject InventoryMenu;
 
@@ -192,7 +195,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableFriendsMenu()
     {
         FriendsMenu.SetActive(true);
-        Home_Home.SetActive(false);
+        //Home_Home.SetActive(false);
+        NewHome.SetActive(false);
         UpgradeMenu.SetActive(false);
         //InventoryMenu.SetActive(false);
         NewLobbyMenu.SetActive(false);
@@ -209,14 +213,19 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
 
         AddFriendStatus.SetActive(false);
-        Home_Home.SetActive(true);
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+        //Home_Home.SetActive(true);
+        NewHome.SetActive(true);
+
     }
 
     public void EnableUpgradeMenu()
     {
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
-        Home_Home.SetActive(false);
+        //Home_Home.SetActive(false);
+        NewHome.SetActive(false);
+
         //InventoryMenu.SetActive(false);
         NewLobbyMenu.SetActive(false);
 
@@ -229,7 +238,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
-        Home_Home.SetActive(false);
+        NewHome.SetActive(false);
+
+        //Home_Home.SetActive(false);
         UpgradeMenu.SetActive(false);
 
         //InventoryMenu.SetActive(true);
@@ -243,7 +254,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         for (; ; )
         {
-            if (PhotonNetwork.IsConnectedAndReady & FriendList != null)
+            if (PhotonNetwork.IsConnectedAndReady && FriendList != null)
             {
                 if (FriendList.Length == 1 & FriendList[0] == "")
                 {
@@ -259,9 +270,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         }
     }
 
-    public void GetFriends(string username)
+    public void GetFriends(string username, int type)
     {
-        DB_Controller.GetComponent<DB_Controller>().GetFriends(username);
+        DB_Controller.GetComponent<DB_Controller>().GetFriends(username,type);
     }
 
     public void AddFriend()
@@ -454,6 +465,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PlayerInventory.Add("self_revive", 0);
         PlayerInventory.Add("fast_hands", 0);
         HomeMenu.SetActive(true);
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+
 
     }
 
@@ -566,8 +579,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
-        GetFriends(PhotonNetwork.NickName);
+        GetFriends(PhotonNetwork.NickName, 1);
         StartCoroutine("UpdateFriendList");
+        //ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+
 
         //JoinNewRooom();
         PhotonNetwork.AutomaticallySyncScene = true;

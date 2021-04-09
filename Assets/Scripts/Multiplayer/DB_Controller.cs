@@ -91,9 +91,9 @@ public class DB_Controller : MonoBehaviour
     }
 
 
-    public void GetFriends(string username)
+    public void GetFriends(string username, int type)
     {
-        StartCoroutine(Friends(username));
+        StartCoroutine(Friends(username,type));
     }
 
     public void CheckIfExists(string username, string friend)
@@ -281,7 +281,7 @@ public class DB_Controller : MonoBehaviour
                     Debug.Log("Friend added succesfully.");
                     _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.GetComponent<Text>().text = "Friend added succesfully";
                     _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
-                    _GameLobby.GetComponent<PUN2_GameLobby1>().GetFriends(username);
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().GetFriends(username,0);
                 }
                 else
                 {
@@ -605,8 +605,14 @@ public class DB_Controller : MonoBehaviour
     }
 
 
-    IEnumerator Friends(string username)
+    IEnumerator Friends(string username, int type)
     {
+        bool refresh = false;
+        if (_GameLobby.GetComponent<PUN2_GameLobby1>().FriendList.Length == 0)
+        {
+            Debug.Log("FRIEND LIST NULL. REFRESHING");
+            refresh = true;
+        }
         string uri = get_friends_url + "user=" + username;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -629,6 +635,11 @@ public class DB_Controller : MonoBehaviour
                 
             }
         }
+        if (type == 0 || refresh == true)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+        }
+
     }
 
     public static class SecurePasswordHasher
