@@ -37,6 +37,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject NewUserMenu;
     [SerializeField] private GameObject HomeMenu;
     [SerializeField] private GameObject LobbyMenu;
+    [SerializeField] private GameObject NewLobbyMenu;
+
     [SerializeField] private GameObject PreGameMenu;
     [SerializeField] private GameObject CreditsMenu;
     [SerializeField] private GameObject RejoinWaitPanel;
@@ -105,7 +107,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
 
 
-
+    // LOBBY MENU OBJECTS
+    public Button BalanceButtonLobby;
 
 
 
@@ -191,7 +194,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         FriendsMenu.SetActive(true);
         Home_Home.SetActive(false);
         UpgradeMenu.SetActive(false);
-        InventoryMenu.SetActive(false);
+        //InventoryMenu.SetActive(false);
+        NewLobbyMenu.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
     }
 
@@ -199,7 +203,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         FriendsMenu.SetActive(false);
         UpgradeMenu.SetActive(false);
-        InventoryMenu.SetActive(false);
+        //InventoryMenu.SetActive(false);
+        NewLobbyMenu.SetActive(false);
+
 
 
         AddFriendStatus.SetActive(false);
@@ -211,20 +217,24 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(false);
-        InventoryMenu.SetActive(false);
+        //InventoryMenu.SetActive(false);
+        NewLobbyMenu.SetActive(false);
+
         GetInventory();
         UpgradeMenu.SetActive(true);
     }
 
 
-    public void EnableInventoryMenu()
+    public void EnableRoomMenu()
     {
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(false);
         UpgradeMenu.SetActive(false);
 
-        InventoryMenu.SetActive(true);
+        //InventoryMenu.SetActive(true);
+        LobbyScript.SetActive(true);
+        NewLobbyMenu.SetActive(true);
         GetInventory();
 
     }

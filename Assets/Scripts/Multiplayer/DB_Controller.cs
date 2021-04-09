@@ -358,6 +358,8 @@ public class DB_Controller : MonoBehaviour
                 _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerBalance = Int32.Parse(balance);
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = balance;
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = balance;
+                _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonLobby.GetComponentInChildren<Text>().text = balance;
+
             }
         }
 
