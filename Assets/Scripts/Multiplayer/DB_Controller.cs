@@ -446,18 +446,28 @@ public class DB_Controller : MonoBehaviour
                         {
                             case "speed_boots":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_InventoryNew.text = kvp.Value.ToString();
+
                                 break;
                             case "shield":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().shield_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryNew.text = kvp.Value.ToString();
+
                                 break;
                             case "vision":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().vision_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().vision_InventoryNew.text = kvp.Value.ToString();
+
                                 break;
                             case "self_revive":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryNew.text = kvp.Value.ToString();
+
                                 break;
                             case "fast_hands":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_InventoryNew.text = kvp.Value.ToString();
+
                                 break;
                             default:
                                 break;

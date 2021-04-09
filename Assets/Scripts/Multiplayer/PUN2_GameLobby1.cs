@@ -97,6 +97,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text self_revive_Inventory;
     public TMP_Text fast_hands_Inventory;
 
+    public TMP_Text speed_boots_InventoryNew;
+    public TMP_Text shield_InventoryNew;
+    public TMP_Text vision_InventoryNew;
+    public TMP_Text self_revive_InventoryNew;
+    public TMP_Text fast_hands_InventoryNew;
+
 
 
 
@@ -206,7 +212,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         AddFriendStatus.SetActive(false);
         Home_Home.SetActive(false);
         InventoryMenu.SetActive(false);
-
+        GetInventory();
         UpgradeMenu.SetActive(true);
     }
 
