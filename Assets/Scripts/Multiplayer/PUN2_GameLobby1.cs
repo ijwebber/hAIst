@@ -281,6 +281,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableMapScreen()
     {
         bg.zoom();
+        GameObject.Find("MapIndicator").SetActive(false);
         LobbyScreen.SetActive(false);
         PreGameHome.SetActive(false);
         // MapScreen.SetActive(true);
