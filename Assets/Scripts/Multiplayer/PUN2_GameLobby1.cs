@@ -459,7 +459,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void ReJoinAfterLeave()
     {
-        StartMenu.SetActive(false);
+        //StartMenu.SetActive(false);
         RejoinWaitPanel.SetActive(true);
         DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
         PhotonNetwork.JoinLobby(TypedLobby.Default);

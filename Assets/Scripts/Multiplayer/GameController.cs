@@ -146,7 +146,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
 
-        PhotonNetwork.LoadLevel("GameLobby 1");
+        //PhotonNetwork.LoadLevel("GameLobby 1");
          //SceneManager.LoadScene("GameLobby 1");
 
 
