@@ -6216,6 +6216,7 @@ MonoBehaviour:
   prevObjectMaterial: {fileID: 0}
   currentObject:
   - 
+  audioSource: {fileID: 0}
   distance: -16
   height: 24
   followOnStart: 0

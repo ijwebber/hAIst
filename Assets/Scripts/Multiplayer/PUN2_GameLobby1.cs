@@ -52,6 +52,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     // NEW USER GAMEOBJECTS
     public GameObject NewStatus;
+    public GameObject UsernameShort;
     public TMP_InputField UsernameCreationInput;
     [SerializeField] TMP_InputField PasswordCreationInput;
 
@@ -141,7 +142,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     // NEW USER MENU
     public void NewAccount()
     {
-        DB_Controller.GetComponent<DB_Controller>().Create(UsernameCreationInput.text, PasswordCreationInput.text);
+
+        if(UsernameCreationInput.text.Length < 5){
+            UsernameShort.SetActive(true);
+        }
+        else{
+            UsernameShort.SetActive(false);
+            DB_Controller.GetComponent<DB_Controller>().Create(UsernameCreationInput.text, PasswordCreationInput.text);
+        }
+        
     }
 
     // EXISTING USER MENU
