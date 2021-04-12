@@ -53,6 +53,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     // NEW USER GAMEOBJECTS
     public GameObject NewStatus;
     public GameObject UsernameShort;
+
+    public GameObject PasswordError;
     public TMP_InputField UsernameCreationInput;
     [SerializeField] TMP_InputField PasswordCreationInput;
 
@@ -145,12 +147,53 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
         if(UsernameCreationInput.text.Length < 5){
             UsernameShort.SetActive(true);
+            PasswordError.SetActive(false);
+            
+        }
+        else if(!(checkPassword(PasswordCreationInput.text,6))){
+            PasswordError.SetActive(true);
+            UsernameShort.SetActive(false);
         }
         else{
+            PasswordError.SetActive(false);
             UsernameShort.SetActive(false);
             DB_Controller.GetComponent<DB_Controller>().Create(UsernameCreationInput.text, PasswordCreationInput.text);
         }
         
+    }
+
+    static bool checkPassword(string input, int minimum){
+
+        bool hasNum = false;
+        bool hasCap = false;
+        bool hasLow = false;
+        bool hasSpec = false;
+        char currentChar;
+
+        if(!(input.Length >= minimum)){
+            return false;
+        }
+
+        for(int i = 0; i < input.Length; i++){
+            currentChar = input[i];
+            if(char.IsDigit(currentChar)){ 
+                hasNum = true;
+            }
+            else if(char.IsUpper(currentChar)){ 
+                hasCap = true;
+            }
+            else if(char.IsLower(currentChar)){ 
+                hasLow = true;
+            }
+            else if(!(char.IsLetterOrDigit(currentChar))){ 
+                hasSpec = true;
+            }
+            if(hasNum && hasCap && hasLow && hasSpec){ 
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // EXISTING USER MENU
