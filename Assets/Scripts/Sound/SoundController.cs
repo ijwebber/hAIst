@@ -7,7 +7,7 @@ using Photon.Pun;
 public class SoundController : MonoBehaviourPun
 {
     [SerializeField] public SoundVisual soundVis;
-    [SerializeField] private DB_Controller DB_Controller;
+    [SerializeField] private DBControllerGame DB_Controller;
     public PlayerController playerController;
     public int multiplier = 240;
     public int threshold = 2;
