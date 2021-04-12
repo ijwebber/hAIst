@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Photon.Pun;
+using Cinemachine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameController : MonoBehaviourPunCallbacks
@@ -17,6 +18,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public SoundVisual soundMesh;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
+    public CinemachineVirtualCamera vcam;
     private int updatedGameState = -1;
     public GameObject EscapeMenu;
     private List<GameObject> specialItems = new List<GameObject>();
@@ -40,6 +42,9 @@ public class GameController : MonoBehaviourPunCallbacks
         spawnpoint.x = xSpawnPos;
 
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnpoint, Quaternion.identity);
+        vcam.Follow = player.transform;
+        vcam.LookAt = player.transform;
+        
 
         // Set custom props
         int numOfSpecial = 0;
