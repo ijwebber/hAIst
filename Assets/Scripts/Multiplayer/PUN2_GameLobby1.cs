@@ -221,6 +221,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         MicMenu.SetActive(true);
         MicCheck = true;
         NewHome.SetActive(false);
+        NewLobbyMenu.SetActive(false);
         UpgradeMenu.SetActive(false);
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
@@ -281,6 +282,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
         //InventoryMenu.SetActive(false);
         NewLobbyMenu.SetActive(false);
+        MicMenu.SetActive(false);
 
         GetInventory();
         UpgradeMenu.SetActive(true);
@@ -681,6 +683,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom");
+        NewLobbyMenu.SetActive(false);
         PreGameMenu.SetActive(true);
         RoomNameButton.GetComponentInChildren<Text>().text = "Room: " + PhotonNetwork.CurrentRoom.Name;
         StopCoroutine("UpdateFriendList");
