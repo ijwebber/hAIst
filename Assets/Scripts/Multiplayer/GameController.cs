@@ -22,6 +22,9 @@ public class GameController : MonoBehaviourPunCallbacks
     private List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
 
+    [SerializeField] private NewQuest questBox;
+    [SerializeField] private NewQuest questMarker;
+
     System.Random r = new System.Random();
 
     //just spawns in player object
@@ -77,6 +80,8 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
         if (gameState != updatedGameState) {
+            questBox.newQuest();
+            questMarker.newQuest();
             updatedGameState = gameState;
             List <string> newText = new List<string>();
             switch (gameState)
