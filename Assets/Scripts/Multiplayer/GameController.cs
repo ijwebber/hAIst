@@ -18,11 +18,16 @@ public class GameController : MonoBehaviourPunCallbacks
     public SoundVisual soundMesh;
     public GameObject SpawnPoint;
     public GUISkin myskin = null;
-    public CinemachineVirtualCamera vcam;
+    public GameObject CamSystem;
     private int updatedGameState = -1;
     public GameObject EscapeMenu;
     private List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
+
+    
+    public CinemachineVirtualCamera playerCam;
+    
+    
 
     System.Random r = new System.Random();
 
@@ -42,9 +47,10 @@ public class GameController : MonoBehaviourPunCallbacks
         spawnpoint.x = xSpawnPos;
 
         GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnpoint, Quaternion.identity);
-        vcam.Follow = player.transform;
-        vcam.LookAt = player.transform;
-        
+        playerCam.Follow = player.gameObject.transform.Find("Timmy").transform;
+        playerCam.LookAt = player.gameObject.transform.Find("Timmy").transform;
+
+
 
         // Set custom props
         int numOfSpecial = 0;
@@ -70,8 +76,11 @@ public class GameController : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
+
         {
+            
+            
             if (!EscapeMenu.activeSelf)
             {
                 EscapeMenu.SetActive(true);
