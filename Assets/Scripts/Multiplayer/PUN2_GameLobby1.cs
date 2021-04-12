@@ -219,7 +219,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableMicThreshold() {
         MicMenu.SetActive(true);
         MicCheck = true;
-        Home_Home.SetActive(false);
+        NewHome.SetActive(false);
+        UpgradeMenu.SetActive(false);
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
     }
@@ -257,6 +258,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         FriendsMenu.SetActive(false);
         UpgradeMenu.SetActive(false);
+        MicMenu.SetActive(false);
         //InventoryMenu.SetActive(false);
         NewLobbyMenu.SetActive(false);
 
