@@ -411,6 +411,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         NewUserMenu.SetActive(false);
         GuestMenu.SetActive(false);
         UserManagerMenu.SetActive(true);
+        UsernameShort.SetActive(true);
+        PasswordError.SetActive(false);
     }
 
 
