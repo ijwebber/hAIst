@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 using Photon.Pun;
 using Photon.Realtime;
@@ -184,6 +185,7 @@ public class PreGame : MonoBehaviourPunCallbacks
             if (PhotonNetwork.PlayerList[i].CustomProperties["ready"].Equals("false")) 
             {
                 StartGameButton.interactable = false;
+                StartGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Waiting for players\nto ready up...";
                 return false;
             }
             total_ready ++;
@@ -194,6 +196,9 @@ public class PreGame : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
             {
                 StartGameButton.interactable = true;
+                StartGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "START";
+            } else {
+                StartGameButton.GetComponentInChildren<TextMeshProUGUI>().text = "Waiting for leader\nto start...";
             }
             return true; 
         }

@@ -43,7 +43,7 @@ public class SoundController : MonoBehaviourPun
     //function done every frame
     void Update() {
         // update sound visualisation
-        grid.updateWalls();
+        // grid.updateWalls();
         soundVis.SetGrid();
         // send microphone volume if above threshold
 #if UNITY_WEBGL && !UNITY_EDITOR

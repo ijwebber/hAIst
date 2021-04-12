@@ -19,13 +19,13 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         timerText.text = "";
 
     }
-    public override void OnRoomPropertiesUpdate(Hashtable setSpotted)
+    public override void OnRoomPropertiesUpdate(Hashtable endTriggered)
     {
-        base.OnRoomPropertiesUpdate(setSpotted);
+        base.OnRoomPropertiesUpdate(endTriggered);
 
-        if (setSpotted["spotted"] != null)
+        if (endTriggered["triggered"] != null)
         {
-            if ((bool)setSpotted["cutSceneDone"] && !timerStarted)
+            if ((bool)endTriggered["triggered"] && !timerStarted)
             {
                 StartCoroutine(endTimer());
             }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,7 +15,18 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Timmy");
+        player = getPlayer();
+    }
+
+    public GameObject getPlayer() {
+        GameObject returnedPlayer = null;
+        foreach (var play in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (play.GetComponent<PhotonView>().IsMine && play.name == "Timmy") {
+                returnedPlayer = play;
+            }
+        }
+        return returnedPlayer;
     }
 
     // Update is called once per frame

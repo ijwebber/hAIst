@@ -5,10 +5,12 @@ using UnityEngine;
 public class DoorScript : MonoBehaviour
 {
     public Animator anim;
+    public SoundController soundController;
     // Start is called before the first frame update
     void Awake()
     {
         anim.ResetTrigger("OpenDoor");
+        soundController = GameObject.FindObjectOfType<SoundController>();
     }
 
     public void OpenDoor() {
@@ -18,6 +20,10 @@ public class DoorScript : MonoBehaviour
     public void CloseDoor() {
         anim.ResetTrigger("OpenDoor");
         anim.enabled = true;
+    }
+    
+    public void updateWall() {
+        soundController.grid.updateWalls();
     }
 
     void pauseAnimationEvent() {

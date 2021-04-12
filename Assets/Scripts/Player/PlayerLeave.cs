@@ -57,13 +57,15 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 bool end = true; // Set end & win to true
                 bool win = true;
                 foreach (Player player in PhotonNetwork.PlayerList) { // Check if all players want to win
-                    if (player.CustomProperties["leave"] != null && !(bool) player.CustomProperties["leave"]) {
-                        end = false;
-                        break;
-                    }
+                    if (player.CustomProperties != null) {
+                        if (player.CustomProperties["leave"] != null && !(bool) player.CustomProperties["leave"]) {
+                            end = false;
+                            break;
+                        }
 
-                    if (!(bool) player.CustomProperties["win"]) { // If all players don't have a win prop then win is false
-                        win = false;
+                        if (!(bool) player.CustomProperties["win"]) { // If all players don't have a win prop then win is false
+                            win = false;
+                        }
                     }
                 }
 

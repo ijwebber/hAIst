@@ -38,10 +38,10 @@ public class KeyPad : MonoBehaviour
     }
 
     void Update() {
-        if(PhotonNetwork.IsMasterClient) {
-            timeElapsed += Time.deltaTime;
-            if (timeElapsed > resetTime) {
-                timeElapsed -= resetTime;
+        timeElapsed += Time.deltaTime;
+        if (timeElapsed > resetTime) {
+            timeElapsed -= resetTime;
+            if(PhotonNetwork.IsMasterClient) {
                 code = string.Empty;
 
                 for (int i = 0; i < keycodeGame.GetComponent<KeycodeTask>().codeLength; i++)

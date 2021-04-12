@@ -21,6 +21,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
 
     string gameVersion = "0.9";
+    public Slider slider;
+    public AnimateBG bg;
+    public TextMeshProUGUI textAsset;
+    public Slider Multiplier;
     bool joiningRoom = false;
     public GameObject DB_Controller;
     public GameObject PreGameScript;
@@ -43,6 +47,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject CreditsMenu;
     [SerializeField] private GameObject RejoinWaitPanel;
 
+    [SerializeField] private GameObject PreGameHome;
+    [SerializeField] private GameObject MapScreen;
 
     // SCRIPTS
     [SerializeField] private GameObject menu_script;
@@ -80,6 +86,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject thief_3;
     public GameObject thief_4;
     public GameObject FriendsMenu;
+    public GameObject MicMenu;
+    private bool MicCheck;
     public GameObject Home_Home;
     public GameObject NewHome;
     public GameObject UpgradeMenu;
@@ -120,9 +128,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject BalanceInfoPre;
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
-    public GameObject MapScreen;
 
     // PHOTON NETWORK GAMEOBJECTS 
+
+    // MAP SCREEN OBJECTS
+    [SerializeField] private GameObject Notes;
 
 
     // Use this for initialization
@@ -200,7 +210,47 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         UpgradeMenu.SetActive(false);
         //InventoryMenu.SetActive(false);
         NewLobbyMenu.SetActive(false);
+        MicMenu.SetActive(false);
+        MicCheck = false;
+        AddFriendStatus.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
+    }
+
+    public void EnableMicThreshold() {
+        MicMenu.SetActive(true);
+        MicCheck = true;
+        Home_Home.SetActive(false);
+        FriendsMenu.SetActive(false);
+        AddFriendStatus.SetActive(false);
+    }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    void Update() {
+        if (MicMenu) {
+            Microphone.Update();
+        }
+        string[] devices = Microphone.devices;
+
+        float[] volumes = Microphone.volumes;
+
+        if (devices.Length > 1) {
+            int index = 0;
+            string deviceName = devices[index];
+            if (deviceName == null)
+            {
+                deviceName = string.Empty;
+            }
+
+            float volume = 0;
+            if (Multiplier.value != null) {
+                volume = volumes[index]*Multiplier.value;
+            }
+            slider.value = volume;
+        }
+    }
+#endif
+    public void updateSlider() {
+        textAsset.text = Multiplier.value + " \n(Default = 240)";
     }
 
     public void EnableLobbyMenu()
@@ -237,6 +287,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableRoomMenu()
     {
         FriendsMenu.SetActive(false);
+        MicMenu.SetActive(false);
+        MicCheck = false;
         AddFriendStatus.SetActive(false);
         NewHome.SetActive(false);
 
@@ -367,23 +419,46 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void EnableHomeScreen()
     {
-        LobbyScreen.SetActive(false);
-        MapScreen.SetActive(false);
+        if (!bg.animating) {
+            LobbyScreen.SetActive(false);
+            if (MapScreen.activeInHierarchy) {
+                MapScreen.SetActive(false);
+                bg.unZoom(PreGameHome);
+            } else {
+                PreGameHome.SetActive(true);
+            }
+        }
 
     }
 
 
+    // zoom in (make sure to call unzoom if map is active when navigating away)
     public void EnableMapScreen()
     {
-        MapScreen.SetActive(true);
+        bg.zoom();
+        GameObject.Find("MapIndicator").SetActive(false);
         LobbyScreen.SetActive(false);
+        PreGameHome.SetActive(false);
+        // MapScreen.SetActive(true);
     }
+
+    public void ToggleNotes() {
+        Notes.SetActive(!Notes.activeInHierarchy);
+    }
+
 
     public void EnableLobbyScreen()
     {
-        MapScreen.SetActive(false);
-        LobbyScreen.SetActive(true);
-        ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        if (!bg.animating) {
+            PreGameHome.SetActive(false);
+            if (MapScreen.activeInHierarchy) {
+                MapScreen.SetActive(false);
+                bg.unZoom(LobbyScreen);
+            } else {
+                LobbyScreen.SetActive(true);
+            }
+            ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        }
     }
 
 

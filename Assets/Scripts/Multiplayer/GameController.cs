@@ -28,6 +28,8 @@ public class GameController : MonoBehaviourPunCallbacks
     private Window_QuestPointer questPointer;
 
     public string playerUsername;
+    [SerializeField] private NewQuest questBox;
+    [SerializeField] private NewQuest questMarker;
 
     System.Random r = new System.Random();
 
@@ -86,6 +88,8 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
         if (gameState != updatedGameState) {
+            questBox.newQuest();
+            questMarker.newQuest();
             updatedGameState = gameState;
             List <string> newText = new List<string>();
             switch (gameState)
@@ -98,7 +102,7 @@ public class GameController : MonoBehaviourPunCallbacks
                     break;
                 case 2: // point to key objects
                     foreach (var item in specialItems) {
-                        newText.Add("Steal " + item.name);
+                        newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
                     }
                     setNewQuest(specialItems, newText);
                     break;
@@ -108,9 +112,9 @@ public class GameController : MonoBehaviourPunCallbacks
                     {
                         if (!item.GetComponent<CollectableItem>().stolen) {
                             toSteal.Add(item);
-                            newText.Add("Steal " + item.name);
+                            newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
                         } else {
-                            newText.Add("<s>Steal " + item.name + "</s>");
+                            newText.Add("<s>Steal " + item.GetComponent<CollectableItem>().itemName + "</s>");
                         }
                     }
                     setNewQuest(toSteal, newText);

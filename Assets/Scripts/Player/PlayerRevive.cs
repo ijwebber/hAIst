@@ -52,44 +52,47 @@ public class PlayerRevive : MonoBehaviour
                 //if in range and player is disabled then display E above their head
                 if (playerInView.GetComponent<PlayerMovement>().disabled && GetComponent<PhotonView>().IsMine)
                 {
-                    disabledPlayersInRange = true;
-                    Debug.Log("Disabled");
-                    playerInView.GetComponent<PlayerRevive>().downText.text = "Hold E";
-                    
+                    if (!GetComponent<PlayerMovement>().disabled)
+                    {
+                        disabledPlayersInRange = true;
+                        Debug.Log("Disabled");
+                        playerInView.GetComponent<PlayerRevive>().downText.text = "Hold E";
 
-                    if (Input.GetKey(KeyCode.E) && !inProgress)
-                    {
-                        inProgressRessPlayer = playerInView;
-                        inProgress = true;
-                        startTime = Time.time;
-                        progressBar.Show();
-                    }
-                    if (Input.GetKey(KeyCode.E) && inProgress)
-                    {
-                        if (playerInView.GetInstanceID() == inProgressRessPlayer.GetInstanceID())
+
+                        if (Input.GetKey(KeyCode.E) && !inProgress)
                         {
-                            progressBar.UpdateBar(Time.time - startTime, 0, holdTime);
-
-                            if (startTime + holdTime <= Time.time)
+                            inProgressRessPlayer = playerInView;
+                            inProgress = true;
+                            startTime = Time.time;
+                            progressBar.Show();
+                        }
+                        if (Input.GetKey(KeyCode.E) && inProgress)
+                        {
+                            if (playerInView.GetInstanceID() == inProgressRessPlayer.GetInstanceID())
                             {
-                                playerInView.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, false);
-                                playerInView.GetComponent<PlayerRevive>().downText.text = "";
-                                
-                                progressBar.Hide();
-                                progressBar.ResetBar();
+                                progressBar.UpdateBar(Time.time - startTime, 0, holdTime);
+
+                                if (startTime + holdTime <= Time.time)
+                                {
+                                    playerInView.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, false);
+                                    playerInView.GetComponent<PlayerRevive>().downText.text = "";
+
+                                    progressBar.Hide();
+                                    progressBar.ResetBar();
+                                }
                             }
+
                         }
 
-                    }
+                        if (!Input.GetKey(KeyCode.E))
+                        {
+                            startTime = 0f;
+                            inProgress = false;
 
-                    if (!Input.GetKey(KeyCode.E))
-                    {
-                        startTime = 0f;
-                        inProgress = false;
-
-                        progressBar.Hide();
-                        progressBar.ResetBar();
-                    }
+                            progressBar.Hide();
+                            progressBar.ResetBar();
+                        }
+                    } else playerInView.GetComponent<PlayerRevive>().downText.text = "";
 
                 }
 
@@ -98,10 +101,24 @@ public class PlayerRevive : MonoBehaviour
 
         }
 
-        if(GetComponent<PlayerMovement>().disabled && playersInView.Length == 1)
+        if (GetComponent<PlayerMovement>().disabled)
         {
-            downText.text = "";
+            bool upPlayerInRange = false;
+            for (int i = 0; i < playersInView.Length; i++)
+            {
+                GameObject playerInView = playersInView[i].gameObject;
+                if (playerInView.gameObject.GetInstanceID() != this.gameObject.GetInstanceID() && !playerInView.GetComponent<PlayerMovement>().disabled)
+                {
+                    upPlayerInRange = true;
+                }
+
+            }
+            if (!upPlayerInRange)
+            {
+                downText.text = "";
+            }
         }
+        else downText.text = "";
 
         
     }

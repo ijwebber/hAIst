@@ -29,11 +29,14 @@ public class PlayerPickUp : MonoBehaviourPun
 
     //int gameSelection;
     public float cooldown = 1;
+    public bool eDown = false;
 
     private float startTime = 0f;
     private float timer = 0f;
+    private GameObject inTrigger = null;
     public float holdTime = 3.0f;
     private bool held = false;
+    private bool codeActive = false;
 
     public bool down;
 
@@ -46,68 +49,48 @@ public class PlayerPickUp : MonoBehaviourPun
     // Update is called once per frame
     void Update()
     {
-        holdTime = 3.0f;
-        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
-
-            down = GetComponent<PlayerMovement>().disabled;
-
-            if(targetTime > 0){
-                displayCooldown();
-            }
-            else{cooldownBox.text = "";}
-
-            if(codeDisplay.active || keycodeGame.active || fixPaintingGame.active){
-                    displayMessage(2);
-            }
-       
-
-            keyCorrect = keycodeGame.GetComponent<KeycodeTask>().codeCorrect;   //dont forget to reset these values
-            paintingCorrect = fixPaintingGame.GetComponent<RotateTask>().win;
-
-        }
-        
-    }
-
-
-
-    private void OnCollisionEnter(Collision other) {    // what to do once player enters
-
-        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
-                                              
-        }
-    }
-    private void OnTriggerStay(Collider other)  {
-        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
+        //game tag thing
+        if (photonView.IsMine && PhotonNetwork.IsConnected && inTrigger != null)
         {
-            switch (other.gameObject.tag) {
+            switch (inTrigger.gameObject.tag) {
 
                 case "button":
                     displayMessage("Press E to press button");
                     if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
-                        int id = other.gameObject.GetComponent<PressButton>().id;
-                        other.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
+                        int id = inTrigger.gameObject.GetComponent<PressButton>().id;
+                        inTrigger.gameObject.GetComponent<PhotonView>().RPC("ButtonPressed", RpcTarget.All, id);
                     }
                     break;
                 case "codedisplay":
                     displayMessage("Press E to see code");
-                    if (Input.GetKey(KeyCode.E))
+                    if (Input.GetKeyDown(KeyCode.E) && inTrigger.GetComponent<PhotonView>().IsMine)
                     {
-                        CodeDisplayObject display = other.gameObject.GetComponent<CodeDisplayObject>();
-                        codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
-
-                        codeDisplay.SetActive(true);
+                        if (!codeDisplay.activeInHierarchy) {
+                            Debug.Log("AYO not active " + inTrigger.gameObject.name);
+                            codeDisplay.SetActive(true);
+                            CodeDisplayObject display = inTrigger.gameObject.GetComponent<CodeDisplayObject>();
+                            codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
+                            codeActive = true;
+                        } else {
+                            Debug.Log("AYO active " + inTrigger.gameObject.name);
+                            codeDisplay.SetActive(false);
+                            codeActive = false;
+                        }
                     }
                     break;
 
                 case "keypad":
-                    KeyPad keypad = other.gameObject.GetComponent<KeyPad>();
+                    KeyPad keypad = inTrigger.gameObject.GetComponent<KeyPad>();
                     keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
 
-                    if (keypad.codeCorrect && !down)
+                    if (Input.GetKeyDown(KeyCode.E) && keycodeGame.activeInHierarchy) {
+                        keycodeGame.SetActive(false);
+                    }
+                    else if (keypad.codeCorrect && !down)
                     {
                         displayMessage("Code already entered");
                     }
-                    else if (Input.GetKey(KeyCode.E) && seconds == 0 && !down)
+                    else if (Input.GetKeyDown(KeyCode.E) && seconds == 0 && !down)
                     {
                         keycodeGame.SetActive(true);
                         displayMessage(2);
@@ -136,7 +119,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     displayMessage("Press E to read manual");
                     if (Input.GetKey(KeyCode.E))
                     {
-                        WireManualObject manual = other.gameObject.GetComponent<WireManualObject>();
+                        WireManualObject manual = inTrigger.gameObject.GetComponent<WireManualObject>();
                         wireManual.GetComponent<WireManual>().wiresID = manual.wires.id;
 
                         wireManual.SetActive(true);
@@ -144,7 +127,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     break;
 
                 case "wires":
-                    Wires wires = other.gameObject.GetComponent<Wires>();
+                    Wires wires = inTrigger.gameObject.GetComponent<Wires>();
                     wireGame.GetComponent<WireTask>().wiresID = wires.id;
 
                     if (wires.complete && !down)
@@ -179,19 +162,44 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
                     break;
                 case "MetalDoorHandle":
-                    if (!other.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
+                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
                         displayMessage("This door requires a code");
                         gameController.gameState = 1;
-                    } else {
-                        gameController.gameState = 2;
                     }
+                        // gameController.gameState = 2;
+                    // }
                     break;
             }
         }
+        holdTime = 3.0f;
+        if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
+
+            down = GetComponent<PlayerMovement>().disabled;
+
+            if(targetTime > 0){
+                displayCooldown();
+            }
+            else{cooldownBox.text = "";}
+
+            if(codeDisplay.active || keycodeGame.active || fixPaintingGame.active){
+                    displayMessage(2);
+            }
+       
+
+            keyCorrect = keycodeGame.GetComponent<KeycodeTask>().codeCorrect;   //dont forget to reset these values
+            paintingCorrect = fixPaintingGame.GetComponent<RotateTask>().win;
+
+        }
+        
     }
 
-    private void OnTriggerExit(Collider other) {    // what to do once player leaves
 
+
+    void OnTriggerEnter(Collider other) {
+        inTrigger = other.gameObject;
+    }
+    void OnTriggerExit(Collider other) {
+        inTrigger = null;
         if(photonView.IsMine == true && PhotonNetwork.IsConnected == true){
                 
             currentObject = null;
