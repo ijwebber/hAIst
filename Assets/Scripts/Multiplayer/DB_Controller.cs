@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using System.Text;
 using System.Security.Cryptography;
-
+using Photon.Pun;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -28,6 +28,7 @@ public class DB_Controller : MonoBehaviour
     string edit_multiplier_url = "https://brasspig.online/set_mic_multiplier.php?";
     string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
     string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
+    [SerializeField] Slider multiplier, threshold;
 
     private void Start()
     {
@@ -65,9 +66,9 @@ public class DB_Controller : MonoBehaviour
         StartCoroutine(EditThreshold(username, value));
     }
 
-    public void GetMicThreshold(string username)
+    public void GetMicThreshold(string username, int state)
     {
-        StartCoroutine(GetThreshold(username));
+        StartCoroutine(GetThreshold(username, state));
     }
 
     public void EditMicMultiplier(string username, int value)
@@ -75,9 +76,19 @@ public class DB_Controller : MonoBehaviour
         StartCoroutine(EditMultiplier(username, value));
     }
 
-    public void GetMicMultiplier(string username)
+    public void saveMicSettings() {
+        EditMicMultiplier(PhotonNetwork.NickName, (int)multiplier.value);
+        EditMicThreshold(PhotonNetwork.NickName, (int)threshold.value);
+    }
+
+    public void getThresholds(string username) {
+        GetMicMultiplier(username, 0);
+        GetMicThreshold(username, 0);
+    }
+
+    public void GetMicMultiplier(string username, int state)
     {
-        StartCoroutine(GetMultiplier(username));
+        StartCoroutine(GetMultiplier(username, state));
     }
 
     public void GetUpgradeList(string username)
@@ -540,9 +551,10 @@ public class DB_Controller : MonoBehaviour
         }
     }
 
-    IEnumerator GetThreshold(string username)
+    IEnumerator GetThreshold(string username, int state)
     {
         string uri = get_threshold_url + "user=" + username;
+        string threshOut = "0";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -553,9 +565,11 @@ public class DB_Controller : MonoBehaviour
             }
             else
             {
-                string threshold = webRequest.downloadHandler.text;
-
+                threshOut = webRequest.downloadHandler.text;
             }
+        }
+        if (state == 0) {
+            threshold.value = Int32.Parse(threshOut);
         }
     }
 
@@ -585,9 +599,10 @@ public class DB_Controller : MonoBehaviour
         }
     }
 
-    IEnumerator GetMultiplier(string username)
+    IEnumerator GetMultiplier(string username, int state)
     {
         string uri = get_multiplier_url + "user=" + username;
+        string outMulti = "240";
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
             // Request and wait for the desired page.
@@ -598,9 +613,11 @@ public class DB_Controller : MonoBehaviour
             }
             else
             {
-                string multiplier = webRequest.downloadHandler.text;
-
+                outMulti = webRequest.downloadHandler.text;
             }
+        }
+        if (state == 0) {
+            multiplier.value = Int32.Parse(outMulti);
         }
     }
 

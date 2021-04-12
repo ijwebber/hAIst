@@ -217,6 +217,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
 
     public void EnableMicThreshold() {
+        DB_Controller.GetComponent<DB_Controller>().getThresholds(PhotonNetwork.NickName);
         MicMenu.SetActive(true);
         MicCheck = true;
         NewHome.SetActive(false);
