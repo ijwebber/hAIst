@@ -52,6 +52,7 @@ public class LaserDown : MonoBehaviourPun
 
                     if (!tripped) {
                         argon.SetActive(true);
+                        argon.GetComponent<Argon>().fillArgon();
                         soundController.grid.updateWalls();
                     }
                 }

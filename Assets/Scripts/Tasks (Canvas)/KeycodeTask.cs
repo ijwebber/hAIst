@@ -49,6 +49,9 @@ public class KeycodeTask : MonoBehaviour
                 {
                     // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
+                    keypad.codeCorrect = true;
+                    codeCorrect = true;
+                    gameController.gameState = 2;
                     // StartCoroutine(ResetCode());
                     StartCoroutine(correct(keypad));
                 }
@@ -64,11 +67,8 @@ public class KeycodeTask : MonoBehaviour
     private IEnumerator correct(KeyPad keypad) {
         yield return new WaitForSeconds(.5f);
         keyCodeCanvas.SetActive(false);
-        gameController.gameState = 2;
         keypad.GetComponent<PhotonView>().RPC("updateKeyCode", RpcTarget.Others, keypadID);
         //insert bool value to say successful if code was correct
-        keypad.codeCorrect = true;
-        codeCorrect = true;
 
     }
 
