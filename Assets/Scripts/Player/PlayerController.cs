@@ -12,10 +12,16 @@ public class PlayerController : MonoBehaviour
     [Range(0,360)]
     public float viewAngle;
     public bool isDisabled = false;
+    public bool isGuest;
     // Start is called before the first frame update
     void Start()
     {
         player = getPlayer();
+        if (PlayerPrefs.GetInt("isGuest", -1) == 1) {
+            isGuest = true;
+        } else {
+            isGuest = false;
+        }
     }
 
     public GameObject getPlayer() {

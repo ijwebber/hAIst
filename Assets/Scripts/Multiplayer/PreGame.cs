@@ -98,6 +98,13 @@ public class PreGame : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
+        PUN2_GameLobby1 gameLobby1 = GameObject.FindObjectOfType<PUN2_GameLobby1>();
+        int guest = 0;
+        if (gameLobby1.IsGuest) {
+            guest = 1;
+        }
+        PlayerPrefs.SetInt("isGuest", guest);
+        PlayerPrefs.Save();
         StartGameWaitPanel.SetActive(true);
         PhotonNetwork.LoadLevel("ArtLevel");
     }
