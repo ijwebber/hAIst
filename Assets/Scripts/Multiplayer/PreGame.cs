@@ -29,7 +29,10 @@ public class PreGame : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        }
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
 
         
@@ -45,17 +48,19 @@ public class PreGame : MonoBehaviourPunCallbacks
     //just spawns in player object
     private void Awake()
     {
-        if (PhotonNetwork.CurrentRoom == null)
+        if (PhotonNetwork.IsConnected)
         {
-            Debug.Log("Is not in the room, returning back to Lobby");
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
-            return;
+            if (PhotonNetwork.CurrentRoom == null)
+            {
+                Debug.Log("Is not in the room, returning back to Lobby");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
+                return;
+            }
+
+            customProperties.Add("ready", "false");
+            customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
-
-        customProperties.Add("ready", "false");
-        customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
-
     }
 
 
