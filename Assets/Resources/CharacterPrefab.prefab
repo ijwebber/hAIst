@@ -3104,8 +3104,7 @@ MonoBehaviour:
   codeLength: 5
   codeReset: 0.5
   player: {fileID: 6181234002884017710}
-  soundController: {fileID: 0}
-  gameController: {fileID: 0}
+  keyCodeCanvas: {fileID: 3273627292254469411}
   codeCorrect: 0
   buttonNoise: {fileID: 1225658058298566098}
   keypadID: 0

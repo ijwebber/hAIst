@@ -39,6 +39,8 @@ public class DBControllerGame : MonoBehaviour
     {
         
     }
+
+    // check if guest!!
     public void getThresholds(string username) {
         GetMicMultiplier(username);
         GetMicThreshold(username);
