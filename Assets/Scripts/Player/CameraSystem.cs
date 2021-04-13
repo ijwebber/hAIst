@@ -11,6 +11,8 @@ public class CameraSystem : MonoBehaviour
     public GameObject playerCamTrack;
     public CinemachineBrain brain;
 
+    public GameObject gameUIReference;
+
     public bool introDone = false;
     private bool playerCamActive = false;
 
@@ -34,7 +36,7 @@ public class CameraSystem : MonoBehaviour
         {
             introDone = true;
             playerCamActive = true;
-
+            
             playerCamTrack.SetActive(true);
             introSceneTrack.SetActive(false);
         }
