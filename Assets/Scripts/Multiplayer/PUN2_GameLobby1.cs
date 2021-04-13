@@ -128,6 +128,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject BalanceInfoPre;
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
+    public GameObject UpgradeScreen;
 
     // PHOTON NETWORK GAMEOBJECTS 
 
@@ -422,10 +423,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     // PRE GAME MENU
 
+
     public void EnableHomeScreen()
     {
         if (!bg.animating) {
             LobbyScreen.SetActive(false);
+            UpgradeScreen.SetActive(false);
             if (MapScreen.activeInHierarchy) {
                 MapScreen.SetActive(false);
                 bg.unZoom(PreGameHome);
@@ -436,14 +439,38 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     }
 
+    public void EnableUpgradeScreen()
+    {
+        if (!bg.animating)
+        {
+            PreGameHome.SetActive(false);
+            LobbyScreen.SetActive(false);
+
+            if (MapScreen.activeInHierarchy)
+            {
+                MapScreen.SetActive(false);
+
+                bg.unZoom(UpgradeScreen);
+            }
+            else
+            {
+                UpgradeScreen.SetActive(true);
+            }
+            //ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        }
+
+    }
 
     // zoom in (make sure to call unzoom if map is active when navigating away)
     public void EnableMapScreen()
     {
-        bg.zoom();
-        GameObject.Find("MapIndicator").SetActive(false);
         LobbyScreen.SetActive(false);
         PreGameHome.SetActive(false);
+        UpgradeScreen.SetActive(false);
+        bg.zoom();
+        GameObject.Find("MapIndicator").SetActive(false);
+        
+
         // MapScreen.SetActive(true);
     }
 
@@ -456,6 +483,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         if (!bg.animating) {
             PreGameHome.SetActive(false);
+            UpgradeScreen.SetActive(false);
+
             if (MapScreen.activeInHierarchy) {
                 MapScreen.SetActive(false);
                 bg.unZoom(LobbyScreen);
