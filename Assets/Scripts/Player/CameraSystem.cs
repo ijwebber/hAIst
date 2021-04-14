@@ -17,22 +17,16 @@ public class CameraSystem : MonoBehaviour
     private GameObject guardShotReference;
 
     void Start()
-    {   
-
-        SetPaintingsLayer(default);
-        guardShotReference = GameObject.Find("Guard3(Clone)");
+    {
+        introCutSceneSetup();
         
-
-        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
-        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
-
-        SetLayerRecursively(guardShotReference, default);
       
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {   
+        //for the first escape key press we want to end the cutscene and skip to the player cam
         if(!introDone && Input.GetKeyDown(KeyCode.Escape))
         {
             introEnd();
@@ -53,6 +47,18 @@ public class CameraSystem : MonoBehaviour
             SetLayerRecursively(guardShotReference, 10);
             SetPaintingsLayer(13);
         }
+    }
+
+    void introCutSceneSetup()
+    {
+        //Finding guard object for guard scene shot and setting the VC to follow and look at it
+        guardShotReference = GameObject.Find("Guard3(Clone)");
+        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
+        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
+
+        //setting the layers for paintings and guard so they render
+        SetPaintingsLayer(default);
+        SetLayerRecursively(guardShotReference, default);
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
