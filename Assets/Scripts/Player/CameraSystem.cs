@@ -12,10 +12,6 @@ public class CameraSystem : MonoBehaviour
     public CinemachineBrain brain;
 
     public GameObject gameUIReference;
-
-    private GameObject easterStatue;
-    private GameObject monaLisaPainting;
-
     public bool introDone = false;
     private bool playerCamActive = false;
     private GameObject guardShotReference;
@@ -23,7 +19,7 @@ public class CameraSystem : MonoBehaviour
     void Start()
     {   
 
-       
+        SetPaintingsLayer(default);
         guardShotReference = GameObject.Find("Guard3(Clone)");
         
 
@@ -32,13 +28,6 @@ public class CameraSystem : MonoBehaviour
 
         SetLayerRecursively(guardShotReference, default);
       
-
-        easterStatue = GameObject.Find("easter-island-statue");
-        easterStatue.layer = default;
-
-        monaLisaPainting = GameObject.Find("MonaLisa");
-        monaLisaPainting.layer = default;
-
     }
 
     // Update is called once per frame
@@ -62,8 +51,7 @@ public class CameraSystem : MonoBehaviour
             introSceneTrack.SetActive(false);
 
             SetLayerRecursively(guardShotReference, 10);
-            easterStatue.layer = 13;
-            monaLisaPainting.layer = 13;
+            SetPaintingsLayer(13);
         }
     }
 
@@ -84,5 +72,10 @@ public class CameraSystem : MonoBehaviour
             }
             SetLayerRecursively(child.gameObject, newLayer);
         }
+    }
+
+    void SetPaintingsLayer(int layer){
+        var stealItems = GameObject.FindGameObjectsWithTag("steal");
+        foreach(var items in stealItems){items.layer = layer;}
     }
 }
