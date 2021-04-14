@@ -15,10 +15,20 @@ public class CameraSystem : MonoBehaviour
 
     public bool introDone = false;
     private bool playerCamActive = false;
+    private GameObject guardShotReference;
 
     void Start()
-    {
+    {   
+
+       
+        guardShotReference = GameObject.Find("Guard3(Clone)");
         
+
+        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
+        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
+      
+
+
     }
 
     // Update is called once per frame
@@ -31,7 +41,8 @@ public class CameraSystem : MonoBehaviour
     }
 
     public void introEnd()
-    {
+    {   
+        //change layer of guard back to normal, fade ui back in, turn on black
         if (!introDone)
         {
             introDone = true;
