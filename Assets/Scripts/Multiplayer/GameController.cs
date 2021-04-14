@@ -10,8 +10,6 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class GameController : MonoBehaviourPunCallbacks
 {
 
-    public PUN2_GameLobby1 GameLobbyScript;
-
     public GameObject playerPrefab;
     public int gameState = 0;
     public GameObject guardPrefab;
@@ -30,6 +28,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public string playerUsername;
     [SerializeField] private NewQuest questBox;
     [SerializeField] private NewQuest questMarker;
+
+    [SerializeField] private PlayerUpdates playerUpdates;
 
     System.Random r = new System.Random();
 
@@ -86,7 +86,11 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 EscapeMenu.SetActive(false);
             }
-        }
+        } 
+        // for info testing
+        // if (Input.GetKeyDown(KeyCode.M)) {
+        //     playerUpdates.updateDisplay("M was just pressed");
+        // }
         if (gameState != updatedGameState) {
             questBox.newQuest();
             questMarker.newQuest();
@@ -95,18 +99,24 @@ public class GameController : MonoBehaviourPunCallbacks
             switch (gameState)
             {
                 case 0: // starting state
+                    playerUpdates.updateDisplay("Game started");
+                    updateDisp("Game started");
                     setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"});
                     break;
                 case 1: // point to code
                     setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"});
                     break;
                 case 2: // point to key objects
+                    playerUpdates.updateDisplay("The key door has been unlocked");
+                    updateDisp("The key door has been unlocked");
                     foreach (var item in specialItems) {
                         newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
                     }
                     setNewQuest(specialItems, newText);
                     break;
                 case 3: // point to key object 2
+                    playerUpdates.updateDisplay("You have stolen a key painting");
+                    updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
                     List <GameObject> toSteal = new List<GameObject>();
                     foreach (var item in specialItems)
                     {
@@ -120,6 +130,8 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(toSteal, newText);
                     break;
                 case 4: // point to exit
+                    playerUpdates.updateDisplay("You have stolen a key painting");
+                    updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
                     setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
                     break;
                 default:
@@ -224,6 +236,15 @@ public class GameController : MonoBehaviourPunCallbacks
             }
             this.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, serialisedObjects, gameState, objectives.ToArray());
         }
+    }
+
+    private void updateDisp(string message) {
+        this.GetComponent<PhotonView>().RPC("displayMessage", RpcTarget.Others, message);
+    }
+
+    [PunRPC]
+    void displayMessage(string message) {
+        playerUpdates.updateDisplay(message);
     }
 
     [PunRPC]
