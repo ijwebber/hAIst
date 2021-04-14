@@ -387,6 +387,8 @@ public class DB_Controller : MonoBehaviour
         if (type == 10)
         {
             _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanel.SetActive(true);
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanelPre.SetActive(true);
+
         }
         string uri = edit_balance_url;
         string post_data = "{ \"username\": \"" + username + "\", \"new_balance\": " + new_balance + "  }";
@@ -411,7 +413,8 @@ public class DB_Controller : MonoBehaviour
                     Debug.Log("Balance edited succesfully.");
                     _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = new_balance.ToString();
                     _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = new_balance.ToString();
-                    
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonLobby.GetComponentInChildren<Text>().text = new_balance.ToString();
+
                 }
                 else
                 {
@@ -424,12 +427,15 @@ public class DB_Controller : MonoBehaviour
         if (type == 10)
         {
             _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanel.SetActive(false);
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanelPre.SetActive(false);
+
         }
     }
 
     IEnumerator UpgradeList(string username)
     {
         _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
+
         string uri = get_upgrades_url + "user=" + username;
         Debug.Log(uri);
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
@@ -466,26 +472,30 @@ public class DB_Controller : MonoBehaviour
                             case "speed_boots":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_Inventory.text = kvp.Value.ToString();
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_InventoryNew.text = kvp.Value.ToString();
-
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_InventoryPre.text = kvp.Value.ToString();
                                 break;
                             case "shield":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().shield_Inventory.text = kvp.Value.ToString();
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryNew.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
                             case "vision":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().vision_Inventory.text = kvp.Value.ToString();
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().vision_InventoryNew.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().vision_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
                             case "self_revive":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_Inventory.text = kvp.Value.ToString();
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryNew.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
                             case "fast_hands":
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_Inventory.text = kvp.Value.ToString();
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_InventoryNew.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
                             default:
@@ -498,6 +508,7 @@ public class DB_Controller : MonoBehaviour
             }
         }
         _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
+
 
 
 
@@ -528,6 +539,7 @@ public class DB_Controller : MonoBehaviour
                 }
             }
         }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().GetInventory();
     }
 
 
@@ -636,6 +648,10 @@ public class DB_Controller : MonoBehaviour
             Debug.Log("FRIEND LIST NULL. REFRESHING");
             refresh = true;
         }
+        if (type == 1)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().FriendWaitPanel.SetActive(true);
+        }
         string uri = get_friends_url + "user=" + username;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -661,6 +677,10 @@ public class DB_Controller : MonoBehaviour
         if (type == 0 || refresh == true)
         {
             _GameLobby.GetComponent<PUN2_GameLobby1>().ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+        }
+        if (type == 1)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().FriendWaitPanel.SetActive(false);
         }
 
     }

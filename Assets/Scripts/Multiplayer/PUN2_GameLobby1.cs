@@ -96,7 +96,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject InventoryMenu;
 
     public GameObject UnlockPanel;
+    public GameObject UnlockPanelPre;
+    public GameObject FriendWaitPanel;
+
     public GameObject InventoryWaitPanel;
+
 
     public string[] FriendList;
     public GameObject AddFriendStatus;
@@ -117,6 +121,13 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text vision_InventoryNew;
     public TMP_Text self_revive_InventoryNew;
     public TMP_Text fast_hands_InventoryNew;
+
+    public TMP_Text speed_boots_InventoryPre;
+    public TMP_Text shield_InventoryPre;
+    public TMP_Text vision_InventoryPre;
+    public TMP_Text self_revive_InventoryPre;
+    public TMP_Text fast_hands_InventoryPre;
+
 
 
 
@@ -465,7 +476,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             }
             else
             {
+                GetInventory();
                 UpgradeScreen.SetActive(true);
+
             }
             //ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
         }
