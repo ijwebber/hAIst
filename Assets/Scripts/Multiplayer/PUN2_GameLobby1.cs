@@ -21,12 +21,6 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
 
     string gameVersion = "0.9";
-    public Slider slider;
-    public AnimateBG bg;
-    public TextMeshProUGUI multiplierTextAsset;
-    public TextMeshProUGUI threshTextAsset;
-    public Slider Multiplier;
-    public Slider Threshold;
     bool joiningRoom = false;
     public GameObject DB_Controller;
     public GameObject PreGameScript;
@@ -89,7 +83,6 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject thief_4;
     public GameObject FriendsMenu;
     public GameObject MicMenu;
-    private bool MicCheck;
     public GameObject Home_Home;
     public GameObject NewHome;
     public GameObject UpgradeMenu;
@@ -134,9 +127,19 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     // LOBBY MENU OBJECTS
     public Button BalanceButtonLobby;
 
+    // MIC MENU OBJECT
+    private bool MicCheck;
+    [SerializeField] private Button saveMicButton;
+    [SerializeField] private TextMeshProUGUI multiplierTextAsset;
+    [SerializeField] private TextMeshProUGUI threshTextAsset;
+    public Slider Multiplier;
+    public Slider Threshold;
+    public Slider slider;
+
 
 
     // PRE GAME OBJECTS
+    public AnimateBG bg;
     public Button BalanceButtonPreGame;
     public GameObject BalanceInfoPre;
     public GameObject RoomNameButton;
@@ -147,6 +150,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     // MAP SCREEN OBJECTS
     [SerializeField] private GameObject Notes;
+
 
 
     // Use this for initialization
@@ -233,6 +237,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableMicThreshold() {
         DB_Controller.GetComponent<DB_Controller>().getThresholds(PhotonNetwork.NickName);
         MicMenu.SetActive(true);
+        Color32 blueCol = new Color32(93,93,118,255);
+        saveMicButton.GetComponent<Image>().color = blueCol;
         MicCheck = true;
         NewHome.SetActive(false);
         NewLobbyMenu.SetActive(false);
@@ -243,40 +249,47 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     void Update() {
-        if (MicMenu) {
+        if (MicCheck) {
             Microphone.Update();
-        }
-        string[] devices = Microphone.devices;
+            string[] devices = Microphone.devices;
 
-        float[] volumes = Microphone.volumes;
+            float[] volumes = Microphone.volumes;
 
-        if (devices.Length > 1) {
-            int index = 0;
-            string deviceName = devices[index];
-            if (deviceName == null)
-            {
-                deviceName = string.Empty;
+            if (devices.Length > 1) {
+                int index = 0;
+                string deviceName = devices[index];
+                if (deviceName == null)
+                {
+                    deviceName = string.Empty;
+                }
+
+                float volume = 0;
+                if (Multiplier.value != null) {
+                    volume = volumes[index]*Multiplier.value;
+                }
+                slider.value = volume;
             }
-
-            float volume = 0;
-            if (Multiplier.value != null) {
-                volume = volumes[index]*Multiplier.value;
-            }
-            slider.value = volume;
         }
     }
 #endif
     public void updateMultiplierSlider() {
         multiplierTextAsset.text = Multiplier.value.ToString();
+        saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
     }
 
     public void updateThresholdSlider() {
         threshTextAsset.text = Threshold.value.ToString();
+        saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
     }
 
     public void defaultMicSettings() {
         Threshold.value = 2;
         Multiplier.value = 240;
+        saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
+    }
+
+    public void saveMicClicked() {
+        saveMicButton.GetComponent<Image>().color = new Color32(93,93,118,255);
     }
 
     public void EnableLobbyMenu()
