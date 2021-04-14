@@ -13,6 +13,9 @@ public class CameraSystem : MonoBehaviour
 
     public GameObject gameUIReference;
 
+    private GameObject easterStatue;
+    private GameObject monaLisaPainting;
+
     public bool introDone = false;
     private bool playerCamActive = false;
     private GameObject guardShotReference;
@@ -28,6 +31,11 @@ public class CameraSystem : MonoBehaviour
         introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
       
 
+        easterStatue = GameObject.Find("easter-island-statue");
+        easterStatue.layer = default;
+
+        monaLisaPainting = GameObject.Find("MonaLisa");
+        monaLisaPainting.layer = default;
 
     }
 
@@ -50,6 +58,9 @@ public class CameraSystem : MonoBehaviour
             
             playerCamTrack.SetActive(true);
             introSceneTrack.SetActive(false);
+
+            easterStatue.layer = 13;
+            monaLisaPainting.layer = 13;
         }
     }
 }
