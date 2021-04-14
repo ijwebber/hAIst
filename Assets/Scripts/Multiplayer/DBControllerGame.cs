@@ -44,8 +44,8 @@ public class DBControllerGame : MonoBehaviour
     public void getThresholds(string username) {
         if (PlayerPrefs.GetInt("isGuest", -1) == 1) {
             // default values for guest
-            soundController.threshold = 2;
-            soundController.multiplier = 240;
+            soundController.threshold = PlayerPrefs.GetInt("Threshold", 2);
+            soundController.multiplier = PlayerPrefs.GetInt("Multiplier", 240);
         } else {
             GetMicMultiplier(username);
             GetMicThreshold(username);

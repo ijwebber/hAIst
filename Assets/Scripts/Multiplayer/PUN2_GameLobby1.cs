@@ -23,8 +23,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     string gameVersion = "0.9";
     public Slider slider;
     public AnimateBG bg;
-    public TextMeshProUGUI textAsset;
+    public TextMeshProUGUI multiplierTextAsset;
+    public TextMeshProUGUI threshTextAsset;
     public Slider Multiplier;
+    public Slider Threshold;
     bool joiningRoom = false;
     public GameObject DB_Controller;
     public GameObject PreGameScript;
@@ -253,8 +255,17 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         }
     }
 #endif
-    public void updateSlider() {
-        textAsset.text = Multiplier.value + " \n(Default = 240)";
+    public void updateMultiplierSlider() {
+        multiplierTextAsset.text = Multiplier.value.ToString();
+    }
+
+    public void updateThresholdSlider() {
+        threshTextAsset.text = Threshold.value.ToString();
+    }
+
+    public void defaultMicSettings() {
+        Threshold.value = 2;
+        Multiplier.value = 240;
     }
 
     public void EnableLobbyMenu()

@@ -77,8 +77,14 @@ public class DB_Controller : MonoBehaviour
     }
 
     public void saveMicSettings() {
-        EditMicMultiplier(PhotonNetwork.NickName, (int)multiplier.value);
-        EditMicThreshold(PhotonNetwork.NickName, (int)threshold.value);
+        if (_GameLobby.GetComponent<PUN2_GameLobby1>().IsGuest) {
+            PlayerPrefs.SetInt("Threshold", (int)threshold.value);
+            PlayerPrefs.SetInt("Multiplier", (int)multiplier.value);
+        } else {
+            EditMicMultiplier(PhotonNetwork.NickName, (int)multiplier.value);
+            EditMicThreshold(PhotonNetwork.NickName, (int)threshold.value);
+        }
+
     }
 
     public void getThresholds(string username) {
