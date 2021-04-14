@@ -11,7 +11,7 @@ public class LaserDown : MonoBehaviourPun
 
     [SerializeField] private Transform startPoint; 
     [SerializeField] private SoundController soundController;
-    [SerializeField] private GameObject argon;
+    [SerializeField] private Argon argon;
 
     GameObject character;
 
@@ -50,9 +50,9 @@ public class LaserDown : MonoBehaviourPun
                     PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
                     song.PlayIntenseTheme();
 
-                    if (!tripped) {
-                        argon.SetActive(true);
-                        argon.GetComponent<Argon>().fillArgon();
+                    if (!argon.tripped) {
+                        argon.gameObject.SetActive(true);
+                        argon.fillArgon();
                         soundController.grid.updateWalls();
                     }
                 }

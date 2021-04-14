@@ -6,7 +6,7 @@ using Photon.Pun;
 public class Argon : MonoBehaviourPun
 {
     [SerializeField] private List<GameObject> argonZones;
-    private bool tripped = false;
+    public bool tripped = false;
     public void fillArgon() {
         if (!tripped) {
             this.photonView.RPC("argonFill", RpcTarget.All);
