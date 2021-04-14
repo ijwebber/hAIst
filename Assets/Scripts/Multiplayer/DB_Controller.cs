@@ -642,6 +642,10 @@ public class DB_Controller : MonoBehaviour
             Debug.Log("FRIEND LIST NULL. REFRESHING");
             refresh = true;
         }
+        if (type == 1)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().FriendWaitPanel.SetActive(true);
+        }
         string uri = get_friends_url + "user=" + username;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -667,6 +671,10 @@ public class DB_Controller : MonoBehaviour
         if (type == 0 || refresh == true)
         {
             _GameLobby.GetComponent<PUN2_GameLobby1>().ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+        }
+        if (type == 1)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().FriendWaitPanel.SetActive(false);
         }
 
     }

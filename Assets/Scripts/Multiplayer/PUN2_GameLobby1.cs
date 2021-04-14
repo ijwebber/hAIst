@@ -95,6 +95,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public GameObject UnlockPanel;
     public GameObject UnlockPanelPre;
+    public GameObject FriendWaitPanel;
 
     public GameObject InventoryWaitPanel;
 
