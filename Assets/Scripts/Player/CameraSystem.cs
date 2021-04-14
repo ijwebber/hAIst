@@ -29,6 +29,8 @@ public class CameraSystem : MonoBehaviour
 
         introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
         introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
+
+        SetLayerRecursively(guardShotReference, default);
       
 
         easterStatue = GameObject.Find("easter-island-statue");
@@ -59,8 +61,28 @@ public class CameraSystem : MonoBehaviour
             playerCamTrack.SetActive(true);
             introSceneTrack.SetActive(false);
 
+            SetLayerRecursively(guardShotReference, 10);
             easterStatue.layer = 13;
             monaLisaPainting.layer = 13;
+        }
+    }
+
+    void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        if (null == obj)
+        {
+            return;
+        }
+       
+        obj.layer = newLayer;
+       
+        foreach (Transform child in obj.transform)
+        {
+            if (null == child)
+            {
+                continue;
+            }
+            SetLayerRecursively(child.gameObject, newLayer);
         }
     }
 }
