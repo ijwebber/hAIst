@@ -22,6 +22,7 @@ public class PreGame : MonoBehaviourPunCallbacks
     public GameObject thief_4;
 
     public GameObject StartGameWaitPanel;
+    public GameObject ChooseUpgradesPanel;
 
 
 
@@ -95,6 +96,19 @@ public class PreGame : MonoBehaviourPunCallbacks
         SetReadyChecks();
         CheckAllReady();
 
+    }
+
+    public void EnableChooseUpgradesPanel()
+    {
+        ChooseUpgradesPanel.SetActive(true);
+        ChooseUpgradesPanel.GetComponent<UpgradeController>().PopulateUpdatesPanel();
+
+
+    }
+
+    public void DisableChooseUpgradesPanel()
+    {
+        ChooseUpgradesPanel.SetActive(false);
     }
 
     public void QuitButton()
