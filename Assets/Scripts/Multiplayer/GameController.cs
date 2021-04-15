@@ -94,13 +94,22 @@ public class GameController : MonoBehaviourPunCallbacks
         if (gameState != updatedGameState) {
             questBox.newQuest();
             questMarker.newQuest();
-            updatedGameState = gameState;
+            bool localChange = false;
+            if (gameState > updatedGameState) {
+                // change originated from here
+                updatedGameState = gameState;
+                localChange = true;
+            } else {
+                gameState = updatedGameState;
+            }
             List <string> newText = new List<string>();
             switch (gameState)
             {
                 case 0: // starting state
                     playerUpdates.updateDisplay("Game started");
-                    updateDisp("Game started");
+                    if (localChange) {
+                        updateDisp("Game started");
+                    }
                     setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"});
                     break;
                 case 1: // point to code
@@ -108,7 +117,9 @@ public class GameController : MonoBehaviourPunCallbacks
                     break;
                 case 2: // point to key objects
                     playerUpdates.updateDisplay("The key door has been unlocked");
-                    updateDisp("The key door has been unlocked");
+                    if (localChange) {
+                        updateDisp("The key door has been unlocked");
+                    }
                     foreach (var item in specialItems) {
                         newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
                     }
@@ -116,7 +127,9 @@ public class GameController : MonoBehaviourPunCallbacks
                     break;
                 case 3: // point to key object 2
                     playerUpdates.updateDisplay("You have stolen a key painting");
-                    updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
+                    if (localChange) {
+                        updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
+                    }
                     List <GameObject> toSteal = new List<GameObject>();
                     foreach (var item in specialItems)
                     {
@@ -132,7 +145,9 @@ public class GameController : MonoBehaviourPunCallbacks
                 case 4: // point to exit
                     playerUpdates.updateDisplay("You have stolen a key painting");
                     updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
-                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
+                    if (localChange) {
+                        setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
+                    }
                     break;
                 default:
                     break;
@@ -249,13 +264,13 @@ public class GameController : MonoBehaviourPunCallbacks
 
     [PunRPC]
     void updateTarget(string[] gameNames, int localgameState, string[] objectives) {
-        gameState = localgameState;
+        updatedGameState = localgameState;
         string newObjectives = "";
         foreach (string objective in objectives)
         {
             newObjectives += objective + "\n";
         }
         objectiveText.text = newObjectives;
-        questPointer.updateTarget(gameNames, gameState);
+        questPointer.updateTarget(gameNames, updatedGameState);
     }
 }
