@@ -20,6 +20,10 @@ public class UpgradeController : MonoBehaviour
     public Sprite self_revive;
     public Sprite fast_hands;
 
+    // POWER UPS
+    public Toggle shield_toggle;
+    public Toggle self_revive_toggle;
+
 
 
 
@@ -67,6 +71,7 @@ public class UpgradeController : MonoBehaviour
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = shield;
                 obj.transform.GetChild(0).GetComponent<TooltipTrigger>().header = "shield";
                 obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "a shield that blocks your first knock-down.";
+                shield_toggle = obj.transform.GetChild(1).GetComponent<Toggle>();
             }
             else if (kvp.Key.Equals("vision") & kvp.Value > 0)
             {
@@ -83,6 +88,8 @@ public class UpgradeController : MonoBehaviour
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = self_revive;
                 obj.transform.GetChild(0).GetComponent<TooltipTrigger>().header = "self revive";
                 obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "ability to revive yourself once after being knocked down.";
+                self_revive_toggle = obj.transform.GetChild(1).GetComponent<Toggle>();
+
             }
             else if (kvp.Key.Equals("fast_hands") & kvp.Value > 0)
             {

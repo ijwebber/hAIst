@@ -10,6 +10,8 @@ using Photon.Realtime;
 
 public class PreGame : MonoBehaviourPunCallbacks
 {
+    public GameObject _GameLobby;
+
 
     public Button StartGameButton;
     public Button SetReadyButton;
@@ -23,6 +25,9 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     public GameObject StartGameWaitPanel;
     public GameObject ChooseUpgradesPanel;
+
+    public Dictionary<string, bool> EnabledUpgrades = new Dictionary<string, bool>();
+
 
 
 
@@ -64,8 +69,52 @@ public class PreGame : MonoBehaviourPunCallbacks
         }
     }
 
+    public void SetUpgradesForGame()
+    {
+        // PERMA UPGRADES
+        foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
+        {
+            if (kvp.Key.Equals("speed_boots") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+            }
+            if (kvp.Key.Equals("vision") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+            }
+            if (kvp.Key.Equals("fast_hands") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+            }
+        }
 
-    public void SetReady() 
+        // POWER UPS
+        foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
+        {
+            if (kvp.Key.Equals("shield") & kvp.Value > 0)
+            {
+                if (ChooseUpgradesPanel.GetComponent<UpgradeController>().shield_toggle != null)
+                {
+                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().shield_toggle.isOn) { EnabledUpgrades[kvp.Key] = true; }
+                }
+            }
+            if (kvp.Key.Equals("self_revive") & kvp.Value > 0)
+            {
+                if (ChooseUpgradesPanel.GetComponent<UpgradeController>().self_revive_toggle != null)
+                {
+                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().self_revive_toggle.isOn) { EnabledUpgrades[kvp.Key] = true; }
+                }
+            }
+        }
+        foreach (KeyValuePair<string, bool> kvp in EnabledUpgrades)
+        {
+            Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
+        }
+
+    }
+
+
+                public void SetReady() 
     {
         Debug.Log("Set Ready Function");
         if (customProperties["ready"].Equals("false"))
@@ -117,6 +166,8 @@ public class PreGame : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
+        StartGameWaitPanel.SetActive(true);
+
         PUN2_GameLobby1 gameLobby1 = GameObject.FindObjectOfType<PUN2_GameLobby1>();
         int guest = 0;
         if (gameLobby1.IsGuest) {
@@ -124,7 +175,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         }
         PlayerPrefs.SetInt("isGuest", guest);
         PlayerPrefs.Save();
-        StartGameWaitPanel.SetActive(true);
+        SetUpgradesForGame();
         PhotonNetwork.LoadLevel("ArtLevel");
     }
     
