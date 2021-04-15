@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 8;
     public float holdTime = 3;
     public bool shield = false;
+    [SerializeField] private GameObject shieldObj;
     public int invincibleFrames = 0;
     void Start()
     {
@@ -36,10 +37,14 @@ public class PlayerController : MonoBehaviour
 
     void Update() {
         if (invincibleFrames > 0) {
+            shieldObj.transform.position = player.transform.position;
             invincibleFrames--;
+        } else {
+            shieldObj.SetActive(false);
         }
     }
     public void disableShield() {
+        shieldObj.SetActive(true);
         Debug.Log("Shield consumed");
         shield = false;
         // TODO remove shield from database
