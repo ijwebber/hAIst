@@ -8,6 +8,15 @@ public class UpgradeList {
     public bool self_revive;
     public bool shield;
 
+    // perma upgrades
+    public bool speed_boots_enabled;
+    public bool vision_enabled;
+    public bool fast_hands_enabled;
+
+    // consumables
+    public bool self_revive_enabled;
+    public bool shield_enabled;
+
     public UpgradeList() {
         this.speed_boots = 0;
         this.vision = 0;

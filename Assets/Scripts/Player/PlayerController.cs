@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public int invincibleFrames = 0;
     void Start()
     {
+        GetUpgrades();
         player = getPlayer();
         if (PlayerPrefs.GetInt("isGuest", -1) == 1) {
             isGuest = true;
@@ -49,6 +50,14 @@ public class PlayerController : MonoBehaviour
         shield = false;
         // TODO remove shield from database
         invincibleFrames = 60;
+    }
+
+    public void GetUpgrades()
+    {
+        upgrades.speed_boots_enabled = PlayerPrefs.GetInt("speed_boots") == 1;
+        upgrades.vision_enabled = PlayerPrefs.GetInt("vision") == 1;
+        upgrades.fast_hands_enabled = PlayerPrefs.GetInt("fast_hands") == 1;
+        upgrades.shield_enabled = PlayerPrefs.GetInt("shield") == 1;
     }
 
     public GameObject getPlayer() {

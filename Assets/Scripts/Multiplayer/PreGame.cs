@@ -39,9 +39,15 @@ public class PreGame : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
+        PlayerPrefs.SetInt("speed_boots", 0);
+        PlayerPrefs.SetInt("vision", 0);
+        PlayerPrefs.SetInt("shield", 0);
+        PlayerPrefs.SetInt("self_revive", 0);
+        PlayerPrefs.SetInt("fast_hands", 0);
+
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
 
-        
+
     }
 
     // Update is called once per frame
@@ -77,14 +83,19 @@ public class PreGame : MonoBehaviourPunCallbacks
             if (kvp.Key.Equals("speed_boots") & kvp.Value > 0)
             {
                 EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, 1);
             }
             if (kvp.Key.Equals("vision") & kvp.Value > 0)
             {
                 EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, 1);
+
             }
             if (kvp.Key.Equals("fast_hands") & kvp.Value > 0)
             {
                 EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, 1);
+
             }
         }
 
@@ -95,14 +106,24 @@ public class PreGame : MonoBehaviourPunCallbacks
             {
                 if (ChooseUpgradesPanel.GetComponent<UpgradeController>().shield_toggle != null)
                 {
-                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().shield_toggle.isOn) { EnabledUpgrades[kvp.Key] = true; }
+                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().shield_toggle.isOn)
+                    {
+                        EnabledUpgrades[kvp.Key] = true;
+                        PlayerPrefs.SetInt(kvp.Key, 1);
+
+                    }
                 }
             }
             if (kvp.Key.Equals("self_revive") & kvp.Value > 0)
             {
                 if (ChooseUpgradesPanel.GetComponent<UpgradeController>().self_revive_toggle != null)
                 {
-                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().self_revive_toggle.isOn) { EnabledUpgrades[kvp.Key] = true; }
+                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().self_revive_toggle.isOn)
+                    {
+                        EnabledUpgrades[kvp.Key] = true;
+                        PlayerPrefs.SetInt(kvp.Key, 1);
+
+                    }
                 }
             }
         }
@@ -110,6 +131,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         {
             Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
         }
+        PlayerPrefs.Save();
 
     }
 
