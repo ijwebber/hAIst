@@ -10,10 +10,17 @@ public class PlayerController : MonoBehaviour
     public LayerMask ObMask;
 
     [Range(0,360)]
-    public float viewAngle;
     public bool isDisabled = false;
     public bool isGuest;
+
+    [SerializeField] DBControllerGame dBController;
     // Start is called before the first frame update
+
+    public UpgradeList upgrades = new UpgradeList();
+    // upgradables
+    public float viewAngle;
+    public float moveSpeed = 8;
+    public float holdTime = 3;
     void Start()
     {
         player = getPlayer();
@@ -21,6 +28,7 @@ public class PlayerController : MonoBehaviour
             isGuest = true;
         } else {
             isGuest = false;
+            dBController.GetUpgradeList(PhotonNetwork.NickName);
         }
     }
 
@@ -35,10 +43,11 @@ public class PlayerController : MonoBehaviour
         return returnedPlayer;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void applyUpdates() {
+        viewRadius += upgrades.vision*.5f;
+        moveSpeed *= (1 + .05f*upgrades.speed_boots);
+        holdTime -= .1f*upgrades.fast_hands;
+        Debug.Log("Updates loaded");
     }
 
     public bool isInView(Vector3 targetObject)  {

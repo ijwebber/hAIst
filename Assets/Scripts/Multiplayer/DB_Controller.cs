@@ -460,7 +460,7 @@ public class DB_Controller : MonoBehaviour
                     string[] upgrade_list = result.Split(delimiterChars);
                     foreach (var upgrade in upgrade_list)
                     {
-                        Debug.Log(upgrade);
+                        Debug.Log("UPGRADE " + upgrade);
 
                         _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory[upgrade] += 1;
 

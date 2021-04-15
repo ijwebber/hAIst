@@ -20,6 +20,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     public GameObject fixPaintingGame;
     [SerializeField] private GameController gameController;
+    private PlayerController playerController;
 
     private GameObject currentObject;
 
@@ -44,6 +45,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     void Awake() {
         gameController = GameObject.FindObjectOfType<GameController>();
+        playerController = GameObject.FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
@@ -171,7 +173,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     break;
             }
         }
-        holdTime = 3.0f;
+        holdTime = playerController.holdTime;
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true){
 
             down = GetComponent<PlayerMovement>().disabled;

@@ -28,10 +28,11 @@ public class DBControllerGame : MonoBehaviour
     string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
     string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
     [SerializeField] private SoundController soundController;
+    [SerializeField] private PlayerController playerController;
     // Start is called before the first frame update
     void Start()
     {
-        
+        // player = playerController.getPlayer();
     }
 
     // Update is called once per frame
@@ -50,6 +51,108 @@ public class DBControllerGame : MonoBehaviour
             GetMicMultiplier(username);
             GetMicThreshold(username);
         }
+
+    }
+
+    public void GetUpgradeList(string username)
+    {
+        StartCoroutine(UpgradeList(username));
+    }
+
+    IEnumerator UpgradeList(string username)
+    {
+        // _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
+
+        string uri = get_upgrades_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no upgrades");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+                    
+                    string[] upgrade_list = result.Split(delimiterChars);
+                    foreach (var upgrade in upgrade_list)
+                    {
+                        Debug.Log("IN GAME " + upgrade);
+                        switch (upgrade.ToString())
+                        {
+                            case "speed_boots":
+                                playerController.upgrades.speed_boots++;
+                                break;
+                            case "shield":
+                                playerController.upgrades.shield = true;
+
+                                break;
+                            case "vision":
+                                playerController.upgrades.vision++;
+
+                                break;
+                            case "self_revive":
+                                playerController.upgrades.self_revive = true;
+
+                                break;
+                            case "fast_hands":
+                                playerController.upgrades.fast_hands++;
+
+                                break;
+                            default:
+                                break;
+                        }
+
+                        // _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory[upgrade] += 1;
+
+                    }
+                    // foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
+                    // {
+                    //     switch (kvp.Key)
+                    //     {
+                    //         case "speed_boots":
+                    //             playerController.upgrades.speed_boots = kvp.Value;
+                    //             break;
+                    //         case "shield":
+                    //             playerController.upgrades.speed_boots = kvp.Value;
+
+                    //             break;
+                    //         case "vision":
+                    //             playerController.upgrades.speed_boots = kvp.Value;
+
+                    //             break;
+                    //         case "self_revive":
+                    //             playerController.upgrades.speed_boots = kvp.Value;
+
+                    //             break;
+                    //         case "fast_hands":
+                    //             playerController.upgrades.speed_boots = kvp.Value;
+
+                    //             break;
+                    //         default:
+                    //             break;
+                    //     }
+                    //     Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
+                    // }
+
+                }
+            }
+        }
+        playerController.applyUpdates();
+        // _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
+
+
+
 
     }
     public void GetMicThreshold(string username)

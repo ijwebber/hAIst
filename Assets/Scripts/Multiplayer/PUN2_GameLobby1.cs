@@ -322,6 +322,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
         GetInventory();
         UpgradeMenu.SetActive(true);
+
+        // TODO: remove
+        // DB_Controller.GetComponent<DB_Controller>().EditCoinBalance("fxlmo", 10000, 10);
     }
 
 
