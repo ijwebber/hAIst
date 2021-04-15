@@ -66,7 +66,7 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 21300000, guid: f59d71e22c6ff6f40b8bf78c42f1c447, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 9a297e37239b83603918473eaf870dad, type: 3}
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
@@ -171,6 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebcaec2b7c34f8648971778314cc909b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  content: 
+  header: 
 --- !u!1 &8792605011573548337
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +237,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fcbfb599ab3fa5d4aaa7a56a1b3153d8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3dbcde595710fd654ae64e11ac3daa84, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -347,7 +349,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f59d71e22c6ff6f40b8bf78c42f1c447, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9a297e37239b83603918473eaf870dad, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
