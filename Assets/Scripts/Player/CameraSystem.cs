@@ -16,9 +16,12 @@ public class CameraSystem : MonoBehaviour
     private bool playerCamActive = false;
     private GameObject guardShotReference;
 
+    private GameObject player;
+
     void Start()
     {
         introCutSceneSetup();
+
         
       
     }
@@ -44,6 +47,9 @@ public class CameraSystem : MonoBehaviour
             playerCamTrack.SetActive(true);
             introSceneTrack.SetActive(false);
 
+            
+            player.GetComponent<PlayerMovement>().paused = false;
+
             SetLayerRecursively(guardShotReference, 10);
             SetPaintingsLayer(13);
         }
@@ -55,6 +61,10 @@ public class CameraSystem : MonoBehaviour
         guardShotReference = GameObject.Find("Guard3(Clone)");
         introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
         introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
+
+        //find players and disable their control whilst cutscene plays
+        player = GameObject.Find("Timmy");
+        player.GetComponent<PlayerMovement>().paused = true;
 
         //setting the layers for paintings and guard so they render
         SetPaintingsLayer(default);
