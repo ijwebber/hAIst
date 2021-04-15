@@ -18,6 +18,7 @@ public class GuardMovement : MonoBehaviourPun
     
 
     public GuardController guardController;
+    private PlayerController playerController;
     public NavMeshAgent agent;
     public SoundVisual soundVis;
     public AudioSource heySound;
@@ -54,6 +55,7 @@ public class GuardMovement : MonoBehaviourPun
         player = GameObject.Find("Timmy");
         this.state = State.normal;
         this.guardController = GameObject.FindObjectOfType<GuardController>();
+        this.playerController = GameObject.FindObjectOfType<PlayerController>();
         fovScript = GetComponent<FieldOfView>();
         heySound = GetComponent<AudioSource>();
     }
@@ -110,10 +112,16 @@ public class GuardMovement : MonoBehaviourPun
                 //if guard is next to player then disable his ass
                 if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= guardReach && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= guardReach && !playerMoveScript.disabled && !guardDisabled)
                 {
-                    playerMoveScript.disabled = true;
-                    this.state = State.normal;
-                    agent.ResetPath();
-                    playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
+                    if (playerController.shield) {
+                        playerController.disableShield();
+                    } else {
+                        if (playerController.invincibleFrames == 0) {
+                            playerMoveScript.disabled = true;
+                            this.state = State.normal;
+                            agent.ResetPath();
+                            playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
+                        }
+                    }
 
                 }
             }
