@@ -14,9 +14,10 @@ public class CameraSystem : MonoBehaviour
     public GameObject gameUIReference;
     public bool introDone = false;
     private bool playerCamActive = false;
+    
     private GameObject guardShotReference;
-
     private GameObject player;
+    private GameObject securityCameraReference;
 
     void Start()
     {
@@ -52,6 +53,7 @@ public class CameraSystem : MonoBehaviour
 
             SetLayerRecursively(guardShotReference, 10);
             SetPaintingsLayer(13);
+            SetLayerRecursively(securityCameraReference, 10);
         }
     }
 
@@ -66,9 +68,13 @@ public class CameraSystem : MonoBehaviour
         player = GameObject.Find("Timmy");
         player.GetComponent<PlayerMovement>().paused = true;
 
+        //find security cam
+        securityCameraReference = GameObject.Find("Camera 1");
+
         //setting the layers for paintings and guard so they render
         SetPaintingsLayer(default);
         SetLayerRecursively(guardShotReference, default);
+        SetLayerRecursively(securityCameraReference, default);
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
