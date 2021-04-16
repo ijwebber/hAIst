@@ -37,6 +37,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     [SerializeField] private PlayerUpdates playerUpdates;
 
+
     System.Random r = new System.Random();
 
     //just spawns in player object
