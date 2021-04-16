@@ -83,19 +83,6 @@ public class UIController : MonoBehaviourPunCallbacks
 
         if (changedProps["score"] != null) {
             scoreText.text = "Score: $" + changedProps["score"];
-        } else if (changedProps["special"] != null) {
-            int i = (int) changedProps["special"] - 1;
-
-            int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) changedProps["special"];
-            if (remaining == 0) {
-                GameObject[] objs = GameObject.FindGameObjectsWithTag("exit");
-                foreach (GameObject tag in objs)
-                {
-                    GameObject mainObj = tag.transform.parent.gameObject;
-                    mainObj.SetActive(false);
-                }
-
-            }
         }
     }
 }
