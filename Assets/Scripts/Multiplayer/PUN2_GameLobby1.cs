@@ -471,9 +471,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     // UPGRADES
 
-    public void RemoveUpgrade(string upgrade)
+    public void RemoveUpgrade(List<string> upgrades)
     {
-        DB_Controller.GetComponent<DB_Controller>().RemoveUpgrade(PhotonNetwork.NickName, upgrade);
+        DB_Controller.GetComponent<DB_Controller>().RemoveUpgrade(PhotonNetwork.NickName, upgrades);
     }
 
     public void BuyUpgradeSpeedBoots()
