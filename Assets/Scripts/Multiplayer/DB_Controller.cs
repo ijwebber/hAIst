@@ -475,9 +475,9 @@ public class DB_Controller : MonoBehaviour
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_InventoryPre.text = kvp.Value.ToString();
                                 break;
                             case "shield":
-                                _GameLobby.GetComponent<PUN2_GameLobby1>().shield_Inventory.text = kvp.Value.ToString();
-                                _GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryNew.text = kvp.Value.ToString();
-                                _GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryPre.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().shield_Inventory.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryNew.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
                             case "vision":
@@ -487,9 +487,9 @@ public class DB_Controller : MonoBehaviour
 
                                 break;
                             case "self_revive":
-                                _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_Inventory.text = kvp.Value.ToString();
-                                _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryNew.text = kvp.Value.ToString();
-                                _GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryPre.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_Inventory.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryNew.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
                             case "fast_hands":
@@ -508,6 +508,7 @@ public class DB_Controller : MonoBehaviour
             }
         }
         _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
+        _GameLobby.GetComponent<PUN2_GameLobby1>().SetOwnedStatus();
 
 
 

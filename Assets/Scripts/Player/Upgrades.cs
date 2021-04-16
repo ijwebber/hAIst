@@ -1,8 +1,13 @@
 public class UpgradeList {
     // perma upgrades
     public int speed_boots;
+    public int speed_boots_level;
+
     public int vision;
+    public int vision_level;
+
     public int fast_hands;
+    public int fast_hands_level;
 
     // consumables
     public bool self_revive;

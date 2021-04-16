@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         GetUpgrades();
+        DebugUpgrades();
         player = getPlayer();
         if (PlayerPrefs.GetInt("isGuest", -1) == 1) {
             isGuest = true;
@@ -54,10 +55,45 @@ public class PlayerController : MonoBehaviour
 
     public void GetUpgrades()
     {
-        upgrades.speed_boots_enabled = PlayerPrefs.GetInt("speed_boots") == 1;
-        upgrades.vision_enabled = PlayerPrefs.GetInt("vision") == 1;
-        upgrades.fast_hands_enabled = PlayerPrefs.GetInt("fast_hands") == 1;
+        // PERMAS
+        if (PlayerPrefs.GetInt("speed_boots") == 1)
+        {
+            upgrades.speed_boots_enabled = true;
+            upgrades.speed_boots_level = PlayerPrefs.GetInt("speed_boots_level");
+        }
+        if (PlayerPrefs.GetInt("vision") == 1)
+        {
+            upgrades.vision_enabled = true;
+            upgrades.vision_level = PlayerPrefs.GetInt("vision_level");
+        }
+        if (PlayerPrefs.GetInt("fast_hands") == 1)
+        {
+            upgrades.fast_hands_enabled = true;
+            upgrades.fast_hands_level = PlayerPrefs.GetInt("fast_hands_level");
+        }
+
+        // POWER UPS
         upgrades.shield_enabled = PlayerPrefs.GetInt("shield") == 1;
+    }
+
+    public void DebugUpgrades()
+    {
+        if (upgrades.speed_boots_enabled)
+        {
+            Debug.Log("SPEED BOOTS ENABLED. LEVEL " + upgrades.speed_boots_level);
+        }
+        if (upgrades.vision_enabled)
+        {
+            Debug.Log("VISION. LEVEL " + upgrades.vision_level);
+        }
+        if (upgrades.fast_hands_enabled)
+        {
+            Debug.Log("FAST HANDS ENABLED. LEVEL " + upgrades.fast_hands_level);
+        }
+        if (upgrades.shield_enabled)
+        {
+            Debug.Log("SHIELD ENABLED.");
+        }
     }
 
     public GameObject getPlayer() {

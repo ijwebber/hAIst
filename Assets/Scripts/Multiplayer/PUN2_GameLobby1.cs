@@ -115,6 +115,20 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text self_revive_InventoryNew;
     public TMP_Text fast_hands_InventoryNew;
 
+
+    public Button shield_unlock;
+    public Button self_revive_unlock;
+
+    public Button shield_owned;
+    public Button self_revive_owned;
+
+    public Button shield_unlock_pre;
+    public Button self_revive_unlock_pre;
+
+    public Button shield_owned_pre;
+    public Button self_revive_owned_pre;
+
+
     public TMP_Text speed_boots_InventoryPre;
     public TMP_Text shield_InventoryPre;
     public TMP_Text vision_InventoryPre;
@@ -456,6 +470,51 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         
     }
 
+    public void SetOwnedStatus()
+    {
+        foreach (KeyValuePair<string, int> kvp in PlayerInventory)
+        {
+            switch (kvp.Key)
+            {
+                case "speed_boots":
+                    
+                    break;
+
+                case "shield":
+                    if (kvp.Value > 0)
+                    {
+                        shield_unlock.gameObject.SetActive(false);
+                        shield_owned.gameObject.SetActive(true);
+                        shield_unlock_pre.gameObject.SetActive(false);
+                        shield_owned_pre.gameObject.SetActive(true);
+                    }
+
+                    break;
+
+                case "vision":
+                  
+
+                    break;
+
+                case "self_revive":
+                    if (kvp.Value > 0)
+                    {
+                        self_revive_unlock.gameObject.SetActive(false);
+                        self_revive_owned.gameObject.SetActive(true);
+                        self_revive_unlock_pre.gameObject.SetActive(false);
+                        self_revive_owned_pre.gameObject.SetActive(true);
+                    }
+
+                    break;
+
+                case "fast_hands":
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
 
 
 
