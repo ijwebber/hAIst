@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         player = getPlayer();
         if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
             isGuest = false;
-            dBController.GetUpgradeList(PhotonNetwork.NickName);
+            applyUpdates();
         } else {
             isGuest = true;
         }
@@ -64,19 +64,19 @@ public class PlayerController : MonoBehaviour
 
     public void DebugUpgrades()
     {
-        if (upgrades.speed_boots_enabled)
+        if (upgrades.speed_boots > 0)
         {
-            Debug.Log("SPEED BOOTS ENABLED. LEVEL " + upgrades.speed_boots_level);
+            Debug.Log("SPEED BOOTS ENABLED. LEVEL " + upgrades.speed_boots);
         }
-        if (upgrades.vision_enabled)
+        if (upgrades.vision > 0)
         {
-            Debug.Log("VISION. LEVEL " + upgrades.vision_level);
+            Debug.Log("VISION. LEVEL " + upgrades.vision);
         }
-        if (upgrades.fast_hands_enabled)
+        if (upgrades.fast_hands > 0)
         {
-            Debug.Log("FAST HANDS ENABLED. LEVEL " + upgrades.fast_hands_level);
+            Debug.Log("FAST HANDS ENABLED. LEVEL " + upgrades.fast_hands);
         }
-        if (upgrades.shield_enabled)
+        if (upgrades.shield)
         {
             Debug.Log("SHIELD ENABLED.");
         }

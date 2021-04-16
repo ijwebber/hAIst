@@ -118,6 +118,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text vision_InventoryNew;
     public TMP_Text self_revive_InventoryNew;
     public TMP_Text fast_hands_InventoryNew;
+
     public TextMeshProUGUI speed_boots_cost;
     public TextMeshProUGUI fast_hands_cost;
     public TextMeshProUGUI vision_cost;
