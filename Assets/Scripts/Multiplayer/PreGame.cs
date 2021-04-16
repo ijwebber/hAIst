@@ -195,6 +195,8 @@ public class PreGame : MonoBehaviourPunCallbacks
         if (gameLobby1.IsGuest) {
             guest = 1;
         }
+        PlayerPrefs.SetInt("PlayerBalance", gameLobby1.PlayerBalance);
+        // PlayerPrefs.SetInt("PlayerBalance", );
         PlayerPrefs.SetInt("isGuest", guest);
         PlayerPrefs.Save();
         SetUpgradesForGame();

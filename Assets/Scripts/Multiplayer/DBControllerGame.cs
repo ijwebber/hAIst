@@ -43,7 +43,7 @@ public class DBControllerGame : MonoBehaviour
 
     // check if guest!!
     public void getThresholds(string username) {
-        if (PlayerPrefs.GetInt("isGuest", -1) == 1) {
+        if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
             // default values for guest
             soundController.threshold = PlayerPrefs.GetInt("Threshold", 2);
             soundController.multiplier = PlayerPrefs.GetInt("Multiplier", 240);
@@ -155,6 +155,11 @@ public class DBControllerGame : MonoBehaviour
 
 
     }
+
+    public void EditCoinBalance(string username, int new_balance, int type)
+    {
+        StartCoroutine(EditBalance(username,new_balance,type));
+    }
     public void GetMicThreshold(string username)
     {
         StartCoroutine(GetThreshold(username));
@@ -203,5 +208,39 @@ public class DBControllerGame : MonoBehaviour
             }
         }
         soundController.threshold = Int32.Parse(threshOut);
+    }
+    IEnumerator EditBalance(string username, int new_balance,int type)
+    {
+        string uri = edit_balance_url;
+        string post_data = "{ \"username\": \"" + username + "\", \"new_balance\": " + new_balance + "  }";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(post_data);
+            webRequest.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+            webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+                //Debug.Log(webRequest.error);
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text == "true")
+                {
+                    Debug.Log("Balance edited succesfully.");
+
+                }
+                else
+                {
+                    Debug.Log("Balance edit unsuccesful.");
+                }
+
+
+            }
+        }
     }
 }

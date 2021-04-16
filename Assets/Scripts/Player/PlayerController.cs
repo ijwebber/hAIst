@@ -29,12 +29,13 @@ public class PlayerController : MonoBehaviour
         GetUpgrades();
         DebugUpgrades();
         player = getPlayer();
-        if (PlayerPrefs.GetInt("isGuest", -1) == 1) {
-            isGuest = true;
-        } else {
+        if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
             isGuest = false;
             dBController.GetUpgradeList(PhotonNetwork.NickName);
+        } else {
+            isGuest = true;
         }
+        Debug.Log("isGuest " + PlayerPrefs.GetInt("isGuest", -1));
     }
 
     void Update() {
