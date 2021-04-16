@@ -28,6 +28,9 @@ public class DB_Controller : MonoBehaviour
     string edit_multiplier_url = "https://brasspig.online/set_mic_multiplier.php?";
     string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
     string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
+    string edit_upgrade_url = "https://brasspig.online/edit_upgrade_list.php?";
+
+
     [SerializeField] Slider multiplier, threshold;
 
     private void Start()
@@ -105,6 +108,21 @@ public class DB_Controller : MonoBehaviour
     public void AddUpgrade(string username, string upgrade)
     {
         StartCoroutine(Add_Upgrade(username, upgrade));
+    }
+
+    public void RemoveUpgrade(string username, string upgrade)
+    {
+        StartCoroutine(Remove_Upgrade(username, upgrade));
+    }
+
+    public void RemoveUpgrade2(string username, string upgrade, string upgrade2)
+    {
+        StartCoroutine(Remove_Upgrade2(username, upgrade, upgrade2));
+    }
+
+    public void EditUpgradeList(string username, string new_upgrade_list)
+    {
+        StartCoroutine(Edit_Upgrade_List(username, new_upgrade_list));
     }
 
 
@@ -542,6 +560,127 @@ public class DB_Controller : MonoBehaviour
         }
         _GameLobby.GetComponent<PUN2_GameLobby1>().GetInventory();
     }
+
+    IEnumerator Remove_Upgrade(string username, string upgrade_name)
+    {
+        string uri = get_upgrades_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no upgrades");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+
+                    string[] upgrade_list = result.Split(delimiterChars);
+                    List<string> new_upgrade_list = new List<string>();
+
+                    foreach (var upgrade in upgrade_list)
+                    {
+                        if (!upgrade_name.Equals(upgrade))
+                        {
+                            new_upgrade_list.Add(upgrade);
+                        }
+                    }
+                    string new_result = String.Join(",", new_upgrade_list.ToArray());
+                    EditUpgradeList(username, new_result);
+                }
+            }
+        }
+    }
+
+    IEnumerator Remove_Upgrade2(string username, string upgrade_name1, string upgrade_name2)
+    {
+        string uri = get_upgrades_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no upgrades");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+
+                    string[] upgrade_list = result.Split(delimiterChars);
+                    List<string> new_upgrade_list = new List<string>();
+                    List<string> new_upgrade_list2 = new List<string>();
+
+
+                    foreach (var upgrade in upgrade_list)
+                    {
+                        if (!upgrade_name1.Equals(upgrade))
+                        {
+                            new_upgrade_list.Add(upgrade);
+                        }
+                    }
+                    foreach (var upgrade in new_upgrade_list)
+                    {
+                        if (!upgrade_name2.Equals(upgrade))
+                        {
+                            new_upgrade_list2.Add(upgrade);
+                        }
+                    }
+                    string new_result = String.Join(",", new_upgrade_list2.ToArray());
+                    EditUpgradeList(username, new_result);
+                }
+            }
+        }
+    }
+
+    IEnumerator Edit_Upgrade_List(string username, string new_upgrade_list)
+    {
+        string uri = edit_upgrade_url + "user=" + username + "&upgrades=" + new_upgrade_list;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true "))
+                {
+                    Debug.Log("Upgrade Succesfully removed");
+
+                }
+                else
+                {
+                    Debug.Log("Upgrade unsuccesfully removed");
+                }
+
+            }
+        }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().GetInventory();
+
+
+    }
+
 
 
     IEnumerator EditThreshold(string username, int value)
