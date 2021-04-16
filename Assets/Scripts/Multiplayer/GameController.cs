@@ -4,11 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
-<<<<<<< HEAD
 using Cinemachine;
-=======
 using Photon.Realtime;
->>>>>>> upgrades
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameController : MonoBehaviourPunCallbacks
@@ -30,18 +27,15 @@ public class GameController : MonoBehaviourPunCallbacks
     private List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
 
-<<<<<<< HEAD
     
     public CinemachineVirtualCamera playerCam;
     
     
-=======
     public string playerUsername;
     [SerializeField] private NewQuest questBox;
     [SerializeField] private NewQuest questMarker;
 
     [SerializeField] private PlayerUpdates playerUpdates;
->>>>>>> upgrades
 
     System.Random r = new System.Random();
 
