@@ -164,6 +164,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     // MAP SCREEN OBJECTS
     [SerializeField] private GameObject Notes;
+    [SerializeField] private GameObject MapIndicator;
 
 
 
@@ -567,7 +568,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PreGameHome.SetActive(false);
         UpgradeScreen.SetActive(false);
         bg.zoom();
-        GameObject.Find("MapIndicator").SetActive(false);
+        MapIndicator.SetActive(false);
         
 
         // MapScreen.SetActive(true);
