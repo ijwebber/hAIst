@@ -53,7 +53,6 @@ public class PreGame : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-   
         
     }
 
@@ -110,6 +109,7 @@ public class PreGame : MonoBehaviourPunCallbacks
                     {
                         EnabledUpgrades[kvp.Key] = true;
                         PlayerPrefs.SetInt(kvp.Key, 1);
+                        // db
 
                     }
                 }

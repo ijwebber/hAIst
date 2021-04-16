@@ -103,6 +103,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public Button UpgradesMenuButton;
     public GameObject BalanceInfoHome;
 
+    // UPGRADES OBJECTS
     public TMP_Text speed_boots_Inventory;
     public TMP_Text shield_Inventory;
     public TMP_Text vision_Inventory;
@@ -114,6 +115,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text vision_InventoryNew;
     public TMP_Text self_revive_InventoryNew;
     public TMP_Text fast_hands_InventoryNew;
+    public TextMeshProUGUI speed_boots_cost;
+    public TextMeshProUGUI fast_hands_cost;
+    public TextMeshProUGUI vision_cost;
 
 
     public Button shield_unlock;
@@ -262,8 +266,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         AddFriendStatus.SetActive(false);
     }
 
-#if UNITY_WEBGL && !UNITY_EDITOR
     void Update() {
+    #if UNITY_WEBGL && !UNITY_EDITOR
         if (MicCheck) {
             Microphone.Update();
             string[] devices = Microphone.devices;
@@ -285,8 +289,18 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                 slider.value = volume;
             }
         }
-    }
 #endif
+        // update cost of upgrades
+        int speedAdd;
+        int visionAdd;
+        int fastAdd;
+        PlayerInventory.TryGetValue("speed_boots",out speedAdd);
+        PlayerInventory.TryGetValue("vision",out visionAdd);
+        PlayerInventory.TryGetValue("fast_hands",out fastAdd);
+        speed_boots_cost.text = (2000 + 200*speedAdd).ToString();
+        vision_cost.text = (2000 + 200*visionAdd).ToString();
+        fast_hands_cost.text = (5000 + 500*fastAdd).ToString();
+    }
     public void updateMultiplierSlider() {
         multiplierTextAsset.text = Multiplier.value.ToString();
         saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
@@ -407,9 +421,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void BuyUpgradeSpeedBoots()
     {
-        if (PlayerBalance > 2000)
+        int updatedCost = int.Parse(speed_boots_cost.text);
+        if (PlayerBalance >= updatedCost)
         {
-            PlayerBalance = PlayerBalance - 2000;
+            PlayerBalance = PlayerBalance - updatedCost;
             DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
             DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "speed_boots");
 
@@ -418,7 +433,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void BuyUpgradeShield()
     {
-        if (PlayerBalance > 2000)
+        if (PlayerBalance >= 2000)
         {
             PlayerBalance = PlayerBalance - 2000;
             DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
@@ -429,9 +444,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void BuyUpgradeVision()
     {
-        if (PlayerBalance > 2000)
+        int updatedCost = int.Parse(vision_cost.text);
+        if (PlayerBalance >= updatedCost)
         {
-            PlayerBalance = PlayerBalance - 2000;
+            PlayerBalance = PlayerBalance - updatedCost;
             DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
             DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "vision");
 
@@ -441,7 +457,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void BuyUpgradeSelfRevive()
     {
-        if (PlayerBalance > 5000)
+        if (PlayerBalance >= 5000)
         {
             PlayerBalance = PlayerBalance - 5000;
             DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
@@ -452,9 +468,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void BuyUpgradeFastHands()
     {
-        if (PlayerBalance > 5000)
+        int updatedCost = int.Parse(fast_hands_cost.text);
+        if (PlayerBalance >= updatedCost)
         {
-            PlayerBalance = PlayerBalance - 5000;
+            PlayerBalance = PlayerBalance - updatedCost;
             DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
             DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "fast_hands");
         }

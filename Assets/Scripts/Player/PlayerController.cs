@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
     public void applyUpdates() {
         viewRadius += upgrades.vision*.5f;
         moveSpeed *= (1 + .05f*upgrades.speed_boots);
-        holdTime -= .1f*upgrades.fast_hands;
+        holdTime -= .3f*upgrades.fast_hands;
         shield = upgrades.shield;
         Debug.Log("Updates loaded");
     }
