@@ -126,15 +126,22 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public Button shield_unlock;
     public Button self_revive_unlock;
+    public Button speed_boots_unlock;
 
     public Button shield_owned;
     public Button self_revive_owned;
+    public Button speed_boots_owned;
+
+
 
     public Button shield_unlock_pre;
     public Button self_revive_unlock_pre;
+    public Button speed_boots_unlock_pre;
 
     public Button shield_owned_pre;
     public Button self_revive_owned_pre;
+    public Button speed_boots_owned_pre;
+
 
 
     public TMP_Text speed_boots_InventoryPre;
@@ -143,6 +150,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text self_revive_InventoryPre;
     public TMP_Text fast_hands_InventoryPre;
 
+    public GameObject speed_boots_page;
+    public GameObject shield_page;
+    public GameObject vision_page;
+    public GameObject self_revive_page;
+    public GameObject fast_hands_page;
 
 
 
@@ -553,7 +565,32 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             switch (kvp.Key)
             {
                 case "speed_boots":
-                    
+                    if (kvp.Value == 0)
+                    {
+                        speed_boots_page.transform.GetChild(1).gameObject.SetActive(true);
+                        speed_boots_page.transform.GetChild(2).gameObject.SetActive(false);
+                        speed_boots_page.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                    if (kvp.Value == 1)
+                    {
+                        speed_boots_page.transform.GetChild(1).gameObject.SetActive(false);
+                        speed_boots_page.transform.GetChild(2).gameObject.SetActive(true);
+                        speed_boots_page.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                    if (kvp.Value == 2)
+                    {
+                        speed_boots_page.transform.GetChild(1).gameObject.SetActive(false);
+                        speed_boots_page.transform.GetChild(2).gameObject.SetActive(false);
+                        speed_boots_page.transform.GetChild(3).gameObject.SetActive(true);
+                    }
+                    if (kvp.Value == 3)
+                    {
+                        speed_boots_page.transform.GetChild(1).gameObject.SetActive(false);
+                        speed_boots_page.transform.GetChild(2).gameObject.SetActive(false);
+                        speed_boots_page.transform.GetChild(3).gameObject.SetActive(true);
+                        speed_boots_unlock.gameObject.SetActive(false);
+                        speed_boots_owned.gameObject.SetActive(true);
+                    }
                     break;
 
                 case "shield":
