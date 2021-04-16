@@ -55,25 +55,10 @@ public class PlayerController : MonoBehaviour
 
     public void GetUpgrades()
     {
-        // PERMAS
-        if (PlayerPrefs.GetInt("speed_boots") == 1)
-        {
-            upgrades.speed_boots_enabled = true;
-            upgrades.speed_boots_level = PlayerPrefs.GetInt("speed_boots_level");
-        }
-        if (PlayerPrefs.GetInt("vision") == 1)
-        {
-            upgrades.vision_enabled = true;
-            upgrades.vision_level = PlayerPrefs.GetInt("vision_level");
-        }
-        if (PlayerPrefs.GetInt("fast_hands") == 1)
-        {
-            upgrades.fast_hands_enabled = true;
-            upgrades.fast_hands_level = PlayerPrefs.GetInt("fast_hands_level");
-        }
-
-        // POWER UPS
-        upgrades.shield_enabled = PlayerPrefs.GetInt("shield") == 1;
+        upgrades.speed_boots = PlayerPrefs.GetInt("speed_boots", 0);
+        upgrades.vision = PlayerPrefs.GetInt("vision", 0);
+        upgrades.fast_hands = PlayerPrefs.GetInt("fast_hands", 0);
+        upgrades.shield = PlayerPrefs.GetInt("shield", 0) == 1;
     }
 
     public void DebugUpgrades()

@@ -83,23 +83,18 @@ public class PreGame : MonoBehaviourPunCallbacks
             if (kvp.Key.Equals("speed_boots") & kvp.Value > 0)
             {
                 EnabledUpgrades[kvp.Key] = true;
-                PlayerPrefs.SetInt(kvp.Key, 1);
-                PlayerPrefs.SetInt("speed_boots_level", kvp.Value);
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
             }
             if (kvp.Key.Equals("vision") & kvp.Value > 0)
             {
                 EnabledUpgrades[kvp.Key] = true;
-                PlayerPrefs.SetInt(kvp.Key, 1);
-                PlayerPrefs.SetInt("vision_level", kvp.Value);
-
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
 
             }
             if (kvp.Key.Equals("fast_hands") & kvp.Value > 0)
             {
                 EnabledUpgrades[kvp.Key] = true;
-                PlayerPrefs.SetInt(kvp.Key, 1);
-                PlayerPrefs.SetInt("fast_hands_level", kvp.Value);
-
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
 
             }
         }
