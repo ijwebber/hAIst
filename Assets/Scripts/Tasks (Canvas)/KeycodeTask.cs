@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Unity.IO;
 
 public class KeycodeTask : MonoBehaviour
 {
@@ -9,10 +10,9 @@ public class KeycodeTask : MonoBehaviour
     public int codeLength = 5;
     public float codeReset = 0.5f;  // code reset time in seconds
     public PhotonView player;
-    [SerializeField]
     private SoundController soundController;
-    [SerializeField]
     private GameController gameController;
+    [SerializeField] GameObject keyCodeCanvas;
     private bool isReset = false;
     public bool codeCorrect = false; // This code should be attached to the keycode task object in the canvas
     public AudioSource buttonNoise;
@@ -49,12 +49,11 @@ public class KeycodeTask : MonoBehaviour
                 {
                     // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
-                    gameController.gameState = 2;
-                    keypad.GetComponent<PhotonView>().RPC("updateKeyCode", RpcTarget.Others, keypadID);
-                    //insert bool value to say successful if code was correct
-                    StartCoroutine(ResetCode());
                     keypad.codeCorrect = true;
                     codeCorrect = true;
+                    gameController.gameState = 2;
+                    // StartCoroutine(ResetCode());
+                    StartCoroutine(correct(keypad));
                 }
             }
         }
@@ -63,6 +62,14 @@ public class KeycodeTask : MonoBehaviour
             _inputCode.text = "Failed";
             StartCoroutine(ResetCode());
         }
+    }
+
+    private IEnumerator correct(KeyPad keypad) {
+        yield return new WaitForSeconds(.5f);
+        keyCodeCanvas.SetActive(false);
+        keypad.GetComponent<PhotonView>().RPC("updateKeyCode", RpcTarget.Others, keypadID);
+        //insert bool value to say successful if code was correct
+
     }
 
 

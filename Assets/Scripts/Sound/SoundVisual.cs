@@ -85,10 +85,10 @@ public class SoundVisual : MonoBehaviour
                 double val3 = grid.GetAvgValue(x+1,y+1);
                 double val4 = grid.GetAvgValue(x,y+1);
                 float height0, height1, height2, height3;
-                if (grid.getVelocity(x,y) != 0) { height0 = process(gridValue, .15f, .6f);} else {height0 = 0;}
-                if (grid.getVelocity(x,y) != 0) { height1 = process(val2, .15f, .6f);} else {height1 = 0;}
-                if (grid.getVelocity(x,y) != 0) { height2 = process(val3, .15f, .6f);} else {height2 = 0;}
-                if (grid.getVelocity(x,y) != 0) { height3 = process(val4, .15f, .6f);} else {height3 = 0;}
+                if (grid.getVelocity(x,y) > 0) { height0 = process(gridValue, .15f, .6f);} else {height0 = 0;}
+                if (grid.getVelocity(x,y) > 0) { height1 = process(val2, .15f, .6f);} else {height1 = 0;}
+                if (grid.getVelocity(x,y) > 0) { height2 = process(val3, .15f, .6f);} else {height2 = 0;}
+                if (grid.getVelocity(x,y) > 0) { height3 = process(val4, .15f, .6f);} else {height3 = 0;}
                 // float height0 = process(gridValue, .15f, .6f);
                 // float height1 = process(val2, .15f, .6f);
                 // float height2 = process(val3, .15f, .6f);

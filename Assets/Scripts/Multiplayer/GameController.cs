@@ -1,13 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
+<<<<<<< HEAD
 using Cinemachine;
+=======
+using Photon.Realtime;
+>>>>>>> upgrades
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
+
     public GameObject playerPrefab;
     public int gameState = 0;
     public GameObject guardPrefab;
@@ -24,22 +30,32 @@ public class GameController : MonoBehaviourPunCallbacks
     private List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
 
+<<<<<<< HEAD
     
     public CinemachineVirtualCamera playerCam;
     
     
+=======
+    public string playerUsername;
+    [SerializeField] private NewQuest questBox;
+    [SerializeField] private NewQuest questMarker;
+
+    [SerializeField] private PlayerUpdates playerUpdates;
+>>>>>>> upgrades
 
     System.Random r = new System.Random();
 
     //just spawns in player object
     private void Awake()
     {
+        //GameLobbyScript = GameObject.Find("_GameLobby").GetComponent<PUN2_GameLobby1>();
         if (PhotonNetwork.CurrentRoom == null)
         {
             Debug.Log("Is not in the room, returning back to Lobby");
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
+        playerUsername = PhotonNetwork.NickName;
         questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
 
         float xSpawnPos = SpawnPoint.transform.position.x + (float) (PhotonNetwork.LocalPlayer.ActorNumber * 0.6);
@@ -89,25 +105,48 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 EscapeMenu.SetActive(false);
             }
-        }
+        } 
+        // for info testing
+        // if (Input.GetKeyDown(KeyCode.M)) {
+        //     playerUpdates.updateDisplay("M was just pressed");
+        // }
         if (gameState != updatedGameState) {
-            updatedGameState = gameState;
+            questBox.newQuest();
+            questMarker.newQuest();
+            bool localChange = false;
+            if (gameState > updatedGameState) {
+                // change originated from here
+                localChange = true;
+            }
+            gameState = Mathf.Max(gameState, updatedGameState);
             List <string> newText = new List<string>();
             switch (gameState)
             {
                 case 0: // starting state
+                    playerUpdates.updateDisplay("Game started");
+                    if (localChange) {
+                        updateDisp("Game started");
+                    }
                     setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"});
                     break;
                 case 1: // point to code
                     setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"});
                     break;
                 case 2: // point to key objects
+                    playerUpdates.updateDisplay("The key door has been unlocked");
+                    if (localChange) {
+                        updateDisp("The key door has been unlocked");
+                    }
                     foreach (var item in specialItems) {
                         newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
                     }
                     setNewQuest(specialItems, newText);
                     break;
                 case 3: // point to key object 2
+                    playerUpdates.updateDisplay("You have stolen a key painting");
+                    if (localChange) {
+                        updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
+                    }
                     List <GameObject> toSteal = new List<GameObject>();
                     foreach (var item in specialItems)
                     {
@@ -121,7 +160,11 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(toSteal, newText);
                     break;
                 case 4: // point to exit
-                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
+                    playerUpdates.updateDisplay("You have stolen a key painting");
+                    updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
+                    if (localChange) {
+                        setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
+                    }
                     break;
                 default:
                     break;
@@ -134,35 +177,29 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();   
     }
 
-
-
-    // Leave Game button
-    /*void OnGUI()
-    {
-        GUI.skin = myskin;
-
-        if (PhotonNetwork.CurrentRoom == null)
-            return;
-
-
-        //Show the Room name
-        //GUI.Label(new Rect(135, 5, 200, 25), PhotonNetwork.CurrentRoom.Name);
-
-        //Show the list of the players connected to this Room
-        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-        {
-            //Show if this player is a Master Client. There can only be one Master Client per Room so use this to define the authoritative logic etc.)
-            //string isMasterClient = (PhotonNetwork.PlayerList[i].IsMasterClient ? ": MasterClient" : "");
-            GUI.Label(new Rect(5, 35 + 30 * i, 200, 25), PhotonNetwork.PlayerList[i].NickName);
-        }
-    }*/
-
     //Go back to main meny when you leave game
     public override void OnLeftRoom()
     {
-        //We have left the Room, return back to the GameLobby
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
+        Debug.Log("On left Room callback");
+        
     }
+
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log("OnConnectedToMaster");
+        PhotonNetwork.LoadLevel("GameLobby 1");
+        Debug.Log("gamelobby 1 loaded");
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+
+        //PhotonNetwork.LoadLevel("GameLobby 1");
+         //SceneManager.LoadScene("GameLobby 1");
+
+
+    }
+
     // Set spotted to false as the players have not been seen by any guards, if a player is seen guard calls police and players have to escape in a set time.
     void SetSpotted()
     {
@@ -233,15 +270,24 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
+    private void updateDisp(string message) {
+        this.GetComponent<PhotonView>().RPC("displayMessage", RpcTarget.Others, message);
+    }
+
+    [PunRPC]
+    void displayMessage(string message) {
+        playerUpdates.updateDisplay(message);
+    }
+
     [PunRPC]
     void updateTarget(string[] gameNames, int localgameState, string[] objectives) {
-        gameState = localgameState;
+        updatedGameState = localgameState;
         string newObjectives = "";
         foreach (string objective in objectives)
         {
             newObjectives += objective + "\n";
         }
         objectiveText.text = newObjectives;
-        questPointer.updateTarget(gameNames, gameState);
+        questPointer.updateTarget(gameNames, updatedGameState);
     }
 }

@@ -6,7 +6,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerMovement : MonoBehaviourPun
 {
-    public float speed = 5;
+    public float speed;
     public PlayerController playerController;
     [SerializeField] private Rigidbody rb;
     
@@ -32,6 +32,9 @@ public class PlayerMovement : MonoBehaviourPun
 
         uiController = GameObject.FindObjectOfType<UIController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
+    }
+    void Update() {
+        speed = playerController.moveSpeed;
     }
  
     void FixedUpdate()

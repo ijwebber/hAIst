@@ -9,6 +9,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class EndScreenController : MonoBehaviourPunCallbacks
 {
 
+    private DBControllerEnd dbController;
     public GameObject[] playerRows;
     public GameObject totalRow;
 
@@ -26,6 +27,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             return;
         }
 
+        dbController = GameObject.FindObjectOfType<DBControllerEnd>();
         if (PhotonNetwork.IsMasterClient) {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}, {"special", 0}});
             PlayAgainWin.interactable = true;
@@ -67,6 +69,11 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             totalRow.transform.Find("Items").gameObject.GetComponent<Text>().text = totalItems.ToString();
             totalRow.transform.Find("Special").gameObject.GetComponent<Text>().text = totalSpecial.ToString();
             totalRow.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
+            Debug.Log("Is guest? " + PlayerPrefs.GetInt("isGuest", -1));
+            if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
+                Debug.Log("New balance = " + PlayerPrefs.GetInt("PlayerBalance", 0) + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]/PhotonNetwork.PlayerList.Length));
+                dbController.EditCoinBalance(PhotonNetwork.NickName, (PlayerPrefs.GetInt("PlayerBalance", 0) + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]/PhotonNetwork.PlayerList.Length)),0);
+            }
         } else {
             winScreen.SetActive(false);
             lossScreen.SetActive(true);

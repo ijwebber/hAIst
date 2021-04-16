@@ -9,8 +9,9 @@ public class LaserDown : MonoBehaviourPun
 
     private LineRenderer lr;
 
-    [SerializeField]
-    private Transform startPoint; 
+    [SerializeField] private Transform startPoint; 
+    [SerializeField] private SoundController soundController;
+    [SerializeField] private Argon argon;
 
     GameObject character;
 
@@ -18,12 +19,12 @@ public class LaserDown : MonoBehaviourPun
 
     public int wiresID;
     public bool disabled = false;
+    private bool tripped = false;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         lr = GetComponent<LineRenderer>();
-        
     }
 
     // Update is called once per frame
@@ -49,6 +50,11 @@ public class LaserDown : MonoBehaviourPun
                     PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
                     song.PlayIntenseTheme();
 
+                    if (!argon.tripped) {
+                        argon.gameObject.SetActive(true);
+                        argon.fillArgon();
+                        soundController.grid.updateWalls();
+                    }
                 }
             }
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using System.Text;
 using System.Security.Cryptography;
-
+using Photon.Pun;
 
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,6 +21,17 @@ public class DB_Controller : MonoBehaviour
     string get_balance_url = "https://brasspig.online/get_balance.php?";
     string get_friends_url = "https://brasspig.online/get_friends.php?";
     string add_friend_url = "https://brasspig.online/add_friend.php?";
+    string edit_balance_url = "https://brasspig.online/edit_balance.php";
+    string get_threshold_url = "https://brasspig.online/get_mic_threshold.php?";
+    string edit_threshold_url = "https://brasspig.online/set_mic_threshold.php?";
+    string get_multiplier_url = "https://brasspig.online/get_mic_multiplier.php?";
+    string edit_multiplier_url = "https://brasspig.online/set_mic_multiplier.php?";
+    string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
+    string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
+    string edit_upgrade_url = "https://brasspig.online/edit_upgrade_list.php?";
+
+
+    [SerializeField] Slider multiplier, threshold;
 
     private void Start()
     {
@@ -46,9 +59,76 @@ public class DB_Controller : MonoBehaviour
         StartCoroutine(CoinBalance(username));
     }
 
-    public void GetFriends(string username)
+    public void EditCoinBalance(string username, int new_balance, int type)
     {
-        StartCoroutine(Friends(username));
+        StartCoroutine(EditBalance(username,new_balance,type));
+    }
+
+    public void EditMicThreshold(string username, int value)
+    {
+        StartCoroutine(EditThreshold(username, value));
+    }
+
+    public void GetMicThreshold(string username, int state)
+    {
+        StartCoroutine(GetThreshold(username, state));
+    }
+
+    public void EditMicMultiplier(string username, int value)
+    {
+        StartCoroutine(EditMultiplier(username, value));
+    }
+
+    public void saveMicSettings() {
+        if (_GameLobby.GetComponent<PUN2_GameLobby1>().IsGuest) {
+            PlayerPrefs.SetInt("Threshold", (int)threshold.value);
+            PlayerPrefs.SetInt("Multiplier", (int)multiplier.value);
+        } else {
+            EditMicMultiplier(PhotonNetwork.NickName, (int)multiplier.value);
+            EditMicThreshold(PhotonNetwork.NickName, (int)threshold.value);
+        }
+
+    }
+
+    public void getThresholds(string username) {
+        GetMicMultiplier(username, 0);
+        GetMicThreshold(username, 0);
+    }
+
+    public void GetMicMultiplier(string username, int state)
+    {
+        StartCoroutine(GetMultiplier(username, state));
+    }
+
+    public void GetUpgradeList(string username)
+    {
+        StartCoroutine(UpgradeList(username));
+    }
+
+    public void AddUpgrade(string username, string upgrade)
+    {
+        StartCoroutine(Add_Upgrade(username, upgrade));
+    }
+
+    public void RemoveUpgrade(string username, string upgrade)
+    {
+        StartCoroutine(Remove_Upgrade(username, upgrade));
+    }
+
+    public void RemoveUpgrade2(string username, string upgrade, string upgrade2)
+    {
+        StartCoroutine(Remove_Upgrade2(username, upgrade, upgrade2));
+    }
+
+    public void EditUpgradeList(string username, string new_upgrade_list)
+    {
+        StartCoroutine(Edit_Upgrade_List(username, new_upgrade_list));
+    }
+
+
+    public void GetFriends(string username, int type)
+    {
+        StartCoroutine(Friends(username,type));
     }
 
     public void CheckIfExists(string username, string friend)
@@ -217,6 +297,7 @@ public class DB_Controller : MonoBehaviour
             }
         }
     }
+
     IEnumerator Add(string username, string friend)
     {
         string uri = add_friend_url + "user=" + username + "&friend=" + friend;
@@ -235,7 +316,7 @@ public class DB_Controller : MonoBehaviour
                     Debug.Log("Friend added succesfully.");
                     _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.GetComponent<Text>().text = "Friend added succesfully";
                     _GameLobby.GetComponent<PUN2_GameLobby1>().AddFriendStatus.SetActive(true);
-                    _GameLobby.GetComponent<PUN2_GameLobby1>().GetFriends();
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().GetFriends(username,0);
                 }
                 else
                 {
@@ -309,15 +390,408 @@ public class DB_Controller : MonoBehaviour
             {
                 string balance = webRequest.downloadHandler.text;
                 Debug.Log("BALANCE SET: "+balance);
+                _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerBalance = Int32.Parse(balance);
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = balance;
                 _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = balance;
+                _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonLobby.GetComponentInChildren<Text>().text = balance;
+
             }
         }
 
     }
 
-    IEnumerator Friends(string username)
+    IEnumerator EditBalance(string username, int new_balance,int type)
     {
+        if (type == 10)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanel.SetActive(true);
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanelPre.SetActive(true);
+
+        }
+        string uri = edit_balance_url;
+        string post_data = "{ \"username\": \"" + username + "\", \"new_balance\": " + new_balance + "  }";
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, "POST"))
+        {
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(post_data);
+            webRequest.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+            webRequest.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            webRequest.SetRequestHeader("Content-Type", "application/json");
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+                //Debug.Log(webRequest.error);
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text == "true")
+                {
+                    Debug.Log("Balance edited succesfully.");
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButton.GetComponentInChildren<Text>().text = new_balance.ToString();
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonPreGame.GetComponentInChildren<Text>().text = new_balance.ToString();
+                    _GameLobby.GetComponent<PUN2_GameLobby1>().BalanceButtonLobby.GetComponentInChildren<Text>().text = new_balance.ToString();
+
+                }
+                else
+                {
+                    Debug.Log("Balance edit unsuccesful.");
+                }
+
+
+            }
+        }
+        if (type == 10)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanel.SetActive(false);
+            _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockPanelPre.SetActive(false);
+
+        }
+    }
+
+    IEnumerator UpgradeList(string username)
+    {
+        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
+
+        string uri = get_upgrades_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no upgrades");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+                    
+                    string[] upgrade_list = result.Split(delimiterChars);
+                    foreach (var upgrade in upgrade_list)
+                    {
+                        Debug.Log("UPGRADE " + upgrade);
+
+                        _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory[upgrade] += 1;
+
+                    }
+                    foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
+                    {
+                        switch (kvp.Key)
+                        {
+                            case "speed_boots":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_InventoryNew.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().speed_boots_InventoryPre.text = kvp.Value.ToString();
+                                break;
+                            case "shield":
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().shield_Inventory.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryNew.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().shield_InventoryPre.text = kvp.Value.ToString();
+
+                                break;
+                            case "vision":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().vision_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().vision_InventoryNew.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().vision_InventoryPre.text = kvp.Value.ToString();
+
+                                break;
+                            case "self_revive":
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_Inventory.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryNew.text = kvp.Value.ToString();
+                                //_GameLobby.GetComponent<PUN2_GameLobby1>().self_revive_InventoryPre.text = kvp.Value.ToString();
+
+                                break;
+                            case "fast_hands":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_InventoryNew.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_InventoryPre.text = kvp.Value.ToString();
+
+                                break;
+                            default:
+                                break;
+                        }
+                        Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
+                    }
+
+                }
+            }
+        }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
+        _GameLobby.GetComponent<PUN2_GameLobby1>().SetOwnedStatus();
+
+
+
+
+    }
+
+    IEnumerator Add_Upgrade(string username, string upgrade)
+    {
+        string uri = add_upgrade_url + "user=" + username + "&upgrade=" + upgrade;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Upgrade added succesfully.");
+
+                }
+                else
+                {
+                    Debug.Log("Upgrade NOT added succesfully.");
+
+                }
+            }
+        }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().GetInventory();
+    }
+
+    IEnumerator Remove_Upgrade(string username, string upgrade_name)
+    {
+        string uri = get_upgrades_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no upgrades");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+
+                    string[] upgrade_list = result.Split(delimiterChars);
+                    List<string> new_upgrade_list = new List<string>();
+
+                    foreach (var upgrade in upgrade_list)
+                    {
+                        if (!upgrade_name.Equals(upgrade))
+                        {
+                            new_upgrade_list.Add(upgrade);
+                        }
+                    }
+                    string new_result = String.Join(",", new_upgrade_list.ToArray());
+                    EditUpgradeList(username, new_result);
+                }
+            }
+        }
+    }
+
+    IEnumerator Remove_Upgrade2(string username, string upgrade_name1, string upgrade_name2)
+    {
+        string uri = get_upgrades_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no upgrades");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+
+                    string[] upgrade_list = result.Split(delimiterChars);
+                    List<string> new_upgrade_list = new List<string>();
+                    List<string> new_upgrade_list2 = new List<string>();
+
+
+                    foreach (var upgrade in upgrade_list)
+                    {
+                        if (!upgrade_name1.Equals(upgrade))
+                        {
+                            new_upgrade_list.Add(upgrade);
+                        }
+                    }
+                    foreach (var upgrade in new_upgrade_list)
+                    {
+                        if (!upgrade_name2.Equals(upgrade))
+                        {
+                            new_upgrade_list2.Add(upgrade);
+                        }
+                    }
+                    string new_result = String.Join(",", new_upgrade_list2.ToArray());
+                    EditUpgradeList(username, new_result);
+                }
+            }
+        }
+    }
+
+    IEnumerator Edit_Upgrade_List(string username, string new_upgrade_list)
+    {
+        string uri = edit_upgrade_url + "user=" + username + "&upgrades=" + new_upgrade_list;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true "))
+                {
+                    Debug.Log("Upgrade Succesfully removed");
+
+                }
+                else
+                {
+                    Debug.Log("Upgrade unsuccesfully removed");
+                }
+
+            }
+        }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().GetInventory();
+
+
+    }
+
+
+
+    IEnumerator EditThreshold(string username, int value)
+    {
+        string uri = edit_threshold_url + "user=" + username + "&value=" + value;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Mic threshold changed succesfully.");
+                    
+                }
+                else
+                {
+                    Debug.Log("Mic threshold change failed.");
+                }
+            }
+        }
+    }
+
+    IEnumerator GetThreshold(string username, int state)
+    {
+        string uri = get_threshold_url + "user=" + username;
+        string threshOut = "0";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                threshOut = webRequest.downloadHandler.text;
+            }
+        }
+        if (state == 0) {
+            threshold.value = Int32.Parse(threshOut);
+        }
+    }
+
+    IEnumerator EditMultiplier(string username, int value)
+    {
+        string uri = edit_multiplier_url + "user=" + username + "&value=" + value;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Mic multiplier changed succesfully.");
+
+                }
+                else
+                {
+                    Debug.Log("Mic threshold change failed.");
+                }
+            }
+        }
+    }
+
+    IEnumerator GetMultiplier(string username, int state)
+    {
+        string uri = get_multiplier_url + "user=" + username;
+        string outMulti = "240";
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                outMulti = webRequest.downloadHandler.text;
+            }
+        }
+        if (state == 0) {
+            multiplier.value = Int32.Parse(outMulti);
+        }
+    }
+
+
+    IEnumerator Friends(string username, int type)
+    {
+        bool refresh = false;
+        if (_GameLobby.GetComponent<PUN2_GameLobby1>().FriendList.Length == 0)
+        {
+            Debug.Log("FRIEND LIST NULL. REFRESHING");
+            refresh = true;
+        }
+        if (type == 1)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().FriendWaitPanel.SetActive(true);
+        }
         string uri = get_friends_url + "user=" + username;
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -340,6 +814,15 @@ public class DB_Controller : MonoBehaviour
                 
             }
         }
+        if (type == 0 || refresh == true)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+        }
+        if (type == 1)
+        {
+            _GameLobby.GetComponent<PUN2_GameLobby1>().FriendWaitPanel.SetActive(false);
+        }
+
     }
 
     public static class SecurePasswordHasher

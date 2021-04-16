@@ -7,7 +7,10 @@ using Photon.Pun;
 public class SoundController : MonoBehaviourPun
 {
     [SerializeField] public SoundVisual soundVis;
+    [SerializeField] private DBControllerGame DB_Controller;
     public PlayerController playerController;
+    public int multiplier = 240;
+    public int threshold = 2;
     public Grid grid;
     public GuardController localSoundGrid;
     // public GuardMovement guardController;
@@ -15,15 +18,16 @@ public class SoundController : MonoBehaviourPun
     public int maxVolume;
     float timeElapsed;
 
-#if UNITY_WEBGL && !UNITY_EDITOR
         void Awake()
         {
+#if UNITY_WEBGL && !UNITY_EDITOR
             // ask for permissions
             Microphone.Init();
             Microphone.QueryAudioInput();
             maxVolume = 0;
-        }
 #endif
+            DB_Controller.getThresholds(PhotonNetwork.NickName);
+        }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
             float[] volumes = Microphone.volumes;
@@ -48,8 +52,8 @@ public class SoundController : MonoBehaviourPun
         // send microphone volume if above threshold
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();
-        if (Microphone.volumes[0]*240 > 2 && !this.playerController.isDisabled) {
-            sendGrid(playerController.player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*240));
+        if (Microphone.volumes[0]*multiplier > threshold && !this.playerController.isDisabled) {
+            sendGrid(playerController.player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*multiplier));
         }
 #endif
         if (Input.GetKeyDown("j") && !this.playerController.isDisabled) {
@@ -61,9 +65,6 @@ public class SoundController : MonoBehaviourPun
         }
         if (Input.GetKeyDown("l") && !this.playerController.isDisabled) {
             sendGrid(playerController.player.transform.position, 30);
-        }
-        if (Input.GetKeyDown("m") && !this.playerController.isDisabled) {
-            this.grid.getAverages();
         }
 
         //flatten array

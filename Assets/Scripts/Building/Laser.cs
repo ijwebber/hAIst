@@ -11,6 +11,8 @@ public class Laser : MonoBehaviourPun
 
     [SerializeField]
     private Transform startPoint; 
+    [SerializeField] private Argon argon;
+    [SerializeField] private SoundController soundController;
 
     GameObject character;
 
@@ -48,6 +50,12 @@ public class Laser : MonoBehaviourPun
                     Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
                     PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
                     song.PlayIntenseTheme();
+
+                    if (!argon.tripped) {
+                        argon.gameObject.SetActive(true);
+                        argon.fillArgon();
+                        soundController.grid.updateWalls();
+                    }
                 }
             }
 

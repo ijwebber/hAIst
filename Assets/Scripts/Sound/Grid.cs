@@ -10,12 +10,14 @@ public class Node {
 public class Grid {
     private int width;
     private int obstacleMask = (1 << 8) | (1 << 12) | (1 << 20);
+    private int argonMask = (1 << 21);
     public int[] averages = new int[500];
     private int height;
     private float maxPressure = 240;
     private double deltaT = 0.02;
     private double dt2;
     private double speedOfSound = 343/10; // this isn't actually the speed of sound, but it's the one that works best
+    private double speedOfSoundArgon = 343/15; // this isn't actually the speed of sound, but it's the one that works best
     private int[,] gridArray;
     private float cellSize;
     public Vector3 offset = new Vector3(-100.5f,11.7f,-60f); // offset for bottom left grid tile (dont change z for some reason idk why)
@@ -37,6 +39,8 @@ public class Grid {
                 Vector3 point1 = new Vector3(i*cellSize, 1, j*cellSize) + offset;
                 if (Physics.CheckSphere(point1, cellSize/4, obstacleMask)) {
                     velocities[i,j] = 0;
+                } else if (Physics.CheckSphere(point1, cellSize/4, argonMask)){
+                    velocities[i,j] = speedOfSoundArgon;
                 } else {
                     velocities[i,j] = speedOfSound;
                 }
@@ -154,7 +158,7 @@ public class Grid {
     public void updateNodes() {
         for (int x = width-2; x >= 1; x--) {
             for (int y = height-2; y >= 1; y--) {
-                if (velocities[x,y] == speedOfSound) {
+                if (velocities[x,y] > 0) {
                     // god equation -- calculates next node based on the four neighbouring nodes and previous node info
                     double v2 = velocities[x,y]*velocities[x,y];
                     // double nextValue = 0;

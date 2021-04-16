@@ -9,19 +9,25 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 
-
+/* PLACES TO ADD NEW UPGRADES:
+1. BuyUpgrade function
+2. Upgrade image in upgrade menu (and description)
+3. Image in inventory
+4. Text object in pregamelobby script
+5. Switch statement in DB_Controller
+6. SetUsername function
+*/
 public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
 
     string gameVersion = "0.9";
-    public Slider slider;
-    public TextMeshProUGUI textAsset;
-    public Slider Multiplier;
-    private bool MapMenu = false;
     bool joiningRoom = false;
     public GameObject DB_Controller;
     public GameObject PreGameScript;
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+
+    public int PlayerBalance;
+    public Dictionary<string, int> PlayerInventory = new Dictionary<string, int>();
 
     // MENUS
     [SerializeField] private GameObject GuestMenu;
@@ -31,14 +37,22 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject NewUserMenu;
     [SerializeField] private GameObject HomeMenu;
     [SerializeField] private GameObject LobbyMenu;
+    [SerializeField] private GameObject NewLobbyMenu;
+
     [SerializeField] private GameObject PreGameMenu;
     [SerializeField] private GameObject CreditsMenu;
+    [SerializeField] private GameObject RejoinWaitPanel;
+
+    [SerializeField] private GameObject PreGameHome;
+    [SerializeField] private GameObject MapScreen;
 
     // SCRIPTS
     [SerializeField] private GameObject menu_script;
     [SerializeField] private GameObject LobbyScript;
     [SerializeField] private GameObject ContentLobby;
     [SerializeField] private GameObject ContentFriends;
+    [SerializeField] public GameObject ContentFriendsNew;
+
 
 
 
@@ -73,20 +87,92 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject FriendsMenu;
     public GameObject MicMenu;
     public GameObject Home_Home;
+    public GameObject NewHome;
+    public GameObject UpgradeMenu;
+    public GameObject InventoryMenu;
+
+    public GameObject UnlockPanel;
+    public GameObject UnlockPanelPre;
+    public GameObject FriendWaitPanel;
+
+    public GameObject InventoryWaitPanel;
+
+
     public string[] FriendList;
     public GameObject AddFriendStatus;
     public TMP_InputField AddFriendInput;
     public bool IsGuest = false;
     public Button FriendsMenuButton;
+    public Button UpgradesMenuButton;
+    public GameObject BalanceInfoHome;
+
+    // UPGRADES OBJECTS
+    public TMP_Text speed_boots_Inventory;
+    public TMP_Text shield_Inventory;
+    public TMP_Text vision_Inventory;
+    public TMP_Text self_revive_Inventory;
+    public TMP_Text fast_hands_Inventory;
+
+    public TMP_Text speed_boots_InventoryNew;
+    public TMP_Text shield_InventoryNew;
+    public TMP_Text vision_InventoryNew;
+    public TMP_Text self_revive_InventoryNew;
+    public TMP_Text fast_hands_InventoryNew;
+    public TextMeshProUGUI speed_boots_cost;
+    public TextMeshProUGUI fast_hands_cost;
+    public TextMeshProUGUI vision_cost;
+
+
+    public Button shield_unlock;
+    public Button self_revive_unlock;
+
+    public Button shield_owned;
+    public Button self_revive_owned;
+
+    public Button shield_unlock_pre;
+    public Button self_revive_unlock_pre;
+
+    public Button shield_owned_pre;
+    public Button self_revive_owned_pre;
+
+
+    public TMP_Text speed_boots_InventoryPre;
+    public TMP_Text shield_InventoryPre;
+    public TMP_Text vision_InventoryPre;
+    public TMP_Text self_revive_InventoryPre;
+    public TMP_Text fast_hands_InventoryPre;
+
+
+
+
+    // LOBBY MENU OBJECTS
+    public Button BalanceButtonLobby;
+
+    // MIC MENU OBJECT
+    private bool MicCheck;
+    [SerializeField] private Button saveMicButton;
+    [SerializeField] private TextMeshProUGUI multiplierTextAsset;
+    [SerializeField] private TextMeshProUGUI threshTextAsset;
+    public Slider Multiplier;
+    public Slider Threshold;
+    public Slider slider;
+
 
 
     // PRE GAME OBJECTS
+    public AnimateBG bg;
     public Button BalanceButtonPreGame;
+    public GameObject BalanceInfoPre;
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
-    public GameObject MapScreen;
+    public GameObject UpgradeScreen;
 
     // PHOTON NETWORK GAMEOBJECTS 
+
+    // MAP SCREEN OBJECTS
+    [SerializeField] private GameObject Notes;
+    [SerializeField] private GameObject MapIndicator;
+
 
 
     // Use this for initialization
@@ -97,17 +183,13 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     void Awake()
     {
+        //DontDestroyOnLoad(this);
         if (PhotonNetwork.IsConnected)
         {
-            thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
-            thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
-            PreGameMenu.SetActive(true);
-            ThiefController();
-            PreGameScript.GetComponent<PreGame>().SetReadyChecks();
-
-            DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
-
+            Debug.Log("IsConnectedRejoin");
+            ReJoinAfterLeave();
         }
+
     }
 
     void Connect()
@@ -212,61 +294,144 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void EnableFriendsMenu()
     {
         FriendsMenu.SetActive(true);
+        //Home_Home.SetActive(false);
+        NewHome.SetActive(false);
+        UpgradeMenu.SetActive(false);
+        //InventoryMenu.SetActive(false);
+        NewLobbyMenu.SetActive(false);
         MicMenu.SetActive(false);
-        Home_Home.SetActive(false);
+        MicCheck = false;
         AddFriendStatus.SetActive(false);
         ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
     }
 
     public void EnableMicThreshold() {
+        DB_Controller.GetComponent<DB_Controller>().getThresholds(PhotonNetwork.NickName);
         MicMenu.SetActive(true);
-        Home_Home.SetActive(false);
+        Color32 blueCol = new Color32(93,93,118,255);
+        saveMicButton.GetComponent<Image>().color = blueCol;
+        MicCheck = true;
+        NewHome.SetActive(false);
+        NewLobbyMenu.SetActive(false);
+        UpgradeMenu.SetActive(false);
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
     }
 
-#if UNITY_WEBGL && !UNITY_EDITOR
     void Update() {
-        if (MapMenu) {
+    #if UNITY_WEBGL && !UNITY_EDITOR
+        if (MicCheck) {
             Microphone.Update();
-        }
-        string[] devices = Microphone.devices;
+            string[] devices = Microphone.devices;
 
-        float[] volumes = Microphone.volumes;
+            float[] volumes = Microphone.volumes;
 
-        if (devices.Length > 1) {
-            int index = 0;
-            string deviceName = devices[index];
-            if (deviceName == null)
-            {
-                deviceName = string.Empty;
+            if (devices.Length > 1) {
+                int index = 0;
+                string deviceName = devices[index];
+                if (deviceName == null)
+                {
+                    deviceName = string.Empty;
+                }
+
+                float volume = 0;
+                if (Multiplier.value != null) {
+                    volume = volumes[index]*Multiplier.value;
+                }
+                slider.value = volume;
             }
-
-            float volume = 0;
-            if (Multiplier.value != null) {
-                volume = volumes[index]*Multiplier.value;
-            }
-            slider.value = volume;
         }
-    }
 #endif
-    public void updateSlider() {
-        textAsset.text = Multiplier.value + " \n(Default = 240)";
+        // update cost of upgrades
+        int speedAdd;
+        int visionAdd;
+        int fastAdd;
+        PlayerInventory.TryGetValue("speed_boots",out speedAdd);
+        PlayerInventory.TryGetValue("vision",out visionAdd);
+        PlayerInventory.TryGetValue("fast_hands",out fastAdd);
+        speed_boots_cost.text = (2000 + 200*speedAdd).ToString();
+        vision_cost.text = (2000 + 200*visionAdd).ToString();
+        fast_hands_cost.text = (5000 + 500*fastAdd).ToString();
+    }
+    public void updateMultiplierSlider() {
+        multiplierTextAsset.text = Multiplier.value.ToString();
+        saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
+    }
+
+    public void updateThresholdSlider() {
+        threshTextAsset.text = Threshold.value.ToString();
+        saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
+    }
+
+    public void defaultMicSettings() {
+        Threshold.value = 2;
+        Multiplier.value = 240;
+        saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
+    }
+
+    public void saveMicClicked() {
+        saveMicButton.GetComponent<Image>().color = new Color32(93,93,118,255);
     }
 
     public void EnableLobbyMenu()
     {
         FriendsMenu.SetActive(false);
+        UpgradeMenu.SetActive(false);
         MicMenu.SetActive(false);
+        //InventoryMenu.SetActive(false);
+        NewLobbyMenu.SetActive(false);
+
+
+
         AddFriendStatus.SetActive(false);
-        Home_Home.SetActive(true);
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+        //Home_Home.SetActive(true);
+        NewHome.SetActive(true);
+
+    }
+
+    public void EnableUpgradeMenu()
+    {
+        FriendsMenu.SetActive(false);
+        AddFriendStatus.SetActive(false);
+        //Home_Home.SetActive(false);
+        NewHome.SetActive(false);
+
+        //InventoryMenu.SetActive(false);
+        NewLobbyMenu.SetActive(false);
+        MicMenu.SetActive(false);
+
+        GetInventory();
+        UpgradeMenu.SetActive(true);
+
+        // TODO: remove
+        // DB_Controller.GetComponent<DB_Controller>().EditCoinBalance("fxlmo", 10000, 10);
+    }
+
+
+    public void EnableRoomMenu()
+    {
+        FriendsMenu.SetActive(false);
+        MicMenu.SetActive(false);
+        MicCheck = false;
+        AddFriendStatus.SetActive(false);
+        NewHome.SetActive(false);
+
+        //Home_Home.SetActive(false);
+        UpgradeMenu.SetActive(false);
+
+        //InventoryMenu.SetActive(true);
+        LobbyScript.SetActive(true);
+        NewLobbyMenu.SetActive(true);
+        GetInventory();
+
     }
 
     IEnumerator UpdateFriendList()
     {
         for (; ; )
         {
-            if (PhotonNetwork.IsConnectedAndReady & FriendList != null)
+            if (PhotonNetwork.IsConnectedAndReady && FriendList != null)
             {
                 if (FriendList.Length == 1 & FriendList[0] == "")
                 {
@@ -282,14 +447,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         }
     }
 
-    public void GetFriends()
+    public void GetFriends(string username, int type)
     {
-        DB_Controller.GetComponent<DB_Controller>().GetFriends(UsernameLoginInput.text);
+        DB_Controller.GetComponent<DB_Controller>().GetFriends(username,type);
     }
 
     public void AddFriend()
     {
         DB_Controller.GetComponent<DB_Controller>().CheckIfExists(PhotonNetwork.NickName, AddFriendInput.text);
+        
     }
 
     public void ChangeAddFriendInput()
@@ -301,33 +467,201 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         LobbyScript.SetActive(true);
         LobbyMenu.SetActive(true);
-
     }
+
+    // UPGRADES
+
+    public void BuyUpgradeSpeedBoots()
+    {
+        int updatedCost = int.Parse(speed_boots_cost.text);
+        if (PlayerBalance >= updatedCost)
+        {
+            PlayerBalance = PlayerBalance - updatedCost;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "speed_boots");
+
+        }
+    }
+
+    public void BuyUpgradeShield()
+    {
+        if (PlayerBalance >= 2000)
+        {
+            PlayerBalance = PlayerBalance - 2000;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "shield");
+
+        }
+    }
+
+    public void BuyUpgradeVision()
+    {
+        int updatedCost = int.Parse(vision_cost.text);
+        if (PlayerBalance >= updatedCost)
+        {
+            PlayerBalance = PlayerBalance - updatedCost;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "vision");
+
+        }
+    }
+
+
+    public void BuyUpgradeSelfRevive()
+    {
+        if (PlayerBalance >= 5000)
+        {
+            PlayerBalance = PlayerBalance - 5000;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "self_revive");
+
+        }
+    }
+
+    public void BuyUpgradeFastHands()
+    {
+        int updatedCost = int.Parse(fast_hands_cost.text);
+        if (PlayerBalance >= updatedCost)
+        {
+            PlayerBalance = PlayerBalance - updatedCost;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "fast_hands");
+        }
+    }
+
+    public void GetInventory()
+    {
+        List<string> keys = new List<string>(PlayerInventory.Keys);
+        foreach (string key in keys)
+        {
+            PlayerInventory[key] = 0;
+        }
+        DB_Controller.GetComponent<DB_Controller>().GetUpgradeList(PhotonNetwork.NickName);
+        
+    }
+
+    public void SetOwnedStatus()
+    {
+        foreach (KeyValuePair<string, int> kvp in PlayerInventory)
+        {
+            switch (kvp.Key)
+            {
+                case "speed_boots":
+                    
+                    break;
+
+                case "shield":
+                    if (kvp.Value > 0)
+                    {
+                        shield_unlock.gameObject.SetActive(false);
+                        shield_owned.gameObject.SetActive(true);
+                        shield_unlock_pre.gameObject.SetActive(false);
+                        shield_owned_pre.gameObject.SetActive(true);
+                    }
+
+                    break;
+
+                case "vision":
+                  
+
+                    break;
+
+                case "self_revive":
+                    if (kvp.Value > 0)
+                    {
+                        self_revive_unlock.gameObject.SetActive(false);
+                        self_revive_owned.gameObject.SetActive(true);
+                        self_revive_unlock_pre.gameObject.SetActive(false);
+                        self_revive_owned_pre.gameObject.SetActive(true);
+                    }
+
+                    break;
+
+                case "fast_hands":
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+
 
     // PRE GAME MENU
 
+
     public void EnableHomeScreen()
     {
-        LobbyScreen.SetActive(false);
-        MapScreen.SetActive(false);
+        if (!bg.animating) {
+            LobbyScreen.SetActive(false);
+            UpgradeScreen.SetActive(false);
+            if (MapScreen.activeInHierarchy) {
+                MapScreen.SetActive(false);
+                bg.unZoom(PreGameHome);
+            } else {
+                PreGameHome.SetActive(true);
+            }
+        }
 
     }
 
+    public void EnableUpgradeScreen()
+    {
+        if (!bg.animating)
+        {
+            PreGameHome.SetActive(false);
+            LobbyScreen.SetActive(false);
 
+            if (MapScreen.activeInHierarchy)
+            {
+                MapScreen.SetActive(false);
+
+                bg.unZoom(UpgradeScreen);
+            }
+            else
+            {
+                GetInventory();
+                UpgradeScreen.SetActive(true);
+
+            }
+            //ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        }
+
+    }
+
+    // zoom in (make sure to call unzoom if map is active when navigating away)
     public void EnableMapScreen()
     {
-        MapScreen.SetActive(true);
-        // backgroundAnimator.SetTrigger("Zoom");
         LobbyScreen.SetActive(false);
-        MapMenu = true;
+        PreGameHome.SetActive(false);
+        UpgradeScreen.SetActive(false);
+        bg.zoom();
+        MapIndicator.SetActive(false);
+        
+
+        // MapScreen.SetActive(true);
+    }
+
+    public void ToggleNotes() {
+        Notes.SetActive(!Notes.activeInHierarchy);
     }
 
 
     public void EnableLobbyScreen()
     {
-        MapScreen.SetActive(false);
-        LobbyScreen.SetActive(true);
-        ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        if (!bg.animating) {
+            PreGameHome.SetActive(false);
+            UpgradeScreen.SetActive(false);
+
+            if (MapScreen.activeInHierarchy) {
+                MapScreen.SetActive(false);
+                bg.unZoom(LobbyScreen);
+            } else {
+                LobbyScreen.SetActive(true);
+            }
+            ContentLobby.GetComponent<PopulateGridLobby>().OnRefresh();
+        }
     }
 
 
@@ -394,13 +728,52 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
         Debug.Log("NICKNAME: " + PhotonNetwork.NickName);
 
-        HomeMenu.SetActive(true);
         if (IsGuest)
         {
             FriendsMenuButton.interactable = false;
+            UpgradesMenuButton.interactable = false;
+            BalanceInfoHome.SetActive(false);
+            BalanceInfoPre.SetActive(false);
+
         }
-        //LobbyScript.SetActive(true);
-        //LobbyMenu.SetActive(true);
+        // ADD NEW UPGRADES HERE
+        PlayerInventory.Add("speed_boots", 0);
+        PlayerInventory.Add("shield", 0);
+        PlayerInventory.Add("vision", 0);
+        PlayerInventory.Add("self_revive", 0);
+        PlayerInventory.Add("fast_hands", 0);
+        HomeMenu.SetActive(true);
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+
+
+    }
+
+    public void ReJoinAfterLeave()
+    {
+        //StartMenu.SetActive(false);
+        RejoinWaitPanel.SetActive(true);
+        DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
+        PhotonNetwork.JoinLobby(TypedLobby.Default);
+        
+
+        thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+        thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+
+        if (IsGuest)
+        {
+            FriendsMenuButton.interactable = false;
+            UpgradesMenuButton.interactable = false;
+            BalanceInfoHome.SetActive(false);
+            BalanceInfoPre.SetActive(false);
+
+        }
+        // ADD NEW UPGRADES HERE
+        PlayerInventory.Add("speed_boots", 0);
+        PlayerInventory.Add("shield", 0);
+        PlayerInventory.Add("vision", 0);
+        PlayerInventory.Add("self_revive", 0);
+        PlayerInventory.Add("fast_hands", 0);
+        HomeMenu.SetActive(true);
     }
 
 
@@ -486,11 +859,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedLobby()
     {
-        GetFriends();
+        GetFriends(PhotonNetwork.NickName, 1);
         StartCoroutine("UpdateFriendList");
+        //ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+
 
         //JoinNewRooom();
         PhotonNetwork.AutomaticallySyncScene = true;
+        //RejoinWaitPanel.SetActive(false);
     }
 
     public override void OnPlayerEnteredRoom(Player player)
@@ -507,6 +883,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("OnJoinedRoom");
+        NewLobbyMenu.SetActive(false);
         PreGameMenu.SetActive(true);
         RoomNameButton.GetComponentInChildren<Text>().text = "Room: " + PhotonNetwork.CurrentRoom.Name;
         StopCoroutine("UpdateFriendList");

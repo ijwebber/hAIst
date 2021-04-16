@@ -10,6 +10,8 @@ using Photon.Realtime;
 
 public class PreGame : MonoBehaviourPunCallbacks
 {
+    public GameObject _GameLobby;
+
 
     public Button StartGameButton;
     public Button SetReadyButton;
@@ -21,43 +23,120 @@ public class PreGame : MonoBehaviourPunCallbacks
     public GameObject thief_3;
     public GameObject thief_4;
 
+    public GameObject StartGameWaitPanel;
+    public GameObject ChooseUpgradesPanel;
+
+    public Dictionary<string, bool> EnabledUpgrades = new Dictionary<string, bool>();
+
+
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        }
+        PlayerPrefs.SetInt("speed_boots", 0);
+        PlayerPrefs.SetInt("vision", 0);
+        PlayerPrefs.SetInt("shield", 0);
+        PlayerPrefs.SetInt("self_revive", 0);
+        PlayerPrefs.SetInt("fast_hands", 0);
+
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
 
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-   
         
     }
 
     //just spawns in player object
     private void Awake()
     {
-        if (PhotonNetwork.CurrentRoom == null)
+        if (PhotonNetwork.IsConnected)
         {
-            Debug.Log("Is not in the room, returning back to Lobby");
-            UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
-            return;
+            if (PhotonNetwork.CurrentRoom == null)
+            {
+                Debug.Log("Is not in the room, returning back to Lobby");
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
+                return;
+            }
+
+            customProperties.Add("ready", "false");
+            customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        }
+    }
+
+    public void SetUpgradesForGame()
+    {
+        // PERMA UPGRADES
+        foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
+        {
+            if (kvp.Key.Equals("speed_boots") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
+            }
+            if (kvp.Key.Equals("vision") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
+
+            }
+            if (kvp.Key.Equals("fast_hands") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
+
+            }
         }
 
-        customProperties.Add("ready", "false");
-        customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
+        // POWER UPS
+        foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
+        {
+            if (kvp.Key.Equals("shield") & kvp.Value > 0)
+            {
+                if (ChooseUpgradesPanel.GetComponent<UpgradeController>().shield_toggle != null)
+                {
+                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().shield_toggle.isOn)
+                    {
+                        EnabledUpgrades[kvp.Key] = true;
+                        PlayerPrefs.SetInt(kvp.Key, 1);
+                        // db
+
+                    }
+                }
+            }
+            if (kvp.Key.Equals("self_revive") & kvp.Value > 0)
+            {
+                if (ChooseUpgradesPanel.GetComponent<UpgradeController>().self_revive_toggle != null)
+                {
+                    if (ChooseUpgradesPanel.GetComponent<UpgradeController>().self_revive_toggle.isOn)
+                    {
+                        EnabledUpgrades[kvp.Key] = true;
+                        PlayerPrefs.SetInt(kvp.Key, 1);
+
+                    }
+                }
+            }
+        }
+        foreach (KeyValuePair<string, bool> kvp in EnabledUpgrades)
+        {
+            Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
+        }
+        PlayerPrefs.Save();
 
     }
 
 
-    public void SetReady() 
+                public void SetReady() 
     {
         Debug.Log("Set Ready Function");
         if (customProperties["ready"].Equals("false"))
@@ -90,12 +169,37 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     }
 
+    public void EnableChooseUpgradesPanel()
+    {
+        ChooseUpgradesPanel.SetActive(true);
+        ChooseUpgradesPanel.GetComponent<UpgradeController>().PopulateUpdatesPanel();
+
+
+    }
+
+    public void DisableChooseUpgradesPanel()
+    {
+        ChooseUpgradesPanel.SetActive(false);
+    }
+
     public void QuitButton()
     {
         PhotonNetwork.LeaveRoom();   
     }
     public void StartGame()
     {
+        StartGameWaitPanel.SetActive(true);
+
+        PUN2_GameLobby1 gameLobby1 = GameObject.FindObjectOfType<PUN2_GameLobby1>();
+        int guest = 0;
+        if (gameLobby1.IsGuest) {
+            guest = 1;
+        }
+        PlayerPrefs.SetInt("PlayerBalance", gameLobby1.PlayerBalance);
+        // PlayerPrefs.SetInt("PlayerBalance", );
+        PlayerPrefs.SetInt("isGuest", guest);
+        PlayerPrefs.Save();
+        SetUpgradesForGame();
         PhotonNetwork.LoadLevel("ArtLevel");
     }
     
@@ -205,9 +309,10 @@ public class PreGame : MonoBehaviourPunCallbacks
 
 
     //Go back to main meny when you leave game
-    public override void OnLeftRoom()
+    /*public override void OnLeftRoom()
     {
         //We have left the Room, return back to the GameLobby
         UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
     }
+    */
 }
