@@ -634,6 +634,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     // PRE GAME MENU
 
 
+
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
     public void EnableHomeScreen()
     {
         if (!bg.animating) {
@@ -933,6 +938,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         ThiefController();
         //PhotonNetwork.LoadLevel("PreGameLobby");
 
+    }
+
+    public override void OnLeftRoom()
+    {
+        PreGameMenu.SetActive(false);
+        NewLobbyMenu.SetActive(true);
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
