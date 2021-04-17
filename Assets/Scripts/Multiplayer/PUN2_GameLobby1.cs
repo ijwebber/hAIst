@@ -97,6 +97,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public GameObject InventoryWaitPanel;
 
+    public GameObject FriendPanel;
+
 
     public string[] FriendList;
     public GameObject AddFriendStatus;
@@ -162,6 +164,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     // LOBBY MENU OBJECTS
     public Button BalanceButtonLobby;
+    public GameObject BalanceInfoLobby;
+    public GameObject UpgradeButtonFromLobby;
+
+    
 
     // MIC MENU OBJECT
     private bool MicCheck;
@@ -181,6 +187,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject RoomNameButton;
     public GameObject LobbyScreen;
     public GameObject UpgradeScreen;
+
+    public GameObject ChooseUpgradesButton;
+    public GameObject UpgradeButtonFromPreGame;
 
     // PHOTON NETWORK GAMEOBJECTS 
 
@@ -948,6 +957,11 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             UpgradesMenuButton.interactable = false;
             BalanceInfoHome.SetActive(false);
             BalanceInfoPre.SetActive(false);
+            BalanceInfoLobby.SetActive(false);
+            FriendPanel.SetActive(false);
+            UpgradeButtonFromLobby.GetComponent<Button>().interactable = false;
+            ChooseUpgradesButton.GetComponent<Button>().interactable = false;
+            UpgradeButtonFromPreGame.GetComponent<Button>().interactable = false;
 
         }
         // ADD NEW UPGRADES HERE

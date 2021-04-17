@@ -205,7 +205,10 @@ public class PreGame : MonoBehaviourPunCallbacks
         // PlayerPrefs.SetInt("PlayerBalance", );
         PlayerPrefs.SetInt("isGuest", guest);
         PlayerPrefs.Save();
-        SetUpgradesForGame();
+        if (guest == 0)
+        { 
+            SetUpgradesForGame();
+        }
         PhotonNetwork.LoadLevel("ArtLevel");
     }
     
