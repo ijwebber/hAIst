@@ -354,7 +354,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         }
 #endif
         // update cost of upgrades
-        int speedAdd;
+        /*int speedAdd;
         int visionAdd;
         int fastAdd;
         PlayerInventory.TryGetValue("speed_boots",out speedAdd);
@@ -363,6 +363,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         speed_boots_cost.text = (2000 + 200*speedAdd).ToString();
         vision_cost.text = (2000 + 200*visionAdd).ToString();
         fast_hands_cost.text = (5000 + 500*fastAdd).ToString();
+        */
     }
     public void updateMultiplierSlider() {
         multiplierTextAsset.text = Multiplier.value.ToString();
@@ -599,7 +600,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         speed_boots_page.transform.GetChild(2).gameObject.SetActive(false);
                         speed_boots_page.transform.GetChild(3).gameObject.SetActive(true);
                         speed_boots_page.transform.GetChild(4).gameObject.SetActive(false);
-                        speed_boots_page.transform.GetChild(5).gameObject.SetActive(false);
+                        speed_boots_page.transform.GetChild(5).gameObject.SetActive(true);
                         //speed_boots_unlock.gameObject.SetActive(false);
                         //speed_boots_owned.gameObject.SetActive(true);
                     }
@@ -654,7 +655,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         vision_page.transform.GetChild(2).gameObject.SetActive(false);
                         vision_page.transform.GetChild(3).gameObject.SetActive(true);
                         vision_page.transform.GetChild(4).gameObject.SetActive(false);
-                        vision_page.transform.GetChild(5).gameObject.SetActive(false);
+                        vision_page.transform.GetChild(5).gameObject.SetActive(true);
                         
                     }
                     break;
@@ -707,7 +708,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         fast_hands_page.transform.GetChild(2).gameObject.SetActive(false);
                         fast_hands_page.transform.GetChild(3).gameObject.SetActive(true);
                         fast_hands_page.transform.GetChild(4).gameObject.SetActive(false);
-                        fast_hands_page.transform.GetChild(5).gameObject.SetActive(false);
+                        fast_hands_page.transform.GetChild(5).gameObject.SetActive(true);
 
                     }
                     break;
