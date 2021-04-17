@@ -154,6 +154,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject vision_page;
     public GameObject fast_hands_page;
 
+    public GameObject speed_boots_page_pre;
+    public GameObject vision_page_pre;
+    public GameObject fast_hands_page_pre;
+
 
 
     // LOBBY MENU OBJECTS
@@ -569,10 +573,16 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         speed_boots_page.transform.GetChild(1).gameObject.SetActive(true);
                         speed_boots_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2000";
                         speed_boots_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         speed_boots_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeSpeedBoots(2000));
                         speed_boots_page.transform.GetChild(2).gameObject.SetActive(false);
                         speed_boots_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        speed_boots_page_pre.transform.GetChild(1).gameObject.SetActive(true);
+                        speed_boots_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2000";
+                        speed_boots_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        speed_boots_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeSpeedBoots(2000));
+                        speed_boots_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        speed_boots_page_pre.transform.GetChild(3).gameObject.SetActive(false);
                     }
                     if (kvp.Value == 1)
                     {
@@ -580,9 +590,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         speed_boots_page.transform.GetChild(2).gameObject.SetActive(true);
                         speed_boots_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
                         speed_boots_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         speed_boots_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeSpeedBoots(5000));
                         speed_boots_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        speed_boots_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        speed_boots_page_pre.transform.GetChild(2).gameObject.SetActive(true);
+                        speed_boots_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
+                        speed_boots_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        speed_boots_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeSpeedBoots(5000));
+                        speed_boots_page_pre.transform.GetChild(3).gameObject.SetActive(false);
                     }
                     if (kvp.Value == 2)
                     {
@@ -591,8 +607,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         speed_boots_page.transform.GetChild(3).gameObject.SetActive(true);
                         speed_boots_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
                         speed_boots_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         speed_boots_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeSpeedBoots(20000));
+
+                        speed_boots_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        speed_boots_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        speed_boots_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        speed_boots_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
+                        speed_boots_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        speed_boots_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeSpeedBoots(20000));
                     }
                     if (kvp.Value == 3)
                     {
@@ -601,6 +623,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         speed_boots_page.transform.GetChild(3).gameObject.SetActive(true);
                         speed_boots_page.transform.GetChild(4).gameObject.SetActive(false);
                         speed_boots_page.transform.GetChild(5).gameObject.SetActive(true);
+
+                        speed_boots_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        speed_boots_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        speed_boots_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        speed_boots_page_pre.transform.GetChild(4).gameObject.SetActive(false);
+                        speed_boots_page_pre.transform.GetChild(5).gameObject.SetActive(true);
                         //speed_boots_unlock.gameObject.SetActive(false);
                         //speed_boots_owned.gameObject.SetActive(true);
                     }
@@ -624,10 +652,16 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         vision_page.transform.GetChild(1).gameObject.SetActive(true);
                         vision_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2000";
                         vision_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         vision_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeVision(2000));
                         vision_page.transform.GetChild(2).gameObject.SetActive(false);
                         vision_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        vision_page_pre.transform.GetChild(1).gameObject.SetActive(true);
+                        vision_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2000";
+                        vision_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        vision_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeVision(2000));
+                        vision_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        vision_page_pre.transform.GetChild(3).gameObject.SetActive(false);
                     }
                     if (kvp.Value == 1)
                     {
@@ -635,9 +669,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         vision_page.transform.GetChild(2).gameObject.SetActive(true);
                         vision_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
                         vision_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         vision_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeVision(5000));
                         vision_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        vision_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        vision_page_pre.transform.GetChild(2).gameObject.SetActive(true);
+                        vision_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
+                        vision_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        vision_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeVision(5000));
+                        vision_page_pre.transform.GetChild(3).gameObject.SetActive(false);
                     }
                     if (kvp.Value == 2)
                     {
@@ -646,8 +686,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         vision_page.transform.GetChild(3).gameObject.SetActive(true);
                         vision_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
                         vision_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         vision_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeVision(20000));
+
+                        vision_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        vision_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        vision_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        vision_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
+                        vision_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        vision_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeVision(20000));
                     }
                     if (kvp.Value == 3)
                     {
@@ -656,7 +702,13 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         vision_page.transform.GetChild(3).gameObject.SetActive(true);
                         vision_page.transform.GetChild(4).gameObject.SetActive(false);
                         vision_page.transform.GetChild(5).gameObject.SetActive(true);
-                        
+
+                        vision_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        vision_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        vision_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        vision_page_pre.transform.GetChild(4).gameObject.SetActive(false);
+                        vision_page_pre.transform.GetChild(5).gameObject.SetActive(true);
+
                     }
                     break;
 
@@ -677,10 +729,16 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         fast_hands_page.transform.GetChild(1).gameObject.SetActive(true);
                         fast_hands_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2000";
                         fast_hands_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         fast_hands_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeFastHands(2000));
                         fast_hands_page.transform.GetChild(2).gameObject.SetActive(false);
                         fast_hands_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        fast_hands_page_pre.transform.GetChild(1).gameObject.SetActive(true);
+                        fast_hands_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2000";
+                        fast_hands_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        fast_hands_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeFastHands(2000));
+                        fast_hands_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        fast_hands_page_pre.transform.GetChild(3).gameObject.SetActive(false);
                     }
                     if (kvp.Value == 1)
                     {
@@ -688,9 +746,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         fast_hands_page.transform.GetChild(2).gameObject.SetActive(true);
                         fast_hands_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
                         fast_hands_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         fast_hands_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeFastHands(5000));
                         fast_hands_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        fast_hands_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        fast_hands_page_pre.transform.GetChild(2).gameObject.SetActive(true);
+                        fast_hands_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
+                        fast_hands_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        fast_hands_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeFastHands(5000));
+                        fast_hands_page_pre.transform.GetChild(3).gameObject.SetActive(false);
                     }
                     if (kvp.Value == 2)
                     {
@@ -699,8 +763,14 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         fast_hands_page.transform.GetChild(3).gameObject.SetActive(true);
                         fast_hands_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
                         fast_hands_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
-
                         fast_hands_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeFastHands(20000));
+
+                        fast_hands_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        fast_hands_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        fast_hands_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        fast_hands_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
+                        fast_hands_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        fast_hands_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeFastHands(20000));
                     }
                     if (kvp.Value == 3)
                     {
@@ -709,6 +779,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                         fast_hands_page.transform.GetChild(3).gameObject.SetActive(true);
                         fast_hands_page.transform.GetChild(4).gameObject.SetActive(false);
                         fast_hands_page.transform.GetChild(5).gameObject.SetActive(true);
+
+                        fast_hands_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        fast_hands_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        fast_hands_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        fast_hands_page_pre.transform.GetChild(4).gameObject.SetActive(false);
+                        fast_hands_page_pre.transform.GetChild(5).gameObject.SetActive(true);
 
                     }
                     break;
