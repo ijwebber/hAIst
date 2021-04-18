@@ -43,7 +43,34 @@ public class TabGroup : MonoBehaviour
         selectedTab = button;
         ResetTabs();
         button.background.sprite = tabActive;
-        int index = button.transform.GetSiblingIndex();
+        int index = -1;
+
+        if (button.gameObject.name == "SpeedTab")
+        {
+            index = 0;
+        }
+        if (button.gameObject.name == "ShieldTab")
+        {
+            index = 1;
+        }
+        if (button.gameObject.name == "VisionTab")
+        {
+            index = 2;
+        }
+        if (button.gameObject.name == "SelfTab")
+        {
+            index = 3;
+        }
+        if (button.gameObject.name == "FastTab")
+        {
+            index = 4;
+        }
+        if (button.gameObject.name == "NinjaTab")
+        {
+            index = 5;
+        }
+
+
         for (int i = 0; i < objectsToSwap.Count; i ++)
         {
             if (i == index)

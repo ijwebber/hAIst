@@ -9,6 +9,9 @@ public class UpgradeList {
     public int fast_hands;
     public int fast_hands_level;
 
+    public int ninja;
+
+
     // consumables
     public bool self_revive;
     public bool shield;

@@ -44,6 +44,8 @@ public class PreGame : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("shield", 0);
         PlayerPrefs.SetInt("self_revive", 0);
         PlayerPrefs.SetInt("fast_hands", 0);
+        PlayerPrefs.SetInt("ninja", 0);
+
 
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
 
@@ -76,6 +78,8 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     public void SetUpgradesForGame()
     {
+
+        List<string> remove_upgrades = new List<string>();
         // PERMA UPGRADES
         foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
         {
@@ -96,6 +100,12 @@ public class PreGame : MonoBehaviourPunCallbacks
                 PlayerPrefs.SetInt(kvp.Key, kvp.Value);
 
             }
+            if (kvp.Key.Equals("ninja") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
+
+            }
         }
 
         // POWER UPS
@@ -109,7 +119,8 @@ public class PreGame : MonoBehaviourPunCallbacks
                     {
                         EnabledUpgrades[kvp.Key] = true;
                         PlayerPrefs.SetInt(kvp.Key, 1);
-                        // db
+                        remove_upgrades.Add(kvp.Key);
+
 
                     }
                 }
@@ -122,11 +133,14 @@ public class PreGame : MonoBehaviourPunCallbacks
                     {
                         EnabledUpgrades[kvp.Key] = true;
                         PlayerPrefs.SetInt(kvp.Key, 1);
+                        remove_upgrades.Add(kvp.Key);
+
 
                     }
                 }
             }
         }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().RemoveUpgrade(remove_upgrades);
         foreach (KeyValuePair<string, bool> kvp in EnabledUpgrades)
         {
             Debug.Log("Key = " + kvp.Key + ", Value = " + kvp.Value);
@@ -199,7 +213,10 @@ public class PreGame : MonoBehaviourPunCallbacks
         // PlayerPrefs.SetInt("PlayerBalance", );
         PlayerPrefs.SetInt("isGuest", guest);
         PlayerPrefs.Save();
-        SetUpgradesForGame();
+        if (guest == 0)
+        { 
+            SetUpgradesForGame();
+        }
         PhotonNetwork.LoadLevel("ArtLevel");
     }
     

@@ -5123,12 +5123,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cedb931aa0ce4ce4b90bb3823881c839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _GameLobby: {fileID: 0}
   StartGameButton: {fileID: 5008632230507118631}
   SetReadyButton: {fileID: 5008632232395128961}
   thief_1: {fileID: 5008632230779064419}
   thief_2: {fileID: 5008632231747051000}
   thief_3: {fileID: 5008632231144677362}
   thief_4: {fileID: 5008632232177548912}
+  StartGameWaitPanel: {fileID: 0}
+  ChooseUpgradesPanel: {fileID: 0}
 --- !u!1 &5008632232311740981
 GameObject:
   m_ObjectHideFlags: 0

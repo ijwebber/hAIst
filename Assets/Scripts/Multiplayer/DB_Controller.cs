@@ -110,9 +110,9 @@ public class DB_Controller : MonoBehaviour
         StartCoroutine(Add_Upgrade(username, upgrade));
     }
 
-    public void RemoveUpgrade(string username, string upgrade)
+    public void RemoveUpgrade(string username, List<string> upgrades)
     {
-        StartCoroutine(Remove_Upgrade(username, upgrade));
+        StartCoroutine(Remove_Upgrade(username, upgrades));
     }
 
     public void RemoveUpgrade2(string username, string upgrade, string upgrade2)
@@ -452,7 +452,7 @@ public class DB_Controller : MonoBehaviour
 
     IEnumerator UpgradeList(string username)
     {
-        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
+        //_GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
 
         string uri = get_upgrades_url + "user=" + username;
         Debug.Log(uri);
@@ -516,6 +516,12 @@ public class DB_Controller : MonoBehaviour
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
+                            case "ninja":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().ninja_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().ninja_InventoryPre.text = kvp.Value.ToString();
+
+
+                                break;
                             default:
                                 break;
                         }
@@ -525,7 +531,7 @@ public class DB_Controller : MonoBehaviour
                 }
             }
         }
-        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
+        //_GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
         _GameLobby.GetComponent<PUN2_GameLobby1>().SetOwnedStatus();
 
 
@@ -561,7 +567,7 @@ public class DB_Controller : MonoBehaviour
         _GameLobby.GetComponent<PUN2_GameLobby1>().GetInventory();
     }
 
-    IEnumerator Remove_Upgrade(string username, string upgrade_name)
+    IEnumerator Remove_Upgrade(string username, List<string> upgrade_names)
     {
         string uri = get_upgrades_url + "user=" + username;
         Debug.Log(uri);
@@ -589,7 +595,7 @@ public class DB_Controller : MonoBehaviour
 
                     foreach (var upgrade in upgrade_list)
                     {
-                        if (!upgrade_name.Equals(upgrade))
+                        if (!upgrade_names.Contains(upgrade))
                         {
                             new_upgrade_list.Add(upgrade);
                         }

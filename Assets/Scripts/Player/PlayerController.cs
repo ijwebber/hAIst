@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
         player = getPlayer();
         if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
             isGuest = false;
-            dBController.GetUpgradeList(PhotonNetwork.NickName);
+            applyUpdates();
         } else {
             isGuest = true;
         }
@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
     public void GetUpgrades()
     {
         upgrades.speed_boots = PlayerPrefs.GetInt("speed_boots", 0);
+        upgrades.ninja = PlayerPrefs.GetInt("ninja", 0);
         upgrades.vision = PlayerPrefs.GetInt("vision", 0);
         upgrades.fast_hands = PlayerPrefs.GetInt("fast_hands", 0);
         upgrades.shield = PlayerPrefs.GetInt("shield", 0) == 1;
@@ -64,19 +65,23 @@ public class PlayerController : MonoBehaviour
 
     public void DebugUpgrades()
     {
-        if (upgrades.speed_boots_enabled)
+        if (upgrades.speed_boots > 0)
         {
-            Debug.Log("SPEED BOOTS ENABLED. LEVEL " + upgrades.speed_boots_level);
+            Debug.Log("SPEED BOOTS ENABLED. LEVEL " + upgrades.speed_boots);
         }
-        if (upgrades.vision_enabled)
+        if (upgrades.vision > 0)
         {
-            Debug.Log("VISION. LEVEL " + upgrades.vision_level);
+            Debug.Log("VISION. LEVEL " + upgrades.vision);
         }
-        if (upgrades.fast_hands_enabled)
+        if (upgrades.fast_hands > 0)
         {
-            Debug.Log("FAST HANDS ENABLED. LEVEL " + upgrades.fast_hands_level);
+            Debug.Log("FAST HANDS ENABLED. LEVEL " + upgrades.fast_hands);
         }
-        if (upgrades.shield_enabled)
+        if (upgrades.ninja > 0)
+        {
+            Debug.Log("NINJA ENABLED. LEVEL " + upgrades.ninja);
+        }
+        if (upgrades.shield)
         {
             Debug.Log("SHIELD ENABLED.");
         }
