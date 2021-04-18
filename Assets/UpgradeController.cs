@@ -19,6 +19,7 @@ public class UpgradeController : MonoBehaviour
     public Sprite vision;
     public Sprite self_revive;
     public Sprite fast_hands;
+    public Sprite ninja;
 
     // POWER UPS
     public Toggle shield_toggle;
@@ -61,7 +62,7 @@ public class UpgradeController : MonoBehaviour
 
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = speed_boots;
                 obj.transform.GetChild(0).GetComponent<TooltipTrigger>().header = "speedy boots";
-                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "20% increased movement speed.";
+                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "increased movement speed.";
                 obj.transform.GetChild(1).gameObject.SetActive(false);
 
             }
@@ -78,7 +79,7 @@ public class UpgradeController : MonoBehaviour
                 GameObject obj = (GameObject)Instantiate(UpgradeImagePrefab2, UpgradePanel.transform);
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = vision;
                 obj.transform.GetChild(0).GetComponent<TooltipTrigger>().header = "super glasses";
-                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "20% increased vision radius.";
+                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "increased vision radius.";
                 obj.transform.GetChild(1).gameObject.SetActive(false);
 
             }
@@ -96,7 +97,16 @@ public class UpgradeController : MonoBehaviour
                 GameObject obj = (GameObject)Instantiate(UpgradeImagePrefab2, UpgradePanel.transform);
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = fast_hands;
                 obj.transform.GetChild(0).GetComponent<TooltipTrigger>().header = "fast hands";
-                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "20% decreased time to steal.";
+                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "decreased time to steal.";
+                obj.transform.GetChild(1).gameObject.SetActive(false);
+
+            }
+            else if (kvp.Key.Equals("ninja") & kvp.Value > 0)
+            {
+                GameObject obj = (GameObject)Instantiate(UpgradeImagePrefab2, UpgradePanel.transform);
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = ninja;
+                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().header = "ninja";
+                obj.transform.GetChild(0).GetComponent<TooltipTrigger>().content = "make less sound";
                 obj.transform.GetChild(1).gameObject.SetActive(false);
 
             }

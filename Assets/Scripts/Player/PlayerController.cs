@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
     public void GetUpgrades()
     {
         upgrades.speed_boots = PlayerPrefs.GetInt("speed_boots", 0);
+        upgrades.ninja = PlayerPrefs.GetInt("ninja", 0);
         upgrades.vision = PlayerPrefs.GetInt("vision", 0);
         upgrades.fast_hands = PlayerPrefs.GetInt("fast_hands", 0);
         upgrades.shield = PlayerPrefs.GetInt("shield", 0) == 1;
@@ -75,6 +76,10 @@ public class PlayerController : MonoBehaviour
         if (upgrades.fast_hands > 0)
         {
             Debug.Log("FAST HANDS ENABLED. LEVEL " + upgrades.fast_hands);
+        }
+        if (upgrades.ninja > 0)
+        {
+            Debug.Log("NINJA ENABLED. LEVEL " + upgrades.ninja);
         }
         if (upgrades.shield)
         {

@@ -452,7 +452,7 @@ public class DB_Controller : MonoBehaviour
 
     IEnumerator UpgradeList(string username)
     {
-        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
+        //_GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(true);
 
         string uri = get_upgrades_url + "user=" + username;
         Debug.Log(uri);
@@ -516,6 +516,12 @@ public class DB_Controller : MonoBehaviour
                                 _GameLobby.GetComponent<PUN2_GameLobby1>().fast_hands_InventoryPre.text = kvp.Value.ToString();
 
                                 break;
+                            case "ninja":
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().ninja_Inventory.text = kvp.Value.ToString();
+                                _GameLobby.GetComponent<PUN2_GameLobby1>().ninja_InventoryPre.text = kvp.Value.ToString();
+
+
+                                break;
                             default:
                                 break;
                         }
@@ -525,7 +531,7 @@ public class DB_Controller : MonoBehaviour
                 }
             }
         }
-        _GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
+        //_GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
         _GameLobby.GetComponent<PUN2_GameLobby1>().SetOwnedStatus();
 
 

@@ -44,6 +44,8 @@ public class PreGame : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("shield", 0);
         PlayerPrefs.SetInt("self_revive", 0);
         PlayerPrefs.SetInt("fast_hands", 0);
+        PlayerPrefs.SetInt("ninja", 0);
+
 
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
 
@@ -93,6 +95,12 @@ public class PreGame : MonoBehaviourPunCallbacks
 
             }
             if (kvp.Key.Equals("fast_hands") & kvp.Value > 0)
+            {
+                EnabledUpgrades[kvp.Key] = true;
+                PlayerPrefs.SetInt(kvp.Key, kvp.Value);
+
+            }
+            if (kvp.Key.Equals("ninja") & kvp.Value > 0)
             {
                 EnabledUpgrades[kvp.Key] = true;
                 PlayerPrefs.SetInt(kvp.Key, kvp.Value);

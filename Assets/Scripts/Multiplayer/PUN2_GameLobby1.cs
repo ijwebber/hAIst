@@ -114,12 +114,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text vision_Inventory;
     public TMP_Text self_revive_Inventory;
     public TMP_Text fast_hands_Inventory;
+    public TMP_Text ninja_Inventory;
+
 
     public TMP_Text speed_boots_InventoryNew;
     public TMP_Text shield_InventoryNew;
     public TMP_Text vision_InventoryNew;
     public TMP_Text self_revive_InventoryNew;
     public TMP_Text fast_hands_InventoryNew;
+
 
     public TextMeshProUGUI speed_boots_cost;
     public TextMeshProUGUI fast_hands_cost;
@@ -151,14 +154,18 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public TMP_Text vision_InventoryPre;
     public TMP_Text self_revive_InventoryPre;
     public TMP_Text fast_hands_InventoryPre;
+    public TMP_Text ninja_InventoryPre;
+
 
     public GameObject speed_boots_page;
     public GameObject vision_page;
     public GameObject fast_hands_page;
+    public GameObject ninja_page;
 
     public GameObject speed_boots_page_pre;
     public GameObject vision_page_pre;
     public GameObject fast_hands_page_pre;
+    public GameObject ninja_page_pre;
 
 
 
@@ -536,6 +543,18 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         }
     }
 
+    public void BuyUpgradeNinja(int cost)
+    {
+        //int updatedCost = int.Parse(vision_cost.text);
+        if (PlayerBalance >= cost)
+        {
+            PlayerBalance = PlayerBalance - cost;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "ninja");
+
+        }
+    }
+
 
     public void BuyUpgradeSelfRevive()
     {
@@ -561,6 +580,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void GetInventory()
     {
+        UnlockPanel.SetActive(true);
+        UnlockPanelPre.SetActive(true);
+
         List<string> keys = new List<string>(PlayerInventory.Keys);
         foreach (string key in keys)
         {
@@ -798,10 +820,78 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                     }
                     break;
 
+                case "ninja":
+                    if (kvp.Value == 0)
+                    {
+                        ninja_page.transform.GetChild(1).gameObject.SetActive(true);
+                        ninja_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2500";
+                        ninja_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        ninja_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeNinja(2000));
+                        ninja_page.transform.GetChild(2).gameObject.SetActive(false);
+                        ninja_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        ninja_page_pre.transform.GetChild(1).gameObject.SetActive(true);
+                        ninja_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "2000";
+                        ninja_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        ninja_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeNinja(2000));
+                        ninja_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        ninja_page_pre.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                    if (kvp.Value == 1)
+                    {
+                        ninja_page.transform.GetChild(1).gameObject.SetActive(false);
+                        ninja_page.transform.GetChild(2).gameObject.SetActive(true);
+                        ninja_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
+                        ninja_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        ninja_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeNinja(5000));
+                        ninja_page.transform.GetChild(3).gameObject.SetActive(false);
+
+                        ninja_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        ninja_page_pre.transform.GetChild(2).gameObject.SetActive(true);
+                        ninja_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "5000";
+                        ninja_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        ninja_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeNinja(5000));
+                        ninja_page_pre.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                    if (kvp.Value == 2)
+                    {
+                        ninja_page.transform.GetChild(1).gameObject.SetActive(false);
+                        ninja_page.transform.GetChild(2).gameObject.SetActive(false);
+                        ninja_page.transform.GetChild(3).gameObject.SetActive(true);
+                        ninja_page.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
+                        ninja_page.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        ninja_page.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeNinja(20000));
+
+                        ninja_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        ninja_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        ninja_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        ninja_page_pre.transform.GetChild(4).transform.GetChild(1).GetComponent<TMP_Text>().text = "20000";
+                        ninja_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.RemoveAllListeners();
+                        ninja_page_pre.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(() => BuyUpgradeNinja(20000));
+                    }
+                    if (kvp.Value == 3)
+                    {
+                        ninja_page.transform.GetChild(1).gameObject.SetActive(false);
+                        ninja_page.transform.GetChild(2).gameObject.SetActive(false);
+                        ninja_page.transform.GetChild(3).gameObject.SetActive(true);
+                        ninja_page.transform.GetChild(4).gameObject.SetActive(false);
+                        ninja_page.transform.GetChild(5).gameObject.SetActive(true);
+
+                        ninja_page_pre.transform.GetChild(1).gameObject.SetActive(false);
+                        ninja_page_pre.transform.GetChild(2).gameObject.SetActive(false);
+                        ninja_page_pre.transform.GetChild(3).gameObject.SetActive(true);
+                        ninja_page_pre.transform.GetChild(4).gameObject.SetActive(false);
+                        ninja_page_pre.transform.GetChild(5).gameObject.SetActive(true);
+
+                    }
+                    break;
+
                 default:
                     break;
             }
         }
+        UnlockPanel.SetActive(false);
+        UnlockPanelPre.SetActive(false);
     }
 
 
@@ -970,6 +1060,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PlayerInventory.Add("vision", 0);
         PlayerInventory.Add("self_revive", 0);
         PlayerInventory.Add("fast_hands", 0);
+        PlayerInventory.Add("ninja", 0);
+
         HomeMenu.SetActive(true);
         ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
 
@@ -1001,6 +1093,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         PlayerInventory.Add("vision", 0);
         PlayerInventory.Add("self_revive", 0);
         PlayerInventory.Add("fast_hands", 0);
+        PlayerInventory.Add("ninja", 0);
+
         HomeMenu.SetActive(true);
     }
 
