@@ -9,12 +9,14 @@ public class AnimationStateController : MonoBehaviourPun
     Animator animator;
     GameObject player;
     SoundController soundController;
+    PlayerController playerController;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         player = GameObject.Find("Timmy");
         soundController = GameObject.FindObjectOfType<SoundController>();
+        playerController = GameObject.FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame
@@ -45,9 +47,9 @@ public class AnimationStateController : MonoBehaviourPun
             currentFrame-=Mathf.FloorToInt(currentFrame);
         }
         if (animator.GetBool("isWalking") && (currentFrame >=0.2f && currentFrame <= 0.3f || currentFrame >= .7f && currentFrame <= .8f)) {
-            int intensity = 20;
+            int intensity = 20 - (playerController.upgrades.ninja*2);
             if (Input.GetKey(KeyCode.LeftShift)) {
-                intensity = 30;
+                intensity = 30 - (playerController.upgrades.ninja*2);
             } else if (Input.GetKey(KeyCode.Space)) {
                 intensity = 0;
             }
