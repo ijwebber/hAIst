@@ -26,6 +26,7 @@ public class SoundController : MonoBehaviourPun
             Microphone.QueryAudioInput();
             maxVolume = 0;
 #endif
+            DB_Controller = GameObject.FindObjectOfType<DBControllerGame>();
             DB_Controller.getThresholds(PhotonNetwork.NickName);
         }
 
