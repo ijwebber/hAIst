@@ -53,7 +53,7 @@ public class SoundController : MonoBehaviourPun
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();
         if (Microphone.volumes[0]*multiplier > threshold && !this.playerController.isDisabled) {
-            sendGrid(playerController.player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*multiplier));
+            sendGrid(playerController.player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*multiplier*(1-.5f*playerController.upgrades.ninja));
         }
 #endif
         if (Input.GetKeyDown("j") && !this.playerController.isDisabled) {

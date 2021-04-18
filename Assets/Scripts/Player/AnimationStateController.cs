@@ -47,9 +47,9 @@ public class AnimationStateController : MonoBehaviourPun
             currentFrame-=Mathf.FloorToInt(currentFrame);
         }
         if (animator.GetBool("isWalking") && (currentFrame >=0.2f && currentFrame <= 0.3f || currentFrame >= .7f && currentFrame <= .8f)) {
-            int intensity = 20 - (playerController.upgrades.ninja*2);
+            int intensity = (int)(20 * (1 - .5*playerController.upgrades.ninja));
             if (Input.GetKey(KeyCode.LeftShift)) {
-                intensity = 30 - (playerController.upgrades.ninja*2);
+                intensity = (int)(30 * (1 - .5*playerController.upgrades.ninja));
             } else if (Input.GetKey(KeyCode.Space)) {
                 intensity = 0;
             }
