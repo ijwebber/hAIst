@@ -69,9 +69,9 @@ public class GameController : MonoBehaviourPunCallbacks
 
         // Set custom props
         int numOfSpecial = 0;
-        if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            numOfSpecial = SetupItems();
-        }
+        // if (PhotonNetwork.LocalPlayer.IsMasterClient) {
+        numOfSpecial = SetupItems();
+        // }
         SetProps(numOfSpecial);
 
         SetSpotted();
