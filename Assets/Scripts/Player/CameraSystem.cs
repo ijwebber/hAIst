@@ -16,6 +16,8 @@ public class CameraSystem : MonoBehaviour
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera playerCam;
 
+    [Range(0.6f, 1.0f)]
+    public float zoomMultiplier = 1.0f;
     public GameObject gameUIReference;
     public bool introDone = false;
     public bool isCutSceneHappening = true;
@@ -24,6 +26,8 @@ public class CameraSystem : MonoBehaviour
     private GameObject guardShotReference;
     private GameObject player;
     private GameObject securityCameraReference;
+    private float startingHeight;
+    private float startingDistance;
 
 
     private void Awake()
@@ -41,9 +45,11 @@ public class CameraSystem : MonoBehaviour
     void Start()
     {
         introCutSceneSetup();
+        startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
+        startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
 
-        
-      
+
+
     }
 
     // Update is called once per frame
@@ -54,6 +60,17 @@ public class CameraSystem : MonoBehaviour
         {
             introEnd();
         }
+
+        if (Input.GetAxis("Mouse ScrollWheel") != 0f) // forward
+        {
+            zoomMultiplier += Input.GetAxis("Mouse ScrollWheel")/-5;
+            zoomMultiplier = Mathf.Clamp(zoomMultiplier, 0.6f, 1.0f);
+            playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = startingHeight * zoomMultiplier;
+            playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z = startingDistance * zoomMultiplier;
+        }
+        
+
+
     }
 
     public void introEnd()
