@@ -157,13 +157,15 @@ public class CameraSystem : MonoBehaviour
     {
         isCutSceneHappening = true;
         GameObject guard = PhotonView.Find(guardViewID).gameObject;
-        guardCaughtIn4k.Follow = guard.transform;
         
-        
+
+
+
 
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(guard.transform, 1.0f, 10.0f);
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(PhotonView.Find(caughtPlayerID).gameObject.transform, 1.0f, 10.0f);
 
+        guardCaughtIn4k.Follow = caughtTargetGroup.transform;
         guardCaughtIn4k.LookAt = caughtTargetGroup.transform;
 
         guardCaughtIn4k.Priority = 11;
