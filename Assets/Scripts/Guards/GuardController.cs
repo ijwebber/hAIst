@@ -115,14 +115,14 @@ public class GuardController : MonoBehaviour
 
                 //get list of players
                 CameraControlPlayer[] players = GameObject.FindObjectsOfType<CameraControlPlayer>();
-                
+
                 
                 //each player needs to run the cutscene code on their own 'CameraControl' script, so we send a targeted rpc to each individual player and the target photonview is owned by that specfic player.
                 foreach(CameraControlPlayer g in players)
                 {
                     PhotonView v = g.gameObject.GetComponent<PhotonView>();
                     
-                    v.RPC("RpcCutScene", v.Controller, guard.photonView.ViewID, "The Police have been alerted!", 1);
+                    v.RPC("RpcCutScene", v.Controller, guard.photonView.ViewID, guard.GetComponent<GuardMovement>().chasedPlayer.GetComponent<PhotonView>().ViewID, "The Police have been alerted!", 1);
                 }
 
                 

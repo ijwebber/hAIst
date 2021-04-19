@@ -22,12 +22,13 @@ public class GuardMovement : MonoBehaviourPun
     public NavMeshAgent agent;
     public SoundVisual soundVis;
     public AudioSource heySound;
-
+    public List<GameObject> specials = new List<GameObject>();
     public List<Vector3> patrolPath = new List<Vector3> {new Vector3(-44.0f, 13.38f, 27.83f), new Vector3(-8.0f, 13.38f, 27.7f), new Vector3(-6.2f, 13.38f, 4.3f), new Vector3(-32.4f, 13.21f, 13.0f)};
     private int currDes = 0;
     public State state;
     public float chaseSpeed;
     public float walkSpeed;
+    public GameObject chasedPlayer;
     private bool start = true;
     private float guardReach = 2f; //reach length of guards
     public bool guardDisabled = false;
@@ -68,6 +69,11 @@ public class GuardMovement : MonoBehaviourPun
             {
                 agent.isStopped = true;
                 timedOut = true;
+                if(this.specials.Count > 0) {
+                    playerController.Specials = this.specials;
+                    this.specials.Clear();
+                    Debug.Log("Recaptured painting");
+                }
                 StartCoroutine(disableForTime(3.0f));
             }
         }
@@ -87,6 +93,7 @@ public class GuardMovement : MonoBehaviourPun
                     if (!moveScript.disabled)
                     {   
                         playerToFollow = g;
+                        chasedPlayer = g;
 
 
                         if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
@@ -120,6 +127,15 @@ public class GuardMovement : MonoBehaviourPun
                             this.state = State.normal;
                             agent.ResetPath();
                             playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
+                            if (playerController.Specials.Count > 0) {
+                                this.specials = playerController.Specials;
+                                foreach (var spec in this.specials)
+                                {
+                                    spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
+                                }
+                                playerController.Specials.Clear();
+                                Debug.Log("Captured painting");
+                            }
                         }
                     }
 
@@ -187,6 +203,7 @@ public class GuardMovement : MonoBehaviourPun
     //timer coroutine
     IEnumerator disableForTime(float disableTime)
     {
+        // if (this.specials.Count)
         yield return new WaitForSeconds(disableTime);
         guardDisabled = false;
         this.state = State.normal;

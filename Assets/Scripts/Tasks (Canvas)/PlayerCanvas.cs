@@ -6,12 +6,15 @@ using UnityEngine.UI;
 public class PlayerCanvas : MonoBehaviour
 {
     public PlayerController playerController;
-    public Vector3 offset;
+    public Vector3 defaultOffset;
     public Canvas canvas;
     public Image indicator;
     [SerializeField] private Sprite crown;
     [SerializeField] private Sprite downed;
+    [SerializeField] private CameraSystem cameraSystem;
+
     private void Update() {
+        Vector3 offset = defaultOffset/cameraSystem.zoomMultiplier;
         Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(playerController.player.transform.position + offset);
         RectTransform pointerRectTransform = indicator.GetComponent<RectTransform>();
         if (playerController.isDisabled) {
