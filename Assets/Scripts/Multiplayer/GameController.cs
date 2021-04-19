@@ -89,7 +89,7 @@ public class GameController : MonoBehaviourPunCallbacks
         
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
 
@@ -118,8 +118,8 @@ public class GameController : MonoBehaviourPunCallbacks
                 updatedGameState = gameState;
                 localChange = true;
             }
-            gameState = updatedGameState;
-            // gameState = Mathf.Max(gameState, updatedGameState);
+            // gameState = updatedGameState;
+            gameState = Mathf.Max(gameState, updatedGameState);
             List <string> newText = new List<string>();
             switch (gameState)
             {
@@ -163,11 +163,11 @@ public class GameController : MonoBehaviourPunCallbacks
                     break;
                 case 4: // point to exit
                     playerUpdates.updateDisplay("You have stolen a key painting");
-                    updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
                     if (localChange) {
                         // playerController.Specials++;
-                        setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
+                        updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
                     }
+                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
                     break;
                 default:
                     break;
