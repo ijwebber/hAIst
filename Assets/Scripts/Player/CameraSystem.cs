@@ -15,6 +15,7 @@ public class CameraSystem : MonoBehaviour
     public CinemachineBrain brain;
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera playerCam;
+    public GameObject caughtTargetGroup;
 
     [Range(0.6f, 1.0f)]
     public float zoomMultiplier = 1.0f;
@@ -157,8 +158,16 @@ public class CameraSystem : MonoBehaviour
         isCutSceneHappening = true;
         GameObject guard = PhotonView.Find(guardViewID).gameObject;
         guardCaughtIn4k.Follow = guard.transform;
-        guardCaughtIn4k.LookAt = guard.transform;
+        
+        
+
+        caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(guard.transform, 1.0f, 10.0f);
+        caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(PhotonView.Find(caughtPlayerID).gameObject.transform, 1.0f, 10.0f);
+
+        guardCaughtIn4k.LookAt = caughtTargetGroup.transform;
+
         guardCaughtIn4k.Priority = 11;
+
 
         SetLayerRecursively(guard, default);
         BarController.Instance.SetText(message);

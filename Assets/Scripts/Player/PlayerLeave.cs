@@ -78,6 +78,21 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 }
             }
         } else if (changedProps["disabled"] != null) {
+            if ((bool) changedProps["disabled"]) {
+                StartCoroutine(CheckIfPlayersAreDown());
+            } else {
+                bool cond = true;
+                foreach (Player player in PhotonNetwork.PlayerList) {
+                    if ((bool) player.CustomProperties["disabled"]) {
+                        cond = false;
+                    }
+                }
+
+                if (cond) {
+                    StopCoroutine(CheckIfPlayersAreDown());
+                }
+            }
+
             if (PhotonNetwork.IsMasterClient) {
                 if ((bool) changedProps["disabled"]) {
                     bool end = true;
@@ -90,20 +105,6 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                     if (end) {
                         Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
                         PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
-                    }
-
-                    StartCoroutine(CheckIfPlayersAreDown());
-
-                } else {
-                    bool cond = true;
-                    foreach (Player player in PhotonNetwork.PlayerList) {
-                        if ((bool) player.CustomProperties["disabled"]) {
-                            cond = false;
-                        }
-                    }
-
-                    if (cond) {
-                        StopCoroutine(CheckIfPlayersAreDown());
                     }
                 }
             }
@@ -127,19 +128,18 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
     IEnumerator CheckIfPlayersAreDown() {
 		while (true) {
 			yield return new WaitForSeconds (.2f);
-            Debug.Log("£££ Running");
             bool end = true;
             foreach (Player player in PhotonNetwork.PlayerList) {
                 if (!(bool) player.CustomProperties["disabled"]) {
                     end = false;
                     break;
                 }
-
-                if (end) {
-                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
-                }
 		    }
+
+            if (end) {
+                Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
+                PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+            }
 	    }
     }
 }
