@@ -4,6 +4,7 @@ using UnityEngine;
 using CodeMonkey.Utils;
 using UnityEngine.UI;
 using Photon.Pun;
+using Cinemachine;
 
 public class Window_QuestPointer : MonoBehaviourPun
 {
@@ -19,6 +20,7 @@ public class Window_QuestPointer : MonoBehaviourPun
     public Sprite arrowSprite;
     public Sprite crossSprite;
     public List<GameObject> pointers = new List<GameObject>();
+    [SerializeField] private CameraSystem cameraSystem;
     void Awake()
     {
         // targetPosition = new Vector3(-39.615f,42.6f);
@@ -51,7 +53,7 @@ public class Window_QuestPointer : MonoBehaviourPun
         GameObject.FindObjectOfType<GameController>().gameState = gameState;
     }
 
-    void LateUpdate()
+    public void UpdateWindowPointer()
     {
         if (targetObjects.Count != 0) {
             for (int i = 0; i < targetObjects.Count; i++)
@@ -64,7 +66,7 @@ public class Window_QuestPointer : MonoBehaviourPun
                 float angle = UtilsClass.GetAngleFromVectorFloat(dir);
                 pointerRectTransforms[i].localEulerAngles = new Vector3(0,0,angle);
                 
-                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset);
+                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset - cameraSystem.playerCam.GetCinemachineComponent<CinemachineTransposer>().EffectiveOffset);
                 bool isOffScreen = !playerController.isInView(targetObjects[i].transform.position);
 
                 if (isOffScreen) {

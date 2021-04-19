@@ -174,6 +174,10 @@ public class CameraSystem : MonoBehaviour
 
     }
 
+    // public static CinemachineBrain.BrainEvent CameraUpdatedEvent() {
+
+    // }
+
     private IEnumerator endCaughtCutScene(GameObject guard)
     {
         yield return new WaitForSeconds(3f);

@@ -14,6 +14,7 @@ public class GuardCanvas : MonoBehaviour
     public Canvas canvas;
     public List<Image> guardIndicators;
     public Image exampleGuard;
+    [SerializeField] private CameraSystem cameraSystem;
 
     private void Awake() {
         guardIndicators = new List<Image>();
