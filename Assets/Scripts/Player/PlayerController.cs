@@ -14,7 +14,8 @@ public class PlayerController : MonoBehaviour
     public bool isGuest;
 
     [SerializeField] DBControllerGame dBController;
-    // Start is called before the first frame update
+
+    public List<GameObject> Specials = new List<GameObject>();
 
     public UpgradeList upgrades = new UpgradeList();
     // upgradables
