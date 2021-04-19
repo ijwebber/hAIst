@@ -263,7 +263,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
     //Recieves CutScene data
     [PunRPC]
-    void RpcCutScene(int guardPhotonID, string customMessage, int code)
+    void RpcCutScene(int guardPhotonID, int caughtPlayerPhotonID, string customMessage, int code)
     {   
         
         
@@ -278,7 +278,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         //freeze guards, will only work if player is master
         GuardController.Instance.disableAllguards(true);
 
-        CameraSystem.Instance.caughtCutScene(guardPhotonID, "The Police have been alerted", this.gameObject);
+        CameraSystem.Instance.caughtCutScene(guardPhotonID, caughtPlayerPhotonID, "The Police have been alerted");
 
         //this starts the incremental camera updates to the desired location (the cutscene)
         //StartCoroutine(cameraCutSceneUpdates(0.03f, location, distanceOffset, heightOffset, cameraRotation, customMessage, code));

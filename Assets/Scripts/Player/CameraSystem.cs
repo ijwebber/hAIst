@@ -24,7 +24,7 @@ public class CameraSystem : MonoBehaviour
     private bool playerCamActive = false;
     
     private GameObject guardShotReference;
-    private GameObject player;
+    private GameObject thisPlayer;
     private GameObject securityCameraReference;
     private float startingHeight;
     private float startingDistance;
@@ -40,15 +40,19 @@ public class CameraSystem : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        
     }
 
     void Start()
-    {
-        introCutSceneSetup();
+    {   
+        thisPlayer = playerCam.Follow.gameObject;
+        
+
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
-
-
+        introCutSceneSetup();
+        
 
     }
 
@@ -61,7 +65,8 @@ public class CameraSystem : MonoBehaviour
             introEnd();
         }
 
-        if (Input.GetAxis("Mouse ScrollWheel") != 0f) // forward
+        //zooming functionality
+        if (Input.GetAxis("Mouse ScrollWheel") != 0f)
         {
             zoomMultiplier += Input.GetAxis("Mouse ScrollWheel")/-5;
             zoomMultiplier = Mathf.Clamp(zoomMultiplier, 0.6f, 1.0f);
@@ -86,7 +91,7 @@ public class CameraSystem : MonoBehaviour
             StartCoroutine(disableAfterTime(playerCamTrack, 2f));
 
             
-            player.GetComponent<PlayerMovement>().paused = false;
+            thisPlayer.GetComponent<PlayerMovement>().paused = false;
 
             isCutSceneHappening = false;
 
@@ -104,8 +109,8 @@ public class CameraSystem : MonoBehaviour
         introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
 
         //find players and disable their control whilst cutscene plays
-        player = GameObject.Find("Timmy");
-        player.GetComponent<PlayerMovement>().paused = true;
+        
+        thisPlayer.GetComponent<PlayerMovement>().paused = true;
 
         //find security cam
         securityCameraReference = GameObject.Find("Camera 1");
@@ -147,7 +152,7 @@ public class CameraSystem : MonoBehaviour
     }
 
 
-    public void caughtCutScene(int guardViewID, string message, GameObject player)
+    public void caughtCutScene(int guardViewID, int caughtPlayerID, string message)
     {
         isCutSceneHappening = true;
         GameObject guard = PhotonView.Find(guardViewID).gameObject;
@@ -179,7 +184,7 @@ public class CameraSystem : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         SetLayerRecursively(guard, 10);
-        player.GetComponent<PlayerMovement>().paused = false;
+        thisPlayer.GetComponent<PlayerMovement>().paused = false;
         
         GuardController.Instance.disableAllguards(false);
 

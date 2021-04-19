@@ -1284,6 +1284,7 @@ MonoBehaviour:
   state: 0
   chaseSpeed: 6.5
   walkSpeed: 3.5
+  chasedPlayer: {fileID: 0}
   guardDisabled: 0
 --- !u!195 &3690989282875342136
 NavMeshAgent:

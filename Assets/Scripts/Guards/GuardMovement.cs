@@ -28,6 +28,7 @@ public class GuardMovement : MonoBehaviourPun
     public State state;
     public float chaseSpeed;
     public float walkSpeed;
+    public GameObject chasedPlayer;
     private bool start = true;
     private float guardReach = 2f; //reach length of guards
     public bool guardDisabled = false;
@@ -92,6 +93,7 @@ public class GuardMovement : MonoBehaviourPun
                     if (!moveScript.disabled)
                     {   
                         playerToFollow = g;
+                        chasedPlayer = g;
 
 
                         if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)

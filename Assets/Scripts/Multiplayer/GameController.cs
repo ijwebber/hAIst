@@ -62,6 +62,9 @@ public class GameController : MonoBehaviourPunCallbacks
         playerCam.Follow = player.gameObject.transform.Find("Timmy").transform;
         playerCam.LookAt = player.gameObject.transform.Find("Timmy").transform;
 
+        
+
+        
 
 
         // Set custom props
