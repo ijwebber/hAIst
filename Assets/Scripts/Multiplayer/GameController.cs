@@ -24,7 +24,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject CamSystem;
     private int updatedGameState = -1;
     public GameObject EscapeMenu;
-    private List<GameObject> specialItems = new List<GameObject>();
+    public List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
     [SerializeField] private PlayerController playerController;
     

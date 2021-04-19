@@ -13,8 +13,9 @@ public class PlayerCanvas : MonoBehaviour
     [SerializeField] private Sprite downed;
     [SerializeField] private CameraSystem cameraSystem;
 
-    private void Update() {
-        Vector3 offset = defaultOffset/cameraSystem.zoomMultiplier;
+    private void LateUpdate() {
+        // Vector3 offset = defaultOffset/cameraSystem.zoomMultiplier;
+        Vector3 offset = defaultOffset;
         Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(playerController.player.transform.position + offset);
         RectTransform pointerRectTransform = indicator.GetComponent<RectTransform>();
         if (playerController.isDisabled) {
