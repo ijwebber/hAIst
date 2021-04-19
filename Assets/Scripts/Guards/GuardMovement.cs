@@ -129,7 +129,7 @@ public class GuardMovement : MonoBehaviourPun
                                 this.specials = playerController.Specials;
                                 foreach (var spec in this.specials)
                                 {
-                                    this.GetComponent<CollectableItem>().stolen = false; // point to guard;
+                                    spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
                                 }
                                 playerController.Specials.Clear();
                                 Debug.Log("Captured painting");
