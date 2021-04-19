@@ -164,7 +164,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
                     break;
                 case "MetalDoorHandle":
-                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
+                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect && gameController.gameState == 0) {
                         displayMessage("This door requires a code");
                         gameController.gameState = 1;
                     }
@@ -397,6 +397,7 @@ public class PlayerPickUp : MonoBehaviourPun
             Hashtable hash = new Hashtable();
             hash.Add("special", currentFound + 1);
             gameController.gameState++;
+            playerController.Specials.Add(obj);
             item.stolen = true;
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
