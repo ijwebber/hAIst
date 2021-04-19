@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -78,20 +79,35 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
             }
         } else if (changedProps["disabled"] != null) {
             if (PhotonNetwork.IsMasterClient) {
-                bool end = true;
-                foreach (Player player in PhotonNetwork.PlayerList) {
-                    if (!(bool) player.CustomProperties["disabled"]) {
-                        end = false;
+                if ((bool) changedProps["disabled"]) {
+                    bool end = true;
+                    foreach (Player player in PhotonNetwork.PlayerList) {
+                        if (!(bool) player.CustomProperties["disabled"]) {
+                            end = false;
+                        }
                     }
-                }
 
-                if (end) {
-                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+                    if (end) {
+                        Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
+                        PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+                    }
+
+                    StartCoroutine(CheckIfPlayersAreDown());
+
+                } else {
+                    bool cond = true;
+                    foreach (Player player in PhotonNetwork.PlayerList) {
+                        if ((bool) player.CustomProperties["disabled"]) {
+                            cond = false;
+                        }
+                    }
+
+                    if (cond) {
+                        StopCoroutine(CheckIfPlayersAreDown());
+                    }
                 }
             }
         }
-        
     }
 
     void UpdateWaitingText() {
@@ -106,5 +122,24 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
 
             uiController.UpdateInfoText("Waiting for others " + total.ToString() + "/" + length.ToString());
         }
+    }
+
+    IEnumerator CheckIfPlayersAreDown() {
+		while (true) {
+			yield return new WaitForSeconds (.2f);
+            Debug.Log("£££ Running");
+            bool end = true;
+            foreach (Player player in PhotonNetwork.PlayerList) {
+                if (!(bool) player.CustomProperties["disabled"]) {
+                    end = false;
+                    break;
+                }
+
+                if (end) {
+                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+                }
+		    }
+	    }
     }
 }
