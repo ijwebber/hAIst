@@ -1061,6 +1061,7 @@ MonoBehaviour:
   agent: {fileID: 3690989282875342136}
   soundVis: {fileID: 0}
   heySound: {fileID: 0}
+  specials: []
   patrolPath:
   - {x: -41, y: 12, z: -26}
   - {x: -13.4, y: 12, z: -54.3}

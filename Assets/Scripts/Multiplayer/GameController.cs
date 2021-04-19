@@ -26,7 +26,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject EscapeMenu;
     private List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
-
+    [SerializeField] private PlayerController playerController;
     
     public CinemachineVirtualCamera playerCam;
     
@@ -112,9 +112,11 @@ public class GameController : MonoBehaviourPunCallbacks
             bool localChange = false;
             if (gameState > updatedGameState) {
                 // change originated from here
+                updatedGameState = gameState;
                 localChange = true;
             }
-            gameState = Mathf.Max(gameState, updatedGameState);
+            gameState = updatedGameState;
+            // gameState = Mathf.Max(gameState, updatedGameState);
             List <string> newText = new List<string>();
             switch (gameState)
             {
@@ -142,6 +144,7 @@ public class GameController : MonoBehaviourPunCallbacks
                     playerUpdates.updateDisplay("You have stolen a key painting");
                     if (localChange) {
                         updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
+                        // playerController.Specials++;
                     }
                     List <GameObject> toSteal = new List<GameObject>();
                     foreach (var item in specialItems)
@@ -159,6 +162,7 @@ public class GameController : MonoBehaviourPunCallbacks
                     playerUpdates.updateDisplay("You have stolen a key painting");
                     updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
                     if (localChange) {
+                        // playerController.Specials++;
                         setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
                     }
                     break;
