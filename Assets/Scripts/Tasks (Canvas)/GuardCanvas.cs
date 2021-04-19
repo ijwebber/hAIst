@@ -33,7 +33,7 @@ public class GuardCanvas : MonoBehaviour
                 guardIndicator = guardIndicators[i];
             }
             if (playerController.isInView(guard.gameObject.transform.position)) {
-                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position + offset);
+                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position + offset*cameraSystem.zoomMultiplier);
                 RectTransform pointerRectTransform = guardIndicator.GetComponent<RectTransform>();
                 switch (guard.state)
                 {

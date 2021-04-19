@@ -19,6 +19,7 @@ public class Window_QuestPointer : MonoBehaviourPun
     private List<Image> pointerImages = new List<Image>();
     public Sprite arrowSprite;
     public Sprite crossSprite;
+    [SerializeField] private Camera mainCam;
     public List<GameObject> pointers = new List<GameObject>();
     [SerializeField] private CameraSystem cameraSystem;
     void Awake()
@@ -53,7 +54,7 @@ public class Window_QuestPointer : MonoBehaviourPun
         GameObject.FindObjectOfType<GameController>().gameState = gameState;
     }
 
-    public void UpdateWindowPointer()
+    void Update()
     {
         if (targetObjects.Count != 0) {
             for (int i = 0; i < targetObjects.Count; i++)
@@ -66,7 +67,8 @@ public class Window_QuestPointer : MonoBehaviourPun
                 float angle = UtilsClass.GetAngleFromVectorFloat(dir);
                 pointerRectTransforms[i].localEulerAngles = new Vector3(0,0,angle);
                 
-                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset - cameraSystem.playerCam.GetCinemachineComponent<CinemachineTransposer>().EffectiveOffset);
+                // Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset + new Vector3(0,100/6,60/6)*(1-cameraSystem.zoomMultiplier));
+                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset);
                 bool isOffScreen = !playerController.isInView(targetObjects[i].transform.position);
 
                 if (isOffScreen) {
