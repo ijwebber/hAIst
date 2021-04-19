@@ -25,9 +25,13 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     public GameObject StartGameWaitPanel;
     public GameObject ChooseUpgradesPanel;
+    public GameObject LockerPanel;
 
     public Dictionary<string, bool> EnabledUpgrades = new Dictionary<string, bool>();
 
+    public GameObject SkinPanelContent;
+
+    public SelectSkinGroup skinGroup;
 
 
 
@@ -74,8 +78,17 @@ public class PreGame : MonoBehaviourPunCallbacks
             customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
+        ControlSkins();
     }
 
+    public void ControlSkins()
+    {
+        Debug.Log("SKIN CONTROLLER");
+        SkinPanelContent.gameObject.transform.GetChild(1).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+        SkinPanelContent.gameObject.transform.GetChild(2).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+        SkinPanelContent.gameObject.transform.GetChild(3).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+
+    }
     public void SetUpgradesForGame()
     {
 
@@ -187,8 +200,16 @@ public class PreGame : MonoBehaviourPunCallbacks
     {
         ChooseUpgradesPanel.SetActive(true);
         ChooseUpgradesPanel.GetComponent<UpgradeController>().PopulateUpdatesPanel();
+    }
 
+    public void EnableLockerPanel()
+    {
+        LockerPanel.SetActive(true);
+    }
 
+    public void DisableLockerPanel()
+    {
+        LockerPanel.SetActive(false);
     }
 
     public void DisableChooseUpgradesPanel()

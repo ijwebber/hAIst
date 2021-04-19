@@ -2,35 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 using UnityEngine.EventSystems;
 
-public class SelectSkin : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
+[RequireComponent(typeof(Image))]
+public class SelectSkinButton : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IPointerExitHandler
 {
+
+    public SelectSkinGroup tabGroup;
+
+    public Image background;
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        gameObject.GetComponent<Image>().color = new Color(90, 90, 90,107);
+        tabGroup.OnTabSelected(this);
     }
+
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        gameObject.GetComponent<Image>().color = new Color(180, 180, 180,107);
+        tabGroup.OnTabEnter(this);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        gameObject.GetComponent<Image>().color = new Color(255, 255, 255, 107);
+        tabGroup.OnTabExit(this);
     }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        background = GetComponent<Image>();
+        tabGroup.Subscribe(this);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

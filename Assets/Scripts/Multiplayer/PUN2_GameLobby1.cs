@@ -608,6 +608,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         UnlockPanel.SetActive(true);
         UnlockPanelPre.SetActive(true);
 
+        Debug.Log("GetInventory");
         List<string> keys = new List<string>(PlayerInventory.Keys);
         foreach (string key in keys)
         {
@@ -1109,7 +1110,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             BalanceInfoLobby.SetActive(false);
             FriendPanel.SetActive(false);
             ColorBlock cb = UpgradeButtonFromLobby.GetComponent<Button>().colors;
-            cb.disabledColor = new Color32(130,130,130,200);
+            cb.disabledColor = new Color32(130, 130, 130, 200);
             UpgradeButtonFromLobby.GetComponent<Button>().colors = cb;
             UpgradeButtonFromPreGame.GetComponent<Button>().colors = cb;
             UpgradeButtonFromLobby.GetComponent<Button>().interactable = false;
@@ -1117,13 +1118,17 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             UpgradeButtonFromPreGame.GetComponent<Button>().interactable = false;
 
         }
-        // ADD NEW UPGRADES HERE
-        PlayerInventory.Add("speed_boots", 0);
-        PlayerInventory.Add("shield", 0);
-        PlayerInventory.Add("vision", 0);
-        PlayerInventory.Add("self_revive", 0);
-        PlayerInventory.Add("fast_hands", 0);
-        PlayerInventory.Add("ninja", 0);
+        else
+        {
+            // ADD NEW UPGRADES HERE
+            PlayerInventory.Add("speed_boots", 0);
+            PlayerInventory.Add("shield", 0);
+            PlayerInventory.Add("vision", 0);
+            PlayerInventory.Add("self_revive", 0);
+            PlayerInventory.Add("fast_hands", 0);
+            PlayerInventory.Add("ninja", 0);
+            GetInventory();
+        }
 
         HomeMenu.SetActive(true);
         ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
@@ -1246,6 +1251,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         GetFriends(PhotonNetwork.NickName, 1);
         StartCoroutine("UpdateFriendList");
+        //GetInventory();
         //ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
 
 

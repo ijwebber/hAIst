@@ -46,6 +46,7 @@ public class UpgradeController : MonoBehaviour
 
     public void PopulateUpdatesPanel()
     {
+        Debug.Log("Populating upgrades panel");
         foreach (Transform child in UpgradePanel.transform)
         {
             GameObject.Destroy(child.gameObject);
@@ -56,8 +57,10 @@ public class UpgradeController : MonoBehaviour
         }
         foreach (KeyValuePair<string, int> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerInventory)
         {
+            Debug.Log(kvp.Key + ": " + kvp.Value);
             if (kvp.Key.Equals("speed_boots") & kvp.Value > 0)
             {
+                Debug.Log("instantiating speedy boots");
                 GameObject obj = (GameObject)Instantiate(UpgradeImagePrefab2, UpgradePanel.transform);
 
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = speed_boots;
