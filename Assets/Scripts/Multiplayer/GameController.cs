@@ -112,9 +112,11 @@ public class GameController : MonoBehaviourPunCallbacks
             bool localChange = false;
             if (gameState > updatedGameState) {
                 // change originated from here
+                updatedGameState = gameState;
                 localChange = true;
             }
-            gameState = Mathf.Max(gameState, updatedGameState);
+            gameState = updatedGameState;
+            // gameState = Mathf.Max(gameState, updatedGameState);
             List <string> newText = new List<string>();
             switch (gameState)
             {
