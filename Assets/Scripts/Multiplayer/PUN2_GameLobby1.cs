@@ -38,6 +38,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject HomeMenu;
     [SerializeField] private GameObject LobbyMenu;
     [SerializeField] private GameObject NewLobbyMenu;
+    [SerializeField] private GameObject LoadingScreenLogIn;
+
 
     [SerializeField] private GameObject PreGameMenu;
     [SerializeField] private GameObject CreditsMenu;
@@ -1088,6 +1090,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
     public void SetUserName()
     {
+        StartCoroutine(ShowLoadingScreenLogIn());
         ExistingUserMenu.SetActive(false);
         GuestMenu.SetActive(false);
         PhotonNetwork.NickName = UsernameLoginInput.text;
@@ -1130,12 +1133,21 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             GetInventory();
         }
 
-        HomeMenu.SetActive(true);
         ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
 
 
     }
+    private IEnumerator ShowLoadingScreenLogIn()
+    {
+        Debug.Log("Showing loading screen");
+        LoadingScreenLogIn.SetActive(true);
+        yield return new WaitForSeconds(3);
+        HomeMenu.SetActive(true);
 
+        LoadingScreenLogIn.SetActive(false);
+
+
+    }
     public void ReJoinAfterLeave()
     {
         //StartMenu.SetActive(false);

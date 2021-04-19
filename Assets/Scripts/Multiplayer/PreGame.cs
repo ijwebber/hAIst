@@ -18,6 +18,8 @@ public class PreGame : MonoBehaviourPunCallbacks
     private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
     private ExitGames.Client.Photon.Hashtable customPropertiesRoom = new ExitGames.Client.Photon.Hashtable();
 
+
+    public GameObject ThiefSkins;
     public GameObject thief_1;
     public GameObject thief_2;
     public GameObject thief_3;
@@ -88,6 +90,12 @@ public class PreGame : MonoBehaviourPunCallbacks
         SkinPanelContent.gameObject.transform.GetChild(2).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
         SkinPanelContent.gameObject.transform.GetChild(3).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
 
+    }
+
+    public void EquipSkin()
+    {
+        string skin_name = ThiefSkins.GetComponent<Image>().sprite.name;
+        thief_1.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
     }
     public void SetUpgradesForGame()
     {
@@ -209,6 +217,7 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     public void DisableLockerPanel()
     {
+        EquipSkin();
         LockerPanel.SetActive(false);
     }
 
