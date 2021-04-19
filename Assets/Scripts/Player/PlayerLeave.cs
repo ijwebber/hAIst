@@ -78,6 +78,21 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 }
             }
         } else if (changedProps["disabled"] != null) {
+            if ((bool) changedProps["disabled"]) {
+                StartCoroutine(CheckIfPlayersAreDown());
+            } else {
+                bool cond = true;
+                foreach (Player player in PhotonNetwork.PlayerList) {
+                    if ((bool) player.CustomProperties["disabled"]) {
+                        cond = false;
+                    }
+                }
+
+                if (cond) {
+                    StopCoroutine(CheckIfPlayersAreDown());
+                }
+            }
+
             if (PhotonNetwork.IsMasterClient) {
                 if ((bool) changedProps["disabled"]) {
                     bool end = true;
@@ -90,20 +105,6 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                     if (end) {
                         Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
                         PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
-                    }
-
-                    StartCoroutine(CheckIfPlayersAreDown());
-
-                } else {
-                    bool cond = true;
-                    foreach (Player player in PhotonNetwork.PlayerList) {
-                        if ((bool) player.CustomProperties["disabled"]) {
-                            cond = false;
-                        }
-                    }
-
-                    if (cond) {
-                        StopCoroutine(CheckIfPlayersAreDown());
                     }
                 }
             }
