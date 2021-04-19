@@ -128,7 +128,6 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
     IEnumerator CheckIfPlayersAreDown() {
 		while (true) {
 			yield return new WaitForSeconds (.2f);
-            Debug.Log("£££ Running");
             bool end = true;
             foreach (Player player in PhotonNetwork.PlayerList) {
                 if (!(bool) player.CustomProperties["disabled"]) {
