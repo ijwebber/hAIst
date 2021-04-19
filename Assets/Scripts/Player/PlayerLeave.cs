@@ -134,12 +134,12 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                     end = false;
                     break;
                 }
-
-                if (end) {
-                    Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
-                    PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
-                }
 		    }
+
+            if (end) {
+                Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
+                PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+            }
 	    }
     }
 }
