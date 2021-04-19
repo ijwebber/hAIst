@@ -70,13 +70,13 @@ public class PlayerMovement : MonoBehaviourPun
 
             // Checks for any adjustments to speed
             float finalSpeed = speed;
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
-                finalSpeed = speed * 1.5f;
-            }
-            else if (Input.GetKey(KeyCode.Space))
+            
+            if (Input.GetKey(KeyCode.Space))
             {
                 finalSpeed = speed * 0.75f;
+            } else if (Input.GetKey(KeyCode.LeftShift))
+            {
+                finalSpeed = speed * 1.5f;
             }
 
             moveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
