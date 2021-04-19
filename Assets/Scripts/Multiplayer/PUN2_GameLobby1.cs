@@ -107,6 +107,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public Button FriendsMenuButton;
     public Button UpgradesMenuButton;
     public GameObject BalanceInfoHome;
+    [SerializeField] private Button btnHome, btnUpgrades, btnMic, btnRooms;
 
     // UPGRADES OBJECTS
     public TMP_Text speed_boots_Inventory;
@@ -198,11 +199,15 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject ChooseUpgradesButton;
     public GameObject UpgradeButtonFromPreGame;
 
+    // menu buttons
+    [SerializeField] private Button btnPreHome, btnPreUpgrade, btnPreMap, btnPreLobby;
+
     // PHOTON NETWORK GAMEOBJECTS 
 
     // MAP SCREEN OBJECTS
     [SerializeField] private GameObject Notes;
     [SerializeField] private GameObject MapIndicator;
+    [SerializeField] private GameObject mapOutline;
 
 
 
@@ -337,6 +342,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
 
     public void EnableMicThreshold() {
+        btnHome.interactable = true;
+        if (!IsGuest) {
+            btnUpgrades.interactable = true;
+        }
+        btnMic.interactable = false;
+        btnRooms.interactable = true;
         DB_Controller.GetComponent<DB_Controller>().getThresholds(PhotonNetwork.NickName);
         MicMenu.SetActive(true);
         Color32 blueCol = new Color32(93,93,118,255);
@@ -413,6 +424,13 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //InventoryMenu.SetActive(false);
         NewLobbyMenu.SetActive(false);
 
+        btnHome.interactable = false;
+        if (!IsGuest) {
+            btnUpgrades.interactable = true;
+        }
+        btnMic.interactable = true;
+        btnRooms.interactable = true;
+
 
 
         AddFriendStatus.SetActive(false);
@@ -424,6 +442,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void EnableUpgradeMenu()
     {
+        btnHome.interactable = true;
+        btnUpgrades.interactable = false;
+        btnMic.interactable = true;
+        btnRooms.interactable = true;
         FriendsMenu.SetActive(false);
         AddFriendStatus.SetActive(false);
         //Home_Home.SetActive(false);
@@ -435,14 +457,17 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
         GetInventory();
         UpgradeMenu.SetActive(true);
-
-        // TODO: remove
-        // DB_Controller.GetComponent<DB_Controller>().EditCoinBalance("fxlmo", 10000, 10);
     }
 
 
     public void EnableRoomMenu()
     {
+        btnHome.interactable = true;
+        if(!IsGuest) {
+            btnUpgrades.interactable = true;
+        }
+        btnMic.interactable = true;
+        btnRooms.interactable = false;
         FriendsMenu.SetActive(false);
         MicMenu.SetActive(false);
         MicCheck = false;
@@ -455,7 +480,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //InventoryMenu.SetActive(true);
         LobbyScript.SetActive(true);
         NewLobbyMenu.SetActive(true);
-        GetInventory();
+        //GetInventory();
 
     }
 
@@ -588,7 +613,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         {
             PlayerInventory[key] = 0;
         }
-        DB_Controller.GetComponent<DB_Controller>().GetUpgradeList(PhotonNetwork.NickName);
+        if (!IsGuest) {
+            DB_Controller.GetComponent<DB_Controller>().GetUpgradeList(PhotonNetwork.NickName);
+        }
         
     }
 
@@ -909,6 +936,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         if (!bg.animating) {
             LobbyScreen.SetActive(false);
             UpgradeScreen.SetActive(false);
+            btnPreLobby.interactable = true;
+            btnPreMap.interactable= true;
+            if (!IsGuest) {
+                btnPreUpgrade.interactable = true;
+            }
+            btnPreHome.interactable = false;
             if (MapScreen.activeInHierarchy) {
                 MapScreen.SetActive(false);
                 bg.unZoom(PreGameHome);
@@ -925,6 +958,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         {
             PreGameHome.SetActive(false);
             LobbyScreen.SetActive(false);
+            btnPreHome.interactable = true;
+            btnPreLobby.interactable = true;
+            btnPreMap.interactable = true;
+            btnPreUpgrade.interactable = false;
 
             if (MapScreen.activeInHierarchy)
             {
@@ -946,14 +983,30 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     // zoom in (make sure to call unzoom if map is active when navigating away)
     public void EnableMapScreen()
     {
+        mapOutline.GetComponent<Image>().color = new Color(255,255,0,0);
         LobbyScreen.SetActive(false);
         PreGameHome.SetActive(false);
         UpgradeScreen.SetActive(false);
+        btnPreHome.interactable = true;
+        btnPreLobby.interactable = true;
+        btnPreMap.interactable = false;
+        if (!IsGuest) {
+            btnPreUpgrade.interactable = true;
+        }
         bg.zoom();
         MapIndicator.SetActive(false);
         
 
         // MapScreen.SetActive(true);
+    }
+    public void OnMouseEnterMap() {
+        if (PreGameHome.activeInHierarchy) {
+            mapOutline.GetComponent<Image>().color = new Color(255,255,0,200);
+        }
+    }
+
+    public void OnMouseLeaveMap() {
+        mapOutline.GetComponent<Image>().color = new Color(255,255,0,0);
     }
 
     public void ToggleNotes() {
@@ -966,6 +1019,12 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         if (!bg.animating) {
             PreGameHome.SetActive(false);
             UpgradeScreen.SetActive(false);
+            btnPreHome.interactable = true;
+            btnPreLobby.interactable = false;
+            btnPreMap.interactable = true;
+            if (!IsGuest) {
+                btnPreUpgrade.interactable = true;
+            }
 
             if (MapScreen.activeInHierarchy) {
                 MapScreen.SetActive(false);
@@ -1049,6 +1108,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             BalanceInfoPre.SetActive(false);
             BalanceInfoLobby.SetActive(false);
             FriendPanel.SetActive(false);
+            ColorBlock cb = UpgradeButtonFromLobby.GetComponent<Button>().colors;
+            cb.disabledColor = new Color32(130,130,130,200);
+            UpgradeButtonFromLobby.GetComponent<Button>().colors = cb;
+            UpgradeButtonFromPreGame.GetComponent<Button>().colors = cb;
             UpgradeButtonFromLobby.GetComponent<Button>().interactable = false;
             ChooseUpgradesButton.GetComponent<Button>().interactable = false;
             UpgradeButtonFromPreGame.GetComponent<Button>().interactable = false;
