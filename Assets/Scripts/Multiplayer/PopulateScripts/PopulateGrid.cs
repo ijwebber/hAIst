@@ -13,6 +13,8 @@ public class PopulateGrid : MonoBehaviourPunCallbacks
     List<RoomInfo> createdRooms = new List<RoomInfo>();
     public ScrollView scrollView;
 	public GameObject prefab; // This is our prefab object that will be exposed in the inspector
+    public GameObject emptyPrefab;
+    private GameObject emptyObj; //used to destroy object when in use
 
 	void Start()
 	{
@@ -52,16 +54,20 @@ public class PopulateGrid : MonoBehaviourPunCallbacks
 	{
 		GameObject newObj; // Create GameObject instance
 
-		for (int i = 0; i < createdRooms.Count; i++)
-		{
-			 // Create new instances of our prefab until we've created as many as we specified
-			newObj = (GameObject)Instantiate(prefab, transform);
-            newObj.transform.Find("RoomNameScroll").GetComponent<Text>().text = "  " + createdRooms[i].Name;
-            newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = createdRooms[i].PlayerCount + "/" + createdRooms[i].MaxPlayers;
-            string roomName = createdRooms[i].Name;
-            newObj.transform.Find("JoinGameButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate {ButtonClick(roomName); });
-			
-		}
+        if (createdRooms.Count == 0) {
+            newObj = (GameObject)Instantiate(emptyPrefab, transform);
+        } else {
+            for (int i = 0; i < createdRooms.Count; i++)
+            {
+                // Create new instances of our prefab until we've created as many as we specified
+                newObj = (GameObject)Instantiate(prefab, transform);
+                newObj.transform.Find("RoomNameScroll").GetComponent<Text>().text = "  " + createdRooms[i].Name;
+                newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = createdRooms[i].PlayerCount + "/" + createdRooms[i].MaxPlayers;
+                string roomName = createdRooms[i].Name;
+                newObj.transform.Find("JoinGameButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate {ButtonClick(roomName); });
+                
+            }
+        }
 
 	}
 
