@@ -263,31 +263,25 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
     //Recieves CutScene data
     [PunRPC]
-    void RpcCutScene(float x, float y, float z, int distanceOffset, int heightOffset, float rotx, float roty, float rotz, string customMessage, int code)
+    void RpcCutScene(int guardPhotonID, string customMessage, int code)
     {   
-        Vector3 location = new Vector3(x,y,z);
-        Vector3 cameraRotation = new Vector3(rotx,roty,rotz);
-        cutscenePosition = location;
+        
+        
         //stop camera following player
-        isFollowing = false;
+        //isFollowing = false;
 
-        //reset rotationCounter
-        rotateCounter = 0f;
-
+     
         //freeze player
         this.GetComponent<PlayerMovement>().paused = true;
 
-        if(code == 1)
-        {
-            audioSource = FindObjectOfType<AudioController>().gameObject.GetComponent<AudioSource>();
-            audioSource.PlayOneShot(FindObjectOfType<AudioController>().alertedSound);
-            
-        }
+       
         //freeze guards, will only work if player is master
         GuardController.Instance.disableAllguards(true);
 
+        CameraSystem.Instance.caughtCutScene(guardPhotonID, "The Police have been alerted", this.gameObject);
+
         //this starts the incremental camera updates to the desired location (the cutscene)
-        StartCoroutine(cameraCutSceneUpdates(0.03f, location, distanceOffset, heightOffset, cameraRotation, customMessage, code));
+        //StartCoroutine(cameraCutSceneUpdates(0.03f, location, distanceOffset, heightOffset, cameraRotation, customMessage, code));
 
     }
 

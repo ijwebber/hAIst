@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using Photon.Pun;
 
 public class CameraSystem : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    public static CameraSystem Instance { get; private set; }
+
     public GameObject introSceneTrack;
     public GameObject playerCamTrack;
     public CinemachineBrain brain;
+    public CinemachineVirtualCamera guardCaughtIn4k;
+    public CinemachineVirtualCamera playerCam;
 
     public GameObject gameUIReference;
     public bool introDone = false;
@@ -18,6 +23,19 @@ public class CameraSystem : MonoBehaviour
     private GameObject guardShotReference;
     private GameObject player;
     private GameObject securityCameraReference;
+
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -47,6 +65,7 @@ public class CameraSystem : MonoBehaviour
             
             playerCamTrack.SetActive(true);
             introSceneTrack.SetActive(false);
+            StartCoroutine(disableAfterTime(playerCamTrack, 2f));
 
             
             player.GetComponent<PlayerMovement>().paused = false;
@@ -100,4 +119,53 @@ public class CameraSystem : MonoBehaviour
         var stealItems = GameObject.FindGameObjectsWithTag("steal");
         foreach(var items in stealItems){items.layer = layer;}
     }
+
+    private IEnumerator disableAfterTime(GameObject g, float time)
+    {
+        yield return new WaitForSeconds(time);
+        g.SetActive(false);
+    }
+
+
+    public void caughtCutScene(int guardViewID, string message, GameObject player)
+    {
+       
+        GameObject guard = PhotonView.Find(guardViewID).gameObject;
+        guardCaughtIn4k.Follow = guard.transform;
+        guardCaughtIn4k.LookAt = guard.transform;
+        guardCaughtIn4k.Priority = 11;
+
+        SetLayerRecursively(guard, default);
+        BarController.Instance.SetText(message);
+        BarController.Instance.ShowBars();
+
+        StartCoroutine(endCaughtCutScene(guard));
+
+        
+        
+        
+
+
+
+    }
+
+    private IEnumerator endCaughtCutScene(GameObject guard)
+    {
+        yield return new WaitForSeconds(3f);
+
+
+        guardCaughtIn4k.Priority = 9;
+        BarController.Instance.HideBars();
+
+        yield return new WaitForSeconds(2f);
+        SetLayerRecursively(guard, 10);
+        player.GetComponent<PlayerMovement>().paused = false;
+        
+        GuardController.Instance.disableAllguards(false);
+    }
+
+
+    
+
 }
+

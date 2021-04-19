@@ -122,7 +122,7 @@ public class GuardController : MonoBehaviour
                 {
                     PhotonView v = g.gameObject.GetComponent<PhotonView>();
                     
-                    v.RPC("RpcCutScene", v.Controller, guardPos.x, guardPos.y, guardPos.z, -4, 8, 75f,0f,0f, "The Police have been alerted!", 1);
+                    v.RPC("RpcCutScene", v.Controller, guard.photonView.ViewID, "The Police have been alerted!", 1);
                 }
 
                 
