@@ -480,7 +480,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //InventoryMenu.SetActive(true);
         LobbyScript.SetActive(true);
         NewLobbyMenu.SetActive(true);
-        GetInventory();
+        //GetInventory();
 
     }
 
