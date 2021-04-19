@@ -18,6 +18,7 @@ public class CameraSystem : MonoBehaviour
 
     public GameObject gameUIReference;
     public bool introDone = false;
+    public bool isCutSceneHappening = true;
     private bool playerCamActive = false;
     
     private GameObject guardShotReference;
@@ -69,6 +70,8 @@ public class CameraSystem : MonoBehaviour
 
             
             player.GetComponent<PlayerMovement>().paused = false;
+
+            isCutSceneHappening = false;
 
             SetLayerRecursively(guardShotReference, 10);
             SetPaintingsLayer(13);
@@ -129,7 +132,7 @@ public class CameraSystem : MonoBehaviour
 
     public void caughtCutScene(int guardViewID, string message, GameObject player)
     {
-       
+        isCutSceneHappening = true;
         GameObject guard = PhotonView.Find(guardViewID).gameObject;
         guardCaughtIn4k.Follow = guard.transform;
         guardCaughtIn4k.LookAt = guard.transform;
@@ -162,6 +165,8 @@ public class CameraSystem : MonoBehaviour
         player.GetComponent<PlayerMovement>().paused = false;
         
         GuardController.Instance.disableAllguards(false);
+
+        isCutSceneHappening = false;
     }
 
 
