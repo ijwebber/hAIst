@@ -1,8 +1,27 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class IntentActions : MonoBehaviour
+public class IntentActions : MonoBehaviourPun
 {    
+
+    LaserController laserController;
+
+    void Start() {
+        laserController = GameObject.FindObjectOfType<LaserController>();
+    }
+
+    void Update() {
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
+
+        if (Input.GetKey(KeyCode.B)) {
+            Debug.Log("*** Switching Off");
+            DisableLasers();
+        }
+    }
+
     public void CarryOutIntent(string topIntent, float score) {
         if (score > 0.3) {
             switch (topIntent)
@@ -41,18 +60,7 @@ public class IntentActions : MonoBehaviour
     }
 
     public void DisableLasers() {
-        Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
-        LaserDown[] lasersDown = GameObject.FindObjectsOfType<LaserDown>();
-        
-        foreach (Laser laser in lasers)
-        {
-            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-        }
-
-        foreach (LaserDown laser in lasersDown)
-        {
-            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-        }
+        laserController.DisableNearestLaser(transform.position);
     }
 
     public void Unsure() {
