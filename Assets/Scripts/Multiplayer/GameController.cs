@@ -32,6 +32,7 @@ public class GameController : MonoBehaviourPunCallbacks
     
     
     public string playerUsername;
+    public bool regress = false;
     [SerializeField] private NewQuest questBox;
     [SerializeField] private NewQuest questMarker;
 
@@ -113,35 +114,56 @@ public class GameController : MonoBehaviourPunCallbacks
             questBox.newQuest();
             questMarker.newQuest();
             bool localChange = false;
+            bool localRegress = regress;
             if (gameState > updatedGameState) {
                 // change originated from here
                 updatedGameState = gameState;
                 localChange = true;
+            } else if (regress) {
+                if (gameState < updatedGameState) {
+                    Debug.Log("A PAINTING HAS BEEN CAPTURED!!");
+                    localChange = true;
+                    updatedGameState = gameState;
+                }
+                gameState = Mathf.Min(gameState,updatedGameState);
+                regress = false;
             }
+
             // gameState = updatedGameState;
             gameState = Mathf.Max(gameState, updatedGameState);
             List <string> newText = new List<string>();
-            switch (gameState)
+            switch (gameState) 
             {
                 case 0: // starting state
                     playerUpdates.updateDisplay("Game started");
                     if (localChange) {
                         updateDisp("Game started");
                     }
-                    setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"});
+                    setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"}, localRegress);
                     break;
                 case 1: // point to code
-                    setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"});
+                    setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"}, localRegress);
                     break;
                 case 2: // point to key objects
-                    playerUpdates.updateDisplay("The key door has been unlocked");
-                    if (localChange) {
-                        updateDisp("The key door has been unlocked");
+                    if (!localRegress) {
+                        playerUpdates.updateDisplay("The key door has been unlocked");
+                        if (localChange) {
+                            updateDisp("The key door has been unlocked");
+                        }
+                    } else  {
+                        updateDisp("A key painting has been lost!");
                     }
+                    List<GameObject> nextQuestItems = new List<GameObject>();
                     foreach (var item in specialItems) {
-                        newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                        if (item.GetComponent<CollectableItem>().guardPoint == null) {
+                            newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                            nextQuestItems.Add(item);
+                        } else {
+                            newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                            nextQuestItems.Add(item);
+                        }
                     }
-                    setNewQuest(specialItems, newText);
+                    setNewQuest(nextQuestItems, newText, localRegress);
                     break;
                 case 3: // point to key object 2
                     playerUpdates.updateDisplay("You have stolen a key painting");
@@ -159,7 +181,7 @@ public class GameController : MonoBehaviourPunCallbacks
                             newText.Add("<s>Steal " + item.GetComponent<CollectableItem>().itemName + "</s>");
                         }
                     }
-                    setNewQuest(toSteal, newText);
+                    setNewQuest(toSteal, newText, localRegress);
                     break;
                 case 4: // point to exit
                     playerUpdates.updateDisplay("You have stolen a key painting");
@@ -167,7 +189,7 @@ public class GameController : MonoBehaviourPunCallbacks
                         // playerController.Specials++;
                         updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
                     }
-                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"});
+                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"}, localRegress);
                     break;
                 default:
                     break;
@@ -272,7 +294,7 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
-    private void setNewQuest(List<GameObject> objs, List<string> objectives) {
+    private void setNewQuest(List<GameObject> objs, List<string> objectives, bool regressTest) {
         if (objs.Count == 0) {
             // questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null", gameState);
         } else {
@@ -281,7 +303,7 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 serialisedObjects[i] = objs[i].name;
             }
-            this.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, serialisedObjects, gameState, objectives.ToArray());
+            this.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, serialisedObjects, gameState, regressTest, objectives.ToArray());
         }
     }
 
@@ -295,7 +317,8 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    void updateTarget(string[] gameNames, int localgameState, string[] objectives) {
+    void updateTarget(string[] gameNames, int localgameState, bool regressTest, string[] objectives) {
+        regress = regressTest;
         updatedGameState = localgameState;
         string newObjectives = "";
         foreach (string objective in objectives)

@@ -19,6 +19,7 @@ public class GuardMovement : MonoBehaviourPun
 
     public GuardController guardController;
     private PlayerController playerController;
+    private GameController gameController;
     public NavMeshAgent agent;
     public SoundVisual soundVis;
     public AudioSource heySound;
@@ -48,7 +49,7 @@ public class GuardMovement : MonoBehaviourPun
 
     private void Awake()
     {
-        
+        this.gameController = GameObject.FindObjectOfType<GameController>();
     }
 
     private void Start() {
@@ -69,7 +70,13 @@ public class GuardMovement : MonoBehaviourPun
             {
                 agent.isStopped = true;
                 timedOut = true;
+                foreach (var spec in this.specials)
+                {
+                    spec.GetComponent<CollectableItem>().stolen = true;
+                    spec.GetComponent<CollectableItem>().guardPoint = null;
+                }
                 if(this.specials.Count > 0) {
+                    gameController.gameState++;
                     playerController.Specials = this.specials;
                     this.specials.Clear();
                     Debug.Log("Recaptured painting");
@@ -129,12 +136,15 @@ public class GuardMovement : MonoBehaviourPun
                             playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
                             if (playerController.Specials.Count > 0) {
                                 this.specials = playerController.Specials;
+                                gameController.gameState -= 1;
+                                gameController.regress = true;
                                 foreach (var spec in this.specials)
                                 {
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
+                                    spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
                                 }
                                 playerController.Specials.Clear();
-                                Debug.Log("Captured painting");
+                                Debug.Log("Guard has Captured painting");
                             }
                         }
                     }
