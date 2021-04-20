@@ -60,7 +60,18 @@ public class IntentActions : MonoBehaviourPun
     }
 
     public void DisableLasers() {
-        laserController.DisableNearestLaser(transform.position);
+        Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
+        LaserDown[] lasersDown = GameObject.FindObjectsOfType<LaserDown>();
+        
+        foreach (Laser laser in lasers)
+        {
+            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+        }
+
+        foreach (LaserDown laser in lasersDown)
+        {
+            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+        }
     }
 
     public void Unsure() {
