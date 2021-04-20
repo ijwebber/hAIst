@@ -160,7 +160,7 @@ public class GameController : MonoBehaviourPunCallbacks
                             nextQuestItems.Add(item);
                         } else {
                             newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
-                            nextQuestItems.Add(item);
+                            nextQuestItems.Add(item.GetComponent<CollectableItem>().guardPoint);
                         }
                     }
                     setNewQuest(nextQuestItems, newText, localRegress);
