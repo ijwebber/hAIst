@@ -57,8 +57,8 @@ public class GameController : MonoBehaviourPunCallbacks
         Vector3 spawnpoint = SpawnPoint.transform.position;
         spawnpoint.x = xSpawnPos;
         spawnpoint.y = 11f;
-
-        GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, spawnpoint, Quaternion.identity);
+        string prefab_to_instantiate = "character_prefab_" + PlayerPrefs.GetString("skin");
+        GameObject player = PhotonNetwork.Instantiate(prefab_to_instantiate, spawnpoint, Quaternion.identity);
         playerCam.Follow = player.gameObject.transform.Find("Timmy").transform;
         playerCam.LookAt = player.gameObject.transform.Find("Timmy").transform;
 

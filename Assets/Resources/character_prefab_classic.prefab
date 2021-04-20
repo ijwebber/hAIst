@@ -5879,7 +5879,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5037312652672791349}
   m_Layer: 9
-  m_Name: CharacterPrefab
+  m_Name: character_prefab_classic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
