@@ -18,15 +18,6 @@ public class LaserController : MonoBehaviour
             }
         }
 
-        closest.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.Others);
-        closest.GetComponent<LineRenderer>().enabled = false;
-        if (closest.GetComponent<Laser>() != null)
-        {
-            closest.GetComponent<Laser>().disabled = true;
-        }
-        else
-        {
-            closest.GetComponent<LaserDown>().disabled = true;
-        }
+        closest.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
     }
 }

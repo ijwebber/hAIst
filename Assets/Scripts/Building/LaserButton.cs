@@ -12,15 +12,7 @@ public class LaserButton : MonoBehaviour
     {
         if (button.done)
         {
-            this.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.Others);
-            this.GetComponent<LineRenderer>().enabled = false;
-            if (this.GetComponent<Laser>() != null)
-            {
-                this.GetComponent<Laser>().disabled = true;
-            } else
-            {
-                this.GetComponent<LaserDown>().disabled = true;
-            }
+            this.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
         }
     }
 }

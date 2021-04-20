@@ -37,9 +37,7 @@ public class WireTask : MonoBehaviour
                     {
                         if (laser.wiresID == wiresID)
                         {
-                            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.Others);
-                            laser.GetComponent<LineRenderer>().enabled = false;
-                            laser.disabled = true;
+                            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
                         }
                     }
 
@@ -48,9 +46,7 @@ public class WireTask : MonoBehaviour
                     {
                         if (laser.wiresID == wiresID)
                         {
-                            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.Others);
-                            laser.GetComponent<LineRenderer>().enabled = false;
-                            laser.disabled = true;
+                            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
                         }
                     }
                 }
