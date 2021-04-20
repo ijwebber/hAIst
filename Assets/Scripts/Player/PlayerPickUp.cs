@@ -232,13 +232,16 @@ public class PlayerPickUp : MonoBehaviourPun
 
                     int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
 
-                    if (seconds == 0 && !down)
+                    if (seconds == 0 && !down && held == false)
                     {
                         holdDownTask();
                     }
 
                     else if (seconds != 0)
                     {
+                        if(Input.GetKey(KeyCode.E)){
+                            displayMessage(1);
+                        }
                         displayMessage(1);
                     }
 
