@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Photon.Pun;
 
 public class LaserController : MonoBehaviour
 {
-
-    void DisableNearestLaser(Vector3 pos)
+    public void DisableNearestLaser(Vector3 pos)
     {
         Laser closest = null;
         Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
