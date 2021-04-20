@@ -85,6 +85,18 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
         return -1;
     }
 
+    public bool IsRoomOpen(string roomName)
+    {
+        for (int i = 0; i < createdRooms.Count; i++)
+        {
+            if (createdRooms[i].Name.Equals(roomName))
+            {
+                return createdRooms[i].IsOpen;
+            }
+        }
+        return false;
+    }
+
     void Populate()
     {
         GameObject newObj; // Create GameObject instance
@@ -101,11 +113,21 @@ public class PopulateGridFriends : MonoBehaviourPunCallbacks
                 if (FriendList[i].IsInRoom)
                 {
                     int playerCount = GetRoomCount(FriendList[i].Room);
-                    newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = playerCount+ "/" + 4;
-                    newObj.transform.Find("RoomInfoScroll").gameObject.SetActive(true);
-                    newObj.transform.Find("JoinGameButton").gameObject.SetActive(true);
-                    string roomName = FriendList[i].Room;
-                    newObj.transform.Find("JoinGameButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate { ButtonClick(roomName); });
+                    bool roomOpen = IsRoomOpen(FriendList[i].Room);
+                    if (roomOpen)
+                    {
+                        newObj.transform.Find("RoomInfoScroll").GetComponent<Text>().text = playerCount + "/" + 4;
+                        newObj.transform.Find("RoomInfoScroll").gameObject.SetActive(true);
+                        newObj.transform.Find("JoinGameButton").gameObject.SetActive(true);
+                        string roomName = FriendList[i].Room;
+                        newObj.transform.Find("JoinGameButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate { ButtonClick(roomName); });
+                    }
+                    else
+                    {
+                        newObj.transform.Find("RoomInfoScroll").gameObject.SetActive(false);
+                        newObj.transform.Find("JoinGameButton").gameObject.SetActive(false);
+
+                    }
                 }
 
 
