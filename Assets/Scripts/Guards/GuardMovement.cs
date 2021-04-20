@@ -194,15 +194,10 @@ public class GuardMovement : MonoBehaviourPun
             {
                 foreach (GameObject g in fovScript.behindGuardTargets)
                 {
-                    if (Mathf.Abs(g.transform.position.x - transform.position.x) <= 1.5f && Mathf.Abs(g.transform.position.z - transform.position.z) <= 1.5f)
-                    {
-
-
                         PhotonView view = PhotonView.Get(this);
                         Player p = g.GetComponent<PhotonView>().Controller;
 
                         g.GetComponent<PhotonView>().RPC("KnockOut", p, view.ViewID);
-                    }
                 }
             }
         }        
