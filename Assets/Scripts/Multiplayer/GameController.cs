@@ -136,9 +136,6 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 case 0: // starting state
                     playerUpdates.updateDisplay("Game started");
-                    if (localChange) {
-                        updateDisp("Game started");
-                    }
                     setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"}, localRegress);
                     break;
                 case 1: // point to code
@@ -151,6 +148,7 @@ public class GameController : MonoBehaviourPunCallbacks
                             updateDisp("The key door has been unlocked");
                         }
                     } else  {
+                        playerUpdates.updateDisplay("You have lost a key painting!");
                         updateDisp("A key painting has been lost!");
                     }
                     List<GameObject> nextQuestItems = new List<GameObject>();
@@ -166,17 +164,26 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(nextQuestItems, newText, localRegress);
                     break;
                 case 3: // point to key object 2
-                    playerUpdates.updateDisplay("You have stolen a key painting");
-                    if (localChange) {
-                        updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
-                        // playerController.Specials++;
+                    if (!localRegress) {
+                        playerUpdates.updateDisplay("The key door has been unlocked");
+                        if (localChange) {
+                            updateDisp("The key door has been unlocked");
+                        }
+                    } else  {
+                        playerUpdates.updateDisplay("You have lost a key painting!");
+                        updateDisp("A key painting has been lost!");
                     }
                     List <GameObject> toSteal = new List<GameObject>();
                     foreach (var item in specialItems)
                     {
                         if (!item.GetComponent<CollectableItem>().stolen) {
-                            toSteal.Add(item);
-                            newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                            if (item.GetComponent<CollectableItem>().guardPoint == null) {
+                                toSteal.Add(item);
+                                newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                            } else {
+                                toSteal.Add(item.GetComponent<CollectableItem>().guardPoint);
+                                newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                            }
                         } else {
                             newText.Add("<s>Steal " + item.GetComponent<CollectableItem>().itemName + "</s>");
                         }

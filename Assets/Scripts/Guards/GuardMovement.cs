@@ -76,9 +76,10 @@ public class GuardMovement : MonoBehaviourPun
                     spec.GetComponent<CollectableItem>().guardPoint = null;
                 }
                 if(specials.Count > 0) {
+                    this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
                     gameController.gameState++;
                     playerController.Specials = specials;
-                    specials.Clear();
+                    // specials.Clear();
                     Debug.Log("Recaptured painting");
                 }
                 StartCoroutine(disableForTime(3.0f));
@@ -211,14 +212,21 @@ public class GuardMovement : MonoBehaviourPun
     void updateGuardSpecials(string serializedObjects) {
         Debug.Log("Received special update with " + serializedObjects);
         string[] outObjs = serializedObjects.Split(","[0]);
-        foreach (var ob in outObjs)
+        GameObject Stealables = GameObject.Find("StealItems");
+        foreach (string ob in outObjs)
         {
             if (ob != "") {
-                Debug.Log(ob);
-                specials.Add(GameObject.Find(ob));
+                Debug.Log("!" + ob + "!");
+                specials.Add(Stealables.transform.Find(ob).gameObject);
+                Debug.Log(specials[0]);
             }
-            Debug.Log("Updated specs " + specials.ToString());
+            // Debug.Log("Updated specs " + specials.ToString());
         }
+    }
+
+    [PunRPC]
+    void ClearSpecials() {
+        specials.Clear();
     }
 
     [PunRPC]
