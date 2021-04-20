@@ -612,6 +612,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void AddFriend()
     {
+        Debug.Log("ADD FRIEND INPUT: " +AddFriendInput.text);
         DB_Controller.GetComponent<DB_Controller>().CheckIfExists(PhotonNetwork.NickName, AddFriendInput.text);
         
     }
