@@ -29,6 +29,10 @@ public class DB_Controller : MonoBehaviour
     string get_upgrades_url = "https://brasspig.online/get_upgrades.php?";
     string add_upgrade_url = "https://brasspig.online/add_upgrade.php?";
     string edit_upgrade_url = "https://brasspig.online/edit_upgrade_list.php?";
+    string get_skins_url = "https://brasspig.online/get_skin_list.php?";
+    string add_skin_url = "https://brasspig.online/add_skin.php?";
+
+
 
 
     [SerializeField] Slider multiplier, threshold;
@@ -104,10 +108,19 @@ public class DB_Controller : MonoBehaviour
     {
         StartCoroutine(UpgradeList(username));
     }
+    public void GetSkinList(string username)
+    {
+        StartCoroutine(SkinList(username));
+    }
 
     public void AddUpgrade(string username, string upgrade)
     {
         StartCoroutine(Add_Upgrade(username, upgrade));
+    }
+
+    public void AddSkin(string username, string skin)
+    {
+        StartCoroutine(Add_Skin(username, skin));
     }
 
     public void RemoveUpgrade(string username, List<string> upgrades)
@@ -534,8 +547,46 @@ public class DB_Controller : MonoBehaviour
         //_GameLobby.GetComponent<PUN2_GameLobby1>().InventoryWaitPanel.SetActive(false);
         _GameLobby.GetComponent<PUN2_GameLobby1>().SetOwnedStatus();
 
+    }
 
+    IEnumerator SkinList(string username)
+    {
 
+        string uri = get_skins_url + "user=" + username;
+        Debug.Log(uri);
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                string result = webRequest.downloadHandler.text.Trim();
+                if (result == "empty")
+                {
+                    Debug.Log("User has no skins");
+                }
+                else
+                {
+                    char[] delimiterChars = { ',' };
+
+                    string[] skin_list = result.Split(delimiterChars);
+                    foreach (var skin in skin_list)
+                    {
+                        Debug.Log("Skin :" + skin);
+
+                        _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerSkins[skin] = true;
+
+                    }
+                    
+
+                }
+            }
+        }
+        //_GameLobby.GetComponent<PUN2_GameLobby1>().ControlSkins();
 
     }
 
@@ -565,6 +616,33 @@ public class DB_Controller : MonoBehaviour
             }
         }
         _GameLobby.GetComponent<PUN2_GameLobby1>().GetInventory();
+    }
+
+    IEnumerator Add_Skin(string username, string skin)
+    {
+        string uri = add_skin_url + "user=" + username + "&skin=" + skin;
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        {
+            // Request and wait for the desired page.
+            yield return webRequest.SendWebRequest();
+
+            if (webRequest.isNetworkError)
+            {
+            }
+            else
+            {
+                if (webRequest.downloadHandler.text.Equals("true"))
+                {
+                    Debug.Log("Skin added succesfully.");
+
+                }
+                else
+                {
+                    Debug.Log("Skin NOT added succesfully.");
+
+                }
+            }
+        }
     }
 
     IEnumerator Remove_Upgrade(string username, List<string> upgrade_names)

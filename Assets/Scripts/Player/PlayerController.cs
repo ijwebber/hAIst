@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
         GetUpgrades();
         DebugUpgrades();
         player = getPlayer();
+        Debug.Log("EQUIPED SKIN IS " + PlayerPrefs.GetString("skin"));
         if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
             isGuest = false;
             applyUpdates();
