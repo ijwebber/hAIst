@@ -327,7 +327,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     void holdDownTask(){
 
-        if(Input.GetKeyDown(KeyCode.E)){    // if player is holding down E, start a timer                     
+        if(Input.GetKeyDown(KeyCode.E) && seconds == 0){    // if player is holding down E, start a timer                     
             startTime = Time.time;
             timer = startTime;
             displayMessage(2);
@@ -339,8 +339,11 @@ public class PlayerPickUp : MonoBehaviourPun
             timer += Time.deltaTime;
             progressBar.UpdateBar((timer - startTime), 0, holdTime);      
 
-            if(timer>(startTime + holdTime)) {   // if the time reaches 5s, then set held to true, else set to false
+            if(timer > startTime + holdTime) {   // if the time reaches 5s, then set held to true, else set to false
                 held = true;
+                startTime = 0f;
+                timer = 0f;
+
                 displayMessage(2);
                 progressBar.Hide();
                 progressBar.ResetBar();
@@ -349,6 +352,8 @@ public class PlayerPickUp : MonoBehaviourPun
                 held = false;
             }
         }
+
+        
 
         if(Input.GetKey(KeyCode.E) == false){ // if key is not being pressed, just set held to false
             held = false;
