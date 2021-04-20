@@ -138,15 +138,16 @@ public class GuardMovement : MonoBehaviourPun
                                 this.specials = playerController.Specials;
                                 gameController.gameState -= 1;
                                 gameController.regress = true;
-                                string[] serializedObjects = new string[this.specials.Count];
+                                string serializedObjects = "";
                                 int i = 0;
                                 foreach (var spec in this.specials)
                                 {
-                                    serializedObjects[i] = spec.name;
+                                    serializedObjects += spec.name + ",";
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
                                     spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
                                     i++;
                                 }
+                                serializedObjects.TrimEnd(","[0]);
                                 this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.All, serializedObjects);
                                 playerController.Specials.Clear();
                                 Debug.Log("Guard has Captured painting");
@@ -207,11 +208,12 @@ public class GuardMovement : MonoBehaviourPun
     }
 
     [PunRPC]
-    void updateGuardSpecials(string[] serializedObjects) {
+    void updateGuardSpecials(string serializedObjects) {
         Debug.Log("Received special update with " + serializedObjects);
-        foreach (var ob in serializedObjects)
+        string[] outObjs = serializedObjects.Split(","[0]);
+        foreach (var ob in outObjs)
         {
-            this.specials.Add(GameObject.Find("ob"));
+            this.specials.Add(GameObject.Find(ob));
         }
     }
     [PunRPC]
