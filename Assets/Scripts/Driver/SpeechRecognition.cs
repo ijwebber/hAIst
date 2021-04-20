@@ -23,13 +23,11 @@ public class SpeechRecognition : MonoBehaviourPun
 
         if (Input.GetKey(KeyCode.Y)) {
             if (!listening) {
-                Debug.Log("£££ Starting");
                 listening = true;
                 StartListening();
             }
         } else {
             if (listening) {
-                Debug.Log("£££ Stoping");
                 listening = false;
                 StopListening();
             }
