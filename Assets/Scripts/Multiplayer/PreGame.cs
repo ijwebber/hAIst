@@ -20,6 +20,7 @@ public class PreGame : MonoBehaviourPunCallbacks
 
 
     public GameObject ThiefSkins;
+    public GameObject thief_1_home;
     public GameObject thief_1;
     public GameObject thief_2;
     public GameObject thief_3;
@@ -34,8 +35,13 @@ public class PreGame : MonoBehaviourPunCallbacks
     public GameObject SkinPanelContent;
 
     public SelectSkinGroup skinGroup;
+    public GameObject SkinIconPrefab;
 
-
+    //SPRITES
+    public Sprite classic;
+    public Sprite red;
+    public Sprite radioactive;
+    public Sprite white;
 
 
     // Start is called before the first frame update
@@ -80,15 +86,37 @@ public class PreGame : MonoBehaviourPunCallbacks
             customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
-        ControlSkins();
     }
 
     public void ControlSkins()
     {
         Debug.Log("SKIN CONTROLLER");
-        SkinPanelContent.gameObject.transform.GetChild(1).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+        /*SkinPanelContent.gameObject.transform.GetChild(1).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
         SkinPanelContent.gameObject.transform.GetChild(2).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
-        SkinPanelContent.gameObject.transform.GetChild(3).GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+        SkinPanelContent.gameObject.transform.GetChild(3).GetComponent<SelectSkinButton>().tabGroup = skinGroup;*/
+
+        foreach (KeyValuePair<string, bool> kvp in _GameLobby.GetComponent<PUN2_GameLobby1>().PlayerSkins)
+        {
+            if (kvp.Key == "red" & kvp.Value)
+            {
+                GameObject obj = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContent.transform);
+                obj.GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = red;
+            }
+            else if (kvp.Key == "white" & kvp.Value)
+            {
+                GameObject obj = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContent.transform);
+                obj.GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = white;
+            }
+            else if (kvp.Key == "radioactive" & kvp.Value)
+            {
+                GameObject obj = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContent.transform);
+                obj.GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = radioactive;
+            }
+
+        }
 
     }
 
@@ -97,6 +125,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         string skin_name = ThiefSkins.GetComponent<Image>().sprite.name;
         thief_1.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
     }
+
     public void SetUpgradesForGame()
     {
 
@@ -212,12 +241,14 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     public void EnableLockerPanel()
     {
+        _GameLobby.GetComponent<PUN2_GameLobby1>().ControlSkins();
         LockerPanel.SetActive(true);
     }
 
     public void DisableLockerPanel()
     {
-        EquipSkin();
+        //EquipSkin();
+        _GameLobby.GetComponent<PUN2_GameLobby1>().EquipSkinPre();
         LockerPanel.SetActive(false);
     }
 
@@ -242,6 +273,10 @@ public class PreGame : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("PlayerBalance", gameLobby1.PlayerBalance);
         // PlayerPrefs.SetInt("PlayerBalance", );
         PlayerPrefs.SetInt("isGuest", guest);
+        string equiped_skin = ThiefSkins.GetComponent<Image>().sprite.name;
+        PlayerPrefs.SetString("skin", equiped_skin);
+
+
         PlayerPrefs.Save();
         if (guest == 0)
         { 

@@ -28,6 +28,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public int PlayerBalance;
     public Dictionary<string, int> PlayerInventory = new Dictionary<string, int>();
+    public Dictionary<string, bool> PlayerSkins = new Dictionary<string, bool>();
+
 
     // MENUS
     [SerializeField] private GameObject GuestMenu;
@@ -92,6 +94,28 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject NewHome;
     public GameObject UpgradeMenu;
     public GameObject InventoryMenu;
+
+    //Locker
+    public GameObject LockerPanelHome;
+    public GameObject ThiefSkins;
+    public GameObject ThiefSkinsPre;
+    public SelectSkinGroup skinGroup;
+    public SelectSkinGroup skinGroupPre;
+
+
+
+    // SKINS
+    public GameObject SkinIconPrefab;
+    public GameObject SkinPanelContent;
+    public GameObject SkinPanelContentPre;
+
+
+    public Sprite classic;
+    public Sprite red;
+    public Sprite radioactive;
+    public Sprite white;
+
+
 
     public GameObject UnlockPanel;
     public GameObject UnlockPanelPre;
@@ -386,17 +410,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             }
         }
 #endif
-        // update cost of upgrades
-        /*int speedAdd;
-        int visionAdd;
-        int fastAdd;
-        PlayerInventory.TryGetValue("speed_boots",out speedAdd);
-        PlayerInventory.TryGetValue("vision",out visionAdd);
-        PlayerInventory.TryGetValue("fast_hands",out fastAdd);
-        speed_boots_cost.text = (2000 + 200*speedAdd).ToString();
-        vision_cost.text = (2000 + 200*visionAdd).ToString();
-        fast_hands_cost.text = (5000 + 500*fastAdd).ToString();
-        */
+        
     }
     public void updateMultiplierSlider() {
         multiplierTextAsset.text = Multiplier.value.ToString();
@@ -439,6 +453,91 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
         //Home_Home.SetActive(true);
         NewHome.SetActive(true);
+
+    }
+
+    public void EnableLockerPanel()
+    {
+        ControlSkins();
+        LockerPanelHome.SetActive(true);
+    }
+
+    public void DisableLockerPanel()
+    {
+        EquipSkin();
+        LockerPanelHome.SetActive(false);
+    }
+
+    public void EquipSkin()
+    {
+        string skin_name = ThiefSkins.GetComponent<Image>().sprite.name;
+        ThiefSkinsPre.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
+        thief_1.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
+        thief_1_home.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
+
+    }
+
+    public void EquipSkinPre()
+    {
+        string skin_name = ThiefSkinsPre.GetComponent<Image>().sprite.name;
+        ThiefSkins.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
+        thief_1.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
+        thief_1_home.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
+
+    }
+
+    public void ControlSkins()
+    {
+        Debug.Log("SKIN CONTROLLER");
+        
+        foreach (Transform child in SkinPanelContent.transform)
+        {
+            if (!child.name.Equals("NoSkin"))
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+        foreach (Transform child in SkinPanelContentPre.transform)
+        {
+            if (!child.name.Equals("NoSkin"))
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+        foreach (KeyValuePair<string, bool> kvp in PlayerSkins)
+        {
+            if (kvp.Key == "red" & kvp.Value)
+            {
+                GameObject obj = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContent.transform);
+                GameObject obj1 = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContentPre.transform);
+
+                obj.GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = red;
+                obj1.GetComponent<SelectSkinButton>().tabGroup = skinGroupPre;
+                obj1.transform.GetChild(0).GetComponent<Image>().sprite = red;
+            }
+            else if (kvp.Key == "white" & kvp.Value)
+            {
+                GameObject obj = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContent.transform);
+                GameObject obj1 = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContentPre.transform);
+
+                obj.GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = white;
+                obj1.GetComponent<SelectSkinButton>().tabGroup = skinGroupPre;
+                obj1.transform.GetChild(0).GetComponent<Image>().sprite = white;
+            }
+            else if (kvp.Key == "radioactive" & kvp.Value)
+            {
+                GameObject obj = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContent.transform);
+                GameObject obj1 = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContentPre.transform);
+
+                obj.GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = radioactive;
+                obj1.GetComponent<SelectSkinButton>().tabGroup = skinGroupPre;
+                obj1.transform.GetChild(0).GetComponent<Image>().sprite = radioactive;
+            }
+
+        }
 
     }
 
@@ -923,7 +1022,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         UnlockPanel.SetActive(false);
         UnlockPanelPre.SetActive(false);
     }
-
+    
 
 
     // PRE GAME MENU
@@ -1131,6 +1230,13 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             PlayerInventory.Add("fast_hands", 0);
             PlayerInventory.Add("ninja", 0);
             GetInventory();
+
+            //ADD NEW SKINS HERE
+            PlayerSkins.Add("red", false);
+            PlayerSkins.Add("radioactive", false);
+            PlayerSkins.Add("white", false);
+            DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
+
         }
 
         ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
