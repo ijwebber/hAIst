@@ -68,7 +68,8 @@ public class Window_QuestPointer : MonoBehaviourPun
                 pointerRectTransforms[i].localEulerAngles = new Vector3(0,0,angle);
                 
                 // Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset + new Vector3(0,100/6,60/6)*(1-cameraSystem.zoomMultiplier));
-                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset);
+                Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset + new Vector3(0,(1-cameraSystem.zoomMultiplier)*30,-(1-cameraSystem.zoomMultiplier)*20));
+                Debug.Log("Cam y pos " + Camera.main.name + " // " + Camera.main.transform.position.y);
                 bool isOffScreen = !playerController.isInView(targetObjects[i].transform.position);
 
                 if (isOffScreen) {
