@@ -7,6 +7,7 @@ public class CollectableItem : MonoBehaviourPun
     public int value;
     public bool stolen = false;
     public bool special = false;
+    public GameObject guardPoint = null;
 
     public int gameSelection;
 
