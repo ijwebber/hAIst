@@ -6113,6 +6113,8 @@ GameObject:
   - component: {fileID: 3283916612493446799}
   - component: {fileID: 7562598184786088477}
   - component: {fileID: 7845293358414595718}
+  - component: {fileID: 6719984766902686749}
+  - component: {fileID: 6226183985783063859}
   m_Layer: 9
   m_Name: Timmy
   m_TagString: Player
@@ -6491,6 +6493,32 @@ MonoBehaviour:
   progressBar: {fileID: 5692998265952435427}
   holdTime: 3
   startTime: 0
+--- !u!114 &6719984766902686749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271825080736462228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f352510ab1324a22bfcfa5b67edf64d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6226183985783063859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271825080736462228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9430ffdbb22a14a04a81cdc70cfb0f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentText: 
+  intentActions: {fileID: 6719984766902686749}
 --- !u!1 &5279081676771190054
 GameObject:
   m_ObjectHideFlags: 0
