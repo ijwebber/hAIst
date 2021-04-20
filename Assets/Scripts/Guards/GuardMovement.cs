@@ -19,6 +19,7 @@ public class GuardMovement : MonoBehaviourPun
 
     public GuardController guardController;
     private PlayerController playerController;
+    private GameController gameController;
     public NavMeshAgent agent;
     public SoundVisual soundVis;
     public AudioSource heySound;
@@ -48,7 +49,7 @@ public class GuardMovement : MonoBehaviourPun
 
     private void Awake()
     {
-        
+        this.gameController = GameObject.FindObjectOfType<GameController>();
     }
 
     private void Start() {
@@ -69,9 +70,16 @@ public class GuardMovement : MonoBehaviourPun
             {
                 agent.isStopped = true;
                 timedOut = true;
-                if(this.specials.Count > 0) {
-                    playerController.Specials = this.specials;
-                    this.specials.Clear();
+                foreach (var spec in specials)
+                {
+                    spec.GetComponent<CollectableItem>().stolen = true;
+                    spec.GetComponent<CollectableItem>().guardPoint = null;
+                }
+                if(specials.Count > 0) {
+                    this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
+                    gameController.gameState++;
+                    playerController.Specials = specials;
+                    // specials.Clear();
                     Debug.Log("Recaptured painting");
                 }
                 StartCoroutine(disableForTime(3.0f));
@@ -128,13 +136,22 @@ public class GuardMovement : MonoBehaviourPun
                             agent.ResetPath();
                             playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
                             if (playerController.Specials.Count > 0) {
-                                this.specials = playerController.Specials;
-                                foreach (var spec in this.specials)
+                                // specials = playerController.Specials;
+                                gameController.gameState -= 1;
+                                gameController.regress = true;
+                                string serializedObjects = "";
+                                int i = 0;
+                                foreach (var spec in playerController.Specials)
                                 {
+                                    serializedObjects += spec.name + ",";
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
+                                    spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
+                                    i++;
                                 }
+                                serializedObjects.TrimEnd(","[0]);
+                                this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.MasterClient, serializedObjects);
                                 playerController.Specials.Clear();
-                                Debug.Log("Captured painting");
+                                Debug.Log("Guard has Captured painting");
                             }
                         }
                     }
@@ -189,6 +206,27 @@ public class GuardMovement : MonoBehaviourPun
                 }
             }
         }        
+    }
+
+    [PunRPC]
+    void updateGuardSpecials(string serializedObjects) {
+        Debug.Log("Received special update with " + serializedObjects);
+        string[] outObjs = serializedObjects.Split(","[0]);
+        GameObject Stealables = GameObject.Find("StealItems");
+        foreach (string ob in outObjs)
+        {
+            if (ob != "") {
+                Debug.Log("!" + ob + "!");
+                specials.Add(Stealables.transform.Find(ob).gameObject);
+                Debug.Log(specials[0]);
+            }
+            // Debug.Log("Updated specs " + specials.ToString());
+        }
+    }
+
+    [PunRPC]
+    void ClearSpecials() {
+        specials.Clear();
     }
 
     [PunRPC]

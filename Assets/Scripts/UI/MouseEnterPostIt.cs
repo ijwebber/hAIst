@@ -1,18 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MouseEnterPostIt : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public void OnMouseEnter() {
+        this.GetComponent<Image>().color = new Color32(255,255,255,55);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    
+    public void OnMouseLeave() {
+        this.GetComponent<Image>().color = new Color32(255,255,255,255);
     }
 }
