@@ -22,7 +22,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: New Material 5
   m_Shader: {fileID: 4800000, guid: 65f6f9b0b3b58644280fa08171b3a0cf, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _USEEMISSION_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -96,7 +96,7 @@ Material:
     - _OutlineZOffsetMaskRemapEnd: 1
     - _OutlineZOffsetMaskRemapStart: 0
     - _QueueOffset: 0
-    - _ReceiveShadowMappingAmount: 0.65
+    - _ReceiveShadowMappingAmount: 0.145
     - _ReceiveShadowMappingPosOffset: 0
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
@@ -105,7 +105,7 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _UseAlphaClipping: 0
-    - _UseEmission: 0
+    - _UseEmission: 1
     - _UseOcclusion: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
@@ -115,7 +115,7 @@ Material:
     - Color_F689E8B9: {r: 0.10586509, g: 0.32979792, b: 0.5754717, a: 1}
     - _BaseColor: {r: 0.13394445, g: 0.43280822, b: 0.8113208, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.14150941, g: 0.14150941, b: 0.14150941, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
     - _IndirectLightMinColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
