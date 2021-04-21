@@ -474,6 +474,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         ThiefSkinsPre.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
         thief_1.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
         thief_1_home.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
+        PlayerPrefs.SetString("skin", skin_name);
+        PlayerPrefs.Save();
 
     }
 
@@ -483,6 +485,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         ThiefSkins.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
         thief_1.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
         thief_1_home.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
+        PlayerPrefs.SetString("skin", skin_name);
+        PlayerPrefs.Save();
 
     }
 
