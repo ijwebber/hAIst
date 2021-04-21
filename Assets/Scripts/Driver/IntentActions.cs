@@ -16,9 +16,14 @@ public class IntentActions : MonoBehaviourPun
             return;
         }
 
-        if (Input.GetKey(KeyCode.B)) {
+        if (Input.GetKeyDown(KeyCode.B)) {
             Debug.Log("*** Switching Off");
             DisableLasers();
+        }
+
+        if (Input.GetKeyDown(KeyCode.N)) {
+            Debug.Log("*** Switching On");
+            EnableLasers();
         }
     }
 
@@ -56,7 +61,18 @@ public class IntentActions : MonoBehaviourPun
     }
 
     public void EnableLasers() {
-        Debug.Log("I have switched on the lasers!");
+        Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
+        LaserDown[] lasersDown = GameObject.FindObjectsOfType<LaserDown>();
+        
+        foreach (Laser laser in lasers)
+        {
+            laser.GetComponent<PhotonView>().RPC("enableLaser", RpcTarget.All);
+        }
+
+        foreach (LaserDown laser in lasersDown)
+        {
+            laser.GetComponent<PhotonView>().RPC("enableLaser", RpcTarget.All);
+        }
     }
 
     public void DisableLasers() {

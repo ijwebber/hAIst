@@ -72,4 +72,11 @@ public class LaserDown : MonoBehaviourPun
         this.disabled = true;
         this.GetComponent<LineRenderer>().enabled = false;
     }
+
+    [PunRPC]
+    void enableLaser()
+    {
+        this.disabled = false;
+        this.GetComponent<LineRenderer>().enabled = true;
+    }
 }

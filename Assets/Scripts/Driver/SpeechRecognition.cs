@@ -40,7 +40,11 @@ public class SpeechRecognition : MonoBehaviourPun
     /// <param name="info"></param>
     public void GetIntent(string info)
     {
-        Debug.Log("£££fuck me sideways");
+        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        {
+            return;
+        }
+        
         string[] infoSplit = info.Split('|');
         string intent = infoSplit[0];
         float score = float.Parse(infoSplit[1]);
@@ -53,7 +57,7 @@ public class SpeechRecognition : MonoBehaviourPun
     /// <param name="result"></param>
     public void GetText(string result)
     {
-        
+        Debug.Log("£££ " + result);
     }
 
 }
