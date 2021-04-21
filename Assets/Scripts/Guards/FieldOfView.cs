@@ -53,7 +53,7 @@ public class FieldOfView : MonoBehaviour
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
                 //we get the distance to the target
-                float dstToTarget = Vector3.Distance(transform.position, target.transform.position);
+                float dstToTarget = Vector3.Distance(new Vector3(transform.position.x, 0, transform.position.z), new Vector3(target.transform.position.x, 0, target.transform.position.z));
 
                 //checks if obstacle is in way
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask) && !target.GetComponent<PlayerMovement>().disabled)
@@ -74,7 +74,9 @@ public class FieldOfView : MonoBehaviour
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                 {
 
-                    behindGuardTargets.Add(target);
+                    if (dstToTarget <= 10f) {
+                        behindGuardTargets.Add(target);
+                    }
                 }
             }
         }

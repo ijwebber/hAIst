@@ -16,7 +16,7 @@ public class Laser : MonoBehaviourPun
 
     GameObject character;
 
-    public AudioController song;
+    [SerializeField] private AudioController audioController;
 
     public int wiresID;
     public bool disabled = false;
@@ -24,8 +24,7 @@ public class Laser : MonoBehaviourPun
     // Start is called before the first frame update
     void Start()
     {
-        lr = GetComponent<LineRenderer>();
-        
+        lr = GetComponent<LineRenderer>();        
     }
 
     // Update is called once per frame
@@ -49,7 +48,7 @@ public class Laser : MonoBehaviourPun
 
                     Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
                     PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
-                    song.PlayIntenseTheme();
+                    audioController.PlayIntenseTheme();
 
                     if (!argon.tripped) {
                         argon.gameObject.SetActive(true);

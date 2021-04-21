@@ -15,7 +15,7 @@ public class LaserDown : MonoBehaviourPun
 
     GameObject character;
 
-    public AudioController song;
+    [SerializeField] private AudioController audioController;
 
     public int wiresID;
     public bool disabled = false;
@@ -48,7 +48,7 @@ public class LaserDown : MonoBehaviourPun
                     PlayerMovement playerMoveScript = character.GetComponent<PlayerMovement>();
                     Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
                     PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
-                    song.PlayIntenseTheme();
+                    audioController.PlayIntenseTheme();
 
                     if (!argon.tripped) {
                         argon.gameObject.SetActive(true);

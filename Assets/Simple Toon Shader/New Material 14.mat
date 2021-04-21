@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Button
+  m_Name: New Material 14
   m_Shader: {fileID: 4800000, guid: 65f6f9b0b3b58644280fa08171b3a0cf, type: 3}
   m_ShaderKeywords: _USEEMISSION_ON
   m_LightmapFlags: 4
@@ -52,10 +52,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_38BD3441: 0.4
-    - Vector1_CF8B0D8D: 6
-    - Vector1_ED5ABFD9: 0
-    - Vector1_F3F6B787: 0
     - _AdditionalLightIgnoreCelShade: 0.9
     - _AlphaClip: 0
     - _Blend: 0
@@ -64,14 +60,14 @@ Material:
     - _CelShadeSoftness: 0.05
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DirectLightMultiplier: 0
+    - _DirectLightMultiplier: 1
     - _DstBlend: 0
     - _EmissionMulByBaseColor: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _IndirectLightMultiplier: 0
+    - _IndirectLightMultiplier: 1
     - _IsFace: 0
     - _MainLightIgnoreCelShade: 0
     - _Metallic: 0
@@ -97,19 +93,16 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_28180829: {r: 0.9433962, g: 0.3608035, b: 0.26254895, a: 1}
-    - Color_57D43A16: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 0}
-    - Color_F689E8B9: {r: 0.9056604, g: 0.17515129, b: 0.17515129, a: 1}
-    - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 0.373576, g: 0.6886792, b: 0.65284395, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 1, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.15205592, g: 0.15992051, b: 0.16037738, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
     - _IndirectLightMinColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
     - _OutlineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _ShadowMapColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowMapColor: {r: 1, g: 0.825, b: 0.78, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
---- !u!114 &4992917593661581667
+--- !u!114 &469734410264054443
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

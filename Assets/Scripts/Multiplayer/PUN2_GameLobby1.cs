@@ -612,6 +612,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void AddFriend()
     {
+        Debug.Log("ADD FRIEND INPUT: " +AddFriendInput.text);
         DB_Controller.GetComponent<DB_Controller>().CheckIfExists(PhotonNetwork.NickName, AddFriendInput.text);
         
     }
@@ -1032,6 +1033,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+        EnableRoomMenu();
     }
     public void EnableHomeScreen()
     {
@@ -1256,8 +1258,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
     public void ReJoinAfterLeave()
     {
-        //StartMenu.SetActive(false);
-        RejoinWaitPanel.SetActive(true);
+        StartCoroutine(ShowLoadingScreenLogIn());
+        LoadingScreenLogIn.transform.GetChild(3).GetComponent<Text>().text = "Loading...";
+        StartMenu.SetActive(false);
+        //RejoinWaitPanel.SetActive(true);
         DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
         PhotonNetwork.JoinLobby(TypedLobby.Default);
         
@@ -1271,17 +1275,37 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             UpgradesMenuButton.interactable = false;
             BalanceInfoHome.SetActive(false);
             BalanceInfoPre.SetActive(false);
+            BalanceInfoLobby.SetActive(false);
+            FriendPanel.SetActive(false);
+            ColorBlock cb = UpgradeButtonFromLobby.GetComponent<Button>().colors;
+            cb.disabledColor = new Color32(130, 130, 130, 200);
+            UpgradeButtonFromLobby.GetComponent<Button>().colors = cb;
+            UpgradeButtonFromPreGame.GetComponent<Button>().colors = cb;
+            UpgradeButtonFromLobby.GetComponent<Button>().interactable = false;
+            ChooseUpgradesButton.GetComponent<Button>().interactable = false;
+            UpgradeButtonFromPreGame.GetComponent<Button>().interactable = false;
 
         }
-        // ADD NEW UPGRADES HERE
-        PlayerInventory.Add("speed_boots", 0);
-        PlayerInventory.Add("shield", 0);
-        PlayerInventory.Add("vision", 0);
-        PlayerInventory.Add("self_revive", 0);
-        PlayerInventory.Add("fast_hands", 0);
-        PlayerInventory.Add("ninja", 0);
+        else
+        {
+            // ADD NEW UPGRADES HERE
+            PlayerInventory.Add("speed_boots", 0);
+            PlayerInventory.Add("shield", 0);
+            PlayerInventory.Add("vision", 0);
+            PlayerInventory.Add("self_revive", 0);
+            PlayerInventory.Add("fast_hands", 0);
+            PlayerInventory.Add("ninja", 0);
+            GetInventory();
 
-        HomeMenu.SetActive(true);
+            //ADD NEW SKINS HERE
+            PlayerSkins.Add("red", false);
+            PlayerSkins.Add("radioactive", false);
+            PlayerSkins.Add("white", false);
+            DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
+
+        }
+
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
     }
 
 

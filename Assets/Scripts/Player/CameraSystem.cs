@@ -30,6 +30,8 @@ public class CameraSystem : MonoBehaviour
     private float startingHeight;
     private float startingDistance;
 
+    AudioController audioController;
+
 
     private void Awake()
     {
@@ -48,13 +50,12 @@ public class CameraSystem : MonoBehaviour
     void Start()
     {   
         thisPlayer = playerCam.Follow.gameObject;
-        
 
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
         introCutSceneSetup();
         
-
+        audioController = GameObject.FindObjectOfType<AudioController>();
     }
 
     // Update is called once per frame
@@ -170,6 +171,7 @@ public class CameraSystem : MonoBehaviour
 
         guardCaughtIn4k.Priority = 11;
 
+        audioController.PlayIntenseTheme();
 
         SetLayerRecursively(guard, default);
         BarController.Instance.SetText(message);
