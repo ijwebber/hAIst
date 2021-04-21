@@ -115,7 +115,10 @@ public class CameraSystem : MonoBehaviour
     {
         //Finding guard object for guard scene shot and setting the VC to follow and look at it
         guardShotReference = GameObject.Find("Guard3(Clone)");
-        Debug.Log("***");
+        Debug.Log("*** " + guardCam);
+        Debug.Log("*** " + guardCam.GetComponent<CinemachineVirtualCamera>());
+        Debug.Log("*** " + guardCam.GetComponent<CinemachineVirtualCamera>().Follow);
+        Debug.Log("*** " + guardShotReference.transform);
         guardCam.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
         guardCam.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
 
