@@ -36,6 +36,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] private GameObject guardCam;
 
     private GameObject black;
+    private bool start = false;
 
 
     private void Awake()
@@ -56,34 +57,41 @@ public class CameraSystem : MonoBehaviour
     {   
         black = GameObject.Find("Black");
         thisPlayer = playerCam.Follow.gameObject;
+        audioController = GameObject.FindObjectOfType<AudioController>();
 
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
-        introCutSceneSetup();
         
-        audioController = GameObject.FindObjectOfType<AudioController>();
     }
 
     // Update is called once per frame
     void Update()
     {   
-        //for the first escape key press we want to end the cutscene and skip to the player cam
-        if(!introDone && Input.GetKeyDown(KeyCode.Escape))
+        if (guardShotReference != null)
         {
-            introEnd();
+            if (!start) {
+                introCutSceneSetup();
+                start = true;
+            }
+
+            //for the first escape key press we want to end the cutscene and skip to the player cam
+            if(!introDone && Input.GetKeyDown(KeyCode.Escape))
+            {
+                introEnd();
+            }
+
+            //zooming functionality
+            if (Input.GetAxis("Mouse ScrollWheel") != 0f)
+            {
+                zoomMultiplier += Input.GetAxis("Mouse ScrollWheel")/-5;
+                zoomMultiplier = Mathf.Clamp(zoomMultiplier, 0.6f, 1.0f);
+                playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = startingHeight * zoomMultiplier;
+                playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z = startingDistance * zoomMultiplier;
+            }
+        } else {
+            gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+            guardShotReference = GameObject.Find("Guard3(Clone)");
         }
-
-        //zooming functionality
-        if (Input.GetAxis("Mouse ScrollWheel") != 0f)
-        {
-            zoomMultiplier += Input.GetAxis("Mouse ScrollWheel")/-5;
-            zoomMultiplier = Mathf.Clamp(zoomMultiplier, 0.6f, 1.0f);
-            playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = startingHeight * zoomMultiplier;
-            playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z = startingDistance * zoomMultiplier;
-        }
-        
-
-
     }
 
     public void introEnd()
@@ -114,14 +122,9 @@ public class CameraSystem : MonoBehaviour
     void introCutSceneSetup()
     {
         //Finding guard object for guard scene shot and setting the VC to follow and look at it
-        guardShotReference = GameObject.Find("Guard3(Clone)");
-        Debug.Log("*** " + guardCam);
-        Debug.Log("*** " + guardCam.GetComponent<CinemachineVirtualCamera>());
-        Debug.Log("*** " + guardCam.GetComponent<CinemachineVirtualCamera>().Follow);
-        Debug.Log("*** " + guardShotReference.transform);
         guardCam.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
         guardCam.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
-
+    
         //find players and disable their control whilst cutscene plays
         
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
