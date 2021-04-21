@@ -162,11 +162,11 @@ public class CameraSystem : MonoBehaviour
     {
         isCutSceneHappening = true;
         GameObject guard = PhotonView.Find(guardViewID).gameObject;
-        
 
 
 
 
+        gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(guard.transform, 1.0f, 10.0f);
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(PhotonView.Find(caughtPlayerID).gameObject.transform, 1.0f, 10.0f);
 
@@ -206,7 +206,8 @@ public class CameraSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         SetLayerRecursively(guard, 10);
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
-        
+        gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
+
         GuardController.Instance.disableAllguards(false);
 
         isCutSceneHappening = false;
