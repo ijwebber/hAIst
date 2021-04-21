@@ -55,6 +55,10 @@ public class KeycodeTask : MonoBehaviour
                     // StartCoroutine(ResetCode());
                     StartCoroutine(correct(keypad));
                 }
+                else if (keypad.id == keypadID && _inputCode.text != keypad.code){
+                    _inputCode.text = "Failed";
+                    StartCoroutine(ResetCode());
+                }
             }
         }
         else if (_inputCode.text.Length >= codeLength)
