@@ -81,16 +81,28 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
     }
 
-    public void QuitButton() {
-        OnLeftRoom();
+    public void QuitButton()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    //Go back to main meny when you leave game
+    public override void OnLeftRoom()
+    {
+        Debug.Log("On left Room callback");
+
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        Debug.Log("OnConnectedToMaster");
+        PhotonNetwork.LoadLevel("GameLobby 1");
+        Debug.Log("gamelobby 1 loaded");
     }
 
     public void PlayAgainButton() {
         PhotonNetwork.LoadLevel("GameLobby 1");
+
     }
 
-    public override void OnLeftRoom()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
-    }
 }
