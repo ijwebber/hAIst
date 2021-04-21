@@ -16,6 +16,8 @@ public class CameraSystem : MonoBehaviour
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera playerCam;
     public GameObject caughtTargetGroup;
+    public GameObject sceneTransitionCanvas;
+    
 
     [Range(0.6f, 1.0f)]
     public float zoomMultiplier = 1.0f;
@@ -113,7 +115,7 @@ public class CameraSystem : MonoBehaviour
         //find players and disable their control whilst cutscene plays
         
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
-
+        sceneTransitionCanvas.SetActive(true);
         //find security cam
         securityCameraReference = GameObject.Find("Camera 1");
 
@@ -121,6 +123,8 @@ public class CameraSystem : MonoBehaviour
         SetPaintingsLayer(default);
         SetLayerRecursively(guardShotReference, default);
         SetLayerRecursively(securityCameraReference, default);
+
+        gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
