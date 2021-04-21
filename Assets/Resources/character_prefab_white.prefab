@@ -6470,6 +6470,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isDancing
+  - Type: 4
+    SynchronizeType: 2
+    Name: danceFlair
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

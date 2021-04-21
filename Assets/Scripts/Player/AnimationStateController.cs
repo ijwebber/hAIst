@@ -119,6 +119,7 @@ public class AnimationStateController : MonoBehaviourPun
         bool isMac = !stopDancing && Input.GetKey(KeyCode.Alpha1);
         bool isLock = !stopDancing && Input.GetKey(KeyCode.Alpha2);
         bool isFloorDance = !stopDancing && Input.GetKey(KeyCode.Alpha3);
+        bool isFlair = !stopDancing && Input.GetKey(KeyCode.Alpha4);
 
         bool isDancing = true;
 
@@ -126,18 +127,27 @@ public class AnimationStateController : MonoBehaviourPun
             animator.SetBool("danceMacarena", true);
             animator.SetBool("danceLockHipHop", false);
             animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", false);
         } else if (isLock) {
             animator.SetBool("danceMacarena", false);
             animator.SetBool("danceLockHipHop", true);
             animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", false);
         } else if (isFloorDance) {
             animator.SetBool("danceMacarena", false);
             animator.SetBool("danceLockHipHop", false);
             animator.SetBool("danceFloorDance", true);
+            animator.SetBool("danceFlair", false);
+        } else if (isFlair) {
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", true);
         } else if (stopDancing) {
             animator.SetBool("danceMacarena", false);
             animator.SetBool("danceLockHipHop", false);
             animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", false);
             isDancing = false;
         }
 
