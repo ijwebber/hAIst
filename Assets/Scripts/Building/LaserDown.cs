@@ -48,7 +48,6 @@ public class LaserDown : MonoBehaviourPun
                     PlayerMovement playerMoveScript = character.GetComponent<PlayerMovement>();
                     Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
                     PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
-                    audioController.PlayIntenseTheme();
 
                     if (!argon.tripped) {
                         argon.gameObject.SetActive(true);
