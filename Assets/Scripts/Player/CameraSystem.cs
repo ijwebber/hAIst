@@ -32,7 +32,10 @@ public class CameraSystem : MonoBehaviour
     private float startingHeight;
     private float startingDistance;
 
-    AudioController audioController;
+    [SerializeField] private AudioController audioController;
+    [SerializeField] private GameObject guardCam;
+
+    private GameObject black;
 
 
     private void Awake()
@@ -51,6 +54,7 @@ public class CameraSystem : MonoBehaviour
 
     void Start()
     {   
+        black = GameObject.Find("Black");
         thisPlayer = playerCam.Follow.gameObject;
 
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
@@ -102,6 +106,8 @@ public class CameraSystem : MonoBehaviour
             SetLayerRecursively(guardShotReference, 10);
             SetPaintingsLayer(13);
             SetLayerRecursively(securityCameraReference, 10);
+
+            black.SetActive(true);
         }
     }
 
@@ -109,8 +115,9 @@ public class CameraSystem : MonoBehaviour
     {
         //Finding guard object for guard scene shot and setting the VC to follow and look at it
         guardShotReference = GameObject.Find("Guard3(Clone)");
-        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
-        introSceneTrack.gameObject.transform.Find("CM Guard Cam").gameObject.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
+        Debug.Log("***");
+        guardCam.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
+        guardCam.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
 
         //find players and disable their control whilst cutscene plays
         
@@ -125,6 +132,8 @@ public class CameraSystem : MonoBehaviour
         SetLayerRecursively(securityCameraReference, default);
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+
+        black.SetActive(false);
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
