@@ -6458,6 +6458,18 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isDown
+  - Type: 4
+    SynchronizeType: 2
+    Name: danceMacarena
+  - Type: 4
+    SynchronizeType: 2
+    Name: danceLockHipHop
+  - Type: 4
+    SynchronizeType: 2
+    Name: danceFloorDance
+  - Type: 4
+    SynchronizeType: 2
+    Name: isDancing
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

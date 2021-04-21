@@ -37,8 +37,14 @@ public class AnimationStateController : MonoBehaviourPun
         bool leftArrow = Input.GetKey(KeyCode.LeftArrow);
         bool rightArrow = Input.GetKey(KeyCode.RightArrow);
 
+        bool spaceBar = Input.GetKey(KeyCode.Space);
+
         bool iscrouched = animator.GetBool("isCrouched");
         bool isdown = GetComponent<PlayerMovement>().disabled;
+
+        bool stopDancing = forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow || spaceBar;
+        
+        bool isDancing = handleDancing(stopDancing);
 
         // do footsteps
         AnimatorStateInfo animatorState = animator.GetCurrentAnimatorStateInfo(0);
@@ -91,6 +97,12 @@ public class AnimationStateController : MonoBehaviourPun
                 animator.SetBool("isCrouchWalk",false);
             }
 
+            if(isDancing) {
+                animator.SetBool("isDancing", true);
+            } else if (animator.GetBool("isDancing")) {
+                animator.SetBool("isDancing", false);
+            }
+
 
         }
 
@@ -99,6 +111,37 @@ public class AnimationStateController : MonoBehaviourPun
             animator.SetBool("isWalking", false);
         }
         
+    }
+
+    bool handleDancing(bool stopDancing) {
+        bool currentlyDancing = animator.GetBool("isDancing");
+
+        bool isMac = !stopDancing && Input.GetKey(KeyCode.Alpha1);
+        bool isLock = !stopDancing && Input.GetKey(KeyCode.Alpha2);
+        bool isFloorDance = !stopDancing && Input.GetKey(KeyCode.Alpha3);
+
+        bool isDancing = true;
+
+        if (isMac) {
+            animator.SetBool("danceMacarena", true);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", false);
+        } else if (isLock) {
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", true);
+            animator.SetBool("danceFloorDance", false);
+        } else if (isFloorDance) {
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", true);
+        } else if (stopDancing) {
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", false);
+            isDancing = false;
+        }
+
+        return isDancing;
     }
     
 }
