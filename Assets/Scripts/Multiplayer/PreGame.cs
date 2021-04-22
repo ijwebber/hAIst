@@ -265,14 +265,12 @@ public class PreGame : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
-
-        StartGameWaitPanel.SetActive(true);
-
         this.GetComponent<PhotonView>().RPC("SetupGame", RpcTarget.All);
     }
 
     [PunRPC]
     void SetupGame() {
+        StartGameWaitPanel.SetActive(true);
         PUN2_GameLobby1 gameLobby1 = GameObject.FindObjectOfType<PUN2_GameLobby1>();
         // this.GetComponent<
         int guest = 0;
