@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     // upgradables
     public float viewAngle;
     public float moveSpeed = 8;
+    public float ninjaMultiplier = 1;
     public float holdTime = 3;
     public bool shield = false;
     [SerializeField] private GameObject shieldObj;
@@ -101,10 +102,11 @@ public class PlayerController : MonoBehaviour
     }
 
     public void applyUpdates() {
-        viewRadius += upgrades.vision*.25f;
+        viewRadius = 15 + 15*(upgrades.vision*.05f);
         moveSpeed *= (1 + .05f*upgrades.speed_boots);
         holdTime -= .3f*upgrades.fast_hands;
         shield = upgrades.shield;
+        ninjaMultiplier = 1 - .1f*upgrades.ninja;
         Debug.Log("Updates loaded");
     }
 

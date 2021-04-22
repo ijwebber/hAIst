@@ -26,8 +26,6 @@ public class SoundController : MonoBehaviourPun
             Microphone.QueryAudioInput();
             maxVolume = 0;
 #endif
-            DB_Controller = GameObject.FindObjectOfType<DBControllerGame>();
-            DB_Controller.getThresholds(PhotonNetwork.NickName);
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -40,6 +38,10 @@ public class SoundController : MonoBehaviourPun
         soundVis.initGrid(grid);
         this.playerController = GameObject.FindObjectOfType<PlayerController>();
         this.localSoundGrid = GameObject.FindObjectOfType<GuardController>();
+        DB_Controller = GameObject.FindObjectOfType<DBControllerGame>();
+        if (!playerController.isGuest){
+            DB_Controller.getThresholds(PhotonNetwork.NickName);
+        }
         InvokeRepeating("timer", 0.01f, 0.02f);
         // StartCoroutine(timer());
         // guardController.setGrid(grid);
@@ -54,7 +56,7 @@ public class SoundController : MonoBehaviourPun
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();
         if (Microphone.volumes[0]*multiplier > threshold && !this.playerController.isDisabled) {
-            sendGrid(playerController.player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*multiplier*(1-.1f*playerController.upgrades.ninja)));
+            sendGrid(playerController.player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*multiplier*(playerController.ninjaMultiplier)));
         }
 #endif
         if (Input.GetKeyDown("j") && !this.playerController.isDisabled) {

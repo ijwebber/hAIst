@@ -31,10 +31,10 @@ public class POVMesh : MonoBehaviourPun
         int stepCount = Mathf.RoundToInt(playerController.viewAngle * meshResolution);
         float stepAngleSize = playerController.viewAngle / stepCount;
         List<Vector3> viewPoints = new List<Vector3>();
-        Debug.Log("!!!! 1");
+        Debug.Log("!!!! 1 " + stepCount + " //" + stepAngleSize);
         for (int i = 0; i <= stepCount; i++)
         {
-            float angle = player.transform.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;
+            float angle = this.transform.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;
             ViewCastInfo newViewCast = viewCast(angle, fromPoint);
             viewPoints.Add(newViewCast.point);
         }
@@ -46,7 +46,7 @@ public class POVMesh : MonoBehaviourPun
         vertices[0] = Vector3.zero;
         for (int i = 0; i < vertexCount-1; i++)
         {
-            vertices[i+1] = player.transform.InverseTransformPoint(viewPoints[i]);
+            vertices[i+1] = this.transform.InverseTransformPoint(viewPoints[i]);
 
             if(i < vertexCount - 2){
                 triangles[i*3] = 0;
@@ -100,33 +100,35 @@ public class POVMesh : MonoBehaviourPun
     // Update is called once per frame
     void LateUpdate()
     {
-        if (SceneManager.GetActiveScene().name == "BuildScene" || SceneManager.GetActiveScene().name == "ArtLevel" && !start) {
-            MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("POVObjects").GetComponent<MeshFilter>();
-            MeshFilter ViewFilter3 = GameObject.FindGameObjectWithTag("POVGuards").GetComponent<MeshFilter>();
+        if (this.photonView.IsMine) {
+            if (SceneManager.GetActiveScene().name == "BuildScene" || SceneManager.GetActiveScene().name == "ArtLevel" && !start) {
+                MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("POVObjects").GetComponent<MeshFilter>();
+                MeshFilter ViewFilter3 = GameObject.FindGameObjectWithTag("POVGuards").GetComponent<MeshFilter>();
 
-            // viewMeshFilter = ViewFilter;
-            viewMeshFilter = ViewFilter3;
-            objectMeshFilter = ViewFilter;
-            viewMesh = new Mesh();
-            viewMesh.name = "POV mesh";
-            viewMeshFilter.mesh = viewMesh;
-            objectMeshFilter.mesh = viewMesh;
-            start = true;
-        }
-        if (start) {
-            Vector3 fromPoint = player.transform.position;
-            if (!cameraControlPlayer.isFollowing) {
-                fromPoint = cameraControlPlayer.cutscenePosition;
-                // viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                // viewMeshFilter.transform.rotation = player.transform.rotation;
-                // objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                // objectMeshFilter.transform.rotation = player.transform.rotation;
+                // viewMeshFilter = ViewFilter;
+                viewMeshFilter = ViewFilter3;
+                objectMeshFilter = ViewFilter;
+                viewMesh = new Mesh();
+                viewMesh.name = "POV mesh";
+                viewMeshFilter.mesh = viewMesh;
+                objectMeshFilter.mesh = viewMesh;
+                start = true;
             }
-            viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-            viewMeshFilter.transform.rotation = player.transform.rotation;
-            objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-            objectMeshFilter.transform.rotation = player.transform.rotation;
-            DrawFOV(fromPoint);
+            if (start) {
+                Vector3 fromPoint = player.transform.position;
+                if (!cameraControlPlayer.isFollowing) {
+                    fromPoint = cameraControlPlayer.cutscenePosition;
+                    // viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
+                    // viewMeshFilter.transform.rotation = player.transform.rotation;
+                    // objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
+                    // objectMeshFilter.transform.rotation = player.transform.rotation;
+                }
+                viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+                viewMeshFilter.transform.rotation = player.transform.rotation;
+                objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
+                objectMeshFilter.transform.rotation = player.transform.rotation;
+                DrawFOV(fromPoint);
+            }
         }
     }
 

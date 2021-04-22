@@ -99,12 +99,11 @@ public class AnimationStateController : MonoBehaviourPun
     }
 
     public void footstep() {
-        float ninjaMultiplier = .1f*playerController.upgrades.ninja;
-        int intensity = (int)(20 * (ninjaMultiplier));
+        int intensity = (int)(20 * (playerController.ninjaMultiplier));
         if (Input.GetKey(KeyCode.Space)) {
             // intensity = 0;
         } else if (Input.GetKey(KeyCode.LeftShift)) {
-            intensity = (int)(30 * (ninjaMultiplier));
+            intensity = (int)(30 * (playerController.ninjaMultiplier));
         }
         soundController.sendGrid(player.transform.position, intensity);
     }
