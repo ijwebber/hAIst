@@ -338,7 +338,7 @@ MonoBehaviour:
     overrideMaterialPassIndex: 0
     overrideDepthState: 1
     depthCompareFunction: 7
-    enableWrite: 0
+    enableWrite: 1
     stencilSettings:
       overrideStencilState: 1
       stencilReference: 1
@@ -492,8 +492,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: df
-    Event: 500
+    passTag: Argon1
+    Event: 1000
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -504,7 +504,7 @@ MonoBehaviour:
     overrideMaterialPassIndex: 0
     overrideDepthState: 1
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     stencilSettings:
       overrideStencilState: 1
       stencilReference: 1

@@ -165,9 +165,9 @@ public class GameController : MonoBehaviourPunCallbacks
                     break;
                 case 3: // point to key object 2
                     if (!localRegress) {
-                        playerUpdates.updateDisplay("The key door has been unlocked");
+                        playerUpdates.updateDisplay("You have stolen a key painting!");
                         if (localChange) {
-                            updateDisp("The key door has been unlocked");
+                            updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
                         }
                     } else  {
                         playerUpdates.updateDisplay("You have lost a key painting!");
@@ -185,7 +185,7 @@ public class GameController : MonoBehaviourPunCallbacks
                                 newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
                             }
                         } else {
-                            newText.Add("<s>Steal " + item.GetComponent<CollectableItem>().itemName + "</s>");
+                            newText.Add("<s><i>Steal " + item.GetComponent<CollectableItem>().itemName + "</s></i>");
                         }
                     }
                     setNewQuest(toSteal, newText, localRegress);

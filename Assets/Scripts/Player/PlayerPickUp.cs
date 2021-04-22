@@ -65,7 +65,7 @@ public class PlayerPickUp : MonoBehaviourPun
                     break;
                 case "codedisplay":
                     displayMessage("Press E to see code");
-                    if (Input.GetKeyDown(KeyCode.E) && inTrigger.GetComponent<PhotonView>().IsMine)
+                    if (Input.GetKeyDown(KeyCode.E))
                     {
                         if (!codeDisplay.activeInHierarchy) {
                             Debug.Log("AYO not active " + inTrigger.gameObject.name);
