@@ -9,7 +9,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class EndScreenController : MonoBehaviourPunCallbacks
 {
 
-    private DBControllerEnd dbController;
+    // private DBControllerEnd dbController;
     public GameObject[] playerRows;
     public GameObject totalRow;
 
@@ -18,7 +18,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
     public Button PlayAgainWin;
     public Button PlayAgainLose;
-    [SerializeField] DBControllerEnd dBController;
+    [SerializeField] DBControllerEnd dbController;
 
     private void Awake()
     {
