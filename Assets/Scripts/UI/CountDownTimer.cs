@@ -9,7 +9,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 {
 
     public Text timerText;
-    private float timeLeftOnceSpotted = 10f;
+    private float timeLeftOnceSpotted = 240f;
 
     private bool timerStarted = false;
 
