@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using Cinemachine;
 using Photon.Pun;
 
@@ -12,6 +13,7 @@ public class CameraSystem : MonoBehaviour
 
     public GameObject introSceneTrack;
     public GameObject playerCamTrack;
+    public GameObject swatCamTrack;
     public CinemachineBrain brain;
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera playerCam;
@@ -166,9 +168,25 @@ public class CameraSystem : MonoBehaviour
         foreach(var items in stealItems){items.layer = layer;}
     }
 
+    public void playSwatScene(){
+        swatCamTrack.SetActive(true);
+
+        thisPlayer.GetComponent<PlayerMovement>().paused = true;
+
+        double swatTime = swatCamTrack.GetComponent<PlayableDirector>().duration;
+        StartCoroutine(disableSwatCam(swatCamTrack, (float)swatTime));
+    }
+
     private IEnumerator disableAfterTime(GameObject g, float time)
     {
         yield return new WaitForSeconds(time);
+        g.SetActive(false);
+    }
+
+    private IEnumerator disableSwatCam(GameObject g, float time)
+    {
+        yield return new WaitForSeconds(time);
+        thisPlayer.GetComponent<PlayerMovement>().paused = false;
         g.SetActive(false);
     }
 

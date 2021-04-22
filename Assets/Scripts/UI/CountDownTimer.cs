@@ -9,7 +9,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 {
 
     public Text timerText;
-    private float timeLeftOnceSpotted = 240f;
+    private float timeLeftOnceSpotted = 10f;
 
     private bool timerStarted = false;
 
@@ -58,8 +58,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
             
 
-            Hashtable endHash = new Hashtable() { { "end", true }, { "win", false } };
-            PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+            CameraSystem.Instance.playSwatScene();
             
         }
     }
