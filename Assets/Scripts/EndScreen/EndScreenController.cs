@@ -18,6 +18,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
     public Button PlayAgainWin;
     public Button PlayAgainLose;
+    [SerializeField] DBControllerEnd dBController;
 
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             return;
         }
 
-        dbController = GameObject.FindObjectOfType<DBControllerEnd>();
+        // dbController = GameObject.FindObjectOfType<DBControllerEnd>();
         if (PhotonNetwork.IsMasterClient) {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}, {"special", 0}});
             PlayAgainWin.interactable = true;
