@@ -248,8 +248,17 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         //DontDestroyOnLoad(this);
         if (PhotonNetwork.IsConnected)
         {
-            Debug.Log("IsConnectedRejoin");
-            ReJoinAfterLeave();
+            if (PhotonNetwork.InRoom)
+            {
+                Debug.Log("Play Again Rejoin");
+
+                ReJoinAfterPlayAgain();
+            }
+            else
+            {
+                Debug.Log("IsConnectedRejoin");
+                ReJoinAfterLeave();
+            }
         }
 
     }
@@ -1195,7 +1204,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
     public void SetUserName()
     {
-        StartCoroutine(ShowLoadingScreenLogIn());
+        StartCoroutine(ShowLoadingScreenLogIn(0));
         ExistingUserMenu.SetActive(false);
         GuestMenu.SetActive(false);
         PhotonNetwork.NickName = UsernameLoginInput.text;
@@ -1249,12 +1258,20 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
 
     }
-    private IEnumerator ShowLoadingScreenLogIn()
+    private IEnumerator ShowLoadingScreenLogIn(int type)
     {
         Debug.Log("Showing loading screen");
         LoadingScreenLogIn.SetActive(true);
         yield return new WaitForSeconds(3);
-        HomeMenu.SetActive(true);
+        if (type == 0)
+        {
+            HomeMenu.SetActive(true);
+        }
+        else if (type == 1)
+        {
+            PreGameMenu.SetActive(true);
+
+        }
 
         LoadingScreenLogIn.SetActive(false);
 
@@ -1262,13 +1279,64 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
     public void ReJoinAfterLeave()
     {
-        StartCoroutine(ShowLoadingScreenLogIn());
+        StartCoroutine(ShowLoadingScreenLogIn(0));
         LoadingScreenLogIn.transform.GetChild(3).GetComponent<Text>().text = "Loading...";
         StartMenu.SetActive(false);
         //RejoinWaitPanel.SetActive(true);
         DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
         PhotonNetwork.JoinLobby(TypedLobby.Default);
         
+
+        thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+        thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+
+        if (IsGuest)
+        {
+            FriendsMenuButton.interactable = false;
+            UpgradesMenuButton.interactable = false;
+            BalanceInfoHome.SetActive(false);
+            BalanceInfoPre.SetActive(false);
+            BalanceInfoLobby.SetActive(false);
+            FriendPanel.SetActive(false);
+            ColorBlock cb = UpgradeButtonFromLobby.GetComponent<Button>().colors;
+            cb.disabledColor = new Color32(130, 130, 130, 200);
+            UpgradeButtonFromLobby.GetComponent<Button>().colors = cb;
+            UpgradeButtonFromPreGame.GetComponent<Button>().colors = cb;
+            UpgradeButtonFromLobby.GetComponent<Button>().interactable = false;
+            ChooseUpgradesButton.GetComponent<Button>().interactable = false;
+            UpgradeButtonFromPreGame.GetComponent<Button>().interactable = false;
+
+        }
+        else
+        {
+            // ADD NEW UPGRADES HERE
+            PlayerInventory.Add("speed_boots", 0);
+            PlayerInventory.Add("shield", 0);
+            PlayerInventory.Add("vision", 0);
+            PlayerInventory.Add("self_revive", 0);
+            PlayerInventory.Add("fast_hands", 0);
+            PlayerInventory.Add("ninja", 0);
+            GetInventory();
+
+            //ADD NEW SKINS HERE
+            PlayerSkins.Add("red", false);
+            PlayerSkins.Add("radioactive", false);
+            PlayerSkins.Add("white", false);
+            DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
+
+        }
+
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+    }
+
+    public void ReJoinAfterPlayAgain()
+    {
+        StartCoroutine(ShowLoadingScreenLogIn(1));
+        LoadingScreenLogIn.transform.GetChild(3).GetComponent<Text>().text = "Loading...";
+        StartMenu.SetActive(false);
+        DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
+        //PhotonNetwork.JoinLobby(TypedLobby.Default);
+
 
         thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
         thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
