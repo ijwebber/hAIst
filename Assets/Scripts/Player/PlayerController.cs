@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void applyUpdates() {
-        viewRadius += upgrades.vision*.5f;
+        viewRadius += upgrades.vision*.25f;
         moveSpeed *= (1 + .05f*upgrades.speed_boots);
         holdTime -= .3f*upgrades.fast_hands;
         shield = upgrades.shield;
