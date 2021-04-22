@@ -11,19 +11,31 @@ public class CameraSystem : MonoBehaviour
 
     public static CameraSystem Instance { get; private set; }
 
+    public CinemachineBrain brain;
+
+    [Header("Tracks")]
     public GameObject introSceneTrack;
     public GameObject playerCamTrack;
     public GameObject swatCamTrack;
-    public CinemachineBrain brain;
+
+    [Header("Camera references")]
+    
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera playerCam;
+    [SerializeField] private GameObject guardCam;
+
+
+    [Header("CutScene object references")]
     public GameObject caughtTargetGroup;
     public GameObject sceneTransitionCanvas;
-    
+    public GameObject helicopterPrefab;
+    public GameObject swatTeam1;
+    public GameObject swatTeam2;
+    public GameObject gameUIReference;
 
+    [Header("Flags and floats")]
     [Range(0.6f, 1.0f)]
     public float zoomMultiplier = 1.0f;
-    public GameObject gameUIReference;
     public bool introDone = false;
     public bool isCutSceneHappening = true;
     private bool playerCamActive = false;
@@ -34,9 +46,9 @@ public class CameraSystem : MonoBehaviour
     private float startingHeight;
     private float startingDistance;
 
+    [Header("Other Stuff")]
     [SerializeField] private AudioController audioController;
-    [SerializeField] private GameObject guardCam;
-
+    
     private GameObject black;
     private bool start = false;
 
@@ -169,13 +181,29 @@ public class CameraSystem : MonoBehaviour
     }
 
     public void playSwatScene(){
+        PhotonNetwork.InstantiateRoomObject(helicopterPrefab.name, new Vector3(-45.77f, 31.64f, 20.19f), Quaternion.identity);
         swatCamTrack.SetActive(true);
 
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
 
+        
+        GuardController.Instance.disableAllguards(true);
+
         double swatTime = swatCamTrack.GetComponent<PlayableDirector>().duration;
-        StartCoroutine(disableSwatCam(swatCamTrack, (float)swatTime));
+        StartCoroutine(endSwatScene(swatCamTrack, (float)swatTime));
     }
+    private IEnumerator endSwatScene(GameObject g, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        thisPlayer.GetComponent<PlayerMovement>().paused = false;
+        GuardController.Instance.disableAllguards(false);
+        g.SetActive(false);
+        
+        PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
+        
+    }
+
 
     private IEnumerator disableAfterTime(GameObject g, float time)
     {
@@ -183,12 +211,7 @@ public class CameraSystem : MonoBehaviour
         g.SetActive(false);
     }
 
-    private IEnumerator disableSwatCam(GameObject g, float time)
-    {
-        yield return new WaitForSeconds(time);
-        thisPlayer.GetComponent<PlayerMovement>().paused = false;
-        g.SetActive(false);
-    }
+    
 
 
     public void caughtCutScene(int guardViewID, int caughtPlayerID, string message)

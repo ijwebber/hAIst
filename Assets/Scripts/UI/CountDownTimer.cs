@@ -12,6 +12,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
     private float timeLeftOnceSpotted = 240f;
 
     private bool timerStarted = false;
+    private bool endStarted = false;
 
     void Start()
     {
@@ -52,10 +53,10 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
             timeLeftOnceSpotted -= Time.deltaTime;
         }
-        else if(timerStarted)
+        else if(timerStarted && !endStarted)
         {
             timerText.text = "";
-
+            endStarted = true;
             
 
             CameraSystem.Instance.playSwatScene();
