@@ -43,7 +43,7 @@ public class DBControllerGame : MonoBehaviour
 
     // check if guest!!
     public void getThresholds(string username) {
-        if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
+        if (PlayerPrefs.GetInt("isGuest", -1) == 1) {
             // default values for guest
             soundController.threshold = PlayerPrefs.GetInt("Threshold", 2);
             soundController.multiplier = PlayerPrefs.GetInt("Multiplier", 240);
@@ -160,12 +160,12 @@ public class DBControllerGame : MonoBehaviour
     {
         StartCoroutine(EditBalance(username,new_balance,type));
     }
-    public void GetMicThreshold(string username)
+    private void GetMicThreshold(string username)
     {
         StartCoroutine(GetThreshold(username));
     }
 
-    public void GetMicMultiplier(string username)
+    private void GetMicMultiplier(string username)
     {
         StartCoroutine(GetMultiplier(username));
     }

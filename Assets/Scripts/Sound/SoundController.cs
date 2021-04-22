@@ -39,9 +39,7 @@ public class SoundController : MonoBehaviourPun
         this.playerController = GameObject.FindObjectOfType<PlayerController>();
         this.localSoundGrid = GameObject.FindObjectOfType<GuardController>();
         DB_Controller = GameObject.FindObjectOfType<DBControllerGame>();
-        if (!playerController.isGuest){
-            DB_Controller.getThresholds(PhotonNetwork.NickName);
-        }
+        DB_Controller.getThresholds(PhotonNetwork.NickName);
         InvokeRepeating("timer", 0.01f, 0.02f);
         // StartCoroutine(timer());
         // guardController.setGrid(grid);
