@@ -265,6 +265,7 @@ public class PreGame : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
+        StartGameWaitPanel.SetActive(true);
         this.GetComponent<PhotonView>().RPC("SetupGame", RpcTarget.All);
     }
 
