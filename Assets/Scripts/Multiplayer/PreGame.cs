@@ -43,6 +43,8 @@ public class PreGame : MonoBehaviourPunCallbacks
     public Sprite radioactive;
     public Sprite white;
 
+    private int noReady = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -200,7 +202,7 @@ public class PreGame : MonoBehaviourPunCallbacks
     }
 
 
-                public void SetReady() 
+    public void SetReady() 
     {
         Debug.Log("Set Ready Function");
         if (customProperties["ready"].Equals("false"))
@@ -263,9 +265,16 @@ public class PreGame : MonoBehaviourPunCallbacks
     }
     public void StartGame()
     {
+
         StartGameWaitPanel.SetActive(true);
 
+        this.GetComponent<PhotonView>().RPC("SetupGame", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void SetupGame() {
         PUN2_GameLobby1 gameLobby1 = GameObject.FindObjectOfType<PUN2_GameLobby1>();
+        // this.GetComponent<
         int guest = 0;
         if (gameLobby1.IsGuest) {
             guest = 1;
@@ -282,7 +291,16 @@ public class PreGame : MonoBehaviourPunCallbacks
         { 
             SetUpgradesForGame();
         }
-        PhotonNetwork.LoadLevel("ArtLevel");
+
+        this.GetComponent<PhotonView>().RPC("ReadyToStart", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    void ReadyToStart(){
+        noReady++;
+        if (noReady == PhotonNetwork.PlayerList.Length){
+            PhotonNetwork.LoadLevel("ArtLevel");
+        }
     }
     
     public int GetNumReady()
