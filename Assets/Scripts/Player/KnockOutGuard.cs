@@ -38,7 +38,7 @@ public class KnockOutGuard : MonoBehaviour
 
         
         //if no longer in range set flags to prevent knocking out of range guard
-        if (guard && !(Mathf.Abs(guard.transform.position.x - transform.position.x) <= 1.5f) && !(Mathf.Abs(guard.transform.position.z - transform.position.z) <= 1.5f))
+        if (guard && Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(guard.transform.position.x, guard.transform.position.z)) >= 5)
         {
             inRangeOfGuard = false;
             guardViewID = -1;

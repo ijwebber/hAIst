@@ -74,9 +74,9 @@ public class FieldOfView : MonoBehaviour
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                 {
 
-                    if (dstToTarget <= 10f) {
-                        behindGuardTargets.Add(target);
-                    }
+                    
+                    behindGuardTargets.Add(target);
+                    
                 }
             }
         }
