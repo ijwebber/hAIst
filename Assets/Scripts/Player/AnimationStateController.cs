@@ -20,7 +20,7 @@ public class AnimationStateController : MonoBehaviourPun
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         if(photonView.IsMine == false && PhotonNetwork.IsConnected == true){
@@ -46,21 +46,6 @@ public class AnimationStateController : MonoBehaviourPun
         
         bool isDancing = handleDancing(stopDancing);
 
-        // do footsteps
-        AnimatorStateInfo animatorState = animator.GetCurrentAnimatorStateInfo(0);
-        float currentFrame = animatorState.normalizedTime;
-        if (currentFrame > 1) {
-            currentFrame-=Mathf.FloorToInt(currentFrame);
-        }
-        if (animator.GetBool("isWalking") && (currentFrame >=0.2f && currentFrame <= 0.3f || currentFrame >= .7f && currentFrame <= .8f)) {
-            int intensity = (int)(20 * (1 - .5*playerController.upgrades.ninja));
-            if (Input.GetKey(KeyCode.Space)) {
-                intensity = 0;
-            } else if (Input.GetKey(KeyCode.LeftShift)) {
-                intensity = (int)(30 * (1 - .5*playerController.upgrades.ninja));
-            }
-            soundController.sendGrid(player.transform.position, intensity);
-        }
 
         if(isdown){
             animator.SetBool("isDown",true);
@@ -111,6 +96,16 @@ public class AnimationStateController : MonoBehaviourPun
             animator.SetBool("isWalking", false);
         }
         
+    }
+
+    public void footstep() {
+        int intensity = (int)(20 * (1 - .5*playerController.upgrades.ninja));
+        if (Input.GetKey(KeyCode.Space)) {
+            intensity = 0;
+        } else if (Input.GetKey(KeyCode.LeftShift)) {
+            intensity = (int)(30 * (1 - .5*playerController.upgrades.ninja));
+        }
+        soundController.sendGrid(player.transform.position, intensity);
     }
 
     bool handleDancing(bool stopDancing) {
