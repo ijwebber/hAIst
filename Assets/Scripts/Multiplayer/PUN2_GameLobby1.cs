@@ -1270,6 +1270,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         else if (type == 1)
         {
             PreGameMenu.SetActive(true);
+            ThiefController();
 
         }
 
