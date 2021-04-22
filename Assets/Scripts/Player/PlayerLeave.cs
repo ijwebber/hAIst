@@ -74,7 +74,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                     Hashtable endHash = new Hashtable() {{"end", true}, {"win", win}};
                     PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
                 } else {
-                    UpdateWaitingText();
+                    photonView.RPC("UpdateWaitingText", RpcTarget.All);
                 }
             }
         } else if (changedProps["disabled"] != null) {
@@ -111,6 +111,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         }
     }
 
+    [PunRPC]
     void UpdateWaitingText() {
         int total = 0;
         int length = PhotonNetwork.PlayerList.Length;
