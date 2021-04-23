@@ -15,8 +15,8 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     public Button StartGameButton;
     public Button SetReadyButton;
-    private ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
-    private ExitGames.Client.Photon.Hashtable customPropertiesRoom = new ExitGames.Client.Photon.Hashtable();
+    public ExitGames.Client.Photon.Hashtable customProperties = new ExitGames.Client.Photon.Hashtable();
+    public ExitGames.Client.Photon.Hashtable customPropertiesRoom = new ExitGames.Client.Photon.Hashtable();
 
 
     public GameObject ThiefSkins;
@@ -51,6 +51,7 @@ public class PreGame : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsConnected)
         {
+
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
         PlayerPrefs.SetInt("speed_boots", 0);
@@ -85,6 +86,7 @@ public class PreGame : MonoBehaviourPunCallbacks
             }
 
             customProperties.Add("ready", "false");
+            customProperties.Add("skin", thief_1.GetComponent<Image>().sprite.name);
             customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
@@ -223,6 +225,70 @@ public class PreGame : MonoBehaviourPunCallbacks
         
     }
 
+    public void SetPlayerSkins()
+    {
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_2.GetComponentInChildren<Text>().text))
+            {
+                if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("classic"))
+                {
+                    thief_2.GetComponent<Image>().sprite = classic;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("red"))
+                {
+                    thief_2.GetComponent<Image>().sprite = red;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("white"))
+                {
+                    thief_2.GetComponent<Image>().sprite = white;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("radioactive"))
+                {
+                    thief_2.GetComponent<Image>().sprite = radioactive;
+                }
+            }
+            else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_3.GetComponentInChildren<Text>().text))
+            {
+                if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("classic"))
+                {
+                    thief_3.GetComponent<Image>().sprite = classic;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("red"))
+                {
+                    thief_3.GetComponent<Image>().sprite = red;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("white"))
+                {
+                    thief_3.GetComponent<Image>().sprite = white;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("radioactive"))
+                {
+                    thief_3.GetComponent<Image>().sprite = radioactive;
+                }
+            }
+            else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_4.GetComponentInChildren<Text>().text))
+            {
+                if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("classic"))
+                {
+                    thief_4.GetComponent<Image>().sprite = classic;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("red"))
+                {
+                    thief_4.GetComponent<Image>().sprite = red;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("white"))
+                {
+                    thief_4.GetComponent<Image>().sprite = white;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("radioactive"))
+                {
+                    thief_4.GetComponent<Image>().sprite = radioactive;
+                }
+            }
+        }
+    }
+
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
@@ -231,6 +297,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         customPropertiesRoom["num_ready"] = num_ready;
         PhotonNetwork.CurrentRoom.SetCustomProperties(customPropertiesRoom);
         SetReadyChecks();
+        SetPlayerSkins();
         CheckAllReady();
 
     }
