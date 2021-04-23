@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public float ninjaMultiplier = 1;
     public float holdTime = 3;
     public bool shield = false;
+    public bool self_revive = false;
     [SerializeField] private GameObject shieldObj;
     public int invincibleFrames = 0;
     void Start()
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
         upgrades.vision = PlayerPrefs.GetInt("vision", 0);
         upgrades.fast_hands = PlayerPrefs.GetInt("fast_hands", 0);
         upgrades.shield = PlayerPrefs.GetInt("shield", 0) == 1;
+        upgrades.self_revive = PlayerPrefs.GetInt("self_revive",0) == 1;
     }
 
     public void DebugUpgrades()
@@ -106,6 +108,7 @@ public class PlayerController : MonoBehaviour
         moveSpeed *= (1 + .05f*upgrades.speed_boots);
         holdTime -= .3f*upgrades.fast_hands;
         shield = upgrades.shield;
+        self_revive = upgrades.self_revive;
         ninjaMultiplier = 1 - .1f*upgrades.ninja;
         Debug.Log("Updates loaded");
     }
