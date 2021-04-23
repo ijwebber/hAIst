@@ -32,6 +32,7 @@ public class GameController : MonoBehaviourPunCallbacks
     
     
     public string playerUsername;
+    private List<string> playerList = new List<string>();
     public bool regress = false;
     [SerializeField] private NewQuest questBox;
     [SerializeField] private NewQuest questMarker;
@@ -52,6 +53,10 @@ public class GameController : MonoBehaviourPunCallbacks
             return;
         }
         playerUsername = PhotonNetwork.NickName;
+        foreach (var play in PhotonNetwork.PlayerList)
+        {
+            playerList.Add(play.NickName);
+        }
         questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
 
         float xSpawnPos = SpawnPoint.transform.position.x + (float) (PhotonNetwork.LocalPlayer.ActorNumber * 0.6);
@@ -92,22 +97,26 @@ public class GameController : MonoBehaviourPunCallbacks
         
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
-
         {
-            
-            
-            if (!EscapeMenu.activeSelf)
-            {
-                EscapeMenu.SetActive(true);
-            }
-            else if (EscapeMenu.activeSelf)
-            {
-                EscapeMenu.SetActive(false);
-            }
+            EscapeMenu.SetActive(!EscapeMenu.activeSelf);
         } 
+
+        if (PhotonNetwork.PlayerList.Length < playerList.Count) {
+            List<string> currentList = new List<string>(playerList);
+            foreach (var play in PhotonNetwork.PlayerList)
+            {
+                if (playerList.Contains(play.NickName)) {
+                    Debug.Log(play.NickName + " is still here");
+                    currentList.Remove(play.NickName);
+                }
+            }
+            playerList.Remove(currentList[0]);
+            playerUpdates.updateDisplay(currentList[0] + " has left the heist");
+            // updateDisp("A thief has left the heist");
+        }
         // for info testing
         // if (Input.GetKeyDown(KeyCode.M)) {
         //     playerUpdates.updateDisplay("M was just pressed");
