@@ -484,8 +484,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         thief_1.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
         thief_1_home.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
         PlayerPrefs.SetString("skin", skin_name);
-        //PreGameScript.GetComponent<PreGame>().customProperties["skin"] = skin_name;
-        //PhotonNetwork.LocalPlayer.SetCustomProperties(PreGameScript.GetComponent<PreGame>().customProperties);
+        PreGameScript.GetComponent<PreGame>().customProperties["skin"] = skin_name;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(PreGameScript.GetComponent<PreGame>().customProperties);
         PlayerPrefs.Save();
 
     }
@@ -497,8 +497,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
         thief_1.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
         thief_1_home.GetComponent<Image>().sprite = ThiefSkinsPre.GetComponent<Image>().sprite;
         PlayerPrefs.SetString("skin", skin_name);
-        //PreGameScript.GetComponent<PreGame>().customProperties["skin"] = skin_name;
-        //PhotonNetwork.LocalPlayer.SetCustomProperties(PreGameScript.GetComponent<PreGame>().customProperties);
+        PreGameScript.GetComponent<PreGame>().customProperties["skin"] = skin_name;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(PreGameScript.GetComponent<PreGame>().customProperties);
         PlayerPrefs.Save();
 
     }
@@ -1162,7 +1162,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 
     public void ThiefController()
     {
-        //PreGameScript.GetComponent<PreGame>().SetPlayerSkins();
+        PreGameScript.GetComponent<PreGame>().SetPlayerSkins();
         if (PhotonNetwork.PlayerListOthers.Length == 0)
         {
             thief_2.SetActive(false);
