@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Playables;
 using Cinemachine;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -199,9 +200,14 @@ public class CameraSystem : MonoBehaviour
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
         g.SetActive(false);
-        
-        PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
-        
+
+        //PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
+
+        Hashtable endHash = new Hashtable() { { "end", true }, { "win", false } };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+
+
+
     }
 
 
