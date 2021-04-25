@@ -196,15 +196,16 @@ public class CameraSystem : MonoBehaviour
     private IEnumerator endSwatScene(GameObject g, float time)
     {
         yield return new WaitForSeconds(time);
-
+        g.SetActive(false);
+        yield return new WaitForSeconds(2f);
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
-        g.SetActive(false);
+        
 
-        //PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
 
-        Hashtable endHash = new Hashtable() { { "end", true }, { "win", false } };
-        PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
+
 
 
 
