@@ -14,9 +14,14 @@ public class PlayerMovement : MonoBehaviourPun
     public bool disabled = false;
     public bool paused = false;
     UIController uiController;
+
+
+    public GameObject objectives;
+    public bool objectivesEnabled;
     
     private void Start()
     {
+
         CameraControlPlayer camera_control = this.gameObject.GetComponent<CameraControlPlayer>();
         if (camera_control != null)
         {  
@@ -32,9 +37,20 @@ public class PlayerMovement : MonoBehaviourPun
 
         uiController = GameObject.FindObjectOfType<UIController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
+        objectives = GameObject.Find("Objectives");
     }
     void Update() {
         speed = playerController.moveSpeed;
+
+        if(Input.GetKeyDown(KeyCode.O) && objectives.active == true){
+            //objectivesEnabled = false;
+            objectives.SetActive(false);
+        }
+        else if(Input.GetKeyDown(KeyCode.O) && objectives.active == false){
+            //objectivesEnabled = true;
+            objectives.SetActive(true);
+        }
+        
     }
  
     void FixedUpdate()
@@ -43,6 +59,8 @@ public class PlayerMovement : MonoBehaviourPun
         {
             return;
         }
+
+        
         
         
 
