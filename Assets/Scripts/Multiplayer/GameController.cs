@@ -36,6 +36,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public bool regress = false;
     [SerializeField] private NewQuest questBox;
     [SerializeField] private NewQuest questMarker;
+    [SerializeField] private Obejctives pager;
 
     [SerializeField] private PlayerUpdates playerUpdates;
 
@@ -124,6 +125,7 @@ public class GameController : MonoBehaviourPunCallbacks
         if (gameState != updatedGameState) {
             questBox.newQuest();
             questMarker.newQuest();
+            pager.newQuest();
             bool localChange = false;
             bool localRegress = regress;
             if (gameState > updatedGameState) {
