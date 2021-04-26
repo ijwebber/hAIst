@@ -209,7 +209,7 @@ public class GameController : MonoBehaviourPunCallbacks
                         // playerController.Specials++;
                         updateDisp(PhotonNetwork.NickName + " has stolen a key painting");
                     }
-                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!"}, localRegress);
+                    setNewQuest(new List<GameObject>() {GameObject.Find("Van")}, new List<string> {"Get out!", "Optional: Steal as much as you can carry!"}, localRegress);
                     break;
                 default:
                     break;
