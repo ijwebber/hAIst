@@ -60,6 +60,9 @@ public class GuardController : MonoBehaviour
     
     void Update() {
         localGrid.velocities = soundController.grid.velocities;
+        if (guardMovements.Length == 0) {
+            guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+        }
     }
 
     public bool inChase() {

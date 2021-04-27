@@ -78,12 +78,13 @@ public class Window_QuestPointer : MonoBehaviourPun
                     pointerImages[i].color = Color.yellow;
                     pointerRectTransforms[i].localPosition = new Vector3(100*dir.x,100*dir.y);
                 } else {
-                        pointerRectTransforms[i].sizeDelta = new Vector2(40,30);
-                        pointerRectTransforms[i].localEulerAngles = new Vector3(0,0,-90);
-                        pointerImages[i].color = Color.green;
-                        // pointerImage.sprite = crossSprite;
-                        pointerRectTransforms[i].anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x) / canvas.scaleFactor, ((targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor + 30));
-                        // pointerRectTransform.anchoredPosition = new Vector2(Screen.width - targetPositionScreenPoint.x / canvas.scaleFactor, (Screen.height - targetPositionScreenPoint.y) + 60);
+                    pointerRectTransforms[i].sizeDelta = new Vector2(40,30);
+                    pointerImages[i].sprite = arrowSprite;
+                    pointerRectTransforms[i].localEulerAngles = new Vector3(0,0,-90);
+                    pointerImages[i].color = Color.green;
+                    // pointerImage.sprite = crossSprite;
+                    pointerRectTransforms[i].anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x) / canvas.scaleFactor, ((targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor + 30));
+                    // pointerRectTransform.anchoredPosition = new Vector2(Screen.width - targetPositionScreenPoint.x / canvas.scaleFactor, (Screen.height - targetPositionScreenPoint.y) + 60);
                 }
             }
         } else {

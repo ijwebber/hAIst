@@ -47,18 +47,15 @@ public class KnockOutGuard : MonoBehaviour
         else if (guard && !guard.GetComponent<GuardMovement>().guardDisabled && guardViewID != -1 && !GetComponent<PlayerMovement>().disabled) //if not already disabled, display locally to the player "E" to say that the player should press E to disable this guard
         {
             GuardKnockOutTimer knockoutscript = guard.GetComponent<GuardKnockOutTimer>();
-
             
             guardStatusText.text = "E";
             
-
             //if pressed destroy "E" text as timer text will take its place and set the guard's disabled flag to true
             if (Input.GetKeyDown(KeyCode.E))
             {
-
                 guardStatusText.text = "";
                 guard.GetComponent<GuardMovement>().guardDisabled = true;
-
+                // guard.GetComponent<GuardMovement>().transferSpecials(this.GetComponent<PlayerController>());
             }
         }
        

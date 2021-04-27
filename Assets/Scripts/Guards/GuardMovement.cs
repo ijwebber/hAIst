@@ -74,12 +74,12 @@ public class GuardMovement : MonoBehaviourPun
                 {
                     spec.GetComponent<CollectableItem>().stolen = true;
                     spec.GetComponent<CollectableItem>().guardPoint = null;
+                    playerController.Specials.Add(spec);
                 }
                 if(specials.Count > 0) {
-                    this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
                     gameController.gameState++;
-                    playerController.Specials = specials;
-                    // specials.Clear();
+                    gameController.regress = false;
+                    this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
                     Debug.Log("Recaptured painting");
                 }
                 StartCoroutine(disableForTime(3.0f));
@@ -107,8 +107,6 @@ public class GuardMovement : MonoBehaviourPun
                         if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
                         {
                             heySound.Play();
-
-
                         }
                         
                         agent.SetDestination(g.transform.position);
@@ -125,7 +123,7 @@ public class GuardMovement : MonoBehaviourPun
                 PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
 
                 //if guard is next to player then disable his ass
-                if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= guardReach && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= guardReach && !playerMoveScript.disabled && !guardDisabled)
+                if (playerToFollow.GetComponent<PhotonView>().IsMine && Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= guardReach && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= guardReach && !playerMoveScript.disabled && !guardDisabled)
                 {
                     if (playerController.shield) {
                         playerController.disableShield();
@@ -149,7 +147,7 @@ public class GuardMovement : MonoBehaviourPun
                                     i++;
                                 }
                                 serializedObjects.TrimEnd(","[0]);
-                                this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.MasterClient, serializedObjects);
+                                this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.All, serializedObjects);
                                 playerController.Specials.Clear();
                                 Debug.Log("Guard has Captured painting");
                             }
