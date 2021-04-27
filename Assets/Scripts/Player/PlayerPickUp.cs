@@ -107,11 +107,6 @@ public class PlayerPickUp : MonoBehaviourPun
                         held = false;
 
                     }
-                    else if (seconds != 0)
-                    {
-                        displayMessage(1);
-
-                    }
                     else if (!Input.GetKey(KeyCode.E))
                     {
                         displayMessage("Press E to enter code.");
@@ -153,11 +148,6 @@ public class PlayerPickUp : MonoBehaviourPun
                         held = false;
 
                     }
-                    else if (seconds != 0)
-                    {
-                        displayMessage(1);
-
-                    }
                     else if (!Input.GetKey(KeyCode.E))
                     {
                         displayMessage("Press E to open electrical box");
@@ -178,10 +168,11 @@ public class PlayerPickUp : MonoBehaviourPun
 
             down = GetComponent<PlayerMovement>().disabled;
 
-            if(targetTime > 0){
-                displayCooldown();
-            }
-            else{cooldownBox.text = "";}
+            // if(targetTime > 0){
+            //     displayCooldown();
+            // }
+            // else{cooldownBox.text = "";}
+            cooldownBox.text = "";
 
             if(codeDisplay.active || keycodeGame.active || fixPaintingGame.active){
                     displayMessage(2);
@@ -235,14 +226,6 @@ public class PlayerPickUp : MonoBehaviourPun
                     if (seconds == 0 && !down && held == false)
                     {
                         holdDownTask();
-                    }
-
-                    else if (seconds != 0)
-                    {
-                        if(Input.GetKey(KeyCode.E)){
-                            displayMessage(1);
-                        }
-                        displayMessage(1);
                     }
 
 

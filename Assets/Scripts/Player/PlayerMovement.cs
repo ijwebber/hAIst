@@ -2,6 +2,7 @@
 using Photon;
 using Photon.Pun;
 using System.Collections;
+using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerMovement : MonoBehaviourPun
@@ -13,6 +14,13 @@ public class PlayerMovement : MonoBehaviourPun
     //private TextMesh Caption = null;
     public bool disabled = false;
     public bool paused = false;
+    private Image staminaBar;
+    private float stamina = 1;
+    private float alpha = 1;
+    private bool tired = false;
+    private float staminaR = 1;
+    private float staminaB = 1;
+    private float staminaG = 1;
     UIController uiController;
 
 
@@ -34,7 +42,7 @@ public class PlayerMovement : MonoBehaviourPun
         {
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraControlPlayer Component on playerPrefab.", this);
         }
-
+        staminaBar = GameObject.Find("StaminaBar").GetComponent<Image>();
         uiController = GameObject.FindObjectOfType<UIController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
         objectives = GameObject.Find("Objectives");
@@ -80,24 +88,56 @@ public class PlayerMovement : MonoBehaviourPun
                 rb.rotation = deltaRotation;
             }
 
-            if (moveVector != Vector3.zero)
-            {
-                Quaternion deltaRotation = Quaternion.LookRotation(moveVector);
-                rb.rotation = deltaRotation;
-            }
-
             // Checks for any adjustments to speed
             float finalSpeed = speed;
             
-            if (Input.GetKey(KeyCode.Space))
-            {
-                finalSpeed = speed * 0.75f;
-            } else if (Input.GetKey(KeyCode.LeftShift))
-            {
-                finalSpeed = speed * 1.5f;
+            if (Input.GetKey(KeyCode.LeftShift)) {
+                if (!tired && moveVector != Vector3.zero) {
+                    stamina -= 0.005f;
+                    finalSpeed = speed * 1.5f;
+                } else {
+                    //flash stamina bar
+                    stamina += .003f;
+                    if (stamina >= 1) {
+                        stamina = 1;
+                    }
+                }
+                if (stamina <= 0) {
+                    tired = true;
+                    stamina = 0;
+                }
+            } else {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    finalSpeed = speed * 0.75f;
+                }
+                stamina += .003f;
+                if (stamina >= 1) {
+                    stamina = 1;
+                }
             }
+            if (tired && stamina >= 1) {
+                tired = false;
+            }
+            if (tired) {
+                staminaR = staminaB = staminaG = .25f;
+            } else {
+                staminaR = staminaB = staminaG = 1;
+            }
+            if (stamina >= 1) {
+                alpha -= .05f;
+            } else {
+                alpha += .05f;
+            }
+            if (alpha > 1) {
+                alpha = 1;
+            } else if (alpha < 0) {
+                alpha = 0;
+            }
+            staminaBar.color = new Color(staminaR,staminaG,staminaB,alpha);
 
             moveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
+            staminaBar.fillAmount = stamina;
             rb.MovePosition(transform.position + moveVector);
         }
         
