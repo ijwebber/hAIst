@@ -74,10 +74,10 @@ public class GuardMovement : MonoBehaviourPun
                 {
                     spec.GetComponent<CollectableItem>().stolen = true;
                     spec.GetComponent<CollectableItem>().guardPoint = null;
+                    playerController.Specials.Add(spec);
                 }
                 if(specials.Count > 0) {
                     gameController.gameState++;
-                    playerController.Specials = specials;
                     gameController.regress = false;
                     this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
                     Debug.Log("Recaptured painting");
@@ -147,7 +147,7 @@ public class GuardMovement : MonoBehaviourPun
                                     i++;
                                 }
                                 serializedObjects.TrimEnd(","[0]);
-                                this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.MasterClient, serializedObjects);
+                                this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.All, serializedObjects);
                                 playerController.Specials.Clear();
                                 Debug.Log("Guard has Captured painting");
                             }
