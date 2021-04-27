@@ -107,8 +107,6 @@ public class GuardMovement : MonoBehaviourPun
                         if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
                         {
                             heySound.Play();
-
-
                         }
                         
                         agent.SetDestination(g.transform.position);
@@ -125,7 +123,7 @@ public class GuardMovement : MonoBehaviourPun
                 PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
 
                 //if guard is next to player then disable his ass
-                if (Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= guardReach && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= guardReach && !playerMoveScript.disabled && !guardDisabled)
+                if (playerToFollow.GetComponent<PhotonView>().IsMine && Mathf.Abs(transform.position.x - playerToFollow.transform.position.x) <= guardReach && Mathf.Abs(transform.position.z - playerToFollow.transform.position.z) <= guardReach && !playerMoveScript.disabled && !guardDisabled)
                 {
                     if (playerController.shield) {
                         playerController.disableShield();
