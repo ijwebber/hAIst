@@ -76,10 +76,10 @@ public class GuardMovement : MonoBehaviourPun
                     spec.GetComponent<CollectableItem>().guardPoint = null;
                 }
                 if(specials.Count > 0) {
-                    this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
                     gameController.gameState++;
                     playerController.Specials = specials;
-                    // specials.Clear();
+                    gameController.regress = false;
+                    this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
                     Debug.Log("Recaptured painting");
                 }
                 StartCoroutine(disableForTime(3.0f));
