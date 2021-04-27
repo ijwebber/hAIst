@@ -40,9 +40,9 @@ public class AnimationStateController : MonoBehaviourPun
         bool spaceBar = Input.GetKey(KeyCode.Space);
 
         bool iscrouched = animator.GetBool("isCrouched");
-        bool isdown = GetComponent<PlayerMovement>().disabled;
+        bool isdown = playerController.isDisabled;
 
-        bool stopDancing = forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow || spaceBar;
+        bool stopDancing = isdown || forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow || spaceBar;
         
         bool isDancing = handleDancing(stopDancing);
 

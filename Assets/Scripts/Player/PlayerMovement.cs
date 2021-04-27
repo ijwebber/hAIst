@@ -111,7 +111,9 @@ public class PlayerMovement : MonoBehaviourPun
         disabled = disabledValue;
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true) {
             playerController.isDisabled = disabledValue;
-            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"disabled", disabledValue}});
+            PlayerController playerContoller = GameObject.Find("PlayerController").GetComponent<PlayerController>();
+            bool selfRevive = playerContoller.self_revive;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"disabled", disabledValue && !selfRevive}});
         }
     }
 

@@ -6036,7 +6036,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5125864241291859169}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 22.252068, y: -1.5261321, z: 83.13654}
+  m_LocalPosition: {x: 0.6, y: 9, z: 83}
   m_LocalScale: {x: 0.83136547, y: 0.83136547, z: 0.83136547}
   m_Children:
   - {fileID: 6567468577845954105}
@@ -6230,6 +6230,8 @@ MonoBehaviour:
   rb: {fileID: 5037312651882039958}
   disabled: 0
   paused: 0
+  objectives: {fileID: 0}
+  objectivesEnabled: 0
 --- !u!114 &5395006071217287135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6505,7 +6507,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   downText: {fileID: 4871176673317979433}
+  textObject: {fileID: 787848764101021827}
   progressBar: {fileID: 5692998265952435427}
+  playerController: {fileID: 0}
   holdTime: 3
   startTime: 0
 --- !u!114 &6719984766902686749
