@@ -6230,6 +6230,8 @@ MonoBehaviour:
   rb: {fileID: 5037312651882039958}
   disabled: 0
   paused: 0
+  objectives: {fileID: 0}
+  objectivesEnabled: 0
 --- !u!114 &5395006071217287135
 MonoBehaviour:
   m_ObjectHideFlags: 0
