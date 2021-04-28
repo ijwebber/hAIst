@@ -21,6 +21,7 @@ public class PlayerPickUp : MonoBehaviourPun
     public GameObject fixPaintingGame;
     [SerializeField] private GameController gameController;
     private PlayerController playerController;
+    AudioController audioController;
 
     private GameObject currentObject;
 
@@ -46,6 +47,7 @@ public class PlayerPickUp : MonoBehaviourPun
     void Awake() {
         gameController = GameObject.FindObjectOfType<GameController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
+        audioController = GameObject.FindObjectOfType<AudioController>();
     }
 
     // Update is called once per frame
@@ -235,11 +237,18 @@ public class PlayerPickUp : MonoBehaviourPun
 
                         //other.gameObject.SetActive(false);
                         UpdateScore(currentObject);
-                        CheckIfSpecial(currentObject);
+                        bool isSpecial = CheckIfSpecial(currentObject);
 
 
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+
+                        // Play sound effect for each item type
+                        if (isSpecial) {
+                            audioController.PlayHighValue();
+                        } else {
+                            audioController.PlayLowValue();
+                        }
 
                         // reset game components
                         keycodeGame.SetActive(false);
@@ -380,7 +389,7 @@ public class PlayerPickUp : MonoBehaviourPun
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
     }
 
-    void CheckIfSpecial(GameObject obj) {
+    bool CheckIfSpecial(GameObject obj) {
         CollectableItem item = obj.GetComponent<CollectableItem>();
 
         if (item.special) {
@@ -393,6 +402,8 @@ public class PlayerPickUp : MonoBehaviourPun
 
             PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
         }
+
+        return item.special;
     }
 
     [PunRPC]

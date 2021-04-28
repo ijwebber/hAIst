@@ -2,29 +2,36 @@
 
 public class AudioController : MonoBehaviour
 {
-    AudioSource audioSource;
-    public AudioClip intenseTheme;
-    public AudioClip alertedSound;
-
-    void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
+    public AudioSource musicPlayer;
+    public AudioSource itemPlayer;
+    [SerializeField] private AudioClip intenseTheme;
+    [SerializeField] private AudioClip alertedSound;
+    [SerializeField] private AudioClip lowValueSFX;
+    [SerializeField] private AudioClip highValueSFX;
 
     public void PlayIntenseTheme() {
-        audioSource.clip = intenseTheme;
+        musicPlayer.clip = intenseTheme;
 
-        if(!audioSource.isPlaying){
+        if(!musicPlayer.isPlaying){
             PlayMusic();
         }
-        //PlayMusic();
     }
 
     public void PlayMusic() {
-        audioSource.Play();
+        musicPlayer.Play();
     }
 
     public void PauseMusic() {
-        audioSource.Pause();
+        musicPlayer.Pause();
+    }
+
+    public void PlayLowValue() {
+        itemPlayer.clip = lowValueSFX;
+        itemPlayer.Play();
+    }
+
+    public void PlayHighValue() {
+        itemPlayer.clip = highValueSFX;
+        itemPlayer.Play();
     }
 }
