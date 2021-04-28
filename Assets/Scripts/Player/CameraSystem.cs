@@ -182,11 +182,13 @@ public class CameraSystem : MonoBehaviour
     }
 
     public void playSwatScene(){
-        PhotonNetwork.InstantiateRoomObject(helicopterPrefab.name, new Vector3(-45.77f, 31.64f, 20.19f), Quaternion.identity);
+        
         swatCamTrack.SetActive(true);
-
+        gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
-
+        
+        BarController.Instance.SetText("Backup has arrived");
+        BarController.Instance.ShowBars();
         
         GuardController.Instance.disableAllguards(true);
 
@@ -200,7 +202,8 @@ public class CameraSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
-        
+        gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
+        BarController.Instance.HideBars();
 
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
