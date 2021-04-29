@@ -57,9 +57,9 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         {
             timerText.text = "";
             endStarted = true;
-            
 
-            CameraSystem.Instance.playSwatScene();
+
+            StartCoroutine(CameraSystem.Instance.playSwatScene());
             
         }
     }

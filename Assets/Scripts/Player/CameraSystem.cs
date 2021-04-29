@@ -18,6 +18,7 @@ public class CameraSystem : MonoBehaviour
     public GameObject introSceneTrack;
     public GameObject playerCamTrack;
     public GameObject swatCamTrack;
+    public GameObject playerCamFadeOutTrack;
 
     [Header("Camera references")]
     
@@ -181,25 +182,30 @@ public class CameraSystem : MonoBehaviour
         foreach(var items in stealItems){items.layer = layer;}
     }
 
-    public void playSwatScene(){
+    public IEnumerator playSwatScene(){
+        thisPlayer.GetComponent<PlayerMovement>().paused = true;
+        GuardController.Instance.disableAllguards(true);
+        playerCamFadeOutTrack.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
         
         swatCamTrack.SetActive(true);
+        playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
-        thisPlayer.GetComponent<PlayerMovement>().paused = true;
+        
         
         BarController.Instance.SetText("Backup has arrived");
         BarController.Instance.ShowBars();
         
-        GuardController.Instance.disableAllguards(true);
+        
+
+        //ending
 
         double swatTime = swatCamTrack.GetComponent<PlayableDirector>().duration;
-        StartCoroutine(endSwatScene(swatCamTrack, (float)swatTime));
-    }
-    private IEnumerator endSwatScene(GameObject g, float time)
-    {
-        yield return new WaitForSeconds(time);
-        g.SetActive(false);
+
+        yield return new WaitForSeconds((float)swatTime);
+        swatCamTrack.SetActive(false);
         yield return new WaitForSeconds(2f);
+
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
@@ -208,11 +214,9 @@ public class CameraSystem : MonoBehaviour
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
 
-
-
-
-
+        
     }
+   
 
 
     private IEnumerator disableAfterTime(GameObject g, float time)
