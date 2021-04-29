@@ -72,22 +72,22 @@ Material:
     - _CelShadeMidPoint: -0.5
     - _CelShadeSoftness: 0.05
     - _Cull: 2
-    - _Cutoff: 0.5
-    - _DirectLightMultiplier: 1
+    - _Cutoff: 0
+    - _DirectLightMultiplier: 0.274
     - _DstBlend: 0
-    - _EmissionMulByBaseColor: 0
+    - _EmissionMulByBaseColor: 0.08
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _IndirectLightMultiplier: 1
+    - _IndirectLightMultiplier: 0.287
     - _IsFace: 0
     - _MainLightIgnoreCelShade: 0
     - _Metallic: 0
     - _OcclusionRemapEnd: 1
     - _OcclusionRemapStart: 0
     - _OcclusionStrength: 1
-    - _OutlineWidth: 1
+    - _OutlineWidth: 4
     - _OutlineZOffset: 0.0001
     - _OutlineZOffsetMaskRemapEnd: 1
     - _OutlineZOffsetMaskRemapStart: 0
@@ -108,10 +108,10 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.05660379, g: 0.05660379, b: 0.05660379, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
-    - _IndirectLightMinColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    - _IndirectLightMinColor: {r: 0.5589622, g: 0.65478444, b: 0.745283, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
-    - _OutlineColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    - _ShadowMapColor: {r: 1, g: 0.825, b: 0.78, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
+    - _ShadowMapColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
