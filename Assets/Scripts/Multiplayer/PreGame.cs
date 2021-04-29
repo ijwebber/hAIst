@@ -86,8 +86,14 @@ public class PreGame : MonoBehaviourPunCallbacks
                 return;
             }
 
-            customProperties.Add("ready", "false");
-            customProperties.Add("skin", thief_1.GetComponent<Image>().sprite.name);
+            if (!customProperties.ContainsKey("ready"))
+            {
+                customProperties.Add("ready", "false");
+            }
+            if (!customProperties.ContainsKey("skin"))
+            {
+                customProperties.Add("skin", thief_1.GetComponent<Image>().sprite.name);
+            }
             customPropertiesRoom = PhotonNetwork.CurrentRoom.CustomProperties;
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
@@ -248,6 +254,10 @@ public class PreGame : MonoBehaviourPunCallbacks
                 {
                     thief_2.GetComponent<Image>().sprite = radioactive;
                 }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("tuxedo"))
+                {
+                    thief_2.GetComponent<Image>().sprite = tuxedo;
+                }
             }
             else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_3.GetComponentInChildren<Text>().text))
             {
@@ -267,6 +277,10 @@ public class PreGame : MonoBehaviourPunCallbacks
                 {
                     thief_3.GetComponent<Image>().sprite = radioactive;
                 }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("tuxedo"))
+                {
+                    thief_3.GetComponent<Image>().sprite = tuxedo;
+                }
             }
             else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_4.GetComponentInChildren<Text>().text))
             {
@@ -285,6 +299,10 @@ public class PreGame : MonoBehaviourPunCallbacks
                 else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("radioactive"))
                 {
                     thief_4.GetComponent<Image>().sprite = radioactive;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("tuxedo"))
+                {
+                    thief_4.GetComponent<Image>().sprite = tuxedo;
                 }
             }
         }
