@@ -121,6 +121,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public Sprite red;
     public Sprite radioactive;
     public Sprite white;
+    public Sprite tuxedo;
 
 
 
@@ -498,9 +499,10 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         string skin_name = ThiefCosmetics.GetComponent<Image>().sprite.name;
         int skin_price = int.Parse(BuySkinButton.transform.GetChild(1).GetComponent<TMP_Text>().text);
-        UnlockingPanelCosmetics.SetActive(true);
+        
         if (PlayerBalance >= skin_price)
         {
+            UnlockingPanelCosmetics.SetActive(true);          
             PlayerBalance = PlayerBalance - skin_price;
             DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
             DB_Controller.GetComponent<DB_Controller>().AddSkin(PhotonNetwork.NickName, skin_name);
@@ -552,6 +554,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                 GameObject.Destroy(child.gameObject);
             }
         }
+        DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
         foreach (KeyValuePair<string, bool> kvp in PlayerSkins)
         {
             if (kvp.Key == "red" & kvp.Value)
@@ -583,6 +586,17 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
                 obj.transform.GetChild(0).GetComponent<Image>().sprite = radioactive;
                 obj1.GetComponent<SelectSkinButton>().tabGroup = skinGroupPre;
                 obj1.transform.GetChild(0).GetComponent<Image>().sprite = radioactive;
+            }
+            else if (kvp.Key == "tuxedo" & kvp.Value)
+            {
+                Debug.Log("TUXEDO SKIN TRUE");
+                GameObject obj = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContent.transform);
+                GameObject obj1 = (GameObject)Instantiate(SkinIconPrefab, SkinPanelContentPre.transform);
+
+                obj.GetComponent<SelectSkinButton>().tabGroup = skinGroup;
+                obj.transform.GetChild(0).GetComponent<Image>().sprite = tuxedo;
+                obj1.GetComponent<SelectSkinButton>().tabGroup = skinGroupPre;
+                obj1.transform.GetChild(0).GetComponent<Image>().sprite = tuxedo;
             }
 
         }
@@ -1410,6 +1424,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             PlayerSkins.Add("red", false);
             PlayerSkins.Add("radioactive", false);
             PlayerSkins.Add("white", false);
+            PlayerSkins.Add("tuxedo", false);
             DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
 
         }

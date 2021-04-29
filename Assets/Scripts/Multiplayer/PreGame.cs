@@ -42,6 +42,7 @@ public class PreGame : MonoBehaviourPunCallbacks
     public Sprite red;
     public Sprite radioactive;
     public Sprite white;
+    public Sprite tuxedo;
 
     private int noReady = 0;
 

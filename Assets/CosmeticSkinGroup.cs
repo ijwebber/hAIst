@@ -13,9 +13,10 @@ public class CosmeticSkinGroup : MonoBehaviour
 
     //SPRITES
     public Sprite tuxedo;
-         
 
+    public GameObject _GameLobby;
     public GameObject Thief;
+    public GameObject BuyPanel;
 
     public void Subscribe(CosmeticSkinButton button)
     {
@@ -53,6 +54,19 @@ public class CosmeticSkinGroup : MonoBehaviour
         if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "tuxedo")
         {
             Thief.GetComponent<Image>().sprite = tuxedo;
+            if (_GameLobby.GetComponent<PUN2_GameLobby1>().PlayerSkins["tuxedo"])
+            {
+                BuyPanel.transform.GetChild(1).gameObject.SetActive(false);
+                BuyPanel.transform.GetChild(2).gameObject.SetActive(true);
+
+            }
+            else
+            {
+                BuyPanel.transform.GetChild(1).gameObject.SetActive(true);
+                BuyPanel.transform.GetChild(2).gameObject.SetActive(false);
+            }
+            
+            BuyPanel.SetActive(true);
         }
         
 

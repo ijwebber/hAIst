@@ -16,6 +16,7 @@ public class SelectSkinGroup : MonoBehaviour
     public Sprite red;
     public Sprite radioactive;
     public Sprite white;
+    public Sprite tuxedo;
          
 
     public GameObject Thief;
@@ -68,6 +69,10 @@ public class SelectSkinGroup : MonoBehaviour
         if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "classic")
         {
             Thief.GetComponent<Image>().sprite = classic;
+        }
+        if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "tuxedo")
+        {
+            Thief.GetComponent<Image>().sprite = tuxedo;
         }
         if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "cancel")
         {

@@ -643,6 +643,7 @@ public class DB_Controller : MonoBehaviour
                 }
             }
         }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().ControlSkins();
         _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockingPanelCosmetics.SetActive(false);
     }
 
