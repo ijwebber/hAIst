@@ -643,6 +643,7 @@ public class DB_Controller : MonoBehaviour
                 }
             }
         }
+        _GameLobby.GetComponent<PUN2_GameLobby1>().UnlockingPanelCosmetics.SetActive(false);
     }
 
     IEnumerator Remove_Upgrade(string username, List<string> upgrade_names)

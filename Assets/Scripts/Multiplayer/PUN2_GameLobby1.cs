@@ -102,6 +102,13 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public SelectSkinGroup skinGroup;
     public SelectSkinGroup skinGroupPre;
 
+    //Cosmetic Store
+    public GameObject CosmeticPanelHome;
+    public CosmeticSkinGroup skinGroupCosmetic;
+    public GameObject UnlockingPanelCosmetics;
+    public GameObject ThiefCosmetics;
+    public Button BuySkinButton;
+
 
 
     // SKINS
@@ -475,6 +482,30 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     {
         EquipSkin();
         LockerPanelHome.SetActive(false);
+    }
+
+    public void EnableCosmeticStorePanel()
+    {
+        CosmeticPanelHome.SetActive(true);
+    }
+
+    public void DisableCosmeticStorePanel()
+    {
+        CosmeticPanelHome.SetActive(false);
+    }
+
+    public void BuySkin()
+    {
+        string skin_name = ThiefCosmetics.GetComponent<Image>().sprite.name;
+        int skin_price = int.Parse(BuySkinButton.transform.GetChild(1).GetComponent<TMP_Text>().text);
+        UnlockingPanelCosmetics.SetActive(true);
+        if (PlayerBalance >= skin_price)
+        {
+            PlayerBalance = PlayerBalance - skin_price;
+            DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
+            DB_Controller.GetComponent<DB_Controller>().AddSkin(PhotonNetwork.NickName, skin_name);
+
+        }
     }
 
     public void EquipSkin()
