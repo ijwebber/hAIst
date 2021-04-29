@@ -12,10 +12,7 @@ public class CosmeticSkinGroup : MonoBehaviour
     public CosmeticSkinButton selectedTab;
 
     //SPRITES
-    public Sprite classic;
-    public Sprite red;
-    public Sprite radioactive;
-    public Sprite white;
+    public Sprite tuxedo;
          
 
     public GameObject Thief;
@@ -53,26 +50,11 @@ public class CosmeticSkinGroup : MonoBehaviour
         int index = button.transform.GetSiblingIndex();
 
 
-        if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "red")
+        if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "tuxedo")
         {
-            Thief.GetComponent<Image>().sprite = red;
+            Thief.GetComponent<Image>().sprite = tuxedo;
         }
-        if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "white")
-        {
-            Thief.GetComponent<Image>().sprite = white;
-        }
-        if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "radioactive")
-        {
-            Thief.GetComponent<Image>().sprite = radioactive;
-        }
-        if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "classic")
-        {
-            Thief.GetComponent<Image>().sprite = classic;
-        }
-        if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "cancel")
-        {
-            Thief.GetComponent<Image>().sprite = classic;
-        }
+        
 
 
     }
