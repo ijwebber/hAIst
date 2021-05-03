@@ -15,7 +15,8 @@ public class GuardController : MonoBehaviour
     public SoundController soundController;
     public GuardMovement[] guardMovements;
     public PlayerController playerController;
-    private bool playersSpotted = false;
+    public bool playersSpotted = false;
+
     public static GuardController Instance { get; private set; }
 
     private void Awake()
@@ -140,6 +141,23 @@ public class GuardController : MonoBehaviour
         }
 
         
+    }
+    public void cutsceneSpotlight(GameObject SpotLight, GameObject other) {
+        CameraControlPlayer[] players = GameObject.FindObjectsOfType<CameraControlPlayer>();
+
+        //each player needs to run the cutscene code on their own 'CameraControl' script, so we send a targeted rpc to each individual player and the target photonview is owned by that specfic player.
+        foreach(CameraControlPlayer g in players)
+        {
+            PhotonView v = g.gameObject.GetComponent<PhotonView>();
+            
+            v.RPC("RpcCutScene", v.Controller, SpotLight.GetComponent<PhotonView>().ViewID, other.gameObject.GetComponent<PhotonView>().ViewID, "The Police have been alerted!", 1);
+        }
+        
+        //set to true so it doesn't run again when guards spot players
+        playersSpotted = true;
+
+        Hashtable endTriggered = new Hashtable() { { "triggered", true } };
+        PhotonNetwork.CurrentRoom.SetCustomProperties(endTriggered);
     }
 
 

@@ -494,7 +494,7 @@ MonoBehaviour:
     passTag: Black
     Event: 1000
     filterSettings:
-      RenderQueueType: 1
+      RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
         m_Bits: 65536
