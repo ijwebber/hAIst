@@ -132,6 +132,7 @@ public class CameraSystem : MonoBehaviour
             SetLayerRecursively(securityCameraReference, 10);
 
             black.SetActive(true);
+            gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
         }
     }
 
