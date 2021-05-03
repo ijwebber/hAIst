@@ -18,6 +18,7 @@ public class GuardController : MonoBehaviour
     public bool playersSpotted = false;
 
     public static GuardController Instance { get; private set; }
+    [SerializeField] private MoveSpotLight[] Spotlights;
 
     private void Awake()
     {
@@ -165,6 +166,13 @@ public class GuardController : MonoBehaviour
     {
         foreach(GuardMovement guard in guardMovements) {
             guard.agent.isStopped = value;
+        }
+        foreach(MoveSpotLight spot in Spotlights) {
+        if (value) {
+            spot.speed = 0;
+        } else {
+            spot.speed = 1;
+        }
         }
     }
 
