@@ -108,6 +108,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public GameObject UnlockingPanelCosmetics;
     public GameObject ThiefCosmetics;
     public Button BuySkinButton;
+    public GameObject OwnedSkinButton;
 
 
 
@@ -493,6 +494,7 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     public void DisableCosmeticStorePanel()
     {
         CosmeticPanelHome.SetActive(false);
+        skinGroupCosmetic.ResetTabsClose();
     }
 
     public void BuySkin()
@@ -506,6 +508,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             PlayerBalance = PlayerBalance - skin_price;
             DB_Controller.GetComponent<DB_Controller>().EditCoinBalance(PhotonNetwork.NickName, PlayerBalance, 10);
             DB_Controller.GetComponent<DB_Controller>().AddSkin(PhotonNetwork.NickName, skin_name);
+            BuySkinButton.gameObject.SetActive(false);
+            OwnedSkinButton.SetActive(true);
 
         }
     }
@@ -1300,6 +1304,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             PlayerSkins.Add("red", false);
             PlayerSkins.Add("radioactive", false);
             PlayerSkins.Add("white", false);
+            PlayerSkins.Add("tuxedo", false);
+
             DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
 
         }
@@ -1373,6 +1379,8 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
             PlayerSkins.Add("red", false);
             PlayerSkins.Add("radioactive", false);
             PlayerSkins.Add("white", false);
+            PlayerSkins.Add("tuxedo", false);
+
             DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
 
         }

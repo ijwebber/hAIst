@@ -81,4 +81,13 @@ public class CosmeticSkinGroup : MonoBehaviour
             button.background.sprite = tabIdle;
         }
     }
+
+    public void ResetTabsClose()
+    {
+        foreach (CosmeticSkinButton button in tabButtons)
+        {
+            button.background.sprite = tabIdle;
+        }
+        BuyPanel.SetActive(false);
+    }
 }
