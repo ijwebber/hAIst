@@ -146,7 +146,7 @@ public class CameraSystem : MonoBehaviour
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
         sceneTransitionCanvas.SetActive(true);
         //find security cam
-        securityCameraReference = GameObject.Find("Camera 1");
+        securityCameraReference = GameObject.Find("Camera 2");
 
         //setting the layers for paintings and guard so they render
         SetPaintingsLayer(default);
