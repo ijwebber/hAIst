@@ -13,6 +13,7 @@ public class CosmeticSkinGroup : MonoBehaviour
 
     //SPRITES
     public Sprite tuxedo;
+    public Sprite pumpkin;
 
     public GameObject _GameLobby;
     public GameObject Thief;
@@ -68,7 +69,24 @@ public class CosmeticSkinGroup : MonoBehaviour
             
             BuyPanel.SetActive(true);
         }
-        
+        else if (button.transform.GetChild(0).GetComponent<Image>().sprite.name == "pumpkin")
+        {
+            Thief.GetComponent<Image>().sprite = pumpkin;
+            if (_GameLobby.GetComponent<PUN2_GameLobby1>().PlayerSkins["pumpkin"])
+            {
+                BuyPanel.transform.GetChild(1).gameObject.SetActive(false);
+                BuyPanel.transform.GetChild(2).gameObject.SetActive(true);
+
+            }
+            else
+            {
+                BuyPanel.transform.GetChild(1).gameObject.SetActive(true);
+                BuyPanel.transform.GetChild(2).gameObject.SetActive(false);
+            }
+
+            BuyPanel.SetActive(true);
+        }
+
 
 
     }
