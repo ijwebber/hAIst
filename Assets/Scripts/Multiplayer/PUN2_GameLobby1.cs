@@ -385,6 +385,9 @@ public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
     }
 
     public void EnableMicThreshold() {
+    #if UNITY_WEBGL && !UNITY_EDITOR
+        Microphone.Init()
+    #endif
         btnHome.interactable = true;
         if (!IsGuest) {
             btnUpgrades.interactable = true;
