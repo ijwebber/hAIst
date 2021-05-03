@@ -141,6 +141,7 @@ public class GuardMovement : MonoBehaviourPun
                                 int i = 0;
                                 foreach (var spec in playerController.Specials)
                                 {
+                                    
                                     serializedObjects += spec.name + ",";
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
                                     spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
