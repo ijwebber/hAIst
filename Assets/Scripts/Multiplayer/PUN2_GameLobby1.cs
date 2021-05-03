@@ -23,8 +23,9 @@ using TMPro;
 2. Add skin in dictionary in set username and the rest
 3. Cosmetic skin group file additions
 4. ControlSkin fuction in pun2gamelobby and pun2gamelobby sprite gameobject
-5. Selec skin group
-
+5. Select skin group
+6. New character model prefab
+7. Pregame set player skins function and sprite gameobject
 */
 public class PUN2_GameLobby1 : MonoBehaviourPunCallbacks
 {
