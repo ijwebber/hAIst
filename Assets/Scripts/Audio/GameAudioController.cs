@@ -8,6 +8,10 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip alertedSound;
     [SerializeField] private AudioClip lowValueSFX;
     [SerializeField] private AudioClip highValueSFX;
+    
+    void Start() {
+        Debug.Log("***" + musicPlayer.volume);
+    }
 
     public void PlayIntenseTheme() {
         musicPlayer.clip = intenseTheme;
