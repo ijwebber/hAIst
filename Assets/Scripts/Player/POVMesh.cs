@@ -79,7 +79,7 @@ public class POVMesh : MonoBehaviourPun
     {
         if (!angleIsGlobal)
         {
-            angleDegrees += transform.eulerAngles.y;
+            angleDegrees += fromPoint.eulerAngles.y;
         }
         return new Vector3(Mathf.Sin(angleDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleDegrees * Mathf.Deg2Rad));
     }
