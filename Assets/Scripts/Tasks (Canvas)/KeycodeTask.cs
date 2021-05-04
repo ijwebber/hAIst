@@ -37,7 +37,9 @@ public class KeycodeTask : MonoBehaviour
 
         _inputCode.text += num;             // set inputcode box to what ever buttom input it is
 
-        buttonNoise.Play();
+        if (buttonNoise != null) {
+            buttonNoise.Play();
+        }
 
         KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
 

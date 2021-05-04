@@ -39,15 +39,48 @@ public class PlayerPickUp : MonoBehaviourPun
     public float holdTime = 3.0f;
     private bool held = false;
     private bool codeActive = false;
+    public GameObject canvasFromPlayer;
 
     public bool down;
 
     public ProgressBarController progressBar;
 
     void Awake() {
+        canvasFromPlayer = GameObject.Find("CanvasFromPlayer");
         gameController = GameObject.FindObjectOfType<GameController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
         audioController = GameObject.FindObjectOfType<AudioController>();
+        Transform[] canvasElements = canvasFromPlayer.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in canvasElements) {
+            Debug.Log("LIGGY " + t.name);
+            switch (t.name)
+            {
+                case "KeycodeTaskCode":
+                    codeDisplay = t.gameObject;
+                    break;
+                case "KeycodeTaskSN":
+                    keycodeGame = t.gameObject;
+                    Debug.Log("KEY TASK GAME");
+                    break;
+                case "WireManual":
+                    wireManual = t.gameObject;
+                    break;
+                case "WireTask":
+                    wireGame = t.gameObject;
+                    break;
+                case "PictureTask":
+                    fixPaintingGame = t.gameObject;
+                    break;
+                case "DisplayMessagePlayer":
+                    messageBox = t.gameObject.GetComponent<Text>();
+                    break;
+                case "ProgressBar":
+                    progressBar = t.gameObject.GetComponent<ProgressBarController>();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -56,6 +89,7 @@ public class PlayerPickUp : MonoBehaviourPun
         //game tag thing
         if (photonView.IsMine && PhotonNetwork.IsConnected && inTrigger != null)
         {
+            Debug.Log("Currently in trigger: " + inTrigger.gameObject.tag);
             switch (inTrigger.gameObject.tag) {
 
                 case "button":
@@ -156,9 +190,11 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
                     break;
                 case "MetalDoorHandle":
-                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect && gameController.gameState == 0) {
+                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect && (gameController.gameState == 0 || gameController.gameState == 1)) {
                         displayMessage("This door requires a code");
-                        gameController.gameState = 1;
+                        if (gameController.gameState == 0) {
+                            gameController.gameState = 1;
+                        }
                     }
                         // gameController.gameState = 2;
                     // }
@@ -174,7 +210,6 @@ public class PlayerPickUp : MonoBehaviourPun
             //     displayCooldown();
             // }
             // else{cooldownBox.text = "";}
-            cooldownBox.text = "";
 
             if(codeDisplay.active || keycodeGame.active || fixPaintingGame.active){
                     displayMessage(2);
@@ -193,6 +228,7 @@ public class PlayerPickUp : MonoBehaviourPun
     void OnTriggerEnter(Collider other) {
         inTrigger = other.gameObject;
     }
+
     void OnTriggerExit(Collider other) {
         inTrigger = null;
         if(photonView.IsMine == true && PhotonNetwork.IsConnected == true){
@@ -244,10 +280,12 @@ public class PlayerPickUp : MonoBehaviourPun
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
 
                         // Play sound effect for each item type
-                        if (isSpecial) {
-                            audioController.PlayHighValue();
-                        } else {
-                            audioController.PlayLowValue();
+                        if (audioController != null) {
+                            if (isSpecial) {
+                                audioController.PlayHighValue();
+                            } else {
+                                audioController.PlayLowValue();
+                            }
                         }
 
                         // reset game components
@@ -298,6 +336,7 @@ public class PlayerPickUp : MonoBehaviourPun
         else if(n==4){messageBox.text = "Hold E for " + holdTime.ToString() + " seconds to pick up"; }
     }
     void displayMessage(string text){
+        Debug.Log("Displaying " + text);
         messageBox.text = text;
     }
 
