@@ -20,6 +20,7 @@ public class POVMesh : MonoBehaviourPun
     private bool start = false;
 
     private CameraControlPlayer cameraControlPlayer;
+    [SerializeField] private CameraSystem cameraSystem;
 
     [HideInInspector]
     public List<GameObject> behindGuardTargets = new List<GameObject>();
@@ -116,8 +117,8 @@ public class POVMesh : MonoBehaviourPun
             }
             if (start) {
                 Vector3 fromPoint = player.transform.position;
-                if (!cameraControlPlayer.isFollowing) {
-                    fromPoint = cameraControlPlayer.cutscenePosition;
+                if (cameraSystem.isCaughtCutSceneHappening) {
+                    fromPoint = cameraSystem.guardCaughtIn4k.LookAt.position;
                     // viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
                     // viewMeshFilter.transform.rotation = player.transform.rotation;
                     // objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
