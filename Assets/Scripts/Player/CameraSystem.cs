@@ -5,6 +5,7 @@ using UnityEngine.Playables;
 using Cinemachine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class CameraSystem : MonoBehaviour
     public float zoomMultiplier = 1.0f;
     public bool introDone = false;
     public bool isCutSceneHappening = true;
+    public bool isCaughtCutSceneHappening = false;
     private bool playerCamActive = false;
     
     private GameObject guardShotReference;
@@ -47,12 +49,16 @@ public class CameraSystem : MonoBehaviour
     private GameObject securityCameraReference;
     private float startingHeight;
     private float startingDistance;
+    
 
     [Header("Other Stuff")]
     [SerializeField] private AudioController audioController;
     
     private GameObject black;
     private bool start = false;
+    private Mesh viewMesh;
+    private MeshFilter viewMeshFilter, objectMeshFilter;
+    private PlayerController playerController;
 
 
     private void Awake()
@@ -74,6 +80,7 @@ public class CameraSystem : MonoBehaviour
         black = GameObject.Find("Black");
         thisPlayer = playerCam.Follow.gameObject;
         audioController = GameObject.FindObjectOfType<AudioController>();
+        playerController = GameObject.FindObjectOfType<PlayerController>();
 
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
@@ -86,12 +93,47 @@ public class CameraSystem : MonoBehaviour
         if (guardShotReference != null)
         {
             if (!start) {
+
+                //setting up start cutScene
                 introCutSceneSetup();
+
+                //setting up mesh for caught cutscene
+                if (SceneManager.GetActiveScene().name == "BuildScene" || SceneManager.GetActiveScene().name == "ArtLevel")
+                {
+                    MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("POVObjectsCutScene").GetComponent<MeshFilter>();
+                    MeshFilter ViewFilter3 = GameObject.FindGameObjectWithTag("POVGuardsCutScene").GetComponent<MeshFilter>();
+
+                    // viewMeshFilter = ViewFilter;
+                    viewMeshFilter = ViewFilter3;
+                    objectMeshFilter = ViewFilter;
+                    viewMesh = new Mesh();
+                    viewMesh.name = "POV mesh";
+                    viewMeshFilter.mesh = viewMesh;
+                    objectMeshFilter.mesh = viewMesh;
+                    
+                }
+
+
                 start = true;
             }
 
+            if (isCaughtCutSceneHappening)
+            {
+
+                viewMeshFilter.transform.position = new Vector3(guardCaughtIn4k.LookAt.position.x, 16.5f, guardCaughtIn4k.LookAt.position.z);
+                viewMeshFilter.transform.rotation = thisPlayer.transform.rotation;
+                objectMeshFilter.transform.position = new Vector3(guardCaughtIn4k.LookAt.position.x, 16.5f, guardCaughtIn4k.LookAt.position.z);
+                objectMeshFilter.transform.rotation = thisPlayer.transform.rotation;
+                DrawFOV();
+            }
+            else
+            {
+                viewMeshFilter.mesh.Clear();
+                objectMeshFilter.mesh.Clear();
+            }
+
             //for the first escape key press we want to end the cutscene and skip to the player cam
-            if(!introDone && Input.GetKeyDown(KeyCode.Escape))
+            if (!introDone && Input.GetKeyDown(KeyCode.Escape))
             {
                 introEnd();
             }
@@ -108,6 +150,10 @@ public class CameraSystem : MonoBehaviour
             gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
             guardShotReference = GameObject.Find("Guard3(Clone)");
         }
+
+
+       
+        
     }
 
     public void introEnd()
@@ -231,7 +277,7 @@ public class CameraSystem : MonoBehaviour
 
     public void caughtCutScene(int guardViewID, int caughtPlayerID, string message)
     {
-        isCutSceneHappening = true;
+        
         GameObject guard = PhotonView.Find(guardViewID).gameObject;
 
 
@@ -244,6 +290,8 @@ public class CameraSystem : MonoBehaviour
         guardCaughtIn4k.Follow = caughtTargetGroup.transform;
         guardCaughtIn4k.LookAt = caughtTargetGroup.transform;
 
+        
+
         guardCaughtIn4k.Priority = 11;
 
         //audioController.PlayIntenseTheme();
@@ -251,6 +299,8 @@ public class CameraSystem : MonoBehaviour
         SetLayerRecursively(guard, default);
         BarController.Instance.SetText(message);
         BarController.Instance.ShowBars();
+        
+        isCaughtCutSceneHappening = true;
 
         StartCoroutine(endCaughtCutScene(guard));
 
@@ -281,11 +331,89 @@ public class CameraSystem : MonoBehaviour
 
         GuardController.Instance.disableAllguards(false);
 
-        isCutSceneHappening = false;
+        isCaughtCutSceneHappening = false;
     }
 
 
-    
 
+    
+    void DrawFOV() {
+
+        float meshResolution = 1f;
+
+        int stepCount = Mathf.RoundToInt(360 * meshResolution);
+        if (stepCount == 0) {
+            stepCount = 360;
+        }
+        float stepAngleSize = 360 / stepCount;
+        List<Vector3> viewPoints = new List<Vector3>();
+        for (int i = 0; i <= stepCount; i++)
+        {
+            float angle = thisPlayer.transform.eulerAngles.y - 360/2 + stepAngleSize*i;
+            ViewCastInfo newViewCast = viewCast(angle);
+            viewPoints.Add(newViewCast.point);
+        }
+
+        int vertexCount = viewPoints.Count+1;
+        Vector3[] vertices = new Vector3[vertexCount];
+        int [] triangles = new int[(vertexCount - 2) * 3];
+
+        vertices[0] = Vector3.zero;
+        for (int i = 0; i < vertexCount-1; i++)
+        {
+            vertices[i+1] = thisPlayer.transform.InverseTransformPoint(viewPoints[i]);
+
+            if(i < vertexCount - 2){
+                triangles[i*3] = 0;
+                triangles[i*3+1] = i+1;
+                triangles[i*3+2] = i+2;
+            }
+
+        }
+
+        viewMesh.Clear();
+        viewMesh.vertices = vertices;
+        viewMesh.triangles = triangles;
+        viewMesh.RecalculateNormals();
+    }
+
+    
+    ViewCastInfo viewCast(float globalAngle) {
+        Vector3  dir = DirFromAngle(globalAngle, true);
+        RaycastHit hit;
+
+        float viewRadius = 15f;
+
+        if (Physics.Raycast(guardCaughtIn4k.LookAt.position, dir, out hit, viewRadius, playerController.ObMask)) {
+            return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
+        } else {
+            return new ViewCastInfo(false, guardCaughtIn4k.LookAt.position + dir * viewRadius, viewRadius, globalAngle);
+        }
+
+    }
+
+    public struct ViewCastInfo
+    {
+        public bool hit;
+        public Vector3 point;
+        public float distance;
+        public float angle;
+
+        public ViewCastInfo(bool _hit, Vector3 _point, float _distance, float _angle)
+        {
+            hit = _hit;
+            point = _point;
+            distance = _distance;
+            angle = _angle;
+        }
+    }
+    public Vector3 DirFromAngle(float angleDegrees, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angleDegrees += thisPlayer.transform.eulerAngles.y;
+        }
+        return new Vector3(Mathf.Sin(angleDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleDegrees * Mathf.Deg2Rad));
+    }
 }
 
