@@ -5,9 +5,11 @@ public class IntentActions : MonoBehaviourPun
 {    
 
     LaserController laserController;
+    GameCameraController cameraController;
 
     void Start() {
         laserController = GameObject.FindObjectOfType<LaserController>();
+        cameraController = GameObject.FindObjectOfType<GameCameraController>();
     }
 
     void Update() {
@@ -25,6 +27,11 @@ public class IntentActions : MonoBehaviourPun
             Debug.Log("*** Switching On");
             EnableLasers();
         }
+
+        if (Input.GetKeyDown(KeyCode.U)) {
+            cameraController.DisableClosestCamera(transform.position);
+        }
+
     }
 
     public void CarryOutIntent(string topIntent, float score) {
