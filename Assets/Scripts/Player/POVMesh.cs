@@ -120,15 +120,12 @@ public class POVMesh : MonoBehaviourPun
                 Vector3 fromPoint = player.transform.position;
                 if (cameraSystem.isCaughtCutSceneHappening) {
                     fromPoint = cameraSystem.guardCaughtIn4k.LookAt.position;
-                    // viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                    // viewMeshFilter.transform.rotation = player.transform.rotation;
-                    // objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                    // objectMeshFilter.transform.rotation = player.transform.rotation;
+                } else {
+                    viewMeshFilter.transform.position = new Vector3(fromPoint.x, 16.5f, fromPoint.z);
+                    viewMeshFilter.transform.rotation = player.transform.rotation;
+                    objectMeshFilter.transform.position = new Vector3(fromPoint.x, 16.5f, fromPoint.z);
+                    objectMeshFilter.transform.rotation = player.transform.rotation;
                 }
-                viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-                viewMeshFilter.transform.rotation = player.transform.rotation;
-                objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-                objectMeshFilter.transform.rotation = player.transform.rotation;
                 DrawFOV(fromPoint);
             }
         }
