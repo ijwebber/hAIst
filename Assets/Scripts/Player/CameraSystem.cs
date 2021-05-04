@@ -132,7 +132,7 @@ public class CameraSystem : MonoBehaviour
             SetLayerRecursively(securityCameraReference, 10);
 
             black.SetActive(true);
-            gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
+            
         }
     }
 
@@ -246,7 +246,7 @@ public class CameraSystem : MonoBehaviour
 
         guardCaughtIn4k.Priority = 11;
 
-        audioController.PlayIntenseTheme();
+        //audioController.PlayIntenseTheme();
 
         SetLayerRecursively(guard, default);
         BarController.Instance.SetText(message);
