@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using Photon.Pun;
 
 public class GameCameraController : MonoBehaviour
 {
@@ -39,10 +40,10 @@ public class GameCameraController : MonoBehaviour
                 }
             }
 
-            if (dist > 10) {
+            if (dist > 15) {
                 return false;
             } else {
-                closest.GetComponent<CameraProps>().disabled = true;
+                closest.GetComponent<PhotonView>().RPC("setDisabled", RpcTarget.All, true);
             }
         }
         
