@@ -468,6 +468,7 @@ public void EnableLobbyMenu()
     FriendsMenu.SetActive(false);
     UpgradeMenu.SetActive(false);
     MicMenu.SetActive(false);
+    MicCheck = false;
     //InventoryMenu.SetActive(false);
     NewLobbyMenu.SetActive(false);
 
