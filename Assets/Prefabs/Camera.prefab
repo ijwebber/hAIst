@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 8516539498406736211}
   - component: {fileID: 1012341737315443397}
   - component: {fileID: 6583056944226891725}
+  - component: {fileID: 5424154563638340355}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -390,3 +391,16 @@ MonoBehaviour:
   viewMeshFilter: {fileID: 3292800086606147627}
   meshResolution: 0.22
   visibleTargets: []
+--- !u!114 &5424154563638340355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7562137419517367105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c633a7111e78f4a59a96e0aa95f6a68d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  disabled: 0
