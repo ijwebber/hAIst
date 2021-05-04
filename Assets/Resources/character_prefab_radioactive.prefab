@@ -6201,7 +6201,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   downText: {fileID: 4871176673317979433}
-  textObject: {fileID: 0}
+  textObject: {fileID: 5779214508688234308}
   progressBar: {fileID: 5692998265952435427}
   playerController: {fileID: 0}
   holdTime: 3
