@@ -190,9 +190,11 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
                     break;
                 case "MetalDoorHandle":
-                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect && gameController.gameState == 0) {
+                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect && (gameController.gameState == 0 || gameController.gameState == 1)) {
                         displayMessage("This door requires a code");
-                        gameController.gameState = 1;
+                        if (gameController.gameState == 0) {
+                            gameController.gameState = 1;
+                        }
                     }
                         // gameController.gameState = 2;
                     // }
