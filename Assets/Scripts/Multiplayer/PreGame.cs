@@ -43,6 +43,7 @@ public class PreGame : MonoBehaviourPunCallbacks
     public Sprite radioactive;
     public Sprite white;
     public Sprite tuxedo;
+    public Sprite pumpkin;
 
     private int noReady = 0;
 
@@ -258,6 +259,10 @@ public class PreGame : MonoBehaviourPunCallbacks
                 {
                     thief_2.GetComponent<Image>().sprite = tuxedo;
                 }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("pumpkin"))
+                {
+                    thief_2.GetComponent<Image>().sprite = pumpkin;
+                }
             }
             else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_3.GetComponentInChildren<Text>().text))
             {
@@ -281,6 +286,10 @@ public class PreGame : MonoBehaviourPunCallbacks
                 {
                     thief_3.GetComponent<Image>().sprite = tuxedo;
                 }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("pumpkin"))
+                {
+                    thief_3.GetComponent<Image>().sprite = pumpkin;
+                }
             }
             else if (PhotonNetwork.PlayerList[i].NickName.Equals(thief_4.GetComponentInChildren<Text>().text))
             {
@@ -303,6 +312,10 @@ public class PreGame : MonoBehaviourPunCallbacks
                 else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("tuxedo"))
                 {
                     thief_4.GetComponent<Image>().sprite = tuxedo;
+                }
+                else if (PhotonNetwork.PlayerList[i].CustomProperties["skin"].Equals("pumpkin"))
+                {
+                    thief_4.GetComponent<Image>().sprite = pumpkin;
                 }
             }
         }

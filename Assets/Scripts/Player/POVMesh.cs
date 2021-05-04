@@ -20,6 +20,7 @@ public class POVMesh : MonoBehaviourPun
     private bool start = false;
 
     private CameraControlPlayer cameraControlPlayer;
+    private CameraSystem cameraSystem;
 
     [HideInInspector]
     public List<GameObject> behindGuardTargets = new List<GameObject>();
@@ -88,6 +89,7 @@ public class POVMesh : MonoBehaviourPun
         playerController = GameObject.FindObjectOfType<PlayerController>();
         player = playerController.getPlayer();
         var cameraControlPlayers = GameObject.FindObjectsOfType<CameraControlPlayer>();
+        cameraSystem = GameObject.FindObjectOfType<CameraSystem>();
         foreach (var ccm in cameraControlPlayers)
         {
             if (ccm.photonView.IsMine) {
@@ -115,19 +117,15 @@ public class POVMesh : MonoBehaviourPun
                 start = true;
             }
             if (start) {
-                Vector3 fromPoint = player.transform.position;
-                if (!cameraControlPlayer.isFollowing) {
-                    fromPoint = cameraControlPlayer.cutscenePosition;
-                    // viewMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                    // viewMeshFilter.transform.rotation = player.transform.rotation;
-                    // objectMeshFilter.transform.position = new Vector3(cameraControlPlayer.cutscenePosition.x, 16.5f, cameraControlPlayer.cutscenePosition.z);
-                    // objectMeshFilter.transform.rotation = player.transform.rotation;
+                Transform fromPoint = player.transform;
+                if (cameraSystem.isCaughtCutSceneHappening) {
+                    fromPoint = cameraSystem.caughtPlayerObject.transform;
                 }
-                viewMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-                viewMeshFilter.transform.rotation = player.transform.rotation;
-                objectMeshFilter.transform.position = new Vector3(player.transform.position.x, 16.5f, player.transform.position.z);
-                objectMeshFilter.transform.rotation = player.transform.rotation;
-                DrawFOV(fromPoint);
+                    viewMeshFilter.transform.position = new Vector3(fromPoint.position.x, 16.5f, fromPoint.position.z);
+                    viewMeshFilter.transform.rotation = fromPoint.rotation;
+                    objectMeshFilter.transform.position = new Vector3(fromPoint.position.x, 16.5f, fromPoint.position.z);
+                    objectMeshFilter.transform.rotation = fromPoint.rotation;
+                DrawFOV(fromPoint.position);
             }
         }
     }

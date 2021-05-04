@@ -5,6 +5,7 @@ using UnityEngine.Playables;
 using Cinemachine;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using UnityEngine.SceneManagement;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -34,12 +35,14 @@ public class CameraSystem : MonoBehaviour
     public GameObject swatTeam1;
     public GameObject swatTeam2;
     public GameObject gameUIReference;
+    public GameObject caughtPlayerObject;
 
     [Header("Flags and floats")]
     [Range(0.6f, 1.0f)]
     public float zoomMultiplier = 1.0f;
     public bool introDone = false;
     public bool isCutSceneHappening = true;
+    public bool isCaughtCutSceneHappening = false;
     private bool playerCamActive = false;
     
     private GameObject guardShotReference;
@@ -47,12 +50,15 @@ public class CameraSystem : MonoBehaviour
     private GameObject securityCameraReference;
     private float startingHeight;
     private float startingDistance;
+    
+    
 
     [Header("Other Stuff")]
     [SerializeField] private AudioController audioController;
     
     private GameObject black;
     private bool start = false;
+    
 
 
     private void Awake()
@@ -74,6 +80,7 @@ public class CameraSystem : MonoBehaviour
         black = GameObject.Find("Black");
         thisPlayer = playerCam.Follow.gameObject;
         audioController = GameObject.FindObjectOfType<AudioController>();
+        
 
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
@@ -86,12 +93,19 @@ public class CameraSystem : MonoBehaviour
         if (guardShotReference != null)
         {
             if (!start) {
+
+                //setting up start cutScene
                 introCutSceneSetup();
+
+                
+
+
                 start = true;
             }
 
+           
             //for the first escape key press we want to end the cutscene and skip to the player cam
-            if(!introDone && Input.GetKeyDown(KeyCode.Escape))
+            if (!introDone && Input.GetKeyDown(KeyCode.Escape))
             {
                 introEnd();
             }
@@ -108,6 +122,10 @@ public class CameraSystem : MonoBehaviour
             gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
             guardShotReference = GameObject.Find("Guard3(Clone)");
         }
+
+
+       
+        
     }
 
     public void introEnd()
@@ -132,6 +150,7 @@ public class CameraSystem : MonoBehaviour
             SetLayerRecursively(securityCameraReference, 10);
 
             black.SetActive(true);
+            
         }
     }
 
@@ -146,7 +165,7 @@ public class CameraSystem : MonoBehaviour
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
         sceneTransitionCanvas.SetActive(true);
         //find security cam
-        securityCameraReference = GameObject.Find("Camera 1");
+        securityCameraReference = GameObject.Find("Camera 2");
 
         //setting the layers for paintings and guard so they render
         SetPaintingsLayer(default);
@@ -230,26 +249,30 @@ public class CameraSystem : MonoBehaviour
 
     public void caughtCutScene(int guardViewID, int caughtPlayerID, string message)
     {
-        isCutSceneHappening = true;
+        
         GameObject guard = PhotonView.Find(guardViewID).gameObject;
 
 
 
-
+        caughtPlayerObject = PhotonView.Find(caughtPlayerID).gameObject;
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(guard.transform, 1.0f, 10.0f);
-        caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(PhotonView.Find(caughtPlayerID).gameObject.transform, 1.0f, 10.0f);
+        caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(caughtPlayerObject.transform, 1.0f, 10.0f);
 
         guardCaughtIn4k.Follow = caughtTargetGroup.transform;
         guardCaughtIn4k.LookAt = caughtTargetGroup.transform;
 
+        
+
         guardCaughtIn4k.Priority = 11;
 
-        audioController.PlayIntenseTheme();
+        //audioController.PlayIntenseTheme();
 
         SetLayerRecursively(guard, default);
         BarController.Instance.SetText(message);
         BarController.Instance.ShowBars();
+        
+        isCaughtCutSceneHappening = true;
 
         StartCoroutine(endCaughtCutScene(guard));
 
@@ -280,11 +303,12 @@ public class CameraSystem : MonoBehaviour
 
         GuardController.Instance.disableAllguards(false);
 
-        isCutSceneHappening = false;
+        isCaughtCutSceneHappening = false;
     }
 
 
-    
 
+    
+   
 }
 
