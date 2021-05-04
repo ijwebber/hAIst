@@ -20,12 +20,12 @@ public class IntentActions : MonoBehaviourPun
 
         if (Input.GetKeyDown(KeyCode.B)) {
             Debug.Log("*** Switching Off");
-            laserController.DisableNearestLaser(this.GetComponent<Transform>().position);
+            laserController.DisableNearestLaser(transform.position);
         }
 
         if (Input.GetKeyDown(KeyCode.N)) {
             Debug.Log("*** Switching On");
-            EnableLasers();
+            EnableLaser();
         }
 
         if (Input.GetKeyDown(KeyCode.U)) {
@@ -38,17 +38,17 @@ public class IntentActions : MonoBehaviourPun
         if (score > 0.3) {
             switch (topIntent)
             {
-                case "ShowMap":
-                    ShowMap();
+                case "EnableCamera":
+                    EnableCamera();
                     break;
-                case "HideMap":
-                    HideMap();
+                case "DisableCamera":
+                    cameraController.DisableClosestCamera(transform.position);
                     break;
-                case "EnableLasers":
-                    EnableLasers();
+                case "EnableLaser":
+                    EnableLaser();
                     break;
-                case "DisableLasers":
-                    laserController.DisableNearestLaser(this.GetComponent<Transform>().position);
+                case "DisableLaser":
+                    laserController.DisableNearestLaser(transform.position);
                     break;
                 default:
                     Unsure();
@@ -59,42 +59,13 @@ public class IntentActions : MonoBehaviourPun
         }
     }
 
-    public void ShowMap() {
-        Debug.Log("I need to show you the map!");
+    public void EnableCamera()
+    {
+        Debug.Log("Why would I do that!");
     }
 
-    public void HideMap() {
-        Debug.Log("I need to hide the map from you!");
-    }
-
-    public void EnableLasers() {
-        Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
-        LaserDown[] lasersDown = GameObject.FindObjectsOfType<LaserDown>();
-        
-        foreach (Laser laser in lasers)
-        {
-            laser.GetComponent<PhotonView>().RPC("enableLaser", RpcTarget.All);
-        }
-
-        foreach (LaserDown laser in lasersDown)
-        {
-            laser.GetComponent<PhotonView>().RPC("enableLaser", RpcTarget.All);
-        }
-    }
-
-    public void DisableLasers() {
-        Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
-        LaserDown[] lasersDown = GameObject.FindObjectsOfType<LaserDown>();
-        
-        foreach (Laser laser in lasers)
-        {
-            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-        }
-
-        foreach (LaserDown laser in lasersDown)
-        {
-            laser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-        }
+    public void EnableLaser() {
+        Debug.Log("Why would I do that!");
     }
 
     public void Unsure() {
