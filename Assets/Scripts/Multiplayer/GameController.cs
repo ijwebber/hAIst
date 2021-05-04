@@ -145,6 +145,7 @@ public class GameController : MonoBehaviourPunCallbacks
             // gameState = updatedGameState;
             gameState = Mathf.Max(gameState, updatedGameState);
             List <string> newText = new List<string>();
+            List <GameObject> toSteal = new List<GameObject>();
             switch (gameState) 
             {
                 case 0: // starting state
@@ -176,7 +177,7 @@ public class GameController : MonoBehaviourPunCallbacks
                     }
                     setNewQuest(nextQuestItems, newText, localRegress);
                     break;
-                case 3: // point to key object 2
+                case 3: // middle key objects stolen
                     if (!localRegress) {
                         playerUpdates.updateDisplay("You have stolen a key painting!");
                         if (localChange) {
@@ -186,7 +187,6 @@ public class GameController : MonoBehaviourPunCallbacks
                         playerUpdates.updateDisplay("You have lost a key painting!");
                         updateDisp("A key painting has been lost!");
                     }
-                    List <GameObject> toSteal = new List<GameObject>();
                     foreach (var item in specialItems)
                     {
                         if (!item.GetComponent<CollectableItem>().stolen) {
@@ -203,7 +203,33 @@ public class GameController : MonoBehaviourPunCallbacks
                     }
                     setNewQuest(toSteal, newText, localRegress);
                     break;
-                case 4: // point to exit
+                case 4: // middle key objects stolen
+                    if (!localRegress) {
+                        playerUpdates.updateDisplay("You have stolen a key painting!");
+                        if (localChange) {
+                            updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
+                        }
+                    } else  {
+                        playerUpdates.updateDisplay("You have lost a key painting!");
+                        updateDisp("A key painting has been lost!");
+                    }
+                    foreach (var item in specialItems)
+                    {
+                        if (!item.GetComponent<CollectableItem>().stolen) {
+                            if (item.GetComponent<CollectableItem>().guardPoint == null) {
+                                toSteal.Add(item);
+                                newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                            } else {
+                                toSteal.Add(item.GetComponent<CollectableItem>().guardPoint);
+                                newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                            }
+                        } else {
+                            newText.Add("<s><i>Steal " + item.GetComponent<CollectableItem>().itemName + "</s></i>");
+                        }
+                    }
+                    setNewQuest(toSteal, newText, localRegress);
+                    break;
+                case 5: // point to exit
                     playerUpdates.updateDisplay("You have stolen a key painting");
                     if (localChange) {
                         // playerController.Specials++;
