@@ -119,7 +119,7 @@ public class POVMesh : MonoBehaviourPun
             if (start) {
                 Transform fromPoint = player.transform;
                 if (cameraSystem.isCaughtCutSceneHappening) {
-                    fromPoint = cameraSystem.guardCaughtIn4k.LookAt;
+                    fromPoint = cameraSystem.caughtPlayerObject.transform;
                 }
                     viewMeshFilter.transform.position = new Vector3(fromPoint.position.x, 16.5f, fromPoint.position.z);
                     viewMeshFilter.transform.rotation = fromPoint.rotation;
