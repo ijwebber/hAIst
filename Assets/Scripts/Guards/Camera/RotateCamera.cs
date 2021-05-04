@@ -21,18 +21,20 @@ public class RotateCamera : MonoBehaviour
 
     void Update()
     {   
-        if (currentRotation > maxBound || currentRotation < minBound) {
-            goingRight = !goingRight;
-        }
-        
-        float rot;
-        if (goingRight) {
-            rot = speed;
-        } else {
-            rot = -speed;
-        }
-        
-        currentRotation += rot;
-        transform.Rotate(0, rot, 0);
+        if (!GetComponent<CameraProps>().disabled) {
+            if (currentRotation > maxBound || currentRotation < minBound) {
+                goingRight = !goingRight;
+            }
+            
+            float rot;
+            if (goingRight) {
+                rot = speed;
+            } else {
+                rot = -speed;
+            }
+            
+            currentRotation += rot;
+            transform.Rotate(0, rot, 0);
+        }        
     }
 }

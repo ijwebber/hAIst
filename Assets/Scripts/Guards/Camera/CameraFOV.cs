@@ -30,14 +30,20 @@ public class CameraFOV : MonoBehaviour {
 	}
 
     void Update() {
-        DrawFOV();
+        if (!GetComponent<CameraProps>().disabled) {
+            DrawFOV();
+        } else {
+            viewMesh.Clear();
+        }
     }
 
 
 	IEnumerator FindTargetsWithDelay(float delay) {
 		while (true) {
 			yield return new WaitForSeconds (delay);
-			GetVisibleTargets();
+            if (!GetComponent<CameraProps>().disabled) {
+                GetVisibleTargets();
+            }
 		}
 	}
 
