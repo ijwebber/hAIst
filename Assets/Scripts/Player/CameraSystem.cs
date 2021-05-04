@@ -262,6 +262,8 @@ public class CameraSystem : MonoBehaviour
         guardCaughtIn4k.Follow = caughtTargetGroup.transform;
         guardCaughtIn4k.LookAt = caughtTargetGroup.transform;
 
+        guardCaughtIn4k.GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XAxis.m_InputAxisValue = 360;
+
         
 
         guardCaughtIn4k.Priority = 11;
@@ -290,7 +292,7 @@ public class CameraSystem : MonoBehaviour
 
     private IEnumerator endCaughtCutScene(GameObject guard)
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3.5f);
 
 
         guardCaughtIn4k.Priority = 9;
