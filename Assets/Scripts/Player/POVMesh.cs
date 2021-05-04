@@ -120,12 +120,11 @@ public class POVMesh : MonoBehaviourPun
                 Vector3 fromPoint = player.transform.position;
                 if (cameraSystem.isCaughtCutSceneHappening) {
                     fromPoint = cameraSystem.guardCaughtIn4k.LookAt.position;
-                } else {
+                }
                     viewMeshFilter.transform.position = new Vector3(fromPoint.x, 16.5f, fromPoint.z);
                     viewMeshFilter.transform.rotation = player.transform.rotation;
                     objectMeshFilter.transform.position = new Vector3(fromPoint.x, 16.5f, fromPoint.z);
                     objectMeshFilter.transform.rotation = player.transform.rotation;
-                }
                 DrawFOV(fromPoint);
             }
         }
