@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviourPun
     //private TextMesh Caption = null;
     public bool disabled = false;
     public bool paused = false;
-    private Image staminaBar;
+    private Image staminaBar, staminaIndicator;
     private float stamina = 1;
     private float alpha = 1;
     private bool tired = false;
@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviourPun
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraControlPlayer Component on playerPrefab.", this);
         }
         staminaBar = GameObject.Find("StaminaBar").GetComponent<Image>();
+        staminaIndicator = GameObject.Find("StaminaBolt").GetComponent<Image>();
         uiController = GameObject.FindObjectOfType<UIController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
         objectives = GameObject.Find("Objectives");
@@ -135,6 +136,7 @@ public class PlayerMovement : MonoBehaviourPun
                 alpha = 0;
             }
             staminaBar.color = new Color(staminaR,staminaG,staminaB,alpha);
+            staminaIndicator.color = new Color(staminaR,staminaG,staminaB,alpha);
 
             moveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
             staminaBar.fillAmount = stamina;

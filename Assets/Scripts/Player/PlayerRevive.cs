@@ -30,6 +30,7 @@ public class PlayerRevive : MonoBehaviour
     void Start()
     {
         StartCoroutine("FindReviveWithDelay", 0.01f);
+        textObject = GameObject.Find("DisplayMessagePlayer");
     }
 
     void Update() {
@@ -168,7 +169,10 @@ public class PlayerRevive : MonoBehaviour
                 }
 
             } else {
-                textObject.GetComponent<Text>().text = "";
+                if (textObject.GetComponent<Text>().text == "Hold E to use self revive") {
+                    //dear isaac. This line of code nearly made me cry. THanks, josh
+                    textObject.GetComponent<Text>().text = "";
+                }
             }
         }
     }
