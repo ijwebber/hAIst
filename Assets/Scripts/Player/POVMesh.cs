@@ -28,7 +28,7 @@ public class POVMesh : MonoBehaviourPun
 
 
 
-    void DrawFOV(Vector3 fromPoint) {
+    void DrawFOV(Transform fromPoint) {
         int stepCount = Mathf.RoundToInt(playerController.viewAngle * meshResolution);
         float stepAngleSize = playerController.viewAngle / stepCount;
         List<Vector3> viewPoints = new List<Vector3>();
@@ -62,24 +62,24 @@ public class POVMesh : MonoBehaviourPun
         viewMesh.triangles = triangles;
         viewMesh.RecalculateNormals();
     }
-    ViewCastInfo viewCast(float globalAngle, Vector3 fromPoint) {
-        Vector3  dir = DirFromAngle(globalAngle, true);
+    ViewCastInfo viewCast(float globalAngle, Transform fromPoint) {
+        Vector3  dir = DirFromAngle(globalAngle, true,fromPoint);
         RaycastHit hit;
 
-        if (Physics.Raycast(fromPoint, dir, out hit, playerController.viewRadius, obstacleMask)) {
+        if (Physics.Raycast(fromPoint.position, dir, out hit, playerController.viewRadius, obstacleMask)) {
             return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
         } else {
-            return new ViewCastInfo(false, fromPoint + dir * playerController.viewRadius, playerController.viewRadius, globalAngle);
+            return new ViewCastInfo(false, fromPoint.position + dir * playerController.viewRadius, playerController.viewRadius, globalAngle);
         }
 
     }
 
     //takes in an angle and gives its direction 
-    public Vector3 DirFromAngle(float angleDegrees, bool angleIsGlobal)
+    public Vector3 DirFromAngle(float angleDegrees, bool angleIsGlobal, Transform fromPoint)
     {
         if (!angleIsGlobal)
         {
-            angleDegrees += player.transform.eulerAngles.y;
+            angleDegrees += transform.eulerAngles.y;
         }
         return new Vector3(Mathf.Sin(angleDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleDegrees * Mathf.Deg2Rad));
     }
@@ -121,11 +121,11 @@ public class POVMesh : MonoBehaviourPun
                 if (cameraSystem.isCaughtCutSceneHappening) {
                     fromPoint = cameraSystem.caughtPlayerObject.transform;
                 }
-                    viewMeshFilter.transform.position = new Vector3(fromPoint.position.x, 16.5f, fromPoint.position.z);
-                    viewMeshFilter.transform.rotation = fromPoint.rotation;
-                    objectMeshFilter.transform.position = new Vector3(fromPoint.position.x, 16.5f, fromPoint.position.z);
-                    objectMeshFilter.transform.rotation = fromPoint.rotation;
-                DrawFOV(fromPoint.position);
+                viewMeshFilter.transform.position = new Vector3(fromPoint.position.x, 16.5f, fromPoint.position.z);
+                viewMeshFilter.transform.rotation = fromPoint.rotation;
+                objectMeshFilter.transform.position = new Vector3(fromPoint.position.x, 16.5f, fromPoint.position.z);
+                objectMeshFilter.transform.rotation = fromPoint.rotation;
+                DrawFOV(fromPoint);
             }
         }
     }
