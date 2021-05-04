@@ -35,6 +35,7 @@ public class CameraSystem : MonoBehaviour
     public GameObject swatTeam1;
     public GameObject swatTeam2;
     public GameObject gameUIReference;
+    public GameObject caughtPlayerObject;
 
     [Header("Flags and floats")]
     [Range(0.6f, 1.0f)]
@@ -49,6 +50,7 @@ public class CameraSystem : MonoBehaviour
     private GameObject securityCameraReference;
     private float startingHeight;
     private float startingDistance;
+    
     
 
     [Header("Other Stuff")]
@@ -252,10 +254,10 @@ public class CameraSystem : MonoBehaviour
 
 
 
-
+        caughtPlayerObject = PhotonView.Find(caughtPlayerID).gameObject;
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(guard.transform, 1.0f, 10.0f);
-        caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(PhotonView.Find(caughtPlayerID).gameObject.transform, 1.0f, 10.0f);
+        caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(caughtPlayerObject.transform, 1.0f, 10.0f);
 
         guardCaughtIn4k.Follow = caughtTargetGroup.transform;
         guardCaughtIn4k.LookAt = caughtTargetGroup.transform;
