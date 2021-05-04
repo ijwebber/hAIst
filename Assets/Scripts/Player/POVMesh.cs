@@ -35,7 +35,7 @@ public class POVMesh : MonoBehaviourPun
         Debug.Log("!!!! 1 " + stepCount + " //" + stepAngleSize);
         for (int i = 0; i <= stepCount; i++)
         {
-            float angle = this.transform.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;
+            float angle = fromPoint.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;
             ViewCastInfo newViewCast = viewCast(angle, fromPoint);
             viewPoints.Add(newViewCast.point);
         }
@@ -63,7 +63,7 @@ public class POVMesh : MonoBehaviourPun
         viewMesh.RecalculateNormals();
     }
     ViewCastInfo viewCast(float globalAngle, Transform fromPoint) {
-        Vector3  dir = DirFromAngle(globalAngle, true,fromPoint);
+        Vector3  dir = DirFromAngle(globalAngle, true, fromPoint);
         RaycastHit hit;
 
         if (Physics.Raycast(fromPoint.position, dir, out hit, playerController.viewRadius, obstacleMask)) {
@@ -79,7 +79,7 @@ public class POVMesh : MonoBehaviourPun
     {
         if (!angleIsGlobal)
         {
-            angleDegrees += transform.eulerAngles.y;
+            angleDegrees += fromPoint.eulerAngles.y;
         }
         return new Vector3(Mathf.Sin(angleDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleDegrees * Mathf.Deg2Rad));
     }
