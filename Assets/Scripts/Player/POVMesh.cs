@@ -47,7 +47,7 @@ public class POVMesh : MonoBehaviourPun
         vertices[0] = Vector3.zero;
         for (int i = 0; i < vertexCount-1; i++)
         {
-            vertices[i+1] = this.transform.InverseTransformPoint(viewPoints[i]);
+            vertices[i+1] = fromPoint.InverseTransformPoint(viewPoints[i]);
 
             if(i < vertexCount - 2){
                 triangles[i*3] = 0;
