@@ -18,7 +18,7 @@ public class IntentActions : MonoBehaviourPun
 
         if (Input.GetKeyDown(KeyCode.B)) {
             Debug.Log("*** Switching Off");
-            DisableLasers();
+            laserController.DisableNearestLaser(this.GetComponent<Transform>().position);
         }
 
         if (Input.GetKeyDown(KeyCode.N)) {
@@ -41,7 +41,7 @@ public class IntentActions : MonoBehaviourPun
                     EnableLasers();
                     break;
                 case "DisableLasers":
-                    DisableLasers();
+                    laserController.DisableNearestLaser(this.GetComponent<Transform>().position);
                     break;
                 default:
                     Unsure();

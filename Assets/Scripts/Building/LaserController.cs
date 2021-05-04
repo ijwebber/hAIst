@@ -9,7 +9,8 @@ public class LaserController : MonoBehaviour
         Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
         foreach (Laser laser in lasers)
         {
-            if (closestLaser == null || Vector3.Distance(laser.GetComponent<Transform>().position, pos) < Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos))
+            if (closestLaser == null || 
+                (!laser.disabled && Vector3.Distance(laser.GetComponent<Transform>().position, pos) < Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos)))
             {
                 closestLaser = laser;
             }
@@ -19,7 +20,8 @@ public class LaserController : MonoBehaviour
         LaserDown[] laserDowns = GameObject.FindObjectsOfType<LaserDown>();
         foreach (LaserDown laserDown in laserDowns)
         {
-            if (closestLaserDown == null || Vector3.Distance(laserDown.GetComponent<Transform>().position, pos) < Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos))
+            if (closestLaserDown == null || 
+                (!laserDown.disabled && Vector3.Distance(laserDown.GetComponent<Transform>().position, pos) < Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos)))
             {
                 closestLaserDown = laserDown;
             }
