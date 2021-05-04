@@ -20,7 +20,7 @@ public class POVMesh : MonoBehaviourPun
     private bool start = false;
 
     private CameraControlPlayer cameraControlPlayer;
-    [SerializeField] private CameraSystem cameraSystem;
+    private CameraSystem cameraSystem;
 
     [HideInInspector]
     public List<GameObject> behindGuardTargets = new List<GameObject>();
@@ -89,6 +89,7 @@ public class POVMesh : MonoBehaviourPun
         playerController = GameObject.FindObjectOfType<PlayerController>();
         player = playerController.getPlayer();
         var cameraControlPlayers = GameObject.FindObjectsOfType<CameraControlPlayer>();
+        cameraSystem = GameObject.FindObjectOfType<CameraSystem>();
         foreach (var ccm in cameraControlPlayers)
         {
             if (ccm.photonView.IsMine) {
