@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: gold
   m_Shader: {fileID: 4800000, guid: 65f6f9b0b3b58644280fa08171b3a0cf, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _USEEMISSION_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -88,14 +88,14 @@ Material:
     - _SrcBlend: 1
     - _Surface: 0
     - _UseAlphaClipping: 0
-    - _UseEmission: 0
+    - _UseEmission: 1
     - _UseOcclusion: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.64647466, g: 0.735849, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
     - _IndirectLightMinColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
