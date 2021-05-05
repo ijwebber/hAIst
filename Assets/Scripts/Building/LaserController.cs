@@ -11,7 +11,7 @@ public enum LaserDisableResult {
 public class LaserController : MonoBehaviour
 {
 
-    float maxDistanceToDisable = 10;
+    float maxDistanceToDisable = 20;
 
     public LaserDisableResult DisableNearestLaser(Vector3 pos)
     {
