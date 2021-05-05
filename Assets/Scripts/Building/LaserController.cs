@@ -4,7 +4,7 @@ using Photon.Pun;
 public class LaserController : MonoBehaviour
 {
 
-    float maxDistanceToDisable = 10;
+    float maxDistanceToDisable = 20;
 
     public void DisableNearestLaser(Vector3 pos)
     {
