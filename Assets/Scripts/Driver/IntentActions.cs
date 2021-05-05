@@ -19,12 +19,10 @@ public class IntentActions : MonoBehaviourPun
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {
-            Debug.Log("*** Switching Off");
-            laserController.DisableNearestLaser(transform.position);
+            DisableLaser();
         }
 
         if (Input.GetKeyDown(KeyCode.N)) {
-            Debug.Log("*** Switching On");
             EnableLaser();
         }
 
@@ -48,7 +46,7 @@ public class IntentActions : MonoBehaviourPun
                     EnableLaser();
                     break;
                 case "DisableLaser":
-                    laserController.DisableNearestLaser(transform.position);
+                    DisableLaser();
                     break;
                 default:
                     Unsure();
@@ -72,11 +70,22 @@ public class IntentActions : MonoBehaviourPun
 
     public void EnableCamera()
     {
-        Debug.Log("*** + Why would I do that!");
+        Debug.Log("*** Why would I do that!");
+    }
+
+    public void DisableLaser() {
+        LaserDisableResult laserResult = laserController.DisableNearestLaser(transform.position);
+        if (laserResult == LaserDisableResult.NOT_FOUND) {
+            Debug.Log("*** Can't find a laser that is enabled to disable!");
+        } else if (laserResult == LaserDisableResult.TOO_FAR) {
+            Debug.Log("*** You need to get closer to the laser!");
+        } else {
+            Debug.Log("*** I've switched the laser off");
+        }
     }
 
     public void EnableLaser() {
-        Debug.Log("*** + Why would I do that!");
+        Debug.Log("*** Why would I do that!");
     }
 
     public void Unsure() {

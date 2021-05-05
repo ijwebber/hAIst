@@ -34,10 +34,10 @@ public class GameCameraController : MonoBehaviour
         if (enabledCameras.Count == 0) {
             return DisableCameraResult.NOT_FOUND;
         } else {
-            GameObject closest = Cameras[0];
-            float dist = Vector3.Distance(playerPos, Cameras[0].transform.position);
+            GameObject closest = enabledCameras[0];
+            float dist = Vector3.Distance(playerPos, enabledCameras[0].transform.position);
             
-            foreach (GameObject camera in Cameras)
+            foreach (GameObject camera in enabledCameras)
             {
                 float newDist = Vector3.Distance(playerPos, camera.transform.position);
 
