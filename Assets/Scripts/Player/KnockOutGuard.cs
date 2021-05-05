@@ -11,7 +11,7 @@ public class KnockOutGuard : MonoBehaviour
     private int guardViewID = -1;
     
     private TextMeshProUGUI guardStatusText;
-    private GameObject guard;
+    public GameObject guard;
     // Start is called before the first frame update
     void Start()
     {
@@ -73,9 +73,7 @@ public class KnockOutGuard : MonoBehaviour
     [PunRPC]
     void KnockOut(int viewID)
     {   
-
         inRangeOfGuard = true;
         guardViewID = viewID;
-        
     }
 }

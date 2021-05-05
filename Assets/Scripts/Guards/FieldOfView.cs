@@ -73,10 +73,7 @@ public class FieldOfView : MonoBehaviour
                 //checks if obstacle is in way
                 if (!Physics.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask))
                 {
-
-                    
                     behindGuardTargets.Add(target);
-                    
                 }
             }
         }
