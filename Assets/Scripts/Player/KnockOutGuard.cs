@@ -21,8 +21,6 @@ public class KnockOutGuard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-
         //if text object exists from previous frame, delete it as we need to update it for this frame
         // if (guardStatusText && guard && !guard.GetComponent<GuardMovement>().guardDisabled)
         // {
