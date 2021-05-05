@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System;
+
+public enum LaserDisableResult {
+    SUCCESS = 0,
+    NOT_FOUND = 1,
+    TOO_FAR = 2
+}
 
 public class LaserController : MonoBehaviour
 {
 
-    float maxDistanceToDisable = 10;
+    float maxDistanceToDisable = 20;
 
-    public void DisableNearestLaser(Vector3 pos)
+    public LaserDisableResult DisableNearestLaser(Vector3 pos)
     {
         Laser closestLaser = null;
         Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
@@ -14,7 +21,7 @@ public class LaserController : MonoBehaviour
         {
             float distance = Vector3.Distance(laser.GetComponent<Transform>().position, pos);
 
-            if (!laser.disabled && distance < maxDistanceToDisable && (closestLaser == null || distance < Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos)))
+            if (!laser.disabled && (closestLaser == null || distance < Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos)))
             {
                 closestLaser = laser;
             }
@@ -26,7 +33,7 @@ public class LaserController : MonoBehaviour
         {
             float distance = Vector3.Distance(laserDown.GetComponent<Transform>().position, pos);
 
-            if (!laserDown.disabled && distance < maxDistanceToDisable && (closestLaserDown == null || distance < Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos)))
+            if (!laserDown.disabled && (closestLaserDown == null || distance < Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos)))
             {
                 closestLaserDown = laserDown;
             }
@@ -36,20 +43,59 @@ public class LaserController : MonoBehaviour
         {
             if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos))
             {
-                closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+                    closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                    return LaserDisableResult.SUCCESS;
+                } else {
+                    return LaserDisableResult.TOO_FAR;
+                }   
             }
             else
-            {
-                closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+            {   
+                if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+                    closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                    return LaserDisableResult.SUCCESS;
+                } else {
+                    return LaserDisableResult.TOO_FAR;
+                }
             }
         }
         else if (closestLaser != null)
         {
-            closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+            if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+                closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                return LaserDisableResult.SUCCESS;
+            } else {
+                return LaserDisableResult.TOO_FAR;
+            } 
         }
         else if (closestLaserDown != null)
         {
-            closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+            if (Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+                closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                return LaserDisableResult.SUCCESS;
+            } else {
+                return LaserDisableResult.TOO_FAR;
+            }
+        } else {
+            return LaserDisableResult.NOT_FOUND;
         }
+    }
+
+    private double perpendicularDistance(Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        Vector2 startp = new Vector2(p1.x, p1.z);
+        Vector2 endp = new Vector2(p2.x, p2.z);
+        Vector2 p = new Vector2(p3.x, p3.z);
+
+        double a = Vector2.Distance(startp, endp);
+        double b = Vector2.Distance(startp, p);
+        double c = Vector2.Distance(endp, p);
+
+        double s = (a + b + c) / 2.0;
+
+        double distance = 2.0 * Math.Sqrt(s * (s - a) * (s - b) * (s - c)) / a;
+
+        return distance;
     }
 }

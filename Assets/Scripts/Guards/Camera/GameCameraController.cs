@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using Photon.Pun;
 
+public enum DisableCameraResult {
+    SUCCESS = 0,
+    NOT_FOUND = 1,
+    TOO_FAR = 2
+}
+
+
 public class GameCameraController : MonoBehaviour
 {
     List<GameObject> Cameras;
@@ -14,7 +21,7 @@ public class GameCameraController : MonoBehaviour
         }
     }
 
-    public bool DisableClosestCamera(Vector3 playerPos) {
+    public DisableCameraResult DisableClosestCamera(Vector3 playerPos) {
         List<GameObject> enabledCameras = new List<GameObject>();
 
         foreach (GameObject camera in Cameras)
@@ -25,12 +32,12 @@ public class GameCameraController : MonoBehaviour
         }
 
         if (enabledCameras.Count == 0) {
-            return false;
+            return DisableCameraResult.NOT_FOUND;
         } else {
-            GameObject closest = Cameras[0];
-            float dist = Vector3.Distance(playerPos, Cameras[0].transform.position);
+            GameObject closest = enabledCameras[0];
+            float dist = Vector3.Distance(playerPos, enabledCameras[0].transform.position);
             
-            foreach (GameObject camera in Cameras)
+            foreach (GameObject camera in enabledCameras)
             {
                 float newDist = Vector3.Distance(playerPos, camera.transform.position);
 
@@ -41,12 +48,12 @@ public class GameCameraController : MonoBehaviour
             }
 
             if (dist > 15) {
-                return false;
+                return DisableCameraResult.TOO_FAR;
             } else {
                 closest.GetComponent<PhotonView>().RPC("setDisabled", RpcTarget.All, true);
             }
         }
         
-        return true;
+        return DisableCameraResult.SUCCESS;
     }
 }
