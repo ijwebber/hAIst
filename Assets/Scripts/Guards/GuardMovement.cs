@@ -194,10 +194,10 @@ public class GuardMovement : MonoBehaviourPun
             {
                 foreach (GameObject g in fovScript.behindGuardTargets)
                 {
-                        PhotonView view = PhotonView.Get(this);
-                        Player p = g.GetComponent<PhotonView>().Controller;
+                    PhotonView view = PhotonView.Get(this);
+                    Player p = g.GetComponent<PhotonView>().Controller;
 
-                        g.GetComponent<PhotonView>().RPC("KnockOut", p, view.ViewID);
+                    g.GetComponent<PhotonView>().RPC("KnockOut", p, view.ViewID);
                 }
             }
         }        

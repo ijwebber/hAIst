@@ -7,6 +7,7 @@ public class GuardCanvas : MonoBehaviour
 {
     public Sprite disabledGuard;
     public Sprite disabledCamera;
+    public Sprite eKey;
     public Sprite cameraSprite;
     public Sprite sus;
     public Sprite exclamation;
@@ -42,30 +43,36 @@ public class GuardCanvas : MonoBehaviour
                 // Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position + offset);
                 Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position + offset + new Vector3(0,(1-cameraSystem.zoomMultiplier)*30,-(1-cameraSystem.zoomMultiplier)*20));
                 RectTransform pointerRectTransform = guardIndicator.GetComponent<RectTransform>();
-                switch (guard.state)
-                {
-                    case State.normal:
-                        guardIndicator.rectTransform.rotation = Quaternion.identity;
-                        guardIndicator.sprite = hat;
-                        guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
-                        break;
-                    case State.suspicious:
-                        guardIndicator.rectTransform.rotation = Quaternion.identity;
-                        guardIndicator.sprite = sus;
-                        guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(15,30);
-                        break;
-                    case State.chase:
-                        guardIndicator.rectTransform.rotation = Quaternion.identity;
-                        guardIndicator.sprite = exclamation;
-                        guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(10,30);
-                        break;
-                    case State.disabled:
-                        disabledFrames++;
-                        disabledFrames = disabledFrames % 360;
-                        guardIndicator.rectTransform.rotation = Quaternion.Euler(0,0,30 * Mathf.Floor(disabledFrames/5));
-                        guardIndicator.sprite = disabledGuard;
-                        guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
-                        break;
+                if (playerController.player.GetComponent<KnockOutGuard>().guard == guard.gameObject && guard.state != State.disabled) {
+                    guardIndicator.rectTransform.rotation = Quaternion.identity;
+                    guardIndicator.sprite = eKey;
+                    guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
+                } else {
+                    switch (guard.state)
+                    {
+                        case State.normal:
+                            guardIndicator.rectTransform.rotation = Quaternion.identity;
+                            guardIndicator.sprite = hat;
+                            guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
+                            break;
+                        case State.suspicious:
+                            guardIndicator.rectTransform.rotation = Quaternion.identity;
+                            guardIndicator.sprite = sus;
+                            guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(15,30);
+                            break;
+                        case State.chase:
+                            guardIndicator.rectTransform.rotation = Quaternion.identity;
+                            guardIndicator.sprite = exclamation;
+                            guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(10,30);
+                            break;
+                        case State.disabled:
+                            disabledFrames++;
+                            disabledFrames = disabledFrames % 360;
+                            guardIndicator.rectTransform.rotation = Quaternion.Euler(0,0,30 * Mathf.Floor(disabledFrames/5));
+                            guardIndicator.sprite = disabledGuard;
+                            guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
+                            break;
+                    }
                 }
                 pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x)/canvas.scaleFactor, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor+guardIndicator.GetComponent<RectTransform>().sizeDelta.y);
             } else {
@@ -95,7 +102,7 @@ public class GuardCanvas : MonoBehaviour
                         break;
                     case State.suspicious:
                         cameraIndicator.sprite = exclamation;
-                        cameraIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(15,30);
+                        cameraIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(10,30);
                         break;
                 }
                 pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x)/canvas.scaleFactor, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor+cameraIndicator.GetComponent<RectTransform>().sizeDelta.y);

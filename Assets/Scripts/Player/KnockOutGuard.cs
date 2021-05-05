@@ -11,7 +11,7 @@ public class KnockOutGuard : MonoBehaviour
     private int guardViewID = -1;
     
     private TextMeshProUGUI guardStatusText;
-    private GameObject guard;
+    public GameObject guard;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,15 +24,15 @@ public class KnockOutGuard : MonoBehaviour
         
 
         //if text object exists from previous frame, delete it as we need to update it for this frame
-        if (guardStatusText && guard && !guard.GetComponent<GuardMovement>().guardDisabled)
-        {
-            guardStatusText.text = "";
-        }
+        // if (guardStatusText && guard && !guard.GetComponent<GuardMovement>().guardDisabled)
+        // {
+        //     guardStatusText.text = "";
+        // }
 
         //if this player is behind a guard then get the guard gameobject using the id
         if (guardViewID != -1)
         {
-            guard = PhotonNetwork.GetPhotonView(guardViewID).gameObject;
+            // guard = PhotonNetwork.GetPhotonView(guardViewID).gameObject;
             guardStatusText = guard.GetComponent<GuardKnockOutTimer>().statusText;
         }
 
@@ -48,12 +48,12 @@ public class KnockOutGuard : MonoBehaviour
         {
             GuardKnockOutTimer knockoutscript = guard.GetComponent<GuardKnockOutTimer>();
             
-            guardStatusText.text = "E";
+            // guardStatusText.text = "E";
             
             //if pressed destroy "E" text as timer text will take its place and set the guard's disabled flag to true
             if (Input.GetKeyDown(KeyCode.E))
             {
-                guardStatusText.text = "";
+                // guardStatusText.text = "";
                 guard.GetComponent<GuardMovement>().guardDisabled = true;
                 // guard.GetComponent<GuardMovement>().transferSpecials(this.GetComponent<PlayerController>());
             }
@@ -73,9 +73,7 @@ public class KnockOutGuard : MonoBehaviour
     [PunRPC]
     void KnockOut(int viewID)
     {   
-
         inRangeOfGuard = true;
         guardViewID = viewID;
-        
     }
 }
