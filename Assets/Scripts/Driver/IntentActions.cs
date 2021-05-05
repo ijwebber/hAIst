@@ -19,17 +19,15 @@ public class IntentActions : MonoBehaviourPun
         }
 
         if (Input.GetKeyDown(KeyCode.B)) {
-            Debug.Log("*** Switching Off");
-            laserController.DisableNearestLaser(transform.position);
+            DisableLaser();
         }
 
         if (Input.GetKeyDown(KeyCode.N)) {
-            Debug.Log("*** Switching On");
             EnableLaser();
         }
 
         if (Input.GetKeyDown(KeyCode.U)) {
-            cameraController.DisableClosestCamera(transform.position);
+            DisableCamera();
         }
 
     }
@@ -42,13 +40,13 @@ public class IntentActions : MonoBehaviourPun
                     EnableCamera();
                     break;
                 case "DisableCamera":
-                    cameraController.DisableClosestCamera(transform.position);
+                    DisableCamera();
                     break;
                 case "EnableLaser":
                     EnableLaser();
                     break;
                 case "DisableLaser":
-                    laserController.DisableNearestLaser(transform.position);
+                    DisableLaser();
                     break;
                 default:
                     Unsure();
@@ -59,13 +57,35 @@ public class IntentActions : MonoBehaviourPun
         }
     }
 
+    public void DisableCamera() {
+        DisableCameraResult cameraResult = cameraController.DisableClosestCamera(transform.position);
+        if (cameraResult == DisableCameraResult.NOT_FOUND) {
+            Debug.Log("*** Can't find a camera that is enabled to disable!");
+        } else if (cameraResult == DisableCameraResult.TOO_FAR) {
+            Debug.Log("*** You need to get closer to the camera!");
+        } else {
+            Debug.Log("*** I've switched the camera off");
+        }
+    }
+
     public void EnableCamera()
     {
-        Debug.Log("*** + Why would I do that!");
+        Debug.Log("*** Why would I do that!");
+    }
+
+    public void DisableLaser() {
+        LaserDisableResult laserResult = laserController.DisableNearestLaser(transform.position);
+        if (laserResult == LaserDisableResult.NOT_FOUND) {
+            Debug.Log("*** Can't find a laser that is enabled to disable!");
+        } else if (laserResult == LaserDisableResult.TOO_FAR) {
+            Debug.Log("*** You need to get closer to the laser!");
+        } else {
+            Debug.Log("*** I've switched the laser off");
+        }
     }
 
     public void EnableLaser() {
-        Debug.Log("*** + Why would I do that!");
+        Debug.Log("*** Why would I do that!");
     }
 
     public void Unsure() {
