@@ -61,14 +61,14 @@ public class IntentActions : MonoBehaviourPun
 
     public void EnableCamera()
     {
-        Debug.Log("Why would I do that!");
+        Debug.Log("*** + Why would I do that!");
     }
 
     public void EnableLaser() {
-        Debug.Log("Why would I do that!");
+        Debug.Log("*** + Why would I do that!");
     }
 
     public void Unsure() {
-        Debug.Log("I am unsure as to what to do!");
+        Debug.Log("*** + I am unsure as to what to do!");
     }
 }
