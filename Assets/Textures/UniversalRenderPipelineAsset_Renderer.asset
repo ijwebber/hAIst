@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: BehindMaskView
+  m_Name: BehindMaskViewW
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: BehindMaskView
+    passTag: BehindMaskViewW
     Event: 500
     filterSettings:
       RenderQueueType: 1
@@ -293,7 +293,7 @@ MonoBehaviour:
       RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
-        m_Bits: 1061120
+        m_Bits: 12544
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
@@ -368,14 +368,14 @@ MonoBehaviour:
   - {fileID: -3580524811760766526}
   - {fileID: -6262859972001139826}
   - {fileID: -7071447176035468431}
-  - {fileID: -8516966259462577537}
   - {fileID: 2750721533087398524}
+  - {fileID: -8516966259462577537}
   - {fileID: -2120419675862890358}
-  - {fileID: 3110519133378916598}
   - {fileID: 5040595360857737103}
   - {fileID: -291475518896013782}
+  - {fileID: 3110519133378916598}
   - {fileID: -4437936419890223418}
-  m_RendererFeatureMap: 2a9c0042fea9db89c2f18675a76b4fce8ef3db9a09da15a9717b7770422cdd9d7fe2bed44fa8cd897c3ab10fa9862c268a88710d8ac192e2f6301becabc82a2b8f476844c6caf3452afe7a538f78f4fbc6a6acdc564869c2
+  m_RendererFeatureMap: 2a9c0042fea9db89c2f18675a76b4fce8ef3db9a09da15a9717b7770422cdd9d7c3ab10fa9862c267fe2bed44fa8cd898a88710d8ac192e28f476844c6caf3452afe7a538f78f4fbf6301becabc82a2bc6a6acdc564869c2
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -423,8 +423,8 @@ MonoBehaviour:
     overrideMaterial: {fileID: 5561349426305759274, guid: 6baada13d5ed1eb4abb64f8d32cc77e7,
       type: 3}
     overrideMaterialPassIndex: 1
-    overrideDepthState: 0
-    depthCompareFunction: 4
+    overrideDepthState: 1
+    depthCompareFunction: 1
     enableWrite: 1
     stencilSettings:
       overrideStencilState: 0

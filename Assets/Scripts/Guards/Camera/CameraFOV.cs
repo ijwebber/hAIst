@@ -13,6 +13,7 @@ public class CameraFOV : MonoBehaviour {
 	public LayerMask obstacleMask;
     public MeshFilter viewMeshFilter;
     public float meshResolution;
+    public State cameraState = State.normal;
     Mesh viewMesh;
 
 	[HideInInspector]
@@ -68,6 +69,11 @@ public class CameraFOV : MonoBehaviour {
 			}
 		}
 
+        if (visibleTargets.Count > 0) {
+            cameraState = State.suspicious;
+        } else {
+            cameraState = State.normal;
+        }
         foreach (Transform target in visibleTargets) {
             guardController.MoveClosestGuard(target.position);
         }

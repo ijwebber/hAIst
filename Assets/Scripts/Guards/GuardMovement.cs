@@ -65,6 +65,7 @@ public class GuardMovement : MonoBehaviourPun
     {
         if (this.state == State.disabled || guardDisabled) //runs if guard is disabled
         {
+            state = State.disabled;
             //check if the timer has already been started, if so don't start it again
             if (!timedOut)
             {
