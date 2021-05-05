@@ -29,7 +29,7 @@ public class IntentActions : MonoBehaviourPun
         }
 
         if (Input.GetKeyDown(KeyCode.U)) {
-            cameraController.DisableClosestCamera(transform.position);
+            DisableCamera();
         }
 
     }
@@ -42,7 +42,7 @@ public class IntentActions : MonoBehaviourPun
                     EnableCamera();
                     break;
                 case "DisableCamera":
-                    cameraController.DisableClosestCamera(transform.position);
+                    DisableCamera();
                     break;
                 case "EnableLaser":
                     EnableLaser();
@@ -56,6 +56,17 @@ public class IntentActions : MonoBehaviourPun
             }
         } else {
             Unsure();
+        }
+    }
+
+    public void DisableCamera() {
+        DisableCameraResult cameraResult = cameraController.DisableClosestCamera(transform.position);
+        if (cameraResult == DisableCameraResult.NOT_FOUND) {
+            Debug.Log("*** Can't find a camera that is enabled to disable!");
+        } else if (cameraResult == DisableCameraResult.TOO_FAR) {
+            Debug.Log("*** You need to get closer to the camera!");
+        } else {
+            Debug.Log("*** I've switched the camera off");
         }
     }
 
