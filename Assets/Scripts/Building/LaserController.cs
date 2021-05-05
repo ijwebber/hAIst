@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System;
 
 public class LaserController : MonoBehaviour
 {
@@ -51,5 +52,22 @@ public class LaserController : MonoBehaviour
         {
             closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
         }
+    }
+
+    private double perpendicularDistance(Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        Vector2 startp = new Vector2(p1.x, p1.z);
+        Vector2 endp = new Vector2(p2.x, p2.z);
+        Vector2 p = new Vector2(p3.x, p3.z);
+
+        double a = Vector2.Distance(startp, endp);
+        double b = Vector2.Distance(startp, p);
+        double c = Vector2.Distance(endp, p);
+
+        double s = (a + b + c) / 2.0;
+
+        double distance = 2.0 * Math.Sqrt(s * (s - a) * (s - b) * (s - c)) / a;
+
+        return distance;
     }
 }
