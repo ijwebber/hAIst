@@ -11,7 +11,7 @@ public enum LaserDisableResult {
 public class LaserController : MonoBehaviour
 {
 
-    float maxDistanceToDisable = 20;
+    float maxDistanceToDisable = 10;
 
     public LaserDisableResult DisableNearestLaser(Vector3 pos)
     {
@@ -43,7 +43,8 @@ public class LaserController : MonoBehaviour
         {
             if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos))
             {
-                if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+                if (distanceFromLine(closestLaser.GetComponent<Transform>().position, closestLaser.hit.point, pos) < maxDistanceToDisable)
+                {
                     closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
                     return LaserDisableResult.SUCCESS;
                 } else {
@@ -52,7 +53,8 @@ public class LaserController : MonoBehaviour
             }
             else
             {   
-                if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+                if (distanceFromLine(closestLaserDown.GetComponent<Transform>().position, closestLaserDown.hit.point, pos) < maxDistanceToDisable)
+                {
                     closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
                     return LaserDisableResult.SUCCESS;
                 } else {
@@ -62,7 +64,8 @@ public class LaserController : MonoBehaviour
         }
         else if (closestLaser != null)
         {
-            if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+            if (distanceFromLine(closestLaser.GetComponent<Transform>().position, closestLaser.hit.point, pos) < maxDistanceToDisable)
+            {
                 closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
                 return LaserDisableResult.SUCCESS;
             } else {
@@ -71,7 +74,8 @@ public class LaserController : MonoBehaviour
         }
         else if (closestLaserDown != null)
         {
-            if (Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos) < maxDistanceToDisable) {
+            if (distanceFromLine(closestLaserDown.GetComponent<Transform>().position, closestLaserDown.hit.point, pos) < maxDistanceToDisable)
+            {
                 closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
                 return LaserDisableResult.SUCCESS;
             } else {
@@ -79,6 +83,29 @@ public class LaserController : MonoBehaviour
             }
         } else {
             return LaserDisableResult.NOT_FOUND;
+        }
+    }
+
+    private double distanceFromLine(Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        Vector2 startp = new Vector2(p1.x, p1.z);
+        Vector2 endp = new Vector2(p2.x, p2.z);
+        Vector2 p = new Vector2(p3.x, p3.z);
+
+        double a1 = Vector2.Angle(p2 - p1, p2 - p3);
+        double a2 = Vector2.Angle(p1 - p2, p1 - p3);
+
+        if (a1 < 90 && a2 < 90)
+        {
+            return perpendicularDistance(p1, p2, p3);
+        }
+        else if (a1 < 90)
+        {
+            return Vector3.Distance(p1, p3);
+        }
+        else
+        {
+            return Vector3.Distance(p2, p3);
         }
     }
 

@@ -20,6 +20,7 @@ public class LaserDown : MonoBehaviourPun
     public int wiresID;
     public bool disabled = false;
     private bool tripped = false;
+    public RaycastHit hit;
 
     // Start is called before the first frame update
     void Awake()
@@ -33,7 +34,6 @@ public class LaserDown : MonoBehaviourPun
         if (!disabled)
         {
             lr.SetPosition(0, startPoint.position);
-            RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.right, out hit))
             {
                 if (hit.collider)

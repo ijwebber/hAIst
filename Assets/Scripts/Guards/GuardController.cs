@@ -93,19 +93,19 @@ public class GuardController : MonoBehaviour
     public void GetClosestGuard(float x, float y, float z) {
     // Returns closest guard to a position
         Vector3 targetPosition = new Vector3(x, y, z);
-        NavMeshAgent closestGuard = null;
+        GuardMovement closestGuard = null;
         float closestDistance = 1000;
         foreach (GuardMovement guard in guardMovements) {
             Vector3 agentPos = guard.agent.transform.position;
 
             float distance = Vector3.Distance(agentPos, targetPosition);
-            if (distance < closestDistance && guard.state != State.chase) {
+            if (distance < closestDistance && guard.state == State.normal) {
                 closestDistance = distance;
             }
-                closestGuard = guard.agent;
+            closestGuard = guard;
         }
-
-        closestGuard.SetDestination(targetPosition);
+        closestGuard.state = State.suspicious;
+        closestGuard.agent.SetDestination(targetPosition);
     }
 
     public void cutSceneIfSpotted()
