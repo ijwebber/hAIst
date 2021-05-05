@@ -89,6 +89,6 @@ public class IntentActions : MonoBehaviourPun
     }
 
     public void Unsure() {
-        Debug.Log("*** + I am unsure as to what to do!");
+        Debug.Log("*** I am unsure as to what to do!");
     }
 }
