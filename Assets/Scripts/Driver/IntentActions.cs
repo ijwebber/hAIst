@@ -79,6 +79,8 @@ public class IntentActions : MonoBehaviourPun
             Debug.Log("*** Can't find a laser that is enabled to disable!");
         } else if (laserResult == LaserDisableResult.TOO_FAR) {
             Debug.Log("*** You need to get closer to the laser!");
+        } else if (laserResult == LaserDisableResult.ERROR) {
+            Debug.Log("*** Can't turn that one off!");
         } else {
             Debug.Log("*** I've switched the laser off");
         }

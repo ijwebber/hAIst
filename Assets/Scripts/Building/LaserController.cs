@@ -5,7 +5,8 @@ using System;
 public enum LaserDisableResult {
     SUCCESS = 0,
     NOT_FOUND = 1,
-    TOO_FAR = 2
+    TOO_FAR = 2,
+    ERROR = 3
 }
 
 public class LaserController : MonoBehaviour
@@ -45,19 +46,37 @@ public class LaserController : MonoBehaviour
             {
                 if (distanceFromLine(closestLaser.GetComponent<Transform>().position, closestLaser.hit.point, pos) < maxDistanceToDisable)
                 {
-                    closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-                    return LaserDisableResult.SUCCESS;
-                } else {
+                    if (closestLaser.GetComponent<LaserButton>() == null && closestLaser.GetComponent<LaserKey>() == null)
+                    {
+                        closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                        return LaserDisableResult.SUCCESS;
+                    }
+                    else
+                    {
+                        return LaserDisableResult.ERROR;
+                    }
+                }
+                else
+                {
                     return LaserDisableResult.TOO_FAR;
-                }   
+                }
             }
             else
-            {   
+            {
                 if (distanceFromLine(closestLaserDown.GetComponent<Transform>().position, closestLaserDown.hit.point, pos) < maxDistanceToDisable)
                 {
-                    closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-                    return LaserDisableResult.SUCCESS;
-                } else {
+                    if (closestLaserDown.GetComponent<LaserButton>() == null && closestLaserDown.GetComponent<LaserKey>() == null)
+                    {
+                        closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                        return LaserDisableResult.SUCCESS;
+                    }
+                    else
+                    {
+                        return LaserDisableResult.ERROR;
+                    }
+                }
+                else
+                {
                     return LaserDisableResult.TOO_FAR;
                 }
             }
@@ -66,19 +85,37 @@ public class LaserController : MonoBehaviour
         {
             if (distanceFromLine(closestLaser.GetComponent<Transform>().position, closestLaser.hit.point, pos) < maxDistanceToDisable)
             {
-                closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-                return LaserDisableResult.SUCCESS;
-            } else {
+                if (closestLaser.GetComponent<LaserButton>() == null && closestLaser.GetComponent<LaserKey>() == null)
+                {
+                    closestLaser.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                    return LaserDisableResult.SUCCESS;
+                }
+                else
+                {
+                    return LaserDisableResult.ERROR;
+                }
+            }
+            else
+            {
                 return LaserDisableResult.TOO_FAR;
-            } 
+            }
         }
         else if (closestLaserDown != null)
         {
             if (distanceFromLine(closestLaserDown.GetComponent<Transform>().position, closestLaserDown.hit.point, pos) < maxDistanceToDisable)
             {
-                closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
-                return LaserDisableResult.SUCCESS;
-            } else {
+                if (closestLaserDown.GetComponent<LaserButton>() == null && closestLaserDown.GetComponent<LaserKey>() == null)
+                {
+                    closestLaserDown.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);
+                    return LaserDisableResult.SUCCESS;
+                }
+                else
+                {
+                    return LaserDisableResult.ERROR;
+                }
+            }
+            else
+            {
                 return LaserDisableResult.TOO_FAR;
             }
         } else {
