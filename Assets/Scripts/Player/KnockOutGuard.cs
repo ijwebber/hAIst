@@ -30,8 +30,8 @@ public class KnockOutGuard : MonoBehaviour
         //if this player is behind a guard then get the guard gameobject using the id
         if (guardViewID != -1)
         {
-            // guard = PhotonNetwork.GetPhotonView(guardViewID).gameObject;
-            guardStatusText = guard.GetComponent<GuardKnockOutTimer>().statusText;
+            guard = PhotonNetwork.GetPhotonView(guardViewID).gameObject;
+            //guardStatusText = guard.GetComponent<GuardKnockOutTimer>().statusText;
         }
 
         
