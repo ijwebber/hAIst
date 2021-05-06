@@ -24,6 +24,7 @@ public class SpeechRecognition : MonoBehaviourPun
 
         if (Input.GetKey(KeyCode.Y)) {
             if (!listening && !(bool) PhotonNetwork.CurrentRoom.CustomProperties["isDriverBusy"]) {
+                Debug.Log("***" + PhotonNetwork.CurrentRoom.CustomProperties["isDriverBusy"]);
                 listening = true;
                 Debug.Log("*** ding dong suck my dong im listening");
                 StartListening();
