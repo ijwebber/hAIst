@@ -100,9 +100,9 @@ Material:
     - Color_28180829: {r: 0.5019608, g: 0.3019608, b: 0.05882353, a: 1}
     - Color_57D43A16: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 0}
     - Color_F689E8B9: {r: 0.9245283, g: 0.6391348, b: 0.2921858, a: 1}
-    - _BaseColor: {r: 0.3301887, g: 0.21128209, b: 0.010902463, a: 1}
+    - _BaseColor: {r: 1, g: 0.6296296, b: 0, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0.20754719, g: 0.14156552, b: 0.006852977, a: 1}
+    - _EmissionColor: {r: 0.31132078, g: 0.20754719, b: 0, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}
     - _IndirectLightMinColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
     - _OcclusionMapChannelMask: {r: 1, g: 0, b: 0, a: 0}
