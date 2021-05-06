@@ -35,7 +35,7 @@ public class SpeechRecognition : MonoBehaviourPun
                 Hashtable setBusy = new Hashtable() {{"isDriverBusy", true}};
                 PhotonNetwork.CurrentRoom.SetCustomProperties(setBusy);
                 StartListening(); 
-            } else if (isDriverBusy) {
+            } else if (!listening && isDriverBusy) {
                 gameController.playerUpdates.updateDisplay("The driver is busy talking to someone else!");
             }
         } else {
