@@ -114,6 +114,7 @@ public SelectSkinGroup skinGroupPre;
 
 //Cosmetic Store
 public GameObject CosmeticPanelHome;
+public Button CosmeticStoreButton;
 public CosmeticSkinGroup skinGroupCosmetic;
 public GameObject UnlockingPanelCosmetics;
 public GameObject ThiefCosmetics;
@@ -1299,8 +1300,10 @@ public void SetUserName()
 
     if (IsGuest)
     {
+        PlayerPrefs.SetInt("IsGuest", 1);
         FriendsMenuButton.interactable = false;
         UpgradesMenuButton.interactable = false;
+        CosmeticStoreButton.interactable = false;
         BalanceInfoHome.SetActive(false);
         BalanceInfoPre.SetActive(false);
         BalanceInfoLobby.SetActive(false);
@@ -1316,8 +1319,10 @@ public void SetUserName()
     }
     else
     {
-        // ADD NEW UPGRADES HERE
-        PlayerInventory.Add("speed_boots", 0);
+        PlayerPrefs.SetInt("IsGuest", 0);
+
+            // ADD NEW UPGRADES HERE
+            PlayerInventory.Add("speed_boots", 0);
         PlayerInventory.Add("shield", 0);
         PlayerInventory.Add("vision", 0);
         PlayerInventory.Add("self_revive", 0);
@@ -1336,6 +1341,13 @@ public void SetUserName()
         DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
 
     }
+    if (IsGuest)
+        {
+            PlayerSkins["red"] = true;
+            PlayerSkins["radioactive"] = true;
+            PlayerSkins["white"] = true;
+
+        }
 
     ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
 
@@ -1367,17 +1379,22 @@ public void ReJoinAfterLeave()
     LoadingScreenLogIn.transform.GetChild(3).GetComponent<Text>().text = "Loading...";
     StartMenu.SetActive(false);
     //RejoinWaitPanel.SetActive(true);
-    DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
+    if (PlayerPrefs.GetInt("IsGuest") == 1)
+        {
+            IsGuest = true;
+        }
     PhotonNetwork.JoinLobby(TypedLobby.Default);
 
 
-    thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
+        thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
     thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
 
     if (IsGuest)
     {
         FriendsMenuButton.interactable = false;
         UpgradesMenuButton.interactable = false;
+        CosmeticStoreButton.interactable = false;
+
         BalanceInfoHome.SetActive(false);
         BalanceInfoPre.SetActive(false);
         BalanceInfoLobby.SetActive(false);
@@ -1392,29 +1409,38 @@ public void ReJoinAfterLeave()
 
     }
     else
-    {
-        // ADD NEW UPGRADES HERE
-        PlayerInventory.Add("speed_boots", 0);
-        PlayerInventory.Add("shield", 0);
-        PlayerInventory.Add("vision", 0);
-        PlayerInventory.Add("self_revive", 0);
-        PlayerInventory.Add("fast_hands", 0);
-        PlayerInventory.Add("ninja", 0);
-        GetInventory();
+        {
+            DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
 
-        //ADD NEW SKINS HERE
-        PlayerSkins.Add("red", false);
-        PlayerSkins.Add("radioactive", false);
-        PlayerSkins.Add("white", false);
-        PlayerSkins.Add("tuxedo", false);
-        PlayerSkins.Add("pumpkin", false);
+            // ADD NEW UPGRADES HERE
+            PlayerInventory.Add("speed_boots", 0);
+            PlayerInventory.Add("shield", 0);
+            PlayerInventory.Add("vision", 0);
+            PlayerInventory.Add("self_revive", 0);
+            PlayerInventory.Add("fast_hands", 0);
+            PlayerInventory.Add("ninja", 0);
+            GetInventory();
+
+            //ADD NEW SKINS HERE
+            PlayerSkins.Add("red", false);
+            PlayerSkins.Add("radioactive", false);
+            PlayerSkins.Add("white", false);
+            PlayerSkins.Add("tuxedo", false);
+            PlayerSkins.Add("pumpkin", false);
 
 
-        DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
+            DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
 
-    }
+        }
+        if (IsGuest)
+        {
+            PlayerSkins["red"] = true;
+            PlayerSkins["radioactive"] = true;
+            PlayerSkins["white"] = true;
 
-    ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+        }
+
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
 }
 
 public void ReJoinAfterPlayAgain()
@@ -1422,17 +1448,22 @@ public void ReJoinAfterPlayAgain()
     StartCoroutine(ShowLoadingScreenLogIn(1));
     LoadingScreenLogIn.transform.GetChild(3).GetComponent<Text>().text = "Loading...";
     StartMenu.SetActive(false);
-    DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
     //PhotonNetwork.JoinLobby(TypedLobby.Default);
 
 
     thief_1.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
     thief_1_home.GetComponentInChildren<Text>().text = PhotonNetwork.NickName;
 
+    if (PlayerPrefs.GetInt("IsGuest") == 1)
+    {
+        IsGuest = true;
+    }
+
     if (IsGuest)
     {
         FriendsMenuButton.interactable = false;
         UpgradesMenuButton.interactable = false;
+        CosmeticStoreButton.interactable = false;
         BalanceInfoHome.SetActive(false);
         BalanceInfoPre.SetActive(false);
         BalanceInfoLobby.SetActive(false);
@@ -1447,28 +1478,38 @@ public void ReJoinAfterPlayAgain()
 
     }
     else
-    {
-        // ADD NEW UPGRADES HERE
-        PlayerInventory.Add("speed_boots", 0);
-        PlayerInventory.Add("shield", 0);
-        PlayerInventory.Add("vision", 0);
-        PlayerInventory.Add("self_revive", 0);
-        PlayerInventory.Add("fast_hands", 0);
-        PlayerInventory.Add("ninja", 0);
-        GetInventory();
+        {
+            DB_Controller.GetComponent<DB_Controller>().GetCoinBalance(PhotonNetwork.NickName);
 
-        //ADD NEW SKINS HERE
-        PlayerSkins.Add("red", false);
-        PlayerSkins.Add("radioactive", false);
-        PlayerSkins.Add("white", false);
-        PlayerSkins.Add("tuxedo", false);
-        PlayerSkins.Add("pumpkin", false);
+            // ADD NEW UPGRADES HERE
+            PlayerInventory.Add("speed_boots", 0);
+            PlayerInventory.Add("shield", 0);
+            PlayerInventory.Add("vision", 0);
+            PlayerInventory.Add("self_revive", 0);
+            PlayerInventory.Add("fast_hands", 0);
+            PlayerInventory.Add("ninja", 0);
+            GetInventory();
 
-        DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
+            //ADD NEW SKINS HERE
+            PlayerSkins.Add("red", false);
+            PlayerSkins.Add("radioactive", false);
+            PlayerSkins.Add("white", false);
+            PlayerSkins.Add("tuxedo", false);
+            PlayerSkins.Add("pumpkin", false);
 
-    }
 
-    ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
+            DB_Controller.GetComponent<DB_Controller>().GetSkinList(PhotonNetwork.NickName);
+
+        }
+        if (IsGuest)
+        {
+            PlayerSkins["red"] = true;
+            PlayerSkins["radioactive"] = true;
+            PlayerSkins["white"] = true;
+
+        }
+
+        ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
 }
 
 
