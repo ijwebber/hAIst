@@ -30,7 +30,9 @@ public class DoorHandlerKey : MonoBehaviourPun
     void EnterMetal() {
         if (!opened) {
             StartCoroutine(openDoor(doorleft));
-            StartCoroutine(openDoor(doorright));
+            if (doorright != null) {
+                StartCoroutine(openDoor(doorright));
+            }
             opened = true;
         }
     }

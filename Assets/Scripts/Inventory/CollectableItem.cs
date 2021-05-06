@@ -8,6 +8,11 @@ public class CollectableItem : MonoBehaviourPun
     public bool stolen = false;
     public bool special = false;
     public GameObject guardPoint = null;
+    public bool hidden;
+    public bool discovered;
+    public bool doorOpened;
+    public GameObject keyPad;
+    public GameObject codeDisplay;
 
     public int gameSelection;
 

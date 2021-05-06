@@ -39,6 +39,7 @@ public class GameController : MonoBehaviourPunCallbacks
     [SerializeField] private Obejctives pager;
 
     [SerializeField] private PlayerUpdates playerUpdates;
+    private bool updateNeeded = false;
 
 
     System.Random r = new System.Random();
@@ -122,30 +123,35 @@ public class GameController : MonoBehaviourPunCallbacks
         // if (Input.GetKeyDown(KeyCode.M)) {
         //     playerUpdates.updateDisplay("M was just pressed");
         // }
-        if (gameState != updatedGameState) {
-            questBox.newQuest();
-            questMarker.newQuest();
-            pager.newQuest();
+        if (gameState != updatedGameState || updateNeeded) {
             bool localChange = false;
             bool localRegress = regress;
-            if (gameState > updatedGameState) {
-                // change originated from here
-                updatedGameState = gameState;
-                localChange = true;
-            } else if (regress) {
-                if (gameState < updatedGameState) {
-                    Debug.Log("A PAINTING HAS BEEN CAPTURED!!");
-                    localChange = true;
+            bool localUpdateNeeded = updateNeeded;
+            if (!updateNeeded) {
+                questBox.newQuest();
+                questMarker.newQuest();
+                pager.newQuest();
+                if (gameState > updatedGameState) {
+                    // change originated from here
                     updatedGameState = gameState;
+                    localChange = true;
+                } else if (regress) {
+                    if (gameState < updatedGameState) {
+                        Debug.Log("A PAINTING HAS BEEN CAPTURED!!");
+                        localChange = true;
+                        updatedGameState = gameState;
+                    }
+                    gameState = Mathf.Min(gameState,updatedGameState);
+                    regress = false;
                 }
-                gameState = Mathf.Min(gameState,updatedGameState);
-                regress = false;
-            }
 
-            // gameState = updatedGameState;
-            gameState = Mathf.Max(gameState, updatedGameState);
+                // gameState = updatedGameState;
+                gameState = Mathf.Max(gameState, updatedGameState);
+            } else {
+                updateNeeded = false;
+            }
             List <string> newText = new List<string>();
-            List <GameObject> toSteal = new List<GameObject>();
+            List<GameObject> nextQuestItems = new List<GameObject>();
             switch (gameState) 
             {
                 case 0: // starting state
@@ -156,78 +162,115 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"}, localRegress);
                     break;
                 case 2: // point to key objects
-                    if (!localRegress) {
-                        playerUpdates.updateDisplay("The key door has been unlocked");
-                        if (localChange) {
-                            updateDisp("The key door has been unlocked");
+                    if (!localUpdateNeeded) {
+                        if (!localRegress) {
+                            playerUpdates.updateDisplay("The key door has been unlocked");
+                            if (localChange) {
+                                updateDisp("The key door has been unlocked");
+                            }
+                        } else  {
+                            playerUpdates.updateDisplay("You have lost a key painting!");
+                            updateDisp("A key painting has been lost!");
                         }
-                    } else  {
-                        playerUpdates.updateDisplay("You have lost a key painting!");
-                        updateDisp("A key painting has been lost!");
                     }
-                    List<GameObject> nextQuestItems = new List<GameObject>();
                     foreach (var item in specialItems) {
-                        if (item.GetComponent<CollectableItem>().guardPoint == null) {
-                            newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
-                            nextQuestItems.Add(item);
+                        if (item.GetComponent<CollectableItem>().stolen) {
+                            newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
                         } else {
-                            newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
-                            nextQuestItems.Add(item.GetComponent<CollectableItem>().guardPoint);
+                            if (item.GetComponent<CollectableItem>().guardPoint == null) {
+                                if (item.GetComponent<CollectableItem>().hidden && !item.GetComponent<CollectableItem>().keyPad.GetComponent<KeyPad>().codeCorrect) {
+                                    if (item.GetComponent<CollectableItem>().discovered) {
+                                        newText.Add("Find code for back room");
+                                        nextQuestItems.Add(item.GetComponent<CollectableItem>().codeDisplay);
+                                    } else {
+                                        newText.Add("Find " + item.GetComponent<CollectableItem>().itemName);
+                                    }
+                                    nextQuestItems.Add(item.GetComponent<CollectableItem>().keyPad);
+                                } else {
+                                    newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                                    nextQuestItems.Add(item);
+                                }
+                            } else {
+                                newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                                nextQuestItems.Add(item.GetComponent<CollectableItem>().guardPoint);
+                            }
                         }
                     }
                     setNewQuest(nextQuestItems, newText, localRegress);
                     break;
                 case 3: // middle key objects stolen
-                    if (!localRegress) {
-                        playerUpdates.updateDisplay("You have stolen a key painting!");
-                        if (localChange) {
-                            updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
-                        }
-                    } else  {
-                        playerUpdates.updateDisplay("You have lost a key painting!");
-                        updateDisp("A key painting has been lost!");
-                    }
-                    foreach (var item in specialItems)
-                    {
-                        if (!item.GetComponent<CollectableItem>().stolen) {
-                            if (item.GetComponent<CollectableItem>().guardPoint == null) {
-                                toSteal.Add(item);
-                                newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
-                            } else {
-                                toSteal.Add(item.GetComponent<CollectableItem>().guardPoint);
-                                newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                    if (!localUpdateNeeded) {
+                        if (!localRegress) {
+                            playerUpdates.updateDisplay("You have stolen a key painting!");
+                            if (localChange) {
+                                updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
                             }
-                        } else {
-                            newText.Add("<s><i>Steal " + item.GetComponent<CollectableItem>().itemName + "</s></i>");
+                        } else  {
+                            playerUpdates.updateDisplay("You have lost a key painting!");
+                            updateDisp("A key painting has been lost!");
                         }
                     }
-                    setNewQuest(toSteal, newText, localRegress);
+                    foreach (var item in specialItems) {
+                        if (item.GetComponent<CollectableItem>().stolen) {
+                            newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
+                        } else {
+                            if (item.GetComponent<CollectableItem>().guardPoint == null) {
+                                if (item.GetComponent<CollectableItem>().hidden && !item.GetComponent<CollectableItem>().keyPad.GetComponent<KeyPad>().codeCorrect) {
+                                    if (item.GetComponent<CollectableItem>().discovered) {
+                                        newText.Add("Find code for back room");
+                                        nextQuestItems.Add(item.GetComponent<CollectableItem>().codeDisplay);
+                                    } else {
+                                        newText.Add("Find " + item.GetComponent<CollectableItem>().itemName);
+                                    }
+                                    nextQuestItems.Add(item.GetComponent<CollectableItem>().keyPad);
+                                } else {
+                                    newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                                    nextQuestItems.Add(item);
+                                }
+                            } else {
+                                newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                                nextQuestItems.Add(item.GetComponent<CollectableItem>().guardPoint);
+                            }
+                        }
+                    }
+                    setNewQuest(nextQuestItems, newText, localRegress);
                     break;
                 case 4: // middle key objects stolen
-                    if (!localRegress) {
-                        playerUpdates.updateDisplay("You have stolen a key painting!");
-                        if (localChange) {
-                            updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
-                        }
-                    } else  {
-                        playerUpdates.updateDisplay("You have lost a key painting!");
-                        updateDisp("A key painting has been lost!");
-                    }
-                    foreach (var item in specialItems)
-                    {
-                        if (!item.GetComponent<CollectableItem>().stolen) {
-                            if (item.GetComponent<CollectableItem>().guardPoint == null) {
-                                toSteal.Add(item);
-                                newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
-                            } else {
-                                toSteal.Add(item.GetComponent<CollectableItem>().guardPoint);
-                                newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                    if (!localUpdateNeeded) {
+                        if (!localRegress) {
+                            playerUpdates.updateDisplay("You have stolen a key painting!");
+                            if (localChange) {
+                                updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
                             }
-                        } else {
-                            newText.Add("<s><i>Steal " + item.GetComponent<CollectableItem>().itemName + "</s></i>");
+                        } else  {
+                            playerUpdates.updateDisplay("You have lost a key painting!");
+                            updateDisp("A key painting has been lost!");
                         }
                     }
-                    setNewQuest(toSteal, newText, localRegress);
+                    foreach (var item in specialItems) {
+                        if (item.GetComponent<CollectableItem>().stolen) {
+                            newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
+                        } else {
+                            if (item.GetComponent<CollectableItem>().guardPoint == null) {
+                                if (item.GetComponent<CollectableItem>().hidden && !item.GetComponent<CollectableItem>().keyPad.GetComponent<KeyPad>().codeCorrect) {
+                                    if (item.GetComponent<CollectableItem>().discovered) {
+                                        newText.Add("Find code for back room");
+                                        nextQuestItems.Add(item.GetComponent<CollectableItem>().codeDisplay);
+                                    } else {
+                                        newText.Add("Find " + item.GetComponent<CollectableItem>().itemName);
+                                    }
+                                    nextQuestItems.Add(item.GetComponent<CollectableItem>().keyPad);
+                                } else {
+                                    newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                                    nextQuestItems.Add(item);
+                                }
+                            } else {
+                                newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
+                                nextQuestItems.Add(item.GetComponent<CollectableItem>().guardPoint);
+                            }
+                        }
+                    }
+                    setNewQuest(nextQuestItems, newText, localRegress);
                     break;
                 case 5: // point to exit
                     playerUpdates.updateDisplay("You have stolen a key painting");
@@ -247,6 +290,16 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();   
     }
+
+    public void updateQuest() {
+        this.photonView.RPC("updateThis", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void updateThis() {
+        updateNeeded = true;
+    }
+
 
     //Go back to main meny when you leave game
     public override void OnLeftRoom()
