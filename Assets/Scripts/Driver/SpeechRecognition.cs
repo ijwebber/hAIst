@@ -1,6 +1,7 @@
 using System.Runtime.InteropServices;
 using UnityEngine;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class SpeechRecognition : MonoBehaviourPun
 {
@@ -22,14 +23,20 @@ public class SpeechRecognition : MonoBehaviourPun
         }
 
         if (Input.GetKey(KeyCode.Y)) {
-            if (!listening) {
+            if (!listening && !(bool) PhotonNetwork.CurrentRoom.CustomProperties["isDriverBusy"]) {
                 listening = true;
+                Debug.Log("*** ding dong suck my dong im listening");
                 StartListening();
+                Hashtable setBusy = new Hashtable() {{"isDriverBusy", true}};
+                PhotonNetwork.CurrentRoom.SetCustomProperties(setBusy);
             }
         } else {
             if (listening) {
                 listening = false;
+                Debug.Log("*** ding dong suck my dong im no longer listening");
                 StopListening();
+                Hashtable setBusy = new Hashtable() {{"isDriverBusy", false}};
+                PhotonNetwork.CurrentRoom.SetCustomProperties(setBusy);
             }
         }
     }
