@@ -294,6 +294,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         if (audioController != null) {
                             if (isSpecial) {
                                 audioController.PlayHighValue();
+                                gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
                             } else {
                                 audioController.PlayLowValue();
                             }

@@ -76,6 +76,8 @@ public class GuardMovement : MonoBehaviourPun
                     spec.GetComponent<CollectableItem>().stolen = true;
                     spec.GetComponent<CollectableItem>().guardPoint = null;
                     playerController.Specials.Add(spec);
+                    gameController.playerUpdates.updateDisplay("You have recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
+                    gameController.updateDisp(PhotonNetwork.NickName + " has recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
                 }
                 if(specials.Count > 0) {
                     gameController.gameState++;
@@ -130,6 +132,8 @@ public class GuardMovement : MonoBehaviourPun
                         playerController.disableShield();
                     } else {
                         if (playerController.invincibleFrames == 0) {
+                            gameController.playerUpdates.updateDisplay("You have been knocked down! Wait for your crew to help you back up!");
+                            gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down!");
                             playerMoveScript.disabled = true;
                             this.state = State.normal;
                             agent.ResetPath();
@@ -147,6 +151,8 @@ public class GuardMovement : MonoBehaviourPun
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
                                     spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
                                     i++;
+                                    gameController.playerUpdates.updateDisplay("You have lost " + spec.GetComponent<CollectableItem>().itemName + "!");
+                                    gameController.updateDisp(PhotonNetwork.NickName + " has lost " + spec.GetComponent<CollectableItem>().itemName + "!");
                                 }
                                 serializedObjects.TrimEnd(","[0]);
                                 this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.All, serializedObjects);
@@ -164,7 +170,6 @@ public class GuardMovement : MonoBehaviourPun
                 if (guardController.localGrid.GetValue(transform.position) > 0 && this.state != State.disabled)
                 {
                     Vector3 playerPosition = player.transform.position;
-                    Debug.Log("I hear a who at // " + playerPosition);
                     this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
                 }
                 else

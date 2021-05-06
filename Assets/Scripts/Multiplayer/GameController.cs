@@ -218,6 +218,7 @@ public class GameController : MonoBehaviourPunCallbacks
             {
                 case 0: // starting state
                     playerUpdates.updateDisplay("Game started");
+                    playerUpdates.updateDisplay("Press TAB to check your pager for tips");
                     setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"}, localRegress);
                     break;
                 case 1: // point to code
@@ -468,7 +469,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    private void updateDisp(string message) {
+    public void updateDisp(string message) {
         this.GetComponent<PhotonView>().RPC("displayMessage", RpcTarget.Others, message);
     }
 
