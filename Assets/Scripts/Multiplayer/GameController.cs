@@ -38,7 +38,7 @@ public class GameController : MonoBehaviourPunCallbacks
     [SerializeField] private NewQuest questMarker;
     [SerializeField] private Obejctives pager;
 
-    [SerializeField] private PlayerUpdates playerUpdates;
+    [SerializeField] public PlayerUpdates playerUpdates;
     private bool updateNeeded = false;
 
 

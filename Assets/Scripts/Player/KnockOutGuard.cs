@@ -31,7 +31,7 @@ public class KnockOutGuard : MonoBehaviour
         if (guardViewID != -1)
         {
             guard = PhotonNetwork.GetPhotonView(guardViewID).gameObject;
-            guardStatusText = guard.GetComponent<GuardKnockOutTimer>().statusText;
+            //guardStatusText = guard.GetComponent<GuardKnockOutTimer>().statusText;
         }
 
         
