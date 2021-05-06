@@ -132,8 +132,6 @@ public class GuardMovement : MonoBehaviourPun
                         playerController.disableShield();
                     } else {
                         if (playerController.invincibleFrames == 0) {
-                            gameController.playerUpdates.updateDisplay("You have been knocked down! Wait for your crew to help you back up!");
-                            gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down!");
                             playerMoveScript.disabled = true;
                             this.state = State.normal;
                             agent.ResetPath();
@@ -151,13 +149,16 @@ public class GuardMovement : MonoBehaviourPun
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
                                     spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
                                     i++;
-                                    gameController.playerUpdates.updateDisplay("You have lost " + spec.GetComponent<CollectableItem>().itemName + "!");
-                                    gameController.updateDisp(PhotonNetwork.NickName + " has lost " + spec.GetComponent<CollectableItem>().itemName + "!");
+                                    gameController.playerUpdates.updateDisplay("You've been knocked down and lost " + spec.GetComponent<CollectableItem>().itemName + "!");
+                                    gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down and lost " + spec.GetComponent<CollectableItem>().itemName + "!");
                                 }
                                 serializedObjects.TrimEnd(","[0]);
                                 this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.All, serializedObjects);
                                 playerController.Specials.Clear();
                                 Debug.Log("Guard has Captured painting");
+                            } else {
+                                gameController.playerUpdates.updateDisplay("You have been knocked down! Wait for your crew to help you back up!");
+                                gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down!");
                             }
                         }
                     }
