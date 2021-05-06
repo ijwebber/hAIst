@@ -115,7 +115,7 @@ public class GameController : MonoBehaviourPunCallbacks
     private void PopulateUpgradeUI()
     {
         foreach (Transform child in UpgradeUI.transform)
-        {
+        {   
             GameObject.Destroy(child.gameObject);
         }
         if (PlayerController.GetComponent<PlayerController>().upgrades.fast_hands > 0)
