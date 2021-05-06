@@ -260,7 +260,10 @@ public GameObject UpgradeButtonFromPreGame;
 // Use this for initialization
 void Start()
 {
-
+#if UNITY_WEBGL && !UNITY_EDITOR
+    Microphone.Init();
+    Microphone.QueryAudioInput();
+#endif
 }
 
 void Awake()
@@ -397,9 +400,6 @@ public void EnableFriendsMenu()
 }
 
 public void EnableMicThreshold() {
-#if UNITY_WEBGL && !UNITY_EDITOR
-    Microphone.Init();
-#endif
     btnHome.interactable = true;
     if (!IsGuest) {
         btnUpgrades.interactable = true;
