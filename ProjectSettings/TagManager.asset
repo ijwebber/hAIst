@@ -26,6 +26,7 @@ TagManager:
   - MetalDoorHandle
   - POVObjectsCutScene
   - POVGuardsCutScene
+  - BackDoorHandle
   layers:
   - Default
   - TransparentFX

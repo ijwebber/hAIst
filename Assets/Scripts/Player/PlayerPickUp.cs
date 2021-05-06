@@ -196,8 +196,19 @@ public class PlayerPickUp : MonoBehaviourPun
                             gameController.gameState = 1;
                         }
                     }
-                        // gameController.gameState = 2;
-                    // }
+                    break;
+                case "BackDoorHandle":
+                    if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
+                        displayMessage("This door requires a code");
+                        CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
+                        if (!ashes.discovered) {
+                            ashes.discovered = true;
+                            gameController.updateQuest();;
+                        }
+                        // if (gameController.gameState == 0) {
+                        //     gameController.gameState = 1;
+                        // }
+                    }
                     break;
             }
         }

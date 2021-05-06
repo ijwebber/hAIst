@@ -69,13 +69,19 @@ public class Window_QuestPointer : MonoBehaviourPun
                 
                 // Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset + new Vector3(0,100/6,60/6)*(1-cameraSystem.zoomMultiplier));
                 Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(targetObjects[i].transform.position + offset + new Vector3(0,(1-cameraSystem.zoomMultiplier)*30,-(1-cameraSystem.zoomMultiplier)*20));
-                Debug.Log("Cam y pos " + Camera.main.name + " // " + Camera.main.transform.position.y);
                 bool isOffScreen = !playerController.isInView(targetObjects[i].transform.position);
 
                 if (isOffScreen) {
                     pointerRectTransforms[i].sizeDelta = new Vector2(40,30);
                     pointerImages[i].sprite = arrowSprite;
-                    pointerImages[i].color = Color.yellow;
+                    float dist = Vector3.Distance(playerController.player.transform.position, targetObjects[i].transform.position);
+                    dist = 30/dist;
+                    if (dist > 1) {
+                        dist = 1;
+                    } else if (dist < .2f) {
+                        dist = .2f;
+                    }
+                    pointerImages[i].color = new Color(1,1,0,dist);
                     pointerRectTransforms[i].localPosition = new Vector3(100*dir.x,100*dir.y);
                 } else {
                     pointerRectTransforms[i].sizeDelta = new Vector2(40,30);
