@@ -16,6 +16,12 @@ public class SpeechRecognition : MonoBehaviourPun
 
     public IntentActions intentActions;
 
+    private GameController gameController;
+
+    void Start() {
+        gameController = GameObject.FindObjectOfType<GameController>();
+    }
+
     void Update() {
         if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
         {
@@ -23,17 +29,18 @@ public class SpeechRecognition : MonoBehaviourPun
         }
 
         if (Input.GetKey(KeyCode.Y)) {
-            if (!listening && !(bool) PhotonNetwork.CurrentRoom.CustomProperties["isDriverBusy"]) {
+            bool isDriverBusy = (bool) PhotonNetwork.CurrentRoom.CustomProperties["isDriverBusy"];
+            if (!listening && !isDriverBusy) {
                 listening = true;
-                Debug.Log("*** ding dong suck my dong im listening");
                 Hashtable setBusy = new Hashtable() {{"isDriverBusy", true}};
                 PhotonNetwork.CurrentRoom.SetCustomProperties(setBusy);
                 StartListening(); 
+            } else if (isDriverBusy) {
+                gameController.playerUpdates.updateDisplay("The driver is busy talking to someone else!");
             }
         } else {
             if (listening) {
                 listening = false;
-                Debug.Log("*** ding dong suck my dong im no longer listening");
                 Hashtable setBusy = new Hashtable() {{"isDriverBusy", false}};
                 PhotonNetwork.CurrentRoom.SetCustomProperties(setBusy);
                 StopListening();
