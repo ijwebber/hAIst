@@ -8,6 +8,7 @@ public class SpeechRecognition : MonoBehaviourPun
     public string currentText;
 
     bool listening = false;
+    bool shownMessage = false;
 
     [DllImport("__Internal")]
     private static extern void StartListening();
@@ -35,10 +36,12 @@ public class SpeechRecognition : MonoBehaviourPun
                 Hashtable setBusy = new Hashtable() {{"isDriverBusy", true}};
                 PhotonNetwork.CurrentRoom.SetCustomProperties(setBusy);
                 StartListening(); 
-            } else if (!listening && isDriverBusy) {
+            } else if (!listening && isDriverBusy && !shownMessage) {
                 gameController.playerUpdates.updateDisplay("The driver is busy talking to someone else!");
+                shownMessage = true;
             }
         } else {
+            shownMessage = false;
             if (listening) {
                 listening = false;
                 Hashtable setBusy = new Hashtable() {{"isDriverBusy", false}};
