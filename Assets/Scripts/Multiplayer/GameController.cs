@@ -225,17 +225,6 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"}, localRegress);
                     break;
                 case 2: // point to key objects
-                    if (!localUpdateNeeded) {
-                        if (!localRegress) {
-                            playerUpdates.updateDisplay("The key door has been unlocked");
-                            if (localChange) {
-                                updateDisp("The key door has been unlocked");
-                            }
-                        } else  {
-                            playerUpdates.updateDisplay("You have lost a key painting!");
-                            updateDisp("A key painting has been lost!");
-                        }
-                    }
                     foreach (var item in specialItems) {
                         if (item.GetComponent<CollectableItem>().stolen) {
                             newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
@@ -262,17 +251,6 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(nextQuestItems, newText, localRegress);
                     break;
                 case 3: // middle key objects stolen
-                    if (!localUpdateNeeded) {
-                        if (!localRegress) {
-                            playerUpdates.updateDisplay("You have stolen a key painting!");
-                            if (localChange) {
-                                updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
-                            }
-                        } else  {
-                            playerUpdates.updateDisplay("You have lost a key painting!");
-                            updateDisp("A key painting has been lost!");
-                        }
-                    }
                     foreach (var item in specialItems) {
                         if (item.GetComponent<CollectableItem>().stolen) {
                             newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
@@ -299,17 +277,6 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(nextQuestItems, newText, localRegress);
                     break;
                 case 4: // middle key objects stolen
-                    if (!localUpdateNeeded) {
-                        if (!localRegress) {
-                            playerUpdates.updateDisplay("You have stolen a key painting!");
-                            if (localChange) {
-                                updateDisp(PhotonNetwork.NickName + " has stolen a key painting!");
-                            }
-                        } else  {
-                            playerUpdates.updateDisplay("You have lost a key painting!");
-                            updateDisp("A key painting has been lost!");
-                        }
-                    }
                     foreach (var item in specialItems) {
                         if (item.GetComponent<CollectableItem>().stolen) {
                             newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
