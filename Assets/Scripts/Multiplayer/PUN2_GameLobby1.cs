@@ -398,7 +398,7 @@ public void EnableFriendsMenu()
 
 public void EnableMicThreshold() {
 #if UNITY_WEBGL && !UNITY_EDITOR
-    Microphone.Init()
+    Microphone.Init();
 #endif
     btnHome.interactable = true;
     if (!IsGuest) {

@@ -268,7 +268,7 @@ public class CameraSystem : MonoBehaviour
 
         guardCaughtIn4k.Priority = 11;
 
-        //audioController.PlayIntenseTheme();
+        audioController.PlayIntenseTheme();
 
         SetLayerRecursively(guard, default);
         BarController.Instance.SetText(message);
