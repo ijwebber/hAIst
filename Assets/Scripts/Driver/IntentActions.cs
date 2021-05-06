@@ -7,9 +7,12 @@ public class IntentActions : MonoBehaviourPun
     LaserController laserController;
     GameCameraController cameraController;
 
+    GameController gameController;
+
     void Start() {
         laserController = GameObject.FindObjectOfType<LaserController>();
         cameraController = GameObject.FindObjectOfType<GameCameraController>();
+        gameController = GameObject.FindObjectOfType<GameController>();
     }
 
     void Update() {
@@ -60,37 +63,37 @@ public class IntentActions : MonoBehaviourPun
     public void DisableCamera() {
         DisableCameraResult cameraResult = cameraController.DisableClosestCamera(transform.position);
         if (cameraResult == DisableCameraResult.NOT_FOUND) {
-            Debug.Log("*** Can't find a camera that is enabled to disable!");
+            gameController.playerUpdates.updateDisplay("Can't find a camera that is enabled to disable!");
         } else if (cameraResult == DisableCameraResult.TOO_FAR) {
-            Debug.Log("*** You need to get closer to the camera!");
+            gameController.playerUpdates.updateDisplay("You need to get closer to the camera!");
         } else {
-            Debug.Log("*** I've switched the camera off");
+            gameController.playerUpdates.updateDisplay("I've switched the camera off");
         }
     }
 
     public void EnableCamera()
     {
-        Debug.Log("*** Why would I do that!");
+        gameController.playerUpdates.updateDisplay("Why would I do that!");
     }
 
     public void DisableLaser() {
         LaserDisableResult laserResult = laserController.DisableNearestLaser(transform.position);
         if (laserResult == LaserDisableResult.NOT_FOUND) {
-            Debug.Log("*** Can't find a laser that is enabled to disable!");
+            gameController.playerUpdates.updateDisplay("Can't find a laser that is enabled to disable!");
         } else if (laserResult == LaserDisableResult.TOO_FAR) {
-            Debug.Log("*** You need to get closer to the laser!");
+            gameController.playerUpdates.updateDisplay("You need to get closer to the laser!");
         } else if (laserResult == LaserDisableResult.ERROR) {
-            Debug.Log("*** Can't turn that one off!");
+            gameController.playerUpdates.updateDisplay("Can't turn that one off!");
         } else {
-            Debug.Log("*** I've switched the laser off");
+            gameController.playerUpdates.updateDisplay("I've switched the laser off");
         }
     }
 
     public void EnableLaser() {
-        Debug.Log("*** Why would I do that!");
+        gameController.playerUpdates.updateDisplay("Why would I do that!");
     }
 
     public void Unsure() {
-        Debug.Log("*** I am unsure as to what to do!");
+        gameController.playerUpdates.updateDisplay("I am unsure as to what to do!");
     }
 }
