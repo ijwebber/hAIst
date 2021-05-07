@@ -255,6 +255,9 @@ public GameObject UpgradeButtonFromPreGame;
 [SerializeField] private GameObject MapIndicator;
 [SerializeField] private GameObject mapOutline;
 
+// FMOD
+private bool audioResumed = false;
+
 
 
 // Use this for initialization
@@ -420,27 +423,27 @@ public void EnableMicThreshold() {
 
 void Update() {
 #if UNITY_WEBGL && !UNITY_EDITOR
-    if (MicCheck) {
-        Microphone.Update();
-        string[] devices = Microphone.devices;
+if (MicCheck) {
+    Microphone.Update();
+    string[] devices = Microphone.devices;
 
-        float[] volumes = Microphone.volumes;
+    float[] volumes = Microphone.volumes;
 
-        if (devices.Length > 1) {
-            int index = 0;
-            string deviceName = devices[index];
-            if (deviceName == null)
-            {
-                deviceName = string.Empty;
-            }
-
-            float volume = 0;
-            if (Multiplier.value != null) {
-                volume = volumes[index]*Multiplier.value;
-            }
-            slider.value = volume;
+    if (devices.Length >= 1) {
+        int index = 0;
+        string deviceName = devices[0];
+        if (deviceName == null)
+        {
+            deviceName = string.Empty;
         }
+
+        float volume = 0;
+        if (Multiplier.value != null) {
+            volume = volumes[0]*Multiplier.value;
+        }
+        slider.value = volume;
     }
+}
 #endif
 
 }
@@ -1545,7 +1548,19 @@ public void StartGame()
 {
     StartMenu.SetActive(false);
     UserManagerMenu.SetActive(true);
+    ResumeAudio();
 }
+
+public void ResumeAudio() {
+            if (!audioResumed)
+            {
+                var result = FMODUnity.RuntimeManager.CoreSystem.mixerSuspend();
+                Debug.Log("***" + result);
+                result = FMODUnity.RuntimeManager.CoreSystem.mixerResume();
+                Debug.Log("***" + result);
+                audioResumed = true;
+            }
+    }
 
 public void QuitGame()
 {

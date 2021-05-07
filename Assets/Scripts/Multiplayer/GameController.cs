@@ -21,6 +21,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject guardPrefab;
     public GameObject guardPrefab2;
     public GameObject guardPrefab3;
+    public GameObject sleepyGuard;
     public TextMeshProUGUI objectiveText;
     public GameObject starSprite;
     public SoundVisual soundMesh;
@@ -104,6 +105,7 @@ public class GameController : MonoBehaviourPunCallbacks
             PhotonNetwork.Instantiate(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
             PhotonNetwork.Instantiate(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
             PhotonNetwork.Instantiate(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
+            PhotonNetwork.Instantiate(sleepyGuard.name, sleepyGuard.transform.position, Quaternion.identity);
         }
         // PhotonNetwork.InstantiateRoomObject(soundMesh.name, soundMesh.transform.position, soundMesh.transform.rotation);
 

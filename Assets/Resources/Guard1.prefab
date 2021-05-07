@@ -1069,6 +1069,7 @@ MonoBehaviour:
   - {x: 53.3, y: 12, z: -8.4}
   state: 0
   chaseSpeed: 6.5
+  sleepy: 0
   walkSpeed: 3.5
   chasedPlayer: {fileID: 0}
   guardDisabled: 0
@@ -1195,6 +1196,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isKnockedOut
+  - Type: 4
+    SynchronizeType: 0
+    Name: Sleeping
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

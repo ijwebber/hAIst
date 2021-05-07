@@ -28,6 +28,7 @@ public class GuardMovement : MonoBehaviourPun
     private int currDes = 0;
     public State state;
     public float chaseSpeed;
+    public bool sleepy;
     public float walkSpeed;
     public GameObject chasedPlayer;
     private bool start = true;
@@ -53,6 +54,9 @@ public class GuardMovement : MonoBehaviourPun
     }
 
     private void Start() {
+        
+        
+        
         agent.SetDestination(patrolPath[currDes]);
         player = GameObject.Find("Timmy");
         this.state = State.normal;
@@ -106,6 +110,7 @@ public class GuardMovement : MonoBehaviourPun
                         playerToFollow = g;
                         chasedPlayer = g;
 
+                        Debug.LogError("inline");
 
                         if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
                         {
@@ -188,6 +193,11 @@ public class GuardMovement : MonoBehaviourPun
                         }
                         else currDes++;
 
+                        if (sleepy)
+                        {
+                            Quaternion target = Quaternion.Euler(0, -178, 0);
+                            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 3f);
+                        }
                         //Debug.Log(currDes);
 
                         agent.SetDestination(patrolPath[currDes]);

@@ -23,8 +23,17 @@ public class GuardAnimation : MonoBehaviourPun
         
         bool isdown = GetComponent<GuardMovement>().guardDisabled;
 
+        if (GetComponent<GuardMovement>().sleepy && GetComponent<GuardMovement>().state != State.chase && GetComponent<GuardMovement>().agent.velocity.magnitude == 0)
+        {
+            animator.SetBool("Sleeping", true);
+        } else { animator.SetBool("Sleeping", false); };
+
         if(isdown || GetComponent<GuardMovement>().agent.isStopped){animator.SetBool("isKnockedOut",true);}
         else{animator.SetBool("isKnockedOut",false);}
+
         
+        
+
+
     }
 }

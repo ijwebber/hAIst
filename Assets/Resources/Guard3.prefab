@@ -1283,6 +1283,7 @@ MonoBehaviour:
   - {x: 88.2, y: 12, z: -45.2}
   state: 0
   chaseSpeed: 6.5
+  sleepy: 0
   walkSpeed: 3.5
   chasedPlayer: {fileID: 0}
   guardDisabled: 0
