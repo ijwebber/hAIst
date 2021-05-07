@@ -100,6 +100,7 @@ public class PlayerRevive : MonoBehaviour
                             startTime = 0f;
                             inProgress = false;
 
+                            Debug.Log("Progress bar -- " + progressBar.name);
                             progressBar.Hide();
                             progressBar.ResetBar();
                         }
