@@ -1,22 +1,30 @@
 fileFormatVersion: 2
 guid: 896ade07724ca1c46ba94e7dc026f82e
-timeCreated: 1482170554
-licenseType: Pro
 PluginImporter:
-  serializedVersion: 1
+  externalObjects: {}
+  serializedVersion: 2
   iconMap: {}
   executionOrder: {}
+  defineConstraints: []
   isPreloaded: 0
   isOverridable: 0
+  isExplicitlyReferenced: 0
+  validateReferences: 1
   platformData:
-    Any:
+  - first:
+      Any: 
+    second:
       enabled: 0
       settings: {}
-    Editor:
+  - first:
+      Editor: Editor
+    second:
       enabled: 0
       settings:
         DefaultValueInitialized: true
-    WebGL:
+  - first:
+      WebGL: WebGL
+    second:
       enabled: 1
       settings: {}
   userData: 
