@@ -49,6 +49,7 @@ public class PlayerRevive : MonoBehaviour
 
     public void checkForRevive()
     {
+        progressBar = GameObject.FindObjectOfType<ProgressBarController>();
         //check circle radius of player
         Collider[] playersInView = Physics.OverlapSphere(transform.position, 3.0f, playerMask);
         //if another player there, check if down
