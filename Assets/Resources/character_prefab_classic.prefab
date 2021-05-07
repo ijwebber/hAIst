@@ -1531,6 +1531,7 @@ MonoBehaviour:
   playerController: {fileID: 0}
   holdTime: 3
   startTime: 0
+  canvasFromPlayer: {fileID: 0}
 --- !u!114 &6719984766902686749
 MonoBehaviour:
   m_ObjectHideFlags: 0
