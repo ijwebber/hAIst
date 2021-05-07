@@ -22,14 +22,6 @@ public class Window_QuestPointer : MonoBehaviourPun
     [SerializeField] private Camera mainCam;
     public List<GameObject> pointers = new List<GameObject>();
     [SerializeField] private CameraSystem cameraSystem;
-    void Awake()
-    {
-        // targetPosition = new Vector3(-39.615f,42.6f);
-        Debug.Log(targetPosition);
-        // pointerRectTransform = transform.Find("Pointer").GetComponent<RectTransform>();
-        // pointerImage = transform.Find("Pointer").GetComponent<Image>();
-    }
-
     public void updateTarget(string[] gameNames, int gameState) {
         foreach (GameObject pointer in pointers)
         {

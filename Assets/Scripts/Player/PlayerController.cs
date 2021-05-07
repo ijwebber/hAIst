@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
         } else {
             isGuest = true;
         }
-        Debug.Log("isGuest " + PlayerPrefs.GetInt("isGuest", -1));
     }
 
     void Update() {
