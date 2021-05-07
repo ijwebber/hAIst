@@ -13,7 +13,6 @@ public class SoundVisual : MonoBehaviour
     public PlayerController playerController;
 
     private void Start() {
-        Debug.Log("this is called");
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
     }

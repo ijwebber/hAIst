@@ -73,7 +73,7 @@ public class PlayerRevive : MonoBehaviour
                     {
                         disabledPlayersInRange = true;
                         Debug.Log("Disabled");
-                        playerInView.GetComponent<PlayerRevive>().downText.text = "Hold E";
+                        textObject.GetComponent<Text>().text = "Hold E to revive";
 
 
                         if (Input.GetKey(KeyCode.E) && !inProgress)
@@ -110,7 +110,12 @@ public class PlayerRevive : MonoBehaviour
                             progressBar.Hide();
                             progressBar.ResetBar();
                         }
-                    } else playerInView.GetComponent<PlayerRevive>().downText.text = "";
+                    } else {
+                        if (textObject.GetComponent<Text>().text == "Hold E to revive") {
+                            textObject.GetComponent<Text>().text = "";
+                        }
+                        playerInView.GetComponent<PlayerRevive>().downText.text = "";
+                    }
 
                 }
 

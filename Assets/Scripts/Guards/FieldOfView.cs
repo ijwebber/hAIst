@@ -137,7 +137,6 @@ public class FieldOfView : MonoBehaviour
     void Start()
     {
         MeshFilter ViewFilter = GameObject.FindGameObjectWithTag("ViewVis").GetComponent<MeshFilter>();
-        Debug.Log("!!!" + ViewFilter.name);
         viewMeshFilter = GameObject.Instantiate<MeshFilter>(ViewFilter);
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";

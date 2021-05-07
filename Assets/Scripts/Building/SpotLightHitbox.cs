@@ -9,10 +9,13 @@ public class SpotLightHitbox : MonoBehaviour
     [SerializeField] private GameObject SpotLight;
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == 9) {
-            SpotLight.GetComponent<Light>().color = Color.red;
-            guardController.GetClosestGuard(other.gameObject.transform.position.x, other.gameObject.transform.position.y, other.gameObject.transform.position.z);
+            if (!other.gameObject.GetComponent<PlayerPickUp>().down) {
+                SpotLight.GetComponent<Light>().color = Color.red;
+                guardController.GetClosestGuard(other.gameObject.transform.position.x, other.gameObject.transform.position.y, other.gameObject.transform.position.z);
+            }
         }
     }
+
     void OnTriggerExit(Collider other) {
         if (other.gameObject.layer == 9) {
             SpotLight.GetComponent<Light>().color = Color.white;
