@@ -16,7 +16,7 @@ public class PlayerRevive : MonoBehaviour
     
 
     private GameObject playerReference;
-    public ProgressBarController progressBar;
+    private ProgressBarController progressBar;
     public PlayerController playerController;
     public float holdTime = 3.0f;
     public float startTime = 0f;
