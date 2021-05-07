@@ -25,12 +25,19 @@ public class PlayerRevive : MonoBehaviour
     private bool inProgress = false;
     private bool selfInProgress = false;
     private bool disabledPlayersInRange = false;
+    public GameObject canvasFromPlayer;
 
 
     void Start()
     {
         textObject = GameObject.Find("DisplayMessagePlayer");
-        progressBar = GameObject.FindObjectOfType<ProgressBarController>();;
+        canvasFromPlayer = GameObject.Find("CanvasFromPlayer");
+        Transform[] canvasElements = canvasFromPlayer.GetComponentsInChildren<Transform>(true);
+        foreach (Transform t in canvasElements) {
+            if (t.name == "ProgressBar") {
+                progressBar = t.GetComponent<ProgressBarController>();
+            }
+        }
         StartCoroutine("FindReviveWithDelay", 0.01f);
     }
 
@@ -49,7 +56,6 @@ public class PlayerRevive : MonoBehaviour
 
     public void checkForRevive()
     {
-        progressBar = GameObject.FindObjectOfType<ProgressBarController>();
         //check circle radius of player
         Collider[] playersInView = Physics.OverlapSphere(transform.position, 3.0f, playerMask);
         //if another player there, check if down
