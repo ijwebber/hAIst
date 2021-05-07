@@ -32,6 +32,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public List<GameObject> specialItems = new List<GameObject>();
     private Window_QuestPointer questPointer;
     [SerializeField] private PlayerController playerController;
+
+    [SerializeField] private AudioController audioController;
     
     public CinemachineVirtualCamera playerCam;
 
@@ -64,6 +66,7 @@ public class GameController : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom == null)
         {
             Debug.Log("Is not in the room, returning back to Lobby");
+            audioController.StopAll();
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
@@ -341,6 +344,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToMaster");
+        audioController.StopAll();
         PhotonNetwork.LoadLevel("GameLobby 1");
         Debug.Log("gamelobby 1 loaded");
     }
@@ -406,6 +410,7 @@ public class GameController : MonoBehaviourPunCallbacks
         if (changedProps["end"] != null) {
             if ((bool) changedProps["end"]) {
                 if (PhotonNetwork.IsMasterClient) {
+                    audioController.StopAll();
                     PhotonNetwork.LoadLevel("EndScreen");
                 }
             }

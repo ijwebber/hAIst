@@ -18,6 +18,11 @@ public class AudioController : MonoBehaviour
         intenseInstance.start();
     }
 
+    public void StopAll() {
+        intenseInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        stealthInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
     /*public void PlayLowValue() {
         itemPlayer.clip = lowValueSFX;
         itemPlayer.Play();
