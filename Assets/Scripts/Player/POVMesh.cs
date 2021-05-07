@@ -32,7 +32,7 @@ public class POVMesh : MonoBehaviourPun
         int stepCount = Mathf.RoundToInt(playerController.viewAngle * meshResolution);
         float stepAngleSize = playerController.viewAngle / stepCount;
         List<Vector3> viewPoints = new List<Vector3>();
-        Debug.Log("!!!! 1 " + stepCount + " //" + stepAngleSize);
+        //Debug.Log("!!!! 1 " + stepCount + " //" + stepAngleSize);
         for (int i = 0; i <= stepCount; i++)
         {
             float angle = fromPoint.eulerAngles.y - playerController.viewAngle/2 + stepAngleSize*i;

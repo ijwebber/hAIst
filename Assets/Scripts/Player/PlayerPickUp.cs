@@ -88,7 +88,7 @@ public class PlayerPickUp : MonoBehaviourPun
         //game tag thing
         if (photonView.IsMine && PhotonNetwork.IsConnected && inTrigger != null)
         {
-            Debug.Log("Currently in trigger: " + inTrigger.gameObject.tag);
+            // Debug.Log("Currently in trigger: " + inTrigger.gameObject.tag);
             switch (inTrigger.gameObject.tag) {
 
                 case "button":
@@ -346,7 +346,7 @@ public class PlayerPickUp : MonoBehaviourPun
         else if(n==4){messageBox.text = "Hold E for " + holdTime.ToString() + " seconds to pick up"; }
     }
     void displayMessage(string text){
-        Debug.Log("Displaying " + text);
+        //Debug.Log("Displaying " + text);
         messageBox.text = text;
     }
 
