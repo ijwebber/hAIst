@@ -9,9 +9,7 @@ public class SpotLightHitbox : MonoBehaviour
     [SerializeField] private GameObject SpotLight;
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == 9) {
-            if (!guardController.playersSpotted) {
-                guardController.cutsceneSpotlight(SpotLight, other.gameObject);
-            }
+            guardController.GetClosestGuard(SpotLight.transform.position.x, ) (SpotLight, other.gameObject);
         }
     }
 }
