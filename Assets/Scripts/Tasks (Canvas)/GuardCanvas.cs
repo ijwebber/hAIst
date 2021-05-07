@@ -43,7 +43,7 @@ public class GuardCanvas : MonoBehaviour
                 // Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position + offset);
                 Vector3 targetPositionScreenPoint = Camera.main.WorldToScreenPoint(guard.gameObject.transform.position + offset + new Vector3(0,(1-cameraSystem.zoomMultiplier)*30,-(1-cameraSystem.zoomMultiplier)*20));
                 RectTransform pointerRectTransform = guardIndicator.GetComponent<RectTransform>();
-                if (playerController.player.GetComponent<KnockOutGuard>().guard && playerController.player.GetComponent<KnockOutGuard>().guard.GetInstanceID() == guard.gameObject.GetInstanceID() && guard.state != State.disabled) {
+                if (playerController.player.GetComponent<KnockOutGuard>().guard && playerController.player.GetComponent<KnockOutGuard>().guard.GetInstanceID() == guard.gameObject.GetInstanceID() && guard.state != State.disabled && !playerController.player.GetComponent<PlayerPickUp>().down) {
                     guardIndicator.rectTransform.rotation = Quaternion.identity;
                     guardIndicator.sprite = eKey;
                     guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
