@@ -255,11 +255,6 @@ public GameObject UpgradeButtonFromPreGame;
 [SerializeField] private GameObject MapIndicator;
 [SerializeField] private GameObject mapOutline;
 
-// FMOD
-private bool audioResumed = false;
-
-
-
 // Use this for initialization
 void Start()
 {
@@ -1548,19 +1543,7 @@ public void StartGame()
 {
     StartMenu.SetActive(false);
     UserManagerMenu.SetActive(true);
-    ResumeAudio();
 }
-
-public void ResumeAudio() {
-            if (!audioResumed)
-            {
-                var result = FMODUnity.RuntimeManager.CoreSystem.mixerSuspend();
-                Debug.Log("***" + result);
-                result = FMODUnity.RuntimeManager.CoreSystem.mixerResume();
-                Debug.Log("***" + result);
-                audioResumed = true;
-            }
-    }
 
 public void QuitGame()
 {
