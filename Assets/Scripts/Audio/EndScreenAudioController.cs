@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 
-public class EndScreenAudioController : MonoBehaviour
+public class EndScreenAudioController : MonoBehaviourPun
 {
     private FMOD.Studio.EventInstance winInstance;
     private FMOD.Studio.EventInstance lossInstance;
@@ -19,6 +19,7 @@ public class EndScreenAudioController : MonoBehaviour
         }
     }
 
+    [PunRPC]
     public void StopAll() {
         winInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         lossInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);

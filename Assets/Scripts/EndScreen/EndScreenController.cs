@@ -26,7 +26,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom == null)
         {
-            audioController.StopAll();
+            audioController.GetComponent<PhotonView>().RPC("StopAll", RpcTarget.All);
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
@@ -100,13 +100,13 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToMaster");
-        audioController.StopAll();
+        audioController.GetComponent<PhotonView>().RPC("StopAll", RpcTarget.All);
         PhotonNetwork.LoadLevel("GameLobby 1");
         Debug.Log("gamelobby 1 loaded");
     }
 
     public void PlayAgainButton() {
-        audioController.StopAll();
+        audioController.GetComponent<PhotonView>().RPC("StopAll", RpcTarget.All);
         PhotonNetwork.LoadLevel("GameLobby 1");
 
     }

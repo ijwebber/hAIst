@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
-public class AudioController : MonoBehaviour
+public class AudioController : MonoBehaviourPun
 {
     private FMOD.Studio.EventInstance intenseInstance;
     private FMOD.Studio.EventInstance stealthInstance;
@@ -18,6 +19,7 @@ public class AudioController : MonoBehaviour
         intenseInstance.start();
     }
 
+    [PunRPC]
     public void StopAll() {
         intenseInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         stealthInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
