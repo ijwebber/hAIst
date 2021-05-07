@@ -63,6 +63,11 @@ public class GameController : MonoBehaviourPunCallbacks
     //just spawns in player object
     private void Awake()
     {
+#if UNITY_EDITOR
+    Debug.unityLogger.logEnabled = true;
+#else
+    Debug.unityLogger.logEnabled = false;
+#endif
         //GameLobbyScript = GameObject.Find("_GameLobby").GetComponent<PUN2_GameLobby1>();
         if (PhotonNetwork.CurrentRoom == null)
         {
