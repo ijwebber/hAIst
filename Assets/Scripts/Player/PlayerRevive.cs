@@ -29,9 +29,9 @@ public class PlayerRevive : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine("FindReviveWithDelay", 0.01f);
         textObject = GameObject.Find("DisplayMessagePlayer");
         progressBar = GameObject.FindObjectOfType<ProgressBarController>();;
+        StartCoroutine("FindReviveWithDelay", 0.01f);
     }
 
     void Update() {
@@ -49,6 +49,7 @@ public class PlayerRevive : MonoBehaviour
 
     public void checkForRevive()
     {
+        progressBar = GameObject.FindObjectOfType<ProgressBarController>();
         //check circle radius of player
         Collider[] playersInView = Physics.OverlapSphere(transform.position, 3.0f, playerMask);
         //if another player there, check if down

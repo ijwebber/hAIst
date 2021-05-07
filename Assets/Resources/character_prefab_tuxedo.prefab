@@ -1216,7 +1216,6 @@ MonoBehaviour:
     m_Bits: 512
   downText: {fileID: 4871176673317979433}
   textObject: {fileID: 0}
-  progressBar: {fileID: 0}
   playerController: {fileID: 0}
   holdTime: 3
   startTime: 0
