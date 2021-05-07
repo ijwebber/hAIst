@@ -683,14 +683,12 @@ IEnumerator UpdateFriendList()
     {
         if (PhotonNetwork.IsConnectedAndReady && FriendList != null)
         {
-            if (FriendList.Length == 1 & FriendList[0] == "")
+            if (FriendList.Length > 0)
             {
+                if (FriendList[0] != "") {
+                    PhotonNetwork.FindFriends(FriendList);
+                }
             }
-            else
-            {
-                PhotonNetwork.FindFriends(FriendList);
-            }
-
         }
         yield return new WaitForSeconds(1f);
 
