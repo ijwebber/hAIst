@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using Photon.Pun;
 
 public class KnockOutGuard : MonoBehaviour
 {   
@@ -53,6 +54,7 @@ public class KnockOutGuard : MonoBehaviour
             {
                 // guardStatusText.text = "";
                 guard.GetComponent<GuardMovement>().guardDisabled = true;
+                guard.GetComponent<PhotonView>().RPC("syncGuardDisabled", RpcTarget.All, true);
                 // guard.GetComponent<GuardMovement>().transferSpecials(this.GetComponent<PlayerController>());
             }
         }

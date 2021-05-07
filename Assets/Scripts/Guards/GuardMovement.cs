@@ -259,4 +259,13 @@ public class GuardMovement : MonoBehaviourPun
         timedOut = false;
         agent.isStopped = false;
     }
+
+    [PunRPC]
+    void syncGuardDisabled(bool value)
+    {
+        if (value)
+        {
+            this.state = State.disabled;
+        }
+    }
 }
