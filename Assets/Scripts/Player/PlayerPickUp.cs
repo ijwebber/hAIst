@@ -291,14 +291,13 @@ public class PlayerPickUp : MonoBehaviourPun
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
 
                         // Play sound effect for each item type
-                        if (audioController != null) {
-                            if (isSpecial) {
-                                //audioController.PlayHighValue();
-                                gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
-                            } /*else {
-                                //audioController.PlayLowValue();
-                            }*/
-                        }
+                        if (isSpecial) {
+                            //audioController.PlayHighValue();
+                            gameController.playerUpdates.updateDisplay("You have stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
+                            gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
+                        } /*else {
+                            //audioController.PlayLowValue();
+                        }*/
 
                         // reset game components
                         keycodeGame.SetActive(false);
