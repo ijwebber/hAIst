@@ -1176,6 +1176,7 @@ MonoBehaviour:
   - {x: -24.6, y: 12, z: 16.5}
   state: 0
   chaseSpeed: 6.5
+  sleepy: 0
   walkSpeed: 3.5
   chasedPlayer: {fileID: 0}
   guardDisabled: 0
