@@ -109,7 +109,7 @@ public class GuardMovement : MonoBehaviourPun
                     {   
                         playerToFollow = g;
                         chasedPlayer = g;
-
+                        
                         if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
                         {
                             heySound.Play();
