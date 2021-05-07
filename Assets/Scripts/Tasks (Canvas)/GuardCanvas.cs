@@ -12,6 +12,7 @@ public class GuardCanvas : MonoBehaviour
     public Sprite sus;
     public Sprite exclamation;
     public Sprite hat;
+    public Sprite ZZZ;
     public GuardController guardController;
     public Vector3 offset;
     public Vector3 cameraOffset;
@@ -54,6 +55,9 @@ public class GuardCanvas : MonoBehaviour
                             guardIndicator.rectTransform.rotation = Quaternion.identity;
                             guardIndicator.sprite = hat;
                             guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
+
+                            
+
                             break;
                         case State.suspicious:
                             guardIndicator.rectTransform.rotation = Quaternion.identity;
@@ -72,6 +76,13 @@ public class GuardCanvas : MonoBehaviour
                             guardIndicator.sprite = disabledGuard;
                             guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
                             break;
+                    }
+
+                    if (guard.GetComponent<GuardMovement>().sleepy && guard.agent.velocity.magnitude == 0)
+                    {
+                        guardIndicator.sprite = null;
+                        guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
+
                     }
                 }
                 pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x)/canvas.scaleFactor, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor+guardIndicator.GetComponent<RectTransform>().sizeDelta.y);
