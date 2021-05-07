@@ -29,9 +29,9 @@ public class PlayerRevive : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine("FindReviveWithDelay", 0.01f);
         textObject = GameObject.Find("DisplayMessagePlayer");
         progressBar = GameObject.FindObjectOfType<ProgressBarController>();;
+        StartCoroutine("FindReviveWithDelay", 0.01f);
     }
 
     void Update() {
