@@ -10,13 +10,12 @@ public class SpotLightHitbox : MonoBehaviour
     void OnTriggerEnter(Collider other) {
         if (other.gameObject.layer == 9) {
             SpotLight.GetComponent<Light>().color = Color.red;
-            guardController.GetClosestGuard(SpotLight.transform.position.x, SpotLight.transform.position.y, SpotLight.transform.position.z);
+            guardController.GetClosestGuard(other.gameObject.transform.position.x, other.gameObject.transform.position.y, other.gameObject.transform.position.z);
         }
     }
-    void OnTriggerLeave(Collider other) {
+    void OnTriggerExit(Collider other) {
         if (other.gameObject.layer == 9) {
             SpotLight.GetComponent<Light>().color = Color.white;
-            guardController.GetClosestGuard(SpotLight.transform.position.x, SpotLight.transform.position.y, SpotLight.transform.position.z);
         }
     }
 }
