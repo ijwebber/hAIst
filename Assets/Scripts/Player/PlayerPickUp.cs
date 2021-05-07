@@ -52,7 +52,6 @@ public class PlayerPickUp : MonoBehaviourPun
         audioController = GameObject.FindObjectOfType<AudioController>();
         Transform[] canvasElements = canvasFromPlayer.GetComponentsInChildren<Transform>(true);
         foreach (Transform t in canvasElements) {
-            Debug.Log("LIGGY " + t.name);
             switch (t.name)
             {
                 case "KeycodeTaskCode":
