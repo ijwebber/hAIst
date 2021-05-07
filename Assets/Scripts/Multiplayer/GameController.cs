@@ -242,8 +242,12 @@ public class GameController : MonoBehaviourPunCallbacks
                                     }
                                     nextQuestItems.Add(item.GetComponent<CollectableItem>().keyPad);
                                 } else {
-                                    newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
-                                    nextQuestItems.Add(item);
+                                    if (item != null) {
+                                        newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                                        nextQuestItems.Add(item);
+                                    } else {
+                                        newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
+                                    }
                                 }
                             } else {
                                 newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
@@ -268,8 +272,12 @@ public class GameController : MonoBehaviourPunCallbacks
                                     }
                                     nextQuestItems.Add(item.GetComponent<CollectableItem>().keyPad);
                                 } else {
-                                    newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
-                                    nextQuestItems.Add(item);
+                                    if (item != null) {
+                                        newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                                        nextQuestItems.Add(item);
+                                    } else {
+                                        newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
+                                    }
                                 }
                             } else {
                                 newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
@@ -294,8 +302,12 @@ public class GameController : MonoBehaviourPunCallbacks
                                     }
                                     nextQuestItems.Add(item.GetComponent<CollectableItem>().keyPad);
                                 } else {
-                                    newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
-                                    nextQuestItems.Add(item);
+                                    if (item != null) {
+                                        newText.Add("Steal " + item.GetComponent<CollectableItem>().itemName);
+                                        nextQuestItems.Add(item);
+                                    } else {
+                                        newText.Add("<i><s>Steal " + item.GetComponent<CollectableItem>().itemName + "</i></s>");
+                                    }
                                 }
                             } else {
                                 newText.Add("Recapture " + item.GetComponent<CollectableItem>().itemName + " from the guards!");
