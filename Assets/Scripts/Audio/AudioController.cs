@@ -2,34 +2,23 @@
 
 public class AudioController : MonoBehaviour
 {
-    public AudioSource musicPlayer;
-    public AudioSource itemPlayer;
-    [SerializeField] private AudioClip intenseTheme;
-    [SerializeField] private AudioClip alertedSound;
-    [SerializeField] private AudioClip lowValueSFX;
-    [SerializeField] private AudioClip highValueSFX;
+    private FMOD.Studio.EventInstance intenseInstance;
+    private FMOD.Studio.EventInstance stealthInstance;
     
     void Start() {
-        Debug.Log("***" + musicPlayer.volume);
+        intenseInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Game/Intense");
+        stealthInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Game/Stealth");
+
+        stealthInstance.start();
     }
 
     public void PlayIntenseTheme() {
-        musicPlayer.clip = intenseTheme;
-
-        if(!musicPlayer.isPlaying){
-            PlayMusic();
-        }
+        stealthInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        stealthInstance.release();
+        intenseInstance.start();
     }
 
-    public void PlayMusic() {
-        musicPlayer.Play();
-    }
-
-    public void PauseMusic() {
-        musicPlayer.Pause();
-    }
-
-    public void PlayLowValue() {
+    /*public void PlayLowValue() {
         itemPlayer.clip = lowValueSFX;
         itemPlayer.Play();
     }
@@ -37,5 +26,5 @@ public class AudioController : MonoBehaviour
     public void PlayHighValue() {
         itemPlayer.clip = highValueSFX;
         itemPlayer.Play();
-    }
+    }*/
 }

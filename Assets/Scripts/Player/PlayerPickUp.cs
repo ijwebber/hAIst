@@ -293,11 +293,11 @@ public class PlayerPickUp : MonoBehaviourPun
                         // Play sound effect for each item type
                         if (audioController != null) {
                             if (isSpecial) {
-                                audioController.PlayHighValue();
+                                //audioController.PlayHighValue();
                                 gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
-                            } else {
-                                audioController.PlayLowValue();
-                            }
+                            } /*else {
+                                //audioController.PlayLowValue();
+                            }*/
                         }
 
                         // reset game components

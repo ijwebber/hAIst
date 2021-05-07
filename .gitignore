@@ -161,3 +161,10 @@ Assets/Scenes/IsaacScene/
 
 Assets/Photon/PhotonChat/Demos/Demo Chat --Obsolete--.meta
 Resources.meta
+
+#FMod
+/Assets/FMODStudioCache.asset
+/Assets/FMODStudioCache.asset.meta
+fmod.log
+fmod_editor.log
+Assets/Music/FModProj/.*

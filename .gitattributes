@@ -69,3 +69,9 @@ Assets/Scenes/*.unity filter=lfs diff=lfs merge=lfs -text lockable
 
 # Zips
 *.zip filter=lfs diff=lfs merge=lfs -text
+
+# FMod
+/Assets/StreamingAssets/*.bank filter=lfs diff=lfs merge=lfs -text
+/Assets/Plugins/fmodstudio.bundle/** filter=lfs diff=lfs merge=lfs -text
+/Assets/Plugins/fmodstudioL.bundle/** filter=lfs diff=lfs merge=lfs -text
+/Source/** filter=lfs diff=lfs merge=lfs -text
