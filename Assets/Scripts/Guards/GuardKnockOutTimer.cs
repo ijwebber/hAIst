@@ -27,7 +27,7 @@ public class GuardKnockOutTimer : MonoBehaviour
         //if guard is disabled and timer is currently not being displayed then send an RPC to everyone to display the 3 second disabled timer on top of the guard
         if (moveScript.guardDisabled && !timerDisplayed )
         {
-            PhotonView.Get(this).RPC("InstiateTimer", RpcTarget.All);
+            //PhotonView.Get(this).RPC("InstiateTimer", RpcTarget.All);
 
 
 
