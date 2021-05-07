@@ -20,10 +20,13 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public Button PlayAgainLose;
     [SerializeField] DBControllerEnd dbController;
 
+    [SerializeField] private EndScreenAudioController audioController;
+
     private void Awake()
     {
         if (PhotonNetwork.CurrentRoom == null)
         {
+            audioController.StopAll();
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
@@ -97,11 +100,13 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("OnConnectedToMaster");
+        audioController.StopAll();
         PhotonNetwork.LoadLevel("GameLobby 1");
         Debug.Log("gamelobby 1 loaded");
     }
 
     public void PlayAgainButton() {
+        audioController.StopAll();
         PhotonNetwork.LoadLevel("GameLobby 1");
 
     }
