@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
         shieldObj.SetActive(true);
         Debug.Log("Shield consumed");
         shield = false;
+        GameController.GetComponent<GameController>().SetShieldUsed();
         // TODO remove shield from database
         invincibleFrames = 60;
     }

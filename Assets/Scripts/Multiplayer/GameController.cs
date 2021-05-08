@@ -125,6 +125,16 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
+    public void SetShieldUsed()
+    {
+        foreach (Transform child in UpgradeUI.transform)
+        {
+            if (child.GetChild(1).gameObject.GetComponent<Image>().sprite.name.Equals("shield"))
+            {
+                child.GetChild(2).gameObject.SetActive(true);
+            }
+        }
+    }
     public void PopulateUpgradeUI()
     {
         Debug.Log("Populating Upgrade UI");
