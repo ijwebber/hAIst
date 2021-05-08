@@ -27,6 +27,7 @@ public class GuardMovement : MonoBehaviourPun
     public List<Vector3> patrolPath = new List<Vector3> {new Vector3(-44.0f, 13.38f, 27.83f), new Vector3(-8.0f, 13.38f, 27.7f), new Vector3(-6.2f, 13.38f, 4.3f), new Vector3(-32.4f, 13.21f, 13.0f)};
     private int currDes = 0;
     public State state;
+    private State previousState;
     public float chaseSpeed;
     public bool sleepy;
     public float walkSpeed;
@@ -84,6 +85,11 @@ public class GuardMovement : MonoBehaviourPun
     }
     void Update()
     {
+        if (previousState != state && PhotonNetwork.IsMasterClient) {
+            previousState = state;
+            //sync state
+            this.photonView.RPC("SyncState", RpcTarget.Others, state);
+        }
         if (this.state == State.disabled || guardDisabled) //runs if guard is disabled
         {
             state = State.disabled;
@@ -219,6 +225,11 @@ public class GuardMovement : MonoBehaviourPun
                 }
             }
         }        
+    }
+
+    [PunRPC]
+    void SyncState(State state) {
+        this.state = state;
     }
 
     [PunRPC]
