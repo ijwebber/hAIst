@@ -328,7 +328,31 @@ public class GameController : MonoBehaviourPunCallbacks
 
     public void QuitButton()
     {
-        PhotonNetwork.LeaveRoom();   
+        /*if (PhotonNetwork.IsMasterClient)
+        {
+            ChangeMasterClientifAvailble();
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+        else
+        {
+            PhotonNetwork.LeaveRoom();
+
+        }*/
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public void ChangeMasterClientifAvailble()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+        if (PhotonNetwork.CurrentRoom.PlayerCount <= 1)
+        {
+            return;
+        }
+
+        PhotonNetwork.SetMasterClient(PhotonNetwork.MasterClient.GetNext());
     }
 
     public void updateQuest() {
@@ -408,6 +432,11 @@ public class GameController : MonoBehaviourPunCallbacks
         }
 
         return totalSpecial;
+    }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable changedProps) {

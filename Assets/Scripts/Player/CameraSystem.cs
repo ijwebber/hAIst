@@ -25,6 +25,7 @@ public class CameraSystem : MonoBehaviour
     
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera playerCam;
+    public Camera mainCam;
     [SerializeField] private GameObject guardCam;
 
 
@@ -139,9 +140,10 @@ public class CameraSystem : MonoBehaviour
             playerCamTrack.SetActive(true);
             introSceneTrack.SetActive(false);
             StartCoroutine(disableAfterTime(playerCamTrack, 2f));
-
-            
+            mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));            
             thisPlayer.GetComponent<PlayerMovement>().paused = false;
+
+            sceneTransitionCanvas.SetActive(false);
 
             isCutSceneHappening = false;
 

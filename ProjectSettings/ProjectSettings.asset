@@ -593,9 +593,6 @@ PlayerSettings:
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
   allowUnsafeCode: 0
-  additionalIl2CppArgs: --additional-cpp="/Users/ijwebber/Documents/University/Year
-    3/Games Project/haist-gp/Assets/../Temp/fmod_register_static_plugins.cpp" --additional-cpp="/Users/ijwebber/Documents/University/Year
-    3/Games Project/haist-gp/Assets/Plugins/FMOD/src/Runtime/fmod_static_plugin_support.h"
   scriptingRuntimeVersion: 1
   gcIncremental: 0
   assemblyVersionValidation: 1
