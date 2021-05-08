@@ -82,6 +82,7 @@ public class GuardMovement : MonoBehaviourPun
                     playerController.Specials.Add(spec);
                     gameController.playerUpdates.updateDisplay("You have recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
                     gameController.updateDisp(PhotonNetwork.NickName + " has recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
+                    player.GetComponent<PlayerPickUp>().UpdateScore(spec);
                 }
                 if(specials.Count > 0) {
                     gameController.gameState++;
@@ -154,6 +155,7 @@ public class GuardMovement : MonoBehaviourPun
                                     i++;
                                     gameController.playerUpdates.updateDisplay("You've been knocked down and lost " + spec.GetComponent<CollectableItem>().itemName + "!");
                                     gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down and lost " + spec.GetComponent<CollectableItem>().itemName + "!");
+                                    player.GetComponent<PlayerPickUp>().UpdateScore(-1*spec.GetComponent<CollectableItem>().value, true);
                                 }
                                 serializedObjects.TrimEnd(","[0]);
                                 this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.All, serializedObjects);
