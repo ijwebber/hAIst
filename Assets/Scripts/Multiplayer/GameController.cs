@@ -115,8 +115,19 @@ public class GameController : MonoBehaviourPunCallbacks
         
     }
 
-    private void PopulateUpgradeUI()
+    public void SetReviveUsed()
     {
+        foreach (Transform child in UpgradeUI.transform)
+        {
+            if (child.GetChild(1).gameObject.GetComponent<Image>().sprite.name.Equals("revive"))
+            {
+                child.GetChild(2).gameObject.SetActive(true);
+            }
+        }
+    }
+    public void PopulateUpgradeUI()
+    {
+        Debug.Log("Populating Upgrade UI");
         foreach (Transform child in UpgradeUI.transform)
         {   
             GameObject.Destroy(child.gameObject);
@@ -167,7 +178,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
         {
-            PopulateUpgradeUI();
+            //PopulateUpgradeUI();
             EscapeMenu.SetActive(!EscapeMenu.activeSelf);
         } 
 
