@@ -53,6 +53,7 @@ public class KnockOutGuard : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.E))
             {
                 // guardStatusText.text = "";
+                guard.GetComponent<GuardMovement>().removeSpecials();
                 guard.GetComponent<GuardMovement>().guardDisabled = true;
                 guard.GetComponent<PhotonView>().RPC("syncGuardDisabled", RpcTarget.All, true);
                 // guard.GetComponent<GuardMovement>().transferSpecials(this.GetComponent<PlayerController>());

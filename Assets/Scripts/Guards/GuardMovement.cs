@@ -65,6 +65,23 @@ public class GuardMovement : MonoBehaviourPun
         fovScript = GetComponent<FieldOfView>();
         heySound = GetComponent<AudioSource>();
     }
+    public void removeSpecials() {
+        if(specials.Count > 0) {
+            foreach (var spec in specials)
+            {
+                spec.GetComponent<CollectableItem>().stolen = true;
+                spec.GetComponent<CollectableItem>().guardPoint = null;
+                playerController.Specials.Add(spec);
+                gameController.playerUpdates.updateDisplay("You have recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
+                gameController.updateDisp(PhotonNetwork.NickName + " has recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
+                player.GetComponent<PlayerPickUp>().UpdateScore(spec);
+            }
+            gameController.gameState++;
+            gameController.regress = false;
+            this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
+            Debug.Log("Recaptured painting");
+        }
+    }
     void Update()
     {
         if (this.state == State.disabled || guardDisabled) //runs if guard is disabled
@@ -75,21 +92,6 @@ public class GuardMovement : MonoBehaviourPun
             {
                 agent.isStopped = true;
                 timedOut = true;
-                foreach (var spec in specials)
-                {
-                    spec.GetComponent<CollectableItem>().stolen = true;
-                    spec.GetComponent<CollectableItem>().guardPoint = null;
-                    playerController.Specials.Add(spec);
-                    gameController.playerUpdates.updateDisplay("You have recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
-                    gameController.updateDisp(PhotonNetwork.NickName + " has recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
-                    player.GetComponent<PlayerPickUp>().UpdateScore(spec);
-                }
-                if(specials.Count > 0) {
-                    gameController.gameState++;
-                    gameController.regress = false;
-                    this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
-                    Debug.Log("Recaptured painting");
-                }
                 StartCoroutine(disableForTime(3.0f));
             }
         }
