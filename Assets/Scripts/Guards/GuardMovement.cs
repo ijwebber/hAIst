@@ -60,7 +60,9 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
         
         
         
-        agent.SetDestination(patrolPath[currDes]);
+        if (photonView.IsMine) {
+            agent.SetDestination(patrolPath[currDes]);
+        }
         player = GameObject.Find("Timmy");
         this.state = State.normal;
         this.guardController = GameObject.FindObjectOfType<GuardController>();
@@ -133,7 +135,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         else
         {
             //if a target is in fov then path to that target
-            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
+            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled && photonView.IsMine)
             {
 
                 GameObject playerToFollow = fovScript.visibleTargets[0];
