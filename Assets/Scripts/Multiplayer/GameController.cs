@@ -183,6 +183,10 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
     }
+    public void ResumeGame()
+    {
+        EscapeMenu.SetActive(false);
+    }
 
     void Update()
     {
