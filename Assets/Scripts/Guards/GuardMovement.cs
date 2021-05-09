@@ -13,7 +13,7 @@ public enum State {
     disabled    = 3
 }
 
-public class GuardMovement : MonoBehaviourPun
+public class GuardMovement : MonoBehaviourPun, IPunObservable
 {
     
 
@@ -41,6 +41,8 @@ public class GuardMovement : MonoBehaviourPun
     private float xDir = 0;
     private float yDir = 0;
     private FieldOfView fovScript;
+    private Vector3 networkPosition;
+    private Quaternion networkRotation;
     
 
     private bool timedOut = false;
@@ -58,7 +60,9 @@ public class GuardMovement : MonoBehaviourPun
         
         
         
-        agent.SetDestination(patrolPath[currDes]);
+        if (photonView.IsMine) {
+            agent.SetDestination(patrolPath[currDes]);
+        }
         player = GameObject.Find("Timmy");
         this.state = State.normal;
         this.guardController = GameObject.FindObjectOfType<GuardController>();
@@ -66,6 +70,24 @@ public class GuardMovement : MonoBehaviourPun
         fovScript = GetComponent<FieldOfView>();
         heySound = GetComponent<AudioSource>();
     }
+  
+public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+{
+    if (stream.IsWriting)
+    {
+        stream.SendNext(this.transform.position);
+        stream.SendNext(this.transform.rotation);
+        // stream.SendNext(this.transform.velocity);
+    }
+    else
+    {
+        networkPosition = (Vector3) stream.ReceiveNext();
+        this.transform.rotation = (Quaternion) stream.ReceiveNext();
+
+        float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
+        // networkPosition += (this.m_Body.velocity * lag);
+    }
+}
     public void removeSpecials() {
         if(specials.Count > 0) {
             foreach (var spec in specials)
@@ -85,6 +107,15 @@ public class GuardMovement : MonoBehaviourPun
     }
     void Update()
     {
+        if (!photonView.IsMine) {
+            float movementSpeed = walkSpeed;
+            if (this.state == State.chase) {
+                walkSpeed = chaseSpeed;
+            } else if (this.state == State.disabled) {
+                walkSpeed = 0;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, networkPosition, Time.deltaTime * movementSpeed);
+        }
         if (previousState != state && PhotonNetwork.IsMasterClient) {
             previousState = state;
             //sync state
@@ -104,7 +135,7 @@ public class GuardMovement : MonoBehaviourPun
         else
         {
             //if a target is in fov then path to that target
-            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
+            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled && photonView.IsMine)
             {
 
                 GameObject playerToFollow = fovScript.visibleTargets[0];
@@ -190,7 +221,7 @@ public class GuardMovement : MonoBehaviourPun
                 {
 
                     //if destination has been reached, the guard moves to the next cords in the patrol path
-                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
+                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f && photonView.IsMine)
                     {
                         state = State.normal;
                         agent.speed = walkSpeed;
