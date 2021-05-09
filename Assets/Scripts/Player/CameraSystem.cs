@@ -20,6 +20,7 @@ public class CameraSystem : MonoBehaviour
     public GameObject playerCamTrack;
     public GameObject swatCamTrack;
     public GameObject playerCamFadeOutTrack;
+    public GameObject exitBlowUpTrack;
 
     [Header("Camera references")]
     
@@ -37,6 +38,10 @@ public class CameraSystem : MonoBehaviour
     public GameObject swatTeam2;
     public GameObject gameUIReference;
     public GameObject caughtPlayerObject;
+    public GameObject preExplosionWall;
+    public GameObject afterExplosionAsset;
+    public GameObject C4;
+    public GameObject explosionEffect;
 
     [Header("Flags and floats")]
     [Range(0.6f, 1.0f)]
@@ -44,6 +49,7 @@ public class CameraSystem : MonoBehaviour
     public bool introDone = false;
     public bool isCutSceneHappening = true;
     public bool isCaughtCutSceneHappening = false;
+    public bool isEndCutSceneHappening = false;
     private bool playerCamActive = false;
     
     private GameObject guardShotReference;
@@ -109,6 +115,8 @@ public class CameraSystem : MonoBehaviour
             if (!introDone && Input.GetKeyDown(KeyCode.Escape))
             {
                 introEnd();
+                
+                
             }
 
             //zooming functionality
@@ -124,7 +132,7 @@ public class CameraSystem : MonoBehaviour
             guardShotReference = GameObject.Find("Guard3(Clone)");
         }
 
-
+        
        
         
     }
@@ -152,7 +160,9 @@ public class CameraSystem : MonoBehaviour
             SetLayerRecursively(securityCameraReference, 10);
 
             black.SetActive(true);
+
             
+
         }
     }
 
@@ -206,6 +216,7 @@ public class CameraSystem : MonoBehaviour
     public IEnumerator playSwatScene(){
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
         GuardController.Instance.disableAllguards(true);
+        sceneTransitionCanvas.SetActive(true);
         playerCamFadeOutTrack.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         
@@ -231,6 +242,7 @@ public class CameraSystem : MonoBehaviour
         GuardController.Instance.disableAllguards(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
         BarController.Instance.HideBars();
+        sceneTransitionCanvas.SetActive(false);
 
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
@@ -310,6 +322,51 @@ public class CameraSystem : MonoBehaviour
         isCaughtCutSceneHappening = false;
     }
 
+
+    public IEnumerator explodeExitCutScene()
+    {
+        thisPlayer.GetComponent<PlayerMovement>().paused = true;
+        GuardController.Instance.disableAllguards(true);
+        sceneTransitionCanvas.SetActive(true);
+        playerCamFadeOutTrack.SetActive(true);
+        
+        yield return new WaitForSeconds(1.5f);
+        black.SetActive(false);
+
+        C4.SetActive(true);
+        exitBlowUpTrack.SetActive(true);
+        playerCamFadeOutTrack.SetActive(false);
+        gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+
+
+        //ending
+
+        double trackTime = exitBlowUpTrack.GetComponent<PlayableDirector>().duration;
+
+        yield return new WaitForSeconds((float)trackTime);
+        exitBlowUpTrack.SetActive(false);
+        sceneTransitionCanvas.SetActive(false);
+        black.SetActive(true);
+        yield return new WaitForSeconds(2f);
+
+        thisPlayer.GetComponent<PlayerMovement>().paused = false;
+        GuardController.Instance.disableAllguards(false);
+        
+        gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
+
+    }
+
+    public void playExplosionEffect()
+    {
+        explosionEffect.SetActive(true);
+    }
+
+    public void changeWallsForExplosion()
+    {
+        preExplosionWall.SetActive(false);
+        afterExplosionAsset.SetActive(true);
+        C4.SetActive(false);
+    }
 
 
     

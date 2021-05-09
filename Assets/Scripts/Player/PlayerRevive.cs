@@ -13,7 +13,6 @@ public class PlayerRevive : MonoBehaviour
     public TextMeshProUGUI downText;
     public GameObject textObject;
 
-    
 
     private GameObject playerReference;
     private ProgressBarController progressBar;
@@ -26,6 +25,7 @@ public class PlayerRevive : MonoBehaviour
     private bool selfInProgress = false;
     private bool disabledPlayersInRange = false;
     public GameObject canvasFromPlayer;
+    
 
 
     void Start()
@@ -167,6 +167,7 @@ public class PlayerRevive : MonoBehaviour
                         textObject.GetComponent<Text>().text = "";
 
                         playerController.self_revive = false;
+                        playerController.SetReviveUsed();
 
                         progressBar.Hide();
                         progressBar.ResetBar();

@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public GameObject player;
     public float viewRadius;
     public LayerMask ObMask;
+    public GameObject GameController;
 
     [Range(0,360)]
     public bool isDisabled = false;
@@ -39,6 +40,7 @@ public class PlayerController : MonoBehaviour
         } else {
             isGuest = true;
         }
+        GameController.GetComponent<GameController>().PopulateUpgradeUI();
     }
 
     void Update() {
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour
         shieldObj.SetActive(true);
         Debug.Log("Shield consumed");
         shield = false;
+        GameController.GetComponent<GameController>().SetShieldUsed();
         // TODO remove shield from database
         invincibleFrames = 60;
     }
@@ -65,6 +68,11 @@ public class PlayerController : MonoBehaviour
         upgrades.fast_hands = PlayerPrefs.GetInt("fast_hands", 0);
         upgrades.shield = PlayerPrefs.GetInt("shield", 0) == 1;
         upgrades.self_revive = PlayerPrefs.GetInt("self_revive",0) == 1;
+    }
+
+    public void SetReviveUsed()
+    {
+        GameController.GetComponent<GameController>().SetReviveUsed();
     }
 
     public void DebugUpgrades()

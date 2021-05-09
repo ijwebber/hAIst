@@ -115,8 +115,29 @@ public class GameController : MonoBehaviourPunCallbacks
         
     }
 
-    private void PopulateUpgradeUI()
+    public void SetReviveUsed()
     {
+        foreach (Transform child in UpgradeUI.transform)
+        {
+            if (child.GetChild(1).gameObject.GetComponent<Image>().sprite.name.Equals("revive"))
+            {
+                child.GetChild(2).gameObject.SetActive(true);
+            }
+        }
+    }
+    public void SetShieldUsed()
+    {
+        foreach (Transform child in UpgradeUI.transform)
+        {
+            if (child.GetChild(1).gameObject.GetComponent<Image>().sprite.name.Equals("shield"))
+            {
+                child.GetChild(2).gameObject.SetActive(true);
+            }
+        }
+    }
+    public void PopulateUpgradeUI()
+    {
+        Debug.Log("Populating Upgrade UI");
         foreach (Transform child in UpgradeUI.transform)
         {   
             GameObject.Destroy(child.gameObject);
@@ -167,7 +188,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
         {
-            PopulateUpgradeUI();
+            //PopulateUpgradeUI();
             EscapeMenu.SetActive(!EscapeMenu.activeSelf);
         } 
 
@@ -453,12 +474,15 @@ public class GameController : MonoBehaviourPunCallbacks
 
             int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) changedProps["special"];
             if (remaining == 0) {
+
+                StartCoroutine(CameraSystem.Instance.explodeExitCutScene());
+                /*
                 GameObject[] objs = GameObject.FindGameObjectsWithTag("exit");
                 foreach (GameObject tag in objs)
                 {
                     GameObject mainObj = tag.transform.parent.gameObject;
                     mainObj.SetActive(false);
-                }
+                }*/
             }
         }
     }
