@@ -43,6 +43,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     private FieldOfView fovScript;
     private Vector3 networkPosition;
     private Quaternion networkRotation;
+    private Rigidbody rigidbody;
     
 
     private bool timedOut = false;
@@ -69,23 +70,25 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
         this.playerController = GameObject.FindObjectOfType<PlayerController>();
         fovScript = GetComponent<FieldOfView>();
         heySound = GetComponent<AudioSource>();
+        this.rigidbody = this.GetComponent<Rigidbody>();
     }
   
 public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 {
     if (stream.IsWriting)
     {
-        stream.SendNext(this.transform.position);
-        stream.SendNext(this.transform.rotation);
-        // stream.SendNext(this.transform.velocity);
+        stream.SendNext(rigidbody.position);
+        stream.SendNext(rigidbody.rotation);
+        stream.SendNext(rigidbody.velocity);
     }
     else
     {
         networkPosition = (Vector3) stream.ReceiveNext();
-        this.transform.rotation = (Quaternion) stream.ReceiveNext();
+        networkRotation = (Quaternion) stream.ReceiveNext();
+        rigidbody.velocity = (Vector3) stream.ReceiveNext();
 
         float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
-        // networkPosition += (this.m_Body.velocity * lag);
+        networkPosition += (rigidbody.velocity * lag);
     }
 }
     public void removeSpecials() {
@@ -105,8 +108,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             Debug.Log("Recaptured painting");
         }
     }
-    void Update()
-    {
+
+    void FixedUpdate() {
         if (!photonView.IsMine) {
             float movementSpeed = walkSpeed;
             if (this.state == State.chase) {
@@ -114,8 +117,12 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             } else if (this.state == State.disabled) {
                 walkSpeed = 0;
             }
-            transform.position = Vector3.MoveTowards(transform.position, networkPosition, Time.deltaTime * movementSpeed);
+            rigidbody.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
+            rigidbody.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
         }
+    }
+    void Update()
+    {
         if (previousState != state && PhotonNetwork.IsMasterClient) {
             previousState = state;
             //sync state
