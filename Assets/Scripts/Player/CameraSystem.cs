@@ -216,6 +216,7 @@ public class CameraSystem : MonoBehaviour
     public IEnumerator playSwatScene(){
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
         GuardController.Instance.disableAllguards(true);
+        sceneTransitionCanvas.SetActive(true);
         playerCamFadeOutTrack.SetActive(true);
         yield return new WaitForSeconds(1.5f);
         
@@ -241,6 +242,7 @@ public class CameraSystem : MonoBehaviour
         GuardController.Instance.disableAllguards(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
         BarController.Instance.HideBars();
+        sceneTransitionCanvas.SetActive(false);
 
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
@@ -325,10 +327,11 @@ public class CameraSystem : MonoBehaviour
     {
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
         GuardController.Instance.disableAllguards(true);
-        
+        sceneTransitionCanvas.SetActive(true);
         playerCamFadeOutTrack.SetActive(true);
-        black.SetActive(false);
+        
         yield return new WaitForSeconds(1.5f);
+        black.SetActive(false);
 
         C4.SetActive(true);
         exitBlowUpTrack.SetActive(true);
@@ -342,6 +345,7 @@ public class CameraSystem : MonoBehaviour
 
         yield return new WaitForSeconds((float)trackTime);
         exitBlowUpTrack.SetActive(false);
+        sceneTransitionCanvas.SetActive(false);
         black.SetActive(true);
         yield return new WaitForSeconds(2f);
 
