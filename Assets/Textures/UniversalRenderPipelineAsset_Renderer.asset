@@ -210,7 +210,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: UI
-    Event: 1000
+    Event: 550
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: PlayerHole
-    Event: 1000
+    Event: 550
     filterSettings:
       RenderQueueType: 0
       LayerMask:
@@ -453,7 +453,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: Argon1
-    Event: 1000
+    Event: 550
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: Black
-    Event: 1000
+    Event: 550
     filterSettings:
       RenderQueueType: 1
       LayerMask:
