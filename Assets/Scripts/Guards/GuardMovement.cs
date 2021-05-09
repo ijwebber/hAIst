@@ -79,8 +79,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     }
     else
     {
-        networkPosition = (Vector3) stream.ReceiveNext();
-        networkRotation = (Quaternion) stream.ReceiveNext();
+        this.transform.position = (Vector3) stream.ReceiveNext();
+        this.transform.rotation = (Quaternion) stream.ReceiveNext();
 
         float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
         // networkPosition += (this.m_Body.velocity * lag);
@@ -105,20 +105,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     }
     void Update()
     {
-        if (!this.photonView.IsMine)
-        {
-            float moveSpeed;
-            if (state == State.chase) {
-                moveSpeed = chaseSpeed;
-            } else if (state == State.disabled) {
-                moveSpeed = 0;
-            } else {
-                moveSpeed = walkSpeed;
-            }
-            transform.position = Vector3.MoveTowards(transform.position, networkPosition, Time.deltaTime * moveSpeed);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, networkRotation, Time.deltaTime * 100);
-            return;
-        }
         if (previousState != state && PhotonNetwork.IsMasterClient) {
             previousState = state;
             //sync state
