@@ -79,7 +79,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     }
     else
     {
-        this.transform.position = (Vector3) stream.ReceiveNext();
+        networkPosition = (Vector3) stream.ReceiveNext();
         this.transform.rotation = (Quaternion) stream.ReceiveNext();
 
         float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
@@ -105,6 +105,15 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     }
     void Update()
     {
+        if (!photonView.IsMine) {
+            float movementSpeed = walkSpeed;
+            if (this.state == State.chase) {
+                walkSpeed = chaseSpeed;
+            } else if (this.state == State.disabled) {
+                walkSpeed = 0;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, networkPosition, Time.deltaTime * movementSpeed);
+        }
         if (previousState != state && PhotonNetwork.IsMasterClient) {
             previousState = state;
             //sync state
@@ -210,7 +219,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 {
 
                     //if destination has been reached, the guard moves to the next cords in the patrol path
-                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
+                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f && photonView.IsMine)
                     {
                         state = State.normal;
                         agent.speed = walkSpeed;
