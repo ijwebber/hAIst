@@ -13,7 +13,7 @@ public enum State {
     disabled    = 3
 }
 
-public class GuardMovement : MonoBehaviourPun
+public class GuardMovement : MonoBehaviourPun, IPunObservable
 {
     
 
@@ -41,6 +41,8 @@ public class GuardMovement : MonoBehaviourPun
     private float xDir = 0;
     private float yDir = 0;
     private FieldOfView fovScript;
+    private Vector3 networkPosition;
+    private Quaternion networkRotation;
     
 
     private bool timedOut = false;
@@ -66,6 +68,24 @@ public class GuardMovement : MonoBehaviourPun
         fovScript = GetComponent<FieldOfView>();
         heySound = GetComponent<AudioSource>();
     }
+  
+public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+{
+    if (stream.IsWriting)
+    {
+        stream.SendNext(this.transform.position);
+        stream.SendNext(this.transform.rotation);
+        // stream.SendNext(this.transform.velocity);
+    }
+    else
+    {
+        networkPosition = (Vector3) stream.ReceiveNext();
+        networkRotation = (Quaternion) stream.ReceiveNext();
+
+        float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
+        // networkPosition += (this.m_Body.velocity * lag);
+    }
+}
     public void removeSpecials() {
         if(specials.Count > 0) {
             foreach (var spec in specials)
@@ -85,6 +105,20 @@ public class GuardMovement : MonoBehaviourPun
     }
     void Update()
     {
+        if (!this.photonView.IsMine)
+        {
+            float moveSpeed;
+            if (state == State.chase) {
+                moveSpeed = chaseSpeed;
+            } else if (state == State.disabled) {
+                moveSpeed = 0;
+            } else {
+                moveSpeed = walkSpeed;
+            }
+            transform.position = Vector3.MoveTowards(transform.position, networkPosition, Time.deltaTime * moveSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, networkRotation, Time.deltaTime * 100);
+            return;
+        }
         if (previousState != state && PhotonNetwork.IsMasterClient) {
             previousState = state;
             //sync state
