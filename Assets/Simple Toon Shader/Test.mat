@@ -21,13 +21,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Test
-  m_Shader: {fileID: 4800000, guid: 65f6f9b0b3b58644280fa08171b3a0cf, type: 3}
-  m_ShaderKeywords: _USEEMISSION_ON
+  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2000
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -83,7 +84,7 @@ Material:
     - _IndirectLightMultiplier: 1
     - _IsFace: 0
     - _MainLightIgnoreCelShade: 0.446
-    - _Metallic: 0
+    - _Metallic: 0.124
     - _OcclusionRemapEnd: 1
     - _OcclusionRemapStart: 0
     - _OcclusionStrength: 1
@@ -95,7 +96,7 @@ Material:
     - _ReceiveShadowMappingAmount: 0.583
     - _ReceiveShadowMappingPosOffset: 0
     - _ReceiveShadows: 1
-    - _Smoothness: 0.5
+    - _Smoothness: 0.71
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
