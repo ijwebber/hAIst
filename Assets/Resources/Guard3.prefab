@@ -1138,6 +1138,7 @@ GameObject:
   - component: {fileID: -5668899875455808092}
   - component: {fileID: -639138772890667824}
   - component: {fileID: -4961069568239854583}
+  - component: {fileID: -6775175430602000935}
   m_Layer: 10
   m_Name: Guard3
   m_TagString: Untagged
@@ -1538,6 +1539,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6775175430602000935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4609556142392328302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SmoothingDelay: 5
 --- !u!1 &4769957961863528404
 GameObject:
   m_ObjectHideFlags: 0

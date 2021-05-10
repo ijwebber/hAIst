@@ -71,11 +71,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             for (int i = 0; i < noPlayers; i++)
             {
                 GameObject row = playerRows[i];
-                GameObject seg = playerSegs[i];
                 row.SetActive(true);
-                seg.SetActive(true);
-                seg.GetComponent<Image>().fillAmount = (1f/(float)noPlayers);
-                seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i);
 
                 Player player = PhotonNetwork.PlayerList[i];
                 row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;
@@ -204,14 +200,20 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
                 deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
             }
+            float startRot = 0;
             for (int i = 0; i < noPlayers; i++)
             {
                 GameObject row = playerRows[i];
+                GameObject seg = playerSegs[i];
+                seg.SetActive(true);
+                seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,startRot);
+                seg.GetComponent<Image>().fillAmount = cuts[i];
                 row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)(cuts[i]*100)).ToString() + "%";
                 if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[i]) {
                     finalEarnings = (int)Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i]);
                 }
                 row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i])).ToString();
+                startRot += 360*cuts[i];
             }
             
             //update total score

@@ -27,16 +27,12 @@ public class SwatMovement : MonoBehaviour
         if (!target.disabled)
         {
             agent.SetDestination(target.transform.position);
-
-            
         }
 
         if(Vector3.Distance(target.transform.position, this.transform.position) <= 3f && !target.disabled)
         {
             target.disabled = true;
             target.gameObject.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
-
-           
         }
 
         if (target.disabled)
