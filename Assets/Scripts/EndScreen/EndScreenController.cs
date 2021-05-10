@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Realtime;
 using Photon.Pun;
+using TMPro;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class EndScreenController : MonoBehaviourPunCallbacks
@@ -11,6 +12,12 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
     // private DBControllerEnd dbController;
     public GameObject[] playerRows;
+    public GameObject[] playerSegs;
+    [SerializeField] private TextMeshProUGUI deadDesc;
+    [SerializeField] private TextMeshProUGUI GADesc;
+    [SerializeField] private TextMeshProUGUI moneyDesc;
+    [SerializeField] private TextMeshProUGUI loudDesc;
+    public TextMeshProUGUI totalText;
     public GameObject totalRow;
 
     public GameObject winScreen;
@@ -44,34 +51,80 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             winScreen.SetActive(true);
             lossScreen.SetActive(false);
 
-            foreach (GameObject row in playerRows) {
+            for (int i = 0; i < playerRows.Length; i++) {
+                GameObject row = playerRows[i];
+                GameObject seg = playerSegs[i];
                 row.SetActive(false);
+                seg.SetActive(false);
             }
 
-            int totalItems = 0;
-            int totalSpecial = 0;
+            int noPlayers = PhotonNetwork.PlayerList.Length;
+            (List<int>,int) moneyBags = (new List<int>(),0);
+            (List<int>,int) GA = (new List<int>(),0);
+            (List<int>,int) loud = (new List<int>(),0);
+            (List<int>,int) dead = (new List<int>(),0);
 
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+            //populate rows and segments
+            for (int i = 0; i < noPlayers; i++)
             {
                 GameObject row = playerRows[i];
+                GameObject seg = playerSegs[i];
                 row.SetActive(true);
+                seg.GetComponent<Image>().fillAmount = 1/noPlayers;
+                seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i);
 
                 Player player = PhotonNetwork.PlayerList[i];
-                row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;;
-                row.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) player.CustomProperties["score"]).ToString();
-
-                int numItems = ((int) player.CustomProperties["itemsStolen"]);
-                totalItems += numItems;
-                row.transform.Find("Items").gameObject.GetComponent<Text>().text = numItems.ToString();
-                int numSpecial = ((int) player.CustomProperties["specialStolen"]);
-                totalSpecial += numSpecial;
-                row.transform.Find("Special").gameObject.GetComponent<Text>().text = numSpecial.ToString();
+                row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;
+                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers).ToString() + "%";
+                row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"])/noPlayers)).ToString();
+                if ((int)player.CustomProperties["score"] >= moneyBags.Item2)  {
+                    if ((int)player.CustomProperties["score"] == moneyBags.Item2) {
+                        moneyBags.Item1.Add(i);
+                    } else {
+                        moneyBags = (new List<int>(i), (int)player.CustomProperties["score"]);
+                    }
+                    moneyDesc.text = "Got the biggest haul for the gang ($" + ((int)player.CustomProperties["score"]).ToString() + ")";
+                }
+                if (player.CustomProperties["downs"] != null) {
+                    if ((int)player.CustomProperties["downs"] >= dead.Item2)  {
+                        if ((int)player.CustomProperties["downs"] == dead.Item2) {
+                            dead.Item1.Add(i);
+                        } else {
+                            dead = (new List<int>(i), (int)player.CustomProperties["downs"]);
+                        }
+                        deadDesc.text = "Letting down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
+                    }
+                }
+                if (player.CustomProperties["revives"] != null)  {
+                    if ((int)player.CustomProperties["revives"] >= GA.Item2)  {
+                        if ((int)player.CustomProperties["revives"] == GA.Item2) {
+                            GA.Item1.Add(i);
+                        } else {
+                            GA = (new List<int>(i), (int)player.CustomProperties["revives"]);
+                        }
+                        GADesc.text = "Had everyone's backs with most saves (" + ((int)player.CustomProperties["revives"]).ToString() + ")";
+                    }
+                }
+                if (player.CustomProperties["alerts"] != null)  {
+                    if ((int)player.CustomProperties["alerts"] >= loud.Item2)  {
+                        if ((int)player.CustomProperties["alerts"] == loud.Item2) {
+                            loud.Item1.Add(i);
+                        } else {
+                            loud = (new List<int>(i), (int)player.CustomProperties["alerts"]);
+                        }
+                        loudDesc.text = "Couldn't shut up and alerted the most guards (" + ((int)player.CustomProperties["alerts"]).ToString() + ")" ;
+                    }
+                }
             }
+            Debug.Log("END money " + PhotonNetwork.PlayerList[moneyBags.Item1[0]]);
+            Debug.Log("END loud " + PhotonNetwork.PlayerList[loud.Item1[0]]);
+            Debug.Log("END ga " + PhotonNetwork.PlayerList[GA.Item1[0]]);
+            Debug.Log("END downs " + PhotonNetwork.PlayerList[dead.Item1[0]]);
             
-            totalRow.transform.Find("Items").gameObject.GetComponent<Text>().text = totalItems.ToString();
-            totalRow.transform.Find("Special").gameObject.GetComponent<Text>().text = totalSpecial.ToString();
-            totalRow.transform.Find("Value").gameObject.GetComponent<Text>().text = "$" + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
-            Debug.Log("Is guest? " + PlayerPrefs.GetInt("isGuest", -1));
+            //update total score
+            totalText.text = ((int)PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
+
+            //update database
             if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
                 Debug.Log("New balance = " + PlayerPrefs.GetInt("PlayerBalance", 0) + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]/PhotonNetwork.PlayerList.Length));
                 dbController.EditCoinBalance(PhotonNetwork.NickName, (PlayerPrefs.GetInt("PlayerBalance", 0) + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]/PhotonNetwork.PlayerList.Length)),0);

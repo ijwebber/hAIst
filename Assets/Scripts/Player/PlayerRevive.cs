@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PlayerRevive : MonoBehaviour
 {
@@ -92,7 +93,16 @@ public class PlayerRevive : MonoBehaviour
                                 if (startTime + holdTime <= Time.time)
                                 {
                                     playerInView.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, false);
-                                    playerInView.GetComponent<PlayerRevive>().downText.text = "";
+                                    Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+                                    int currentRevs = 0;
+                                    if (props["revives"] != null) {
+                                        currentRevs = (int) props["revs"];
+                                    }
+                                    currentRevs++;
+                                    Hashtable playerHash = new Hashtable();
+                                    playerHash.Add("revs", currentRevs);
+                                    PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
+                                    textObject.GetComponent<Text>().text = "";
 
                                     progressBar.Hide();
                                     progressBar.ResetBar();

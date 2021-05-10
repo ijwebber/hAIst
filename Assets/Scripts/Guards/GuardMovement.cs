@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public enum State {
     normal      = 0,
@@ -180,6 +181,15 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         playerController.disableShield();
                     } else {
                         if (playerController.invincibleFrames == 0) {
+                            Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+                            int currentDowns = 0;
+                            if (props["downs"] != null) {
+                                currentDowns = (int) props["downs"];
+                            }
+                            currentDowns++;
+                            Hashtable playerHash = new Hashtable();
+                            playerHash.Add("downs", currentDowns);
+                            PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                             playerMoveScript.disabled = true;
                             this.state = State.normal;
                             agent.ResetPath();
@@ -219,6 +229,15 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 // check for sound
                 if (guardController.localGrid.GetValue(transform.position) > 0 && this.state != State.disabled)
                 {
+                    Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+                    int currentAlerts = 0;
+                    if (props["alerts"] != null) {
+                        currentAlerts = (int) props["alerts"];
+                    }
+                    currentAlerts++;
+                    Hashtable playerHash = new Hashtable();
+                    playerHash.Add("alerts", currentAlerts);
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                     Vector3 playerPosition = player.transform.position;
                     this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
                 }
