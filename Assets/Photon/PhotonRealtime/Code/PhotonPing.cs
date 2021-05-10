@@ -36,6 +36,7 @@ namespace Photon.Realtime
     // import WWW class
     using UnityEngine;
     #endif
+    using UnityEngine.Networking;
 
     /// <summary>
     /// Abstract implementation of PhotonPing, ase for pinging servers to find the "Best Region".
@@ -446,14 +447,14 @@ namespace Photon.Realtime
     #if UNITY_WEBGL
     public class PingHttp : PhotonPing
     {
-        private WWW webRequest;
+        private UnityWebRequest webRequest;
 
         public override bool StartPing(string address)
         {
             base.Init();
 
             address = "https://" + address + "/photon/m/?ping&r=" + UnityEngine.Random.Range(0, 10000);
-            this.webRequest = new WWW(address);
+            this.webRequest = new UnityWebRequest(address);
             return true;
         }
 

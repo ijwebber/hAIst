@@ -7,7 +7,7 @@ public class PressButton : MonoBehaviour
 {
     // Start is called before the first frame update
     public bool triggered = true;
-    public Light light;
+    public new Light light;
     public int id;
     public bool done = false;
 

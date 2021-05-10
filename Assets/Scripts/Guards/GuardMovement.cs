@@ -43,7 +43,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     private FieldOfView fovScript;
     private Vector3 networkPosition;
     private Quaternion networkRotation;
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
     
 
     private bool timedOut = false;

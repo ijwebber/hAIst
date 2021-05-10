@@ -221,7 +221,7 @@ public class PlayerPickUp : MonoBehaviourPun
             // }
             // else{cooldownBox.text = "";}
 
-            if(codeDisplay.active || keycodeGame.active || fixPaintingGame.active){
+            if(codeDisplay.activeInHierarchy || keycodeGame.activeInHierarchy || fixPaintingGame.activeInHierarchy){
                     displayMessage(2);
             }
        

@@ -22,7 +22,7 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
     private float staminaB = 1;
     private float staminaG = 1;
     UIController uiController;
-    private Rigidbody rigidbody;
+    private new Rigidbody rigidbody;
     private Vector3 networkPosition;
     private Quaternion networkRotation;
 
@@ -56,11 +56,11 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
     void Update() {
         speed = playerController.moveSpeed;
 
-        if(Input.GetKeyDown(KeyCode.O) && objectives.active == true){
+        if(Input.GetKeyDown(KeyCode.O) && objectives.activeInHierarchy == true){
             //objectivesEnabled = false;
             objectives.SetActive(false);
         }
-        else if(Input.GetKeyDown(KeyCode.O) && objectives.active == false){
+        else if(Input.GetKeyDown(KeyCode.O) && objectives.activeInHierarchy == false){
             //objectivesEnabled = true;
             objectives.SetActive(true);
         }

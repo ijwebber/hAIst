@@ -215,7 +215,6 @@ public class GameController : MonoBehaviourPunCallbacks
         //     playerUpdates.updateDisplay("M was just pressed");
         // }
         if (gameState != updatedGameState || updateNeeded) {
-            bool localChange = false;
             bool localRegress = regress;
             bool localUpdateNeeded = updateNeeded;
             if (!updateNeeded) {
@@ -225,11 +224,8 @@ public class GameController : MonoBehaviourPunCallbacks
                 if (gameState > updatedGameState) {
                     // change originated from here
                     updatedGameState = gameState;
-                    localChange = true;
                 } else if (regress) {
                     if (gameState < updatedGameState) {
-                        Debug.Log("A PAINTING HAS BEEN CAPTURED!!");
-                        localChange = true;
                         updatedGameState = gameState;
                     }
                     gameState = Mathf.Min(gameState,updatedGameState);
