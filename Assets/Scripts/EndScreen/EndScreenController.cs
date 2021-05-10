@@ -25,6 +25,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public Button PlayAgainWin;
     public Button PlayAgainLose;
     [SerializeField] DBControllerEnd dbController;
+    [SerializeField] private EndScreenAudioController audioController;
 
     private void Awake()
     {
@@ -47,6 +48,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
         bool wasWin = (bool) PhotonNetwork.CurrentRoom.CustomProperties["win"];
 
         if (wasWin) {
+            audioController.PlayWin();
+
             winScreen.SetActive(true);
             lossScreen.SetActive(false);
 
@@ -217,6 +220,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 dbController.EditCoinBalance(PhotonNetwork.NickName, (PlayerPrefs.GetInt("PlayerBalance", 0) + finalEarnings),0);
             }
         } else {
+            audioController.PlayLoss();
+
             winScreen.SetActive(false);
             lossScreen.SetActive(true);
         }

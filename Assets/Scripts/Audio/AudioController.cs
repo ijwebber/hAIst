@@ -11,12 +11,6 @@ public class AudioController : MonoBehaviour
 
     [SerializeField] private AudioClip intenseMainIntro;
     [SerializeField] private AudioClip intenseAddIntro;
-    
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            PlayIntenseTheme();
-        } 
-    }
 
     public void PlayIntenseTheme() {
         mainPlayer.Pause();
