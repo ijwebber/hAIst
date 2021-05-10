@@ -5,6 +5,8 @@ using UnityEngine.Playables;
 using Cinemachine;
 using UnityEngine.UI;
 using Photon.Pun;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
 
@@ -61,8 +63,9 @@ public class CameraSystem : MonoBehaviour
     private float startingHeight;
     private float startingDistance;
     public int skipCounter;
-    
-    
+    public const byte skipCutSceneCounterCode = 1;
+
+
 
     [Header("Other Stuff")]
     [SerializeField] private AudioController audioController;
@@ -87,7 +90,8 @@ public class CameraSystem : MonoBehaviour
     }
 
     void Start()
-    {   
+    {
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
         black = GameObject.Find("Black");
         thisPlayer = playerCam.Follow.gameObject;
         audioController = GameObject.FindObjectOfType<AudioController>();
@@ -120,7 +124,7 @@ public class CameraSystem : MonoBehaviour
             //for the first escape key press we want to end the cutscene and skip to the player cam
             if (!introDone && Input.GetKeyDown(KeyCode.Escape) && !skippedOrNot)
             {
-                thisPlayer.GetPhotonView().RPC("updateSkipCounter", RpcTarget.All, true);
+                raiseEventSkipCounter();
                 skippedOrNot = true;
                 
                 
@@ -153,7 +157,24 @@ public class CameraSystem : MonoBehaviour
        
         
     }
+    public void raiseEventSkipCounter()
+    {
+        Debug.LogError("called");
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent(skipCutSceneCounterCode, null, raiseEventOptions, SendOptions.SendReliable);
+    }
 
+    public void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+
+        if (eventCode == skipCutSceneCounterCode)
+        {
+            skipCounter++;
+        }
+    }
+
+    
     public void introEnd()
     {   
         //change layer of guard back to normal, fade ui back in, turn on black
