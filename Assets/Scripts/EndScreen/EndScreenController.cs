@@ -13,7 +13,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     // private DBControllerEnd dbController;
     public GameObject[] playerRows;
     public GameObject[] playerSegs;
-    [SerializeField] private Color[] colors;
+    [SerializeField] private string[] colors;
     [SerializeField] private GameObject deadWeight;
     [SerializeField] private GameObject GA;
     [SerializeField] private GameObject moneyBags;
@@ -122,11 +122,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     seg.GetComponent<Image>().fillAmount += .1f;
                     cuts[i] += .1f/moneyPlayers.Count;
                     if (moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
-                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     } else {
-                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
-                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     }
                     start -= 36;
                 } else {
@@ -138,11 +136,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     seg.GetComponent<Image>().fillAmount -= .05f;
                     cuts[i] -= .05f/loudPlayers.Count;
                     if (loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
-                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     } else {
-                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
-                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     }
                     start += 18;
                 } else {
@@ -154,11 +150,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     seg.GetComponent<Image>().fillAmount += .05f;
                     cuts[i] += .05f/GAPlayers.Count;
                     if (GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
-                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     } else {
-                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
-                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     }
                     start -= 18;
                 } else {
@@ -171,11 +165,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     seg.GetComponent<Image>().fillAmount -= .1f;
                     cuts[i] -= .1f/deadPlayers.Count;
                     if (deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
-                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     } else {
-                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
-                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     }
                     start += 18;
                 } else {
