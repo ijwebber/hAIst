@@ -92,7 +92,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 }
     void FixedUpdate()
     {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected == true)
+        if (!photonView.IsMine)
         {
             //lag compensation
             // rb.MovePosition(networkPosition);
