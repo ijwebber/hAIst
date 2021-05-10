@@ -219,7 +219,7 @@ public class CameraSystem : MonoBehaviour
         securityCameraReference = GameObject.Find("Camera 2");
 
         //setting the layers for paintings and guard so they render
-        SetPaintingsLayer(default);
+        SetPaintingsLayer(23);
         SetLayerRecursively(guardShotReference, default);
         SetLayerRecursively(securityCameraReference, default);
 
