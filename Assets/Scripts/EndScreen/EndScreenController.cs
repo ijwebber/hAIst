@@ -116,6 +116,23 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             Debug.Log("END loud " + loudPlayers[0] + " // " + loudValue);
             Debug.Log("END ga " + GAPlayers[0] + " // " + GAValue);
             Debug.Log("END downs " + deadPlayers[0] + " // " + deadValue);
+
+
+            int start = 0;
+            for (int i = 0; i < noPlayers; i++)
+            {
+                GameObject row = playerRows[i];
+                GameObject seg = playerSegs[i];
+                seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i + start);
+                if (moneyPlayers.Contains(i)) {
+                    seg.GetComponent<Image>().fillAmount += .05f;
+                    row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers + 5).ToString() + "%";
+                    start += 18;
+                } else {
+                    seg.GetComponent<Image>().fillAmount -= .05f;
+                    row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers - 5).ToString() + "%";
+                }
+            }
             
             //update total score
             totalText.text = "$" + ((int)PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
