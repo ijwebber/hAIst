@@ -285,6 +285,12 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
 
     }
 
+    [PunRPC]
+    void updateSkipCounter(bool skip)
+    {
+        CameraSystem.Instance.skipCounter++;
+    }
+
     //This calls the incremental update function, 0.03 works for 30 frames per second
     IEnumerator cameraCutSceneUpdates(float delay, object location, int distanceOffset, int heightOffset, object cameraRotation, string customMessage, int code)
     {
