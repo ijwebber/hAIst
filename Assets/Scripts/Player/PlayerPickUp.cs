@@ -487,6 +487,5 @@ public class PlayerPickUp : MonoBehaviourPun
     void hideObject(int objID) {  // do the following
        PhotonView.Find(objID).gameObject.SetActive(false);
        PhotonView.Find(objID).GetComponent<CollectableItem>().stolen = true;
-
     }
 }

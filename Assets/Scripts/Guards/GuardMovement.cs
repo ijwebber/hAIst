@@ -62,9 +62,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
         
         
         
-        if (photonView.IsMine) {
-            agent.SetDestination(patrolPath[currDes]);
-        }
+        agent.SetDestination(patrolPath[currDes]);
         player = GameObject.Find("Timmy");
         this.state = State.normal;
         this.guardController = GameObject.FindObjectOfType<GuardController>();
