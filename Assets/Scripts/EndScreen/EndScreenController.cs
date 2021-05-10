@@ -57,10 +57,14 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             }
 
             int noPlayers = PhotonNetwork.PlayerList.Length;
-            (List<int>,int) moneyBags = (new List<int>(),0);
-            (List<int>,int) GA = (new List<int>(),0);
-            (List<int>,int) loud = (new List<int>(),0);
-            (List<int>,int) dead = (new List<int>(),0);
+            List<int> moneyPlayers = new List<int>();
+            int moneyValue = 0;
+            List<int> GAPlayers = new List<int>();
+            int GAValue = 0;
+            List<int> loudPlayers = new List<int>();
+            int loudValue = 0;
+            List<int> deadPlayers = new List<int>();
+            int deadValue = 0;
 
             //populate rows and segments
             for (int i = 0; i < noPlayers; i++)
@@ -76,23 +80,17 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;
                 row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers).ToString() + "%";
                 row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"])/noPlayers)).ToString();
-                if ((int)player.CustomProperties["score"] >= moneyBags.Item2)  {
-                    if ((int)player.CustomProperties["score"] == moneyBags.Item2) {
-                        moneyBags.Item1.Add(i);
-                    } else {
-                        moneyBags = (new List<int>(i), (int)player.CustomProperties["score"]);
-                    }
+                if ((int)player.CustomProperties["score"] >= moneyValue)  {
+                    moneyPlayers.Add(i);
+                    moneyValue = (int)player.CustomProperties["score"];
                     moneyDesc.text = "Got the biggest haul for the gang ($" + ((int)player.CustomProperties["score"]).ToString() + ")";
                 } else {
                     Debug.Log("Null score");
                 }
                 if (player.CustomProperties["downs"] != null) {
-                    if ((int)player.CustomProperties["downs"] >= dead.Item2)  {
-                        if ((int)player.CustomProperties["downs"] == dead.Item2) {
-                            dead.Item1.Add(i);
-                        } else {
-                            dead = (new List<int>(i), (int)player.CustomProperties["downs"]);
-                        }
+                    if ((int)player.CustomProperties["downs"] >= deadValue)  {
+                        deadPlayers.Add(i);
+                        deadValue =  (int)player.CustomProperties["downs"];
                         Debug.Log("Player " + i + " got downed " + (int)player.CustomProperties["downs"]);
                         deadDesc.text = "Letting down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
                     }
@@ -100,33 +98,27 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     Debug.Log("Null downs");
                 }
                 if (player.CustomProperties["revives"] != null)  {
-                    if ((int)player.CustomProperties["revives"] >= GA.Item2)  {
-                        if ((int)player.CustomProperties["revives"] == GA.Item2) {
-                            GA.Item1.Add(i);
-                        } else {
-                            GA = (new List<int>(i), (int)player.CustomProperties["revives"]);
-                        }
+                    if ((int)player.CustomProperties["revives"] >= GAValue)  {
+                        GAPlayers.Add(i);
+                        GAValue = (int)player.CustomProperties["revives"];
                         GADesc.text = "Had everyone's backs with most saves (" + ((int)player.CustomProperties["revives"]).ToString() + ")";
                     }
                 }
                 if (player.CustomProperties["alerts"] != null)  {
-                    if ((int)player.CustomProperties["alerts"] >= loud.Item2)  {
-                        if ((int)player.CustomProperties["alerts"] == loud.Item2) {
-                            loud.Item1.Add(i);
-                        } else {
-                            loud = (new List<int>(i), (int)player.CustomProperties["alerts"]);
-                        }
+                    if ((int)player.CustomProperties["alerts"] >= loudValue)  {
+                        loudPlayers.Add(i);
+                        loudValue = (int)player.CustomProperties["alerts"];
                         loudDesc.text = "Couldn't shut up and alerted the most guards (" + ((int)player.CustomProperties["alerts"]).ToString() + ")" ;
                     }
                 }
             }
-            // Debug.Log("END money " + moneyBags.Item1[0] + " // " + moneyBags.Item2);
-            // Debug.Log("END loud " + loud.Item1[0] + " // " + loud.Item2);
-            // Debug.Log("END ga " + GA.Item1[0] + " // " + GA.Item2);
-            // Debug.Log("END downs " + dead.Item1[0] + " // " + dead.Item2);
+            Debug.Log("END money " + PhotonNetwork.PlayerList[moneyPlayers[0]].NickName + " // " + moneyValue);
+            Debug.Log("END loud " + loudPlayers[0] + " // " + loudValue);
+            Debug.Log("END ga " + GAPlayers[0] + " // " + GAValue);
+            Debug.Log("END downs " + deadPlayers[0] + " // " + deadValue);
             
             //update total score
-            totalText.text = ((int)PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
+            totalText.text = "$" + ((int)PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
 
             //update database
             if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
