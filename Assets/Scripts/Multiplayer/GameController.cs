@@ -16,6 +16,12 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject UpgradeUIPrefab;
     public GameObject PlayerController;
 
+    public GameObject MuteButton;
+    public Sprite sound_on;
+    public Sprite sound_off;
+    private bool mute;
+
+
     public GameObject playerPrefab;
     public int gameState = 0;
     public GameObject guardPrefab;
@@ -112,6 +118,7 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
         }
+        mute = false;
         
     }
 
@@ -186,6 +193,25 @@ public class GameController : MonoBehaviourPunCallbacks
     public void ResumeGame()
     {
         EscapeMenu.SetActive(false);
+    }
+
+    public void MutePressed()
+    {
+        if (mute)
+        {
+            MuteButton.GetComponent<Image>().sprite = sound_on;
+            mute = false;
+            AudioListener.volume = 1;
+
+        }
+        else
+        {
+            MuteButton.GetComponent<Image>().sprite = sound_off;
+            mute = true;
+            AudioListener.volume = 0;
+        }
+
+
     }
 
 
