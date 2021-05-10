@@ -95,7 +95,7 @@ public class CameraSystem : MonoBehaviour
         black = GameObject.Find("Black");
         thisPlayer = playerCam.Follow.gameObject;
         audioController = GameObject.FindObjectOfType<AudioController>();
-        
+        sceneTransitionCanvas.SetActive(true);
 
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
@@ -214,7 +214,7 @@ public class CameraSystem : MonoBehaviour
         //find players and disable their control whilst cutscene plays
         
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
-        sceneTransitionCanvas.SetActive(true);
+        //sceneTransitionCanvas.SetActive(true);
         //find security cam
         securityCameraReference = GameObject.Find("Camera 2");
 
@@ -226,6 +226,7 @@ public class CameraSystem : MonoBehaviour
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
 
         black.SetActive(false);
+        introSceneTrack.SetActive(true);
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
