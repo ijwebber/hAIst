@@ -1015,7 +1015,6 @@ GameObject:
   - component: {fileID: 2809632148375622185}
   - component: {fileID: 2915908149367081819}
   - component: {fileID: 3283916612493446799}
-  - component: {fileID: 7562598184786088477}
   - component: {fileID: 7845293358414595718}
   - component: {fileID: 6719984766902686749}
   - component: {fileID: 6226183985783063859}
@@ -1202,9 +1201,9 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
+  - {fileID: 5037312651882039959}
   - {fileID: 5395006071217287135}
   - {fileID: 3283916612493446799}
-  - {fileID: 7562598184786088477}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1235,7 +1234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   obstruction: {fileID: 0}
-  name: 
+  objInView: 
   objectMaterial: {fileID: 0}
   prevObjectMaterial: {fileID: 0}
   currentObject:
@@ -1385,19 +1384,6 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
---- !u!114 &7562598184786088477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5271825080736462228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SmoothingDelay: 5
 --- !u!114 &7845293358414595718
 MonoBehaviour:
   m_ObjectHideFlags: 0
