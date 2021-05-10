@@ -32,7 +32,45 @@ MonoBehaviour:
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
-  RpcList: []
+  RpcList:
+  - argonFill
+  - ButtonPressed
+  - ClearSpecials
+  - ClickRpc
+  - destroyObject
+  - DestroyRpc
+  - DestroySpaceship
+  - disableLaser
+  - displayMessage
+  - enableLaser
+  - Enter
+  - EnterMetal
+  - Exit
+  - Fire
+  - GetClosestGuard
+  - hideObject
+  - InstiateTimer
+  - KnockOut
+  - ReadyToStart
+  - RespawnSpaceship
+  - RpcCutScene
+  - SendCode
+  - SendWire
+  - setDisabled
+  - SetupGame
+  - snitch
+  - syncDisabled
+  - syncGuardDisabled
+  - SyncState
+  - updateGrid
+  - updateGuardSpecials
+  - updateKeyCode
+  - UpdateObject
+  - updateSkipCounter
+  - updateTarget
+  - updateThis
+  - UpdateWaitingText
+  - updateWires
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using Cinemachine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
@@ -51,6 +52,7 @@ public class CameraSystem : MonoBehaviour
     public bool isCutSceneHappening = true;
     public bool isCaughtCutSceneHappening = false;
     public bool isEndCutSceneHappening = false;
+    public bool skippedOrNot = false;
     private bool playerCamActive = false;
     
     private GameObject guardShotReference;
@@ -58,6 +60,7 @@ public class CameraSystem : MonoBehaviour
     private GameObject securityCameraReference;
     private float startingHeight;
     private float startingDistance;
+    public int skipCounter;
     
     
 
@@ -92,6 +95,8 @@ public class CameraSystem : MonoBehaviour
 
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
+
+        
         
     }
 
@@ -113,9 +118,10 @@ public class CameraSystem : MonoBehaviour
 
            
             //for the first escape key press we want to end the cutscene and skip to the player cam
-            if (!introDone && Input.GetKeyDown(KeyCode.Escape))
+            if (!introDone && Input.GetKeyDown(KeyCode.Escape) && !skippedOrNot)
             {
-                introEnd();
+                thisPlayer.GetPhotonView().RPC("updateSkipCounter", RpcTarget.All, true);
+                skippedOrNot = true;
                 
                 
             }
@@ -134,6 +140,16 @@ public class CameraSystem : MonoBehaviour
         }
 
         
+        if(!introDone && (skipCounter == PhotonNetwork.CurrentRoom.PlayerCount))
+        {
+            introEnd();
+            introDone = true;
+        }
+
+        if(!introDone && (skipCounter>0))
+        {
+            skipCounterText.GetComponent<Text>().text = skipCounter + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
+        }
        
         
     }
@@ -141,30 +157,31 @@ public class CameraSystem : MonoBehaviour
     public void introEnd()
     {   
         //change layer of guard back to normal, fade ui back in, turn on black
-        if (!introDone)
-        {
-            introDone = true;
-            playerCamActive = true;
+        
             
-            playerCamTrack.SetActive(true);
-            introSceneTrack.SetActive(false);
-            StartCoroutine(disableAfterTime(playerCamTrack, 2f));
-            mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));            
-            thisPlayer.GetComponent<PlayerMovement>().paused = false;
+        playerCamActive = true;
+            
+        playerCamTrack.SetActive(true);
+        introSceneTrack.SetActive(false);
+        StartCoroutine(disableAfterTime(playerCamTrack, 2f));
+        mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));            
+        thisPlayer.GetComponent<PlayerMovement>().paused = false;
 
-            sceneTransitionCanvas.SetActive(false);
+        skipCounterText.GetComponent<Text>().text = "";
 
-            isCutSceneHappening = false;
+        sceneTransitionCanvas.SetActive(false);
 
-            SetLayerRecursively(guardShotReference, 10);
-            SetPaintingsLayer(13);
-            SetLayerRecursively(securityCameraReference, 10);
+        isCutSceneHappening = false;
 
-            black.SetActive(true);
+        SetLayerRecursively(guardShotReference, 10);
+        SetPaintingsLayer(13);
+        SetLayerRecursively(securityCameraReference, 10);
+
+        black.SetActive(true);
 
             
 
-        }
+        
     }
 
     void introCutSceneSetup()
