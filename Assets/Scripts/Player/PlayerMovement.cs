@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
     UIController uiController;
     private new Rigidbody rigidbody;
     private Vector3 networkPosition;
+    private Vector3 moveVector;
     private Quaternion networkRotation;
 
 
@@ -73,16 +74,16 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         stream.SendNext(rigidbody.position);
         stream.SendNext(rigidbody.rotation);
-        stream.SendNext(rigidbody.velocity);
+        stream.SendNext(moveVector);
     }
     else
     {
         networkPosition = (Vector3) stream.ReceiveNext();
         networkRotation = (Quaternion) stream.ReceiveNext();
-        rigidbody.velocity = (Vector3) stream.ReceiveNext();
+        Vector3 networkMoveVector = (Vector3) stream.ReceiveNext();
 
         float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
-        networkPosition += (rigidbody.velocity * lag);
+        networkPosition += (networkMoveVector * lag);
     }
 }
     void FixedUpdate()
@@ -90,8 +91,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         if (!photonView.IsMine && PhotonNetwork.IsConnected == true)
         {
             //lag compensation
-            rigidbody.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
-            rigidbody.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
+            rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
+            rb.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
             return;
         }
 
@@ -107,7 +108,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
-            Vector3 moveVector = new Vector3(horizontal, 0, vertical); //changed 0 to 0.0001 toa avodd error messages
+            moveVector = new Vector3(horizontal, 0, vertical); //changed 0 to 0.0001 toa avodd error messages
 
             if (moveVector != Vector3.zero)
             {
