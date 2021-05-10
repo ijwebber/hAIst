@@ -69,7 +69,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 GameObject seg = playerSegs[i];
                 row.SetActive(true);
                 seg.SetActive(true);
-                seg.GetComponent<Image>().fillAmount = (1/noPlayers);
+                seg.GetComponent<Image>().fillAmount = (1f/(float)noPlayers);
                 seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i);
 
                 Player player = PhotonNetwork.PlayerList[i];
@@ -83,6 +83,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                         moneyBags = (new List<int>(i), (int)player.CustomProperties["score"]);
                     }
                     moneyDesc.text = "Got the biggest haul for the gang ($" + ((int)player.CustomProperties["score"]).ToString() + ")";
+                } else {
+                    Debug.Log("Null score");
                 }
                 if (player.CustomProperties["downs"] != null) {
                     if ((int)player.CustomProperties["downs"] >= dead.Item2)  {
@@ -91,8 +93,11 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                         } else {
                             dead = (new List<int>(i), (int)player.CustomProperties["downs"]);
                         }
+                        Debug.Log("Player " + i + " got downed " + (int)player.CustomProperties["downs"]);
                         deadDesc.text = "Letting down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
                     }
+                } else {
+                    Debug.Log("Null downs");
                 }
                 if (player.CustomProperties["revives"] != null)  {
                     if ((int)player.CustomProperties["revives"] >= GA.Item2)  {
@@ -115,10 +120,10 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     }
                 }
             }
-            Debug.Log("END money " + moneyBags.Item1[0] + " // " + moneyBags.Item2);
-            Debug.Log("END loud " + loud.Item1[0] + " // " + loud.Item2);
-            Debug.Log("END ga " + GA.Item1[0] + " // " + GA.Item2);
-            Debug.Log("END downs " + dead.Item1[0] + " // " + dead.Item2);
+            // Debug.Log("END money " + moneyBags.Item1[0] + " // " + moneyBags.Item2);
+            // Debug.Log("END loud " + loud.Item1[0] + " // " + loud.Item2);
+            // Debug.Log("END ga " + GA.Item1[0] + " // " + GA.Item2);
+            // Debug.Log("END downs " + dead.Item1[0] + " // " + dead.Item2);
             
             //update total score
             totalText.text = ((int)PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
