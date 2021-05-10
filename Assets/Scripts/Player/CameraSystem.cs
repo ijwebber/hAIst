@@ -373,6 +373,9 @@ public class CameraSystem : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         black.SetActive(false);
 
+        // Additional music plays here
+        audioController.EnableAdditional();
+
         C4.SetActive(true);
         exitBlowUpTrack.SetActive(true);
         playerCamFadeOutTrack.SetActive(false);

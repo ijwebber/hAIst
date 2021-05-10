@@ -25,6 +25,10 @@ public class AudioController : MonoBehaviour
         }
     }
 
+    public void EnableAdditional() {
+        addPlayer.volume = mainPlayer.volume;
+    }
+
     /*public void PlayLowValue() {
         itemPlayer.clip = lowValueSFX;
         itemPlayer.Play();
