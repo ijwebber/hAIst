@@ -111,12 +111,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 
     void FixedUpdate() {
         if (!photonView.IsMine) {
-            float movementSpeed = walkSpeed;
-            if (this.state == State.chase) {
-                walkSpeed = chaseSpeed;
-            } else if (this.state == State.disabled) {
-                walkSpeed = 0;
-            }
+            //lag compensation
             rigidbody.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
             rigidbody.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
         }

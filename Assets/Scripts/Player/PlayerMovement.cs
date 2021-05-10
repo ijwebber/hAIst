@@ -5,7 +5,7 @@ using System.Collections;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class PlayerMovement : MonoBehaviourPun
+public class PlayerMovement : MonoBehaviourPun, IPunObservable
 {
     public float speed;
     public PlayerController playerController;
@@ -22,6 +22,9 @@ public class PlayerMovement : MonoBehaviourPun
     private float staminaB = 1;
     private float staminaG = 1;
     UIController uiController;
+    private Rigidbody rigidbody;
+    private Vector3 networkPosition;
+    private Quaternion networkRotation;
 
 
     public GameObject objectives;
@@ -47,7 +50,9 @@ public class PlayerMovement : MonoBehaviourPun
         uiController = GameObject.FindObjectOfType<UIController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
         objectives = GameObject.Find("Objectives");
+        rigidbody = this.GetComponent<Rigidbody>();
     }
+
     void Update() {
         speed = playerController.moveSpeed;
 
@@ -62,10 +67,31 @@ public class PlayerMovement : MonoBehaviourPun
         
     }
  
+public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+{
+    if (stream.IsWriting)
+    {
+        stream.SendNext(rigidbody.position);
+        stream.SendNext(rigidbody.rotation);
+        stream.SendNext(rigidbody.velocity);
+    }
+    else
+    {
+        networkPosition = (Vector3) stream.ReceiveNext();
+        networkRotation = (Quaternion) stream.ReceiveNext();
+        rigidbody.velocity = (Vector3) stream.ReceiveNext();
+
+        float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
+        networkPosition += (rigidbody.velocity * lag);
+    }
+}
     void FixedUpdate()
     {
-        if (photonView.IsMine == false && PhotonNetwork.IsConnected == true)
+        if (!photonView.IsMine && PhotonNetwork.IsConnected == true)
         {
+            //lag compensation
+            rigidbody.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
+            rigidbody.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
             return;
         }
 
