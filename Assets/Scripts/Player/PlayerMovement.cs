@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
     UIController uiController;
     private new Rigidbody rigidbody;
     private Vector3 networkPosition;
-    private Vector3 moveVector;
+    private Vector3 finalmoveVector;
     private Quaternion networkRotation;
 
 
@@ -74,7 +74,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         stream.SendNext(rigidbody.position);
         stream.SendNext(rigidbody.rotation);
-        stream.SendNext(moveVector);
+        stream.SendNext(finalmoveVector);
     }
     else
     {
@@ -91,8 +91,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         if (!photonView.IsMine && PhotonNetwork.IsConnected == true)
         {
             //lag compensation
-            rb.MovePosition(networkPosition);
-            // rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
+            // rb.MovePosition(networkPosition);
+            rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
             rb.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
             return;
         }
@@ -109,7 +109,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             float horizontal = Input.GetAxis("Horizontal");
             float vertical = Input.GetAxis("Vertical");
 
-            moveVector = new Vector3(horizontal, 0, vertical); //changed 0 to 0.0001 toa avodd error messages
+            Vector3 moveVector = new Vector3(horizontal, 0, vertical); //changed 0 to 0.0001 toa avodd error messages
 
             if (moveVector != Vector3.zero)
             {
@@ -166,9 +166,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             staminaBar.color = new Color(staminaR,staminaG,staminaB,alpha);
             staminaIndicator.color = new Color(staminaR,staminaG,staminaB,alpha);
 
-            moveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
+            finalmoveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
             staminaBar.fillAmount = stamina;
-            rb.MovePosition(transform.position + moveVector);
+            rb.MovePosition(transform.position + finalmoveVector);
         }
         
 
