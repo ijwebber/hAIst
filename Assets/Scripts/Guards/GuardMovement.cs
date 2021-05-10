@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using System;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public enum State {
     normal      = 0,
@@ -140,10 +141,10 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         else
         {
             //if a target is in fov then path to that target
-            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled && photonView.IsMine)
+            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
             {
-
                 GameObject playerToFollow = fovScript.visibleTargets[0];
+
 
                 foreach (GameObject g in fovScript.visibleTargets)
                 {
@@ -209,9 +210,17 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 gameController.playerUpdates.updateDisplay("You have been knocked down! Wait for your crew to help you back up!");
                                 gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down!");
                             }
+                            Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+                            int currentDowns = 0;
+                            if (props["downs"] != null) {
+                                currentDowns = (int) props["downs"];
+                            }
+                            currentDowns++;
+                            Hashtable playerHash = new Hashtable();
+                            playerHash.Add("downs", currentDowns);
+                            PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                         }
                     }
-
                 }
             }
             else
@@ -219,6 +228,15 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 // check for sound
                 if (guardController.localGrid.GetValue(transform.position) > 0 && this.state != State.disabled)
                 {
+                    Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+                    int currentAlerts = 0;
+                    if (props["alerts"] != null) {
+                        currentAlerts = (int) props["alerts"];
+                    }
+                    currentAlerts++;
+                    Hashtable playerHash = new Hashtable();
+                    playerHash.Add("alerts", currentAlerts);
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                     Vector3 playerPosition = player.transform.position;
                     this.photonView.RPC("snitch", RpcTarget.MasterClient, playerPosition.x, playerPosition.y, playerPosition.z);
                 }
@@ -226,7 +244,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 {
 
                     //if destination has been reached, the guard moves to the next cords in the patrol path
-                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f && photonView.IsMine)
+                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
                     {
                         state = State.normal;
                         agent.speed = walkSpeed;
