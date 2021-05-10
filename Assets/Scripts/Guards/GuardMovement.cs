@@ -141,10 +141,10 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         else
         {
             //if a target is in fov then path to that target
-            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled && photonView.IsMine)
+            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
             {
-
                 GameObject playerToFollow = fovScript.visibleTargets[0];
+
 
                 foreach (GameObject g in fovScript.visibleTargets)
                 {
@@ -183,7 +183,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         if (playerController.invincibleFrames == 0) {
                             playerMoveScript.disabled = true;
                             this.state = State.normal;
-                            agent.ResetPath();
+                            if (photonView.IsMine) {
+                                agent.ResetPath();
+                            }
                             playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
                             if (playerController.Specials.Count > 0) {
                                 // specials = playerController.Specials;
@@ -221,7 +223,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                             PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                         }
                     }
-
                 }
             }
             else
