@@ -91,7 +91,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         if (!photonView.IsMine && PhotonNetwork.IsConnected == true)
         {
             //lag compensation
-            rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
+            rb.MovePosition(networkPosition);
+            // rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime);
             rb.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
             return;
         }
