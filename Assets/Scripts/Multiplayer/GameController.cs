@@ -201,13 +201,14 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             MuteButton.GetComponent<Image>().sprite = sound_on;
             mute = false;
+            AudioListener.volume = 1;
 
         }
         else
         {
             MuteButton.GetComponent<Image>().sprite = sound_off;
             mute = true;
-
+            AudioListener.volume = 0;
         }
 
 
