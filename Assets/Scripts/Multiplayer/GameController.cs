@@ -21,6 +21,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public Sprite sound_off;
     private bool mute;
 
+    public GameObject OptionsPanel;
+
 
     public GameObject playerPrefab;
     public int gameState = 0;
@@ -193,6 +195,15 @@ public class GameController : MonoBehaviourPunCallbacks
     public void ResumeGame()
     {
         EscapeMenu.SetActive(false);
+    }
+
+    public void EnableOptionsPanel()
+    {
+        OptionsPanel.SetActive(true);
+    }
+    public void DisableOptionsPanel()
+    {
+        OptionsPanel.SetActive(false);
     }
 
     public void MutePressed()

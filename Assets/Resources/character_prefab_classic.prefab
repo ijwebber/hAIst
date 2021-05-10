@@ -1348,7 +1348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   obstruction: {fileID: 0}
-  name: 
+  objInView: 
   objectMaterial: {fileID: 0}
   prevObjectMaterial: {fileID: 0}
   currentObject:
