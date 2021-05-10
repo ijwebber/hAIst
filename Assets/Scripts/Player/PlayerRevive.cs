@@ -96,11 +96,11 @@ public class PlayerRevive : MonoBehaviour
                                     Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
                                     int currentRevs = 0;
                                     if (props["revives"] != null) {
-                                        currentRevs = (int) props["revs"];
+                                        currentRevs = (int) props["revives"];
                                     }
                                     currentRevs++;
                                     Hashtable playerHash = new Hashtable();
-                                    playerHash.Add("revs", currentRevs);
+                                    playerHash.Add("revives", currentRevs);
                                     PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                                     textObject.GetComponent<Text>().text = "";
 
