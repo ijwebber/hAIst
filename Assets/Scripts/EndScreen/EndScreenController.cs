@@ -68,7 +68,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 GameObject row = playerRows[i];
                 GameObject seg = playerSegs[i];
                 row.SetActive(true);
-                seg.GetComponent<Image>().fillAmount = 1/noPlayers;
+                seg.SetActive(true);
+                seg.GetComponent<Image>().fillAmount = (1/noPlayers);
                 seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i);
 
                 Player player = PhotonNetwork.PlayerList[i];
