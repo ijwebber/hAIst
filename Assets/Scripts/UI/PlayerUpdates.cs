@@ -11,7 +11,7 @@ public class PlayerUpdates : MonoBehaviourPun
     private bool riseOthers = false;
 
     public void updateDisplay(string message) {
-        var newText = GameObject.Instantiate(sampleText, new Vector3(168,45,0), Quaternion.identity,this.transform);
+        var newText = GameObject.Instantiate(sampleText, this.transform.position, Quaternion.identity,this.transform);
         newText.GetComponent<TextMeshProUGUI>().text = message;
         newText.GetComponent<UpdateText>().playerUpdates = this;
         newText.GetComponent<Animator>().SetTrigger("newUpdate");
@@ -22,8 +22,8 @@ public class PlayerUpdates : MonoBehaviourPun
     }
 
     public void destroy(TextMeshProUGUI obj) {
-        textAssets.Remove(obj.gameObject);
-        Destroy(obj.gameObject);
+        // textAssets.Remove(obj.gameObject);
+        // Destroy(obj.gameObject);
     }
 
     void Update() {
