@@ -107,12 +107,12 @@ public class GameController : MonoBehaviourPunCallbacks
 
         SetSpotted();
         
-        if (PhotonNetwork.IsMasterClient) {
-            PhotonNetwork.Instantiate(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
-            PhotonNetwork.Instantiate(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
-            PhotonNetwork.Instantiate(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
-            PhotonNetwork.Instantiate(sleepyGuard.name, sleepyGuard.transform.position, Quaternion.identity);
-        }
+        
+        PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
+        PhotonNetwork.InstantiateRoomObject(sleepyGuard.name, sleepyGuard.transform.position, Quaternion.identity);
+        
         // PhotonNetwork.InstantiateRoomObject(soundMesh.name, soundMesh.transform.position, soundMesh.transform.rotation);
 
         Debug.Log("Spawned a player");
