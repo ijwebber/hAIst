@@ -13,10 +13,11 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     // private DBControllerEnd dbController;
     public GameObject[] playerRows;
     public GameObject[] playerSegs;
-    [SerializeField] private TextMeshProUGUI deadDesc;
-    [SerializeField] private TextMeshProUGUI GADesc;
-    [SerializeField] private TextMeshProUGUI moneyDesc;
-    [SerializeField] private TextMeshProUGUI loudDesc;
+    [SerializeField] private Color[] colors;
+    [SerializeField] private GameObject deadWeight;
+    [SerializeField] private GameObject GA;
+    [SerializeField] private GameObject moneyBags;
+    [SerializeField] private GameObject loudMouth;
     public TextMeshProUGUI totalText;
     public GameObject winScreen;
     public GameObject lossScreen;
@@ -83,7 +84,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 if ((int)player.CustomProperties["score"] >= moneyValue)  {
                     moneyPlayers.Add(i);
                     moneyValue = (int)player.CustomProperties["score"];
-                    moneyDesc.text = "Got the biggest haul for the gang ($" + ((int)player.CustomProperties["score"]).ToString() + ")";
+                    moneyBags.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Got the biggest haul for the gang ($" + ((int)player.CustomProperties["score"]).ToString() + ")";
                 } else {
                     Debug.Log("Null score");
                 }
@@ -92,7 +93,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                         deadPlayers.Add(i);
                         deadValue =  (int)player.CustomProperties["downs"];
                         Debug.Log("Player " + i + " got downed " + (int)player.CustomProperties["downs"]);
-                        deadDesc.text = "Letting down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
+                        deadWeight.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Letting down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
                     }
                 } else {
                     Debug.Log("Null downs");
@@ -101,22 +102,19 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     if ((int)player.CustomProperties["revives"] >= GAValue)  {
                         GAPlayers.Add(i);
                         GAValue = (int)player.CustomProperties["revives"];
-                        GADesc.text = "Had everyone's backs with most saves (" + ((int)player.CustomProperties["revives"]).ToString() + ")";
+                        GA.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Had everyone's backs with most saves (" + ((int)player.CustomProperties["revives"]).ToString() + ")";
                     }
                 }
                 if (player.CustomProperties["alerts"] != null)  {
                     if ((int)player.CustomProperties["alerts"] >= loudValue)  {
                         loudPlayers.Add(i);
                         loudValue = (int)player.CustomProperties["alerts"];
-                        loudDesc.text = "Couldn't shut up and alerted the most guards (" + ((int)player.CustomProperties["alerts"]).ToString() + ")" ;
+                        loudMouth.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Couldn't shut up and alerted the most guards (" + ((int)player.CustomProperties["alerts"]).ToString() + ")" ;
                     }
                 }
             }
             Debug.Log("END money " + PhotonNetwork.PlayerList[moneyPlayers[0]].NickName + " // " + moneyValue);
             Debug.Log("END loud " + loudPlayers[0] + " // " + loudValue);
-            Debug.Log("END ga " + GAPlayers[0] + " // " + GAValue);
-            Debug.Log("END downs " + deadPlayers[0] + " // " + deadValue);
-
 
             int start = 0;
             for (int i = 0; i < noPlayers; i++)
@@ -124,14 +122,52 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 GameObject row = playerRows[i];
                 GameObject seg = playerSegs[i];
                 seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i + start);
+                float cut = (1f/(float)noPlayers);
                 if (moneyPlayers.Contains(i)) {
-                    seg.GetComponent<Image>().fillAmount += .05f;
-                    row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers + 5).ToString() + "%";
-                    start += 18;
-                } else {
-                    seg.GetComponent<Image>().fillAmount -= .05f;
-                    row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers - 5).ToString() + "%";
+                    seg.GetComponent<Image>().fillAmount += .1f;
+                    cut += .1f;
+                    moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
+                    moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                    start += 36;
                 }
+                if (loudPlayers.Contains(i)) {
+                    seg.GetComponent<Image>().fillAmount -= .05f;
+                    cut -= .05f;
+                    loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
+                    loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                    start -= 18;
+                }
+                if (GAPlayers.Contains(i)) {
+                    seg.GetComponent<Image>().fillAmount += .05f;
+                    cut += .05f;
+                    GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
+                    GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                    start += 18;
+                }
+                if (deadPlayers.Contains(i)) {
+                    seg.GetComponent<Image>().fillAmount -= .1f;
+                    cut -= .1f;
+                    deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
+                    deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
+                    start += 18;
+                }
+                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers + 10).ToString() + "%";
+            }
+            if (moneyPlayers.Count == 0) {
+                moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
+                moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
+            }
+            if (loudPlayers.Count == 0) {
+                loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
+                loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
+            }
+            if (GAPlayers.Count == 0) {
+                GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
+                GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
+            }
+            if (deadPlayers.Count == 0) {
+                deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
+                deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
             }
             
             //update total score

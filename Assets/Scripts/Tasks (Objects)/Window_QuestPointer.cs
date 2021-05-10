@@ -51,7 +51,15 @@ public class Window_QuestPointer : MonoBehaviourPun
         if (targetObjects.Count != 0) {
             for (int i = 0; i < targetObjects.Count; i++)
             {
-                targetPosition = new Vector3(targetObjects[i].transform.position.x, targetObjects[i].transform.position.z);
+                try
+                {
+                    targetPosition = new Vector3(targetObjects[i].transform.position.x, targetObjects[i].transform.position.z);
+                }
+                catch (System.Exception)
+                {
+                    // Debug.LogError("Couldn't find " + targetObjects[i].name);
+                    return;
+                }
                 Vector3 toPosition = targetPosition;
                 Vector3 fromPosition = new Vector3(playerController.player.transform.position.x, playerController.player.transform.position.z);
                 // fromPosition.y = 0;
