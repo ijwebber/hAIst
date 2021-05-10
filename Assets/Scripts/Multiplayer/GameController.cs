@@ -232,6 +232,8 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             //PopulateUpgradeUI();
             EscapeMenu.SetActive(!EscapeMenu.activeSelf);
+            OptionsPanel.SetActive(false);
+
         } 
 
         if (PhotonNetwork.PlayerList.Length < playerList.Count) {
