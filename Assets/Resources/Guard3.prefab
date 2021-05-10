@@ -1328,6 +1328,7 @@ MonoBehaviour:
   Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
+  - {fileID: 3690989282875342140}
   - {fileID: 7398894807846927064}
   - {fileID: -2478463508837237988}
   - {fileID: -5668899875455808092}
@@ -1380,7 +1381,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4609556142392328302}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
   m_Name: 
@@ -1423,6 +1424,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isKnockedOut
+  - Type: 4
+    SynchronizeType: 0
+    Name: Sleeping
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
