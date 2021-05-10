@@ -183,9 +183,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         if (playerController.invincibleFrames == 0) {
                             playerMoveScript.disabled = true;
                             this.state = State.normal;
-                            if (photonView.IsMine) {
-                                agent.ResetPath();
-                            }
+                            agent.ResetPath();
                             playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
                             if (playerController.Specials.Count > 0) {
                                 // specials = playerController.Specials;
@@ -246,7 +244,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 {
 
                     //if destination has been reached, the guard moves to the next cords in the patrol path
-                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f && photonView.IsMine)
+                    if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
                     {
                         state = State.normal;
                         agent.speed = walkSpeed;

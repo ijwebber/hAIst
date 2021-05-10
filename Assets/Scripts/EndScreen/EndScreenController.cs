@@ -114,10 +114,10 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     }
                 }
             }
-            Debug.Log("END money " + PhotonNetwork.PlayerList[moneyBags.Item1[0]] + " // " + moneyBags.Item2);
-            Debug.Log("END loud " + PhotonNetwork.PlayerList[loud.Item1[0]] + " // " + loud.Item2);
-            Debug.Log("END ga " + PhotonNetwork.PlayerList[GA.Item1[0]] + " // " + GA.Item2);
-            Debug.Log("END downs " + PhotonNetwork.PlayerList[dead.Item1[0]] + " // " + dead.Item2);
+            Debug.Log("END money " + moneyBags.Item1[0] + " // " + moneyBags.Item2);
+            Debug.Log("END loud " + loud.Item1[0] + " // " + loud.Item2);
+            Debug.Log("END ga " + GA.Item1[0] + " // " + GA.Item2);
+            Debug.Log("END downs " + dead.Item1[0] + " // " + dead.Item2);
             
             //update total score
             totalText.text = ((int)PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
