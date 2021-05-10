@@ -42,6 +42,7 @@ public class CameraSystem : MonoBehaviour
     public GameObject afterExplosionAsset;
     public GameObject C4;
     public GameObject explosionEffect;
+    public GameObject skipCounterText;
 
     [Header("Flags and floats")]
     [Range(0.6f, 1.0f)]
