@@ -100,7 +100,7 @@ Material:
     - Color_28180829: {r: 0.9433962, g: 0.3608035, b: 0.26254895, a: 1}
     - Color_57D43A16: {r: 0.9528302, g: 0.9528302, b: 0.9528302, a: 0}
     - Color_F689E8B9: {r: 0.9056604, g: 0.17515129, b: 0.17515129, a: 1}
-    - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 0, b: 0, a: 1}
     - _EmissionMapChannelMask: {r: 1, g: 1, b: 1, a: 0}

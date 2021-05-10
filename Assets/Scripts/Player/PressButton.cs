@@ -17,8 +17,12 @@ public class PressButton : MonoBehaviour
     }
 
     public void Update() {
+        MeshRenderer buttonRenderer = GetComponentInChildren<MeshRenderer>(false);
         if (!this.triggered && !done) {
             light.color = Color.red;
+            buttonRenderer.materials[0].color = Color.red;
+        } else if (done) {
+            buttonRenderer.materials[0].color = Color.green;
         }
     }
 
@@ -26,8 +30,10 @@ public class PressButton : MonoBehaviour
     void ButtonPressed(int id) {  // do the following
         if (!done) {
             PressButton[] buttons = GameObject.FindObjectsOfType<PressButton>();
+            MeshRenderer buttonRenderer = GetComponentInChildren<MeshRenderer>(false);
             this.triggered = true;
             light.color = Color.yellow;
+            buttonRenderer.materials[0].color = Color.yellow;
             StartCoroutine(timer());
             bool allTriggered = true;
             foreach (PressButton button in buttons)
@@ -39,8 +45,8 @@ public class PressButton : MonoBehaviour
                 }
             }
             if (allTriggered) {
-                print("hey, all buttons have been triggered");
                 light.color = Color.green;
+                buttonRenderer.materials[0].color = Color.green;
                 foreach (PressButton button in buttons)
                 { 
                     if(button.id == id) {
