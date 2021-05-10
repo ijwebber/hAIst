@@ -18,8 +18,6 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     [SerializeField] private TextMeshProUGUI moneyDesc;
     [SerializeField] private TextMeshProUGUI loudDesc;
     public TextMeshProUGUI totalText;
-    public GameObject totalRow;
-
     public GameObject winScreen;
     public GameObject lossScreen;
 

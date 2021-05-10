@@ -181,15 +181,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         playerController.disableShield();
                     } else {
                         if (playerController.invincibleFrames == 0) {
-                            Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
-                            int currentDowns = 0;
-                            if (props["downs"] != null) {
-                                currentDowns = (int) props["downs"];
-                            }
-                            currentDowns++;
-                            Hashtable playerHash = new Hashtable();
-                            playerHash.Add("downs", currentDowns);
-                            PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                             playerMoveScript.disabled = true;
                             this.state = State.normal;
                             agent.ResetPath();
@@ -219,6 +210,15 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 gameController.playerUpdates.updateDisplay("You have been knocked down! Wait for your crew to help you back up!");
                                 gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down!");
                             }
+                            Hashtable props = PhotonNetwork.LocalPlayer.CustomProperties;
+                            int currentDowns = 0;
+                            if (props["downs"] != null) {
+                                currentDowns = (int) props["downs"];
+                            }
+                            currentDowns++;
+                            Hashtable playerHash = new Hashtable();
+                            playerHash.Add("downs", currentDowns);
+                            PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
                         }
                     }
 
