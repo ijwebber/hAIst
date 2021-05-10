@@ -21,10 +21,12 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
     private float staminaR = 1;
     private float staminaB = 1;
     private float staminaG = 1;
+    private float finalSpeed;
     UIController uiController;
     private new Rigidbody rigidbody;
     private Vector3 networkPosition;
     private Vector3 finalmoveVector;
+    private float networkSpeed;
     private Quaternion networkRotation;
 
 
@@ -75,12 +77,14 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         stream.SendNext(rigidbody.position);
         stream.SendNext(rigidbody.rotation);
         stream.SendNext(finalmoveVector);
+        stream.SendNext(finalSpeed);
     }
     else
     {
         networkPosition = (Vector3) stream.ReceiveNext();
         networkRotation = (Quaternion) stream.ReceiveNext();
         Vector3 networkMoveVector = (Vector3) stream.ReceiveNext();
+        networkSpeed = (float) stream.ReceiveNext();
 
         float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
         networkPosition += (networkMoveVector * lag);
@@ -92,7 +96,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             //lag compensation
             // rb.MovePosition(networkPosition);
-            rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime*speed);
+            rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime*networkSpeed);
             rb.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
             return;
         }
@@ -118,7 +122,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             }
 
             // Checks for any adjustments to speed
-            float finalSpeed = speed;
+            finalSpeed = speed;
             
             if (Input.GetKey(KeyCode.LeftShift)) {
                 if (!tired && moveVector != Vector3.zero) {
