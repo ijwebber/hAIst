@@ -85,10 +85,13 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         networkPosition = (Vector3) stream.ReceiveNext();
         networkRotation = (Quaternion) stream.ReceiveNext();
-        rigidbody.velocity = (Vector3) stream.ReceiveNext();
+        if (rigidbody != null) {
+            rigidbody.velocity = (Vector3) stream.ReceiveNext();
 
-        float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
-        networkPosition += (rigidbody.velocity * lag);
+            float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
+            networkPosition += (rigidbody.velocity * lag);
+        }
+
     }
 }
     public void removeSpecials() {

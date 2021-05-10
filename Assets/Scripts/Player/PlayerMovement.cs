@@ -92,11 +92,11 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 }
     void FixedUpdate()
     {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected == true)
+        if (!photonView.IsMine)
         {
             //lag compensation
             // rb.MovePosition(networkPosition);
-            rb.position = Vector3.MoveTowards(rigidbody.position, networkPosition, Time.fixedDeltaTime*networkSpeed);
+            rb.position = Vector3.Lerp(rigidbody.position, networkPosition, Time.fixedDeltaTime*networkSpeed);
             rb.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
             return;
         }
