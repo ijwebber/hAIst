@@ -117,41 +117,51 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             Debug.Log("END loud " + loudPlayers[0] + " // " + loudValue);
 
             int start = 0;
+            int finalEarnings = 0;
+            float startingCut = (1f/(float)noPlayers);
             for (int i = 0; i < noPlayers; i++)
             {
                 GameObject row = playerRows[i];
                 GameObject seg = playerSegs[i];
+                float cut = startingCut;
                 seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i + start);
-                float cut = (1f/(float)noPlayers);
                 if (moneyPlayers.Contains(i)) {
                     seg.GetComponent<Image>().fillAmount += .1f;
                     cut += .1f;
+                    startingCut -= .1f/noPlayers;
                     moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
                     moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
-                    start += 36;
+                    start -= 36;
                 }
                 if (loudPlayers.Contains(i)) {
                     seg.GetComponent<Image>().fillAmount -= .05f;
                     cut -= .05f;
+                    startingCut += .05f/noPlayers;
                     loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
                     loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
-                    start -= 18;
+                    start += 18;
                 }
                 if (GAPlayers.Contains(i)) {
                     seg.GetComponent<Image>().fillAmount += .05f;
                     cut += .05f;
+                    startingCut -= .05f/noPlayers;
                     GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
                     GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
-                    start += 18;
+                    start -= 18;
                 }
                 if (deadPlayers.Contains(i)) {
                     seg.GetComponent<Image>().fillAmount -= .1f;
+                    startingCut += .1f/noPlayers;
                     cut -= .1f;
                     deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = PhotonNetwork.PlayerList[i].NickName;
                     deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = colors[i];
                     start += 18;
                 }
-                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers + 10).ToString() + "%";
+                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)(cut*100)).ToString() + "%";
+                if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[i]) {
+                    finalEarnings = (int)Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cut);
+                }
+                row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cut)).ToString();
             }
             if (moneyPlayers.Count == 0) {
                 moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
@@ -175,8 +185,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
             //update database
             if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
-                Debug.Log("New balance = " + PlayerPrefs.GetInt("PlayerBalance", 0) + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]/PhotonNetwork.PlayerList.Length));
-                dbController.EditCoinBalance(PhotonNetwork.NickName, (PlayerPrefs.GetInt("PlayerBalance", 0) + ((int) PhotonNetwork.CurrentRoom.CustomProperties["score"]/PhotonNetwork.PlayerList.Length)),0);
+                Debug.Log("New balance = " + PlayerPrefs.GetInt("PlayerBalance", 0) + (finalEarnings));
+                dbController.EditCoinBalance(PhotonNetwork.NickName, (PlayerPrefs.GetInt("PlayerBalance", 0) + finalEarnings),0);
             }
         } else {
             winScreen.SetActive(false);
