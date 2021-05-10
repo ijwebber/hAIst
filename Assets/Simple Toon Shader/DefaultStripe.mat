@@ -12,8 +12,8 @@ Material:
   m_ShaderKeywords: 
   m_LightmapFlags: 6
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: 1999
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses: []
@@ -59,7 +59,7 @@ Material:
     - _BumpScale: 1
     - _CelShadeMidPoint: -0.5
     - _CelShadeSoftness: 0.05
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DirectLightMultiplier: 1
     - _DstBlend: 0
@@ -79,7 +79,7 @@ Material:
     - _OutlineZOffset: 0.0001
     - _OutlineZOffsetMaskRemapEnd: 1
     - _OutlineZOffsetMaskRemapStart: 0
-    - _QueueOffset: 0
+    - _QueueOffset: -1
     - _ReceiveShadowMappingAmount: 0.65
     - _ReceiveShadowMappingPosOffset: 0
     - _ReceiveShadows: 1
