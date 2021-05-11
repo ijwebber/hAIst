@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
     //private TextMesh Caption = null;
     public bool disabled = false;
     public bool paused = false;
-    private Image staminaBar, staminaIndicator;
+    private Image staminaBar, staminaIndicator, staminaBarBg;
     private float stamina = 1;
     private float alpha = 1;
     private bool tired = false;
@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
             Debug.LogError("<Color=Red><a>Missing</a></Color> CameraControlPlayer Component on playerPrefab.", this);
         }
         staminaBar = GameObject.Find("StaminaBar").GetComponent<Image>();
+        staminaBarBg = GameObject.Find("StaminaBarBG").GetComponent<Image>();
         staminaIndicator = GameObject.Find("StaminaBolt").GetComponent<Image>();
         uiController = GameObject.FindObjectOfType<UIController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
@@ -168,6 +169,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 alpha = 0;
             }
             staminaBar.color = new Color(staminaR,staminaG,staminaB,alpha);
+            staminaBarBg.color = new Color(200,0,0,alpha);
             staminaIndicator.color = new Color(staminaR,staminaG,staminaB,alpha);
 
             finalmoveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
