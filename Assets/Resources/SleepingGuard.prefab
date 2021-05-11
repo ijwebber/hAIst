@@ -564,8 +564,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5080172384295789258}
-  m_LocalRotation: {x: 0, y: -0.999879, z: 0, w: 0.015558921}
-  m_LocalPosition: {x: -9.96, y: 12, z: 61.6}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -42.02, y: 12, z: 50.93}
   m_LocalScale: {x: 1, y: 1, z: 0.99577}
   m_Children:
   - {fileID: 2368381272229519405}
@@ -578,7 +578,7 @@ Transform:
   - {fileID: 8971235072444591035}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -178.21701, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!54 &5350571095147552669
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -691,7 +691,7 @@ MonoBehaviour:
   heySound: {fileID: 0}
   specials: []
   patrolPath:
-  - {x: -9.96, y: 12, z: 616}
+  - {x: -42.02, y: 12, z: 50.93}
   state: 0
   chaseSpeed: 6.5
   sleepy: 1
@@ -1997,13 +1997,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8971235072444591036}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 2}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 5, z: 0.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5605773664588101744}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!212 &8971235072444591034
 SpriteRenderer:
   m_ObjectHideFlags: 0
