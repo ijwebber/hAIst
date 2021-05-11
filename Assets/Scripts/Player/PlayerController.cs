@@ -44,6 +44,12 @@ public class PlayerController : MonoBehaviour
         GameController.GetComponent<GameController>().PopulateUpgradeUI();
     }
 
+    void FixedUpdate() {
+        if (invincibleFrames > 0) {
+            shieldObj.transform.position = player.transform.position + shieldOffset;
+        }
+
+    }
     void Update() {
         if (invincibleFrames > 0) {
             shieldObj.transform.position = player.transform.position + shieldOffset;
