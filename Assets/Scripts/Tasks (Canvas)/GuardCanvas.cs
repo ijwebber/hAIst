@@ -110,12 +110,21 @@ public class GuardCanvas : MonoBehaviour
                 switch (camera.cameraState)
                 {
                     case State.normal:
+                        cameraIndicator.rectTransform.rotation = Quaternion.identity;
                         cameraIndicator.sprite = cameraSprite;
                         cameraIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
                         break;
                     case State.suspicious:
+                        cameraIndicator.rectTransform.rotation = Quaternion.identity;
                         cameraIndicator.sprite = exclamation;
                         cameraIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(10,30);
+                        break;
+                    case State.disabled:
+                        disabledFrames++;
+                        disabledFrames = disabledFrames % 360;
+                        cameraIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, 30 * Mathf.Floor(disabledFrames / 5));
+                        cameraIndicator.sprite = disabledCamera;
+                        cameraIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30, 30);
                         break;
                 }
                 pointerRectTransform.anchoredPosition = new Vector2((targetPositionScreenPoint.x - canvas.GetComponent<RectTransform>().position.x)/canvas.scaleFactor, (targetPositionScreenPoint.y - canvas.GetComponent<RectTransform>().position.y)/canvas.scaleFactor+cameraIndicator.GetComponent<RectTransform>().sizeDelta.y);

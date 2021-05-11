@@ -108,7 +108,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             Hashtable playerHash = new Hashtable();
             int specCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["specialStolen"];
             playerHash.Add("specialStolen", specCount + specials.Count);
-            Debug.LogError("Stole back. Spec count " + specCount + " -> " + (specCount+specials.Count));
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
             gameController.gameState++;
             gameController.regress = false;
@@ -274,7 +273,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 
                         if (sleepy)
                         {
-                            Quaternion target = Quaternion.Euler(0, -178, 0);
+                            Quaternion target = Quaternion.Euler(0, -90, 0);
                             transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 3f);
                         }
                         //Debug.Log(currDes);
