@@ -53,8 +53,13 @@ public class AnimationStateController : MonoBehaviourPun
         bool isdown = playerController.isDisabled;
 
         bool stopDancing = isdown || forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow || spaceBar;
+
+        bool isMac = Input.GetKey(KeyCode.Alpha1);
+        bool isLock = Input.GetKey(KeyCode.Alpha2);
+        bool isFloorDance = Input.GetKey(KeyCode.Alpha3);
+        bool isFlair = Input.GetKey(KeyCode.Alpha4);
         
-        bool isDancing = handleDancing(stopDancing);
+        
 
 
         if((forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow) && velocity < 1.0f){
@@ -63,7 +68,7 @@ public class AnimationStateController : MonoBehaviourPun
         if(!(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow) && velocity > 0.0f){
             velocity -= Time.deltaTime * deceleration;
         }
-        if(!(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow) &&velocity < 0.0f){
+        if(!(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow) && velocity < 0.0f){
             velocity = 0.0f;
 
         }
@@ -71,7 +76,6 @@ public class AnimationStateController : MonoBehaviourPun
         //Debug.Log("Speed" + velocity);
 
         animator.SetFloat(VelocityHash,velocity);
-
 
         if(isdown){
             animator.SetBool("isDown",true);
@@ -86,35 +90,61 @@ public class AnimationStateController : MonoBehaviourPun
 
             if(!(Input.GetKey(KeyCode.Space))){
                 animator.SetBool("isCrouched",false);
+                
             }
 
             if(iscrouched && (forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow)){
                 animator.SetBool("isCrouchWalk",true);
+              
             }
 
             if(!(iscrouched && (forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow))){
+
                 animator.SetBool("isCrouchWalk",false);
+               
             }
 
             if(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow){
+
                 animator.SetBool("isWalking",true);
+                
             }
 
             if(!(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow)){
+
                 animator.SetBool("isWalking",false);
+                
             }
 
             if(!(iscrouched && (forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow))){
+
                 animator.SetBool("isCrouchWalk",false);
-                //Debug.Log("OH DEAR");
+                   
             }
 
-            if(isDancing) {
+               // DANCE
+
+            if(stopDancing){
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", false);
+            }
+            if(isMac) {
+                animator.SetBool("danceMacarena", true);
+            }if(isLock) {
+                animator.SetBool("danceLockHipHop", true);
+            }if(isFloorDance) {
+                animator.SetBool("danceFloorDance", true);
+            }if(isFlair) {
+                animator.SetBool("danceFlair", true);
+            }
+
+            /*(if(isDancing) {
                 animator.SetBool("isDancing", true);
             } else if (animator.GetBool("isDancing")) {
                 animator.SetBool("isDancing", false);
-            }
-
+            }*/
 
         }
 
@@ -134,6 +164,37 @@ public class AnimationStateController : MonoBehaviourPun
                 intensity = (int)(30 * (playerController.ninjaMultiplier));
             }
             soundController.sendGrid(player.transform.position, intensity);
+        }
+    }
+
+
+    void doDance(){
+        bool isMac = Input.GetKey(KeyCode.Alpha1);
+        bool isLock = Input.GetKey(KeyCode.Alpha2);
+        bool isFloorDance = Input.GetKey(KeyCode.Alpha3);
+        bool isFlair = Input.GetKey(KeyCode.Alpha4);
+
+        if (isMac) {
+            animator.SetBool("danceMacarena", true);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", false);
+        }if (isLock) {
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", true);
+            animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", false);
+        }if (isFloorDance) {
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", true);
+            animator.SetBool("danceFlair", false);
+        } if (isFlair) {
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", true);
+    
         }
     }
 
