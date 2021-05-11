@@ -84,7 +84,11 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 }
                 row.transform.Find("Specials").gameObject.GetComponent<Text>().text = specs.ToString();
                 if ((int)player.CustomProperties["score"] >= moneyValue)  {
-                    moneyPlayers.Add(i);
+                    if ((int)player.CustomProperties["score"] == moneyValue)  {
+                        moneyPlayers.Add(i);
+                    } else {
+                        moneyPlayers = new List<int>(i);
+                    }
                     moneyValue = (int)player.CustomProperties["score"];
                     moneyBags.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Got the biggest haul for the gang ($" + ((int)player.CustomProperties["score"]).ToString() + ")";
                 } else {
@@ -92,7 +96,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 }
                 if (player.CustomProperties["downs"] != null) {
                     if ((int)player.CustomProperties["downs"] >= deadValue)  {
-                        deadPlayers.Add(i);
+                        if ((int)player.CustomProperties["downs"] == deadValue) deadPlayers.Add(i);
+                        else deadPlayers = new List<int>(i);
                         deadValue =  (int)player.CustomProperties["downs"];
                         Debug.Log("Player " + i + " got downed " + (int)player.CustomProperties["downs"]);
                         deadWeight.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "let down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
@@ -102,14 +107,16 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 }
                 if (player.CustomProperties["revives"] != null)  {
                     if ((int)player.CustomProperties["revives"] >= GAValue)  {
-                        GAPlayers.Add(i);
+                        if ((int)player.CustomProperties["revives"] == GAValue) GAPlayers.Add(i);
+                        else GAPlayers = new List<int>(i);
                         GAValue = (int)player.CustomProperties["revives"];
                         GA.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Had everyone's backs with most saves (" + ((int)player.CustomProperties["revives"]).ToString() + ")";
                     }
                 }
                 if (player.CustomProperties["alerts"] != null)  {
                     if ((int)player.CustomProperties["alerts"] >= loudValue)  {
-                        loudPlayers.Add(i);
+                        if ((int)player.CustomProperties["alerts"] == loudValue) loudPlayers.Add(i);
+                        else loudPlayers = new List<int>(i);
                         loudValue = (int)player.CustomProperties["alerts"];
                         loudMouth.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Couldn't shut up and alerted the most guards (" + ((int)player.CustomProperties["alerts"]).ToString() + ")" ;
                     }
