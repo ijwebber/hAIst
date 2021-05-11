@@ -79,8 +79,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 Player player = PhotonNetwork.PlayerList[i];
                 row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;
                 int specs = 0;
-                if (PhotonNetwork.PlayerList[i].CustomProperties["specialsStolen"] != null) {
-                    specs = (int)PhotonNetwork.PlayerList[i].CustomProperties["specialsStolen"];
+                if (PhotonNetwork.PlayerList[i].CustomProperties["specialStolen"] != null) {
+                    specs = (int)PhotonNetwork.PlayerList[i].CustomProperties["specialStolen"];
                 }
                 row.transform.Find("Specials").gameObject.GetComponent<Text>().text = specs.ToString();
                 if ((int)player.CustomProperties["score"] >= moneyValue)  {
@@ -125,9 +125,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     if (moneyPlayers.Contains(i)) {
                         cuts[i] += .1f/moneyPlayers.Count;
                         if (moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                            moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         } else {
-                            moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         }
                     } else {
                         if (moneyPlayers.Count > 0) {
@@ -139,9 +139,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     if (loudPlayers.Contains(i)) {
                         cuts[i] -= .05f/loudPlayers.Count;
                         if (loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                            loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         } else {
-                            loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         }
                     } else {
                         if (loudPlayers.Count > 0) {
@@ -153,9 +153,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     if (GAPlayers.Contains(i)) {
                         cuts[i] += .05f/GAPlayers.Count;
                         if (GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                            GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         } else {
-                            GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         }
                     } else {
                         if (GAPlayers.Count > 0) {
@@ -168,9 +168,9 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     if (deadPlayers.Contains(i)) {
                         cuts[i] -= .1f/deadPlayers.Count;
                         if (deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                            deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         } else {
-                            deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                            deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "</color>";
                         }
                     } else {
                         if (deadPlayers.Count > 0) {
@@ -222,7 +222,6 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 GameObject row = playerRows[i];
                 GameObject seg = playerSegs[i];
                 seg.SetActive(true);
-                seg.GetComponent<RectTransform>().rotation = Quaternion.identity;
                 seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,startRot);
                 seg.GetComponent<Image>().fillAmount = cuts[i];
                 row.transform.Find("Cut").gameObject.GetComponent<Text>().text = (cuts[i]*100).ToString("0.#") + "%";
@@ -230,7 +229,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     finalEarnings = (int)Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i]);
                 }
                 row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i])).ToString();
-                startRot += 360*cuts[i];
+                startRot -= 360f*cuts[i];
+                Debug.Log("END // " + startRot);
             }
             
             //update total score
