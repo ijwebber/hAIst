@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float viewRadius;
     public LayerMask ObMask;
     public GameObject GameController;
+    public Vector3 shieldOffset;
 
     [Range(0,360)]
     public bool isDisabled = false;
@@ -26,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public float holdTime = 3;
     public bool shield = false;
     public bool self_revive = false;
-    [SerializeField] private GameObject shieldObj;
+    private GameObject shieldObj;
     public int invincibleFrames = 0;
     void Start()
     {
@@ -45,18 +46,19 @@ public class PlayerController : MonoBehaviour
 
     void Update() {
         if (invincibleFrames > 0) {
-            shieldObj.transform.position = player.transform.position;
+            shieldObj.transform.position = player.transform.position + shieldOffset;
             invincibleFrames--;
         } else {
-            shieldObj.SetActive(false);
+            if (shieldObj != null) {
+                PhotonNetwork.Destroy(shieldObj.GetPhotonView());
+            }
         }
     }
     public void disableShield() {
-        shieldObj.SetActive(true);
+        GameController.GetComponent<GameController>().SetShieldUsed();
+        shieldObj = PhotonNetwork.InstantiateRoomObject("PlayerShield", player.transform.position + shieldOffset, Quaternion.identity);
         Debug.Log("Shield consumed");
         shield = false;
-        GameController.GetComponent<GameController>().SetShieldUsed();
-        // TODO remove shield from database
         invincibleFrames = 60;
     }
 
