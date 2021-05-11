@@ -9,6 +9,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 {
 
     public Text timerText;
+    public Image badge;
     private float timeLeftOnceSpotted = 260f;
 
     private bool timerStarted = false;
@@ -18,6 +19,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
     {
 
         timerText.text = "";
+        badge.color = new Color(1,1,1,0);
 
     }
     public override void OnRoomPropertiesUpdate(Hashtable endTriggered)
@@ -38,17 +40,18 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         
         if (timeLeftOnceSpotted > 0 && timerStarted)
         {
+            badge.color = new Color(1,1,1,1);
             
 
             float minutes = Mathf.FloorToInt(timeLeftOnceSpotted / 60);
             float seconds = Mathf.FloorToInt(timeLeftOnceSpotted % 60);
             if (seconds >= 10)
             {
-                timerText.text = "Police will arrive in " + "0" + minutes + ":" + seconds;
+                timerText.text = "0" + minutes + ":" + seconds;
             }
             else
             {   
-                timerText.text = "Police will arrive in " + "0" + minutes + ":" +  "0" + seconds;
+                timerText.text = "0" + minutes + ":" +  "0" + seconds;
             }
 
             timeLeftOnceSpotted -= Time.deltaTime;
@@ -56,6 +59,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         else if(timerStarted && !endStarted)
         {
             timerText.text = "";
+            badge.color = new Color(1,1,1,0);
             endStarted = true;
 
 
