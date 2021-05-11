@@ -1171,10 +1171,10 @@ MonoBehaviour:
   heySound: {fileID: 0}
   specials: []
   patrolPath:
-  - {x: -4, y: 12, z: 17.7}
-  - {x: -39.9, y: 12, z: 48.8}
-  - {x: -89.5, y: 12, z: 27.2}
-  - {x: -24.6, y: 12, z: 16.5}
+  - {x: -15.6, y: 12, z: 31.14}
+  - {x: -19.4, y: 12, z: 7.9}
+  - {x: -60.2, y: 12, z: 41.2}
+  - {x: -14.2, y: 12, z: 64}
   state: 0
   chaseSpeed: 6.5
   sleepy: 0
@@ -1200,9 +1200,11 @@ MonoBehaviour:
   Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
+  - {fileID: 3690989282875342140}
   - {fileID: 7398894807846927064}
   - {fileID: 1330611744502108808}
   - {fileID: 1863373155120804519}
+  - {fileID: -3707617428690100401}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1294,6 +1296,9 @@ MonoBehaviour:
   - Type: 4
     SynchronizeType: 2
     Name: isKnockedOut
+  - Type: 4
+    SynchronizeType: 0
+    Name: Sleeping
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

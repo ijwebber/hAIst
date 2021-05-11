@@ -84,6 +84,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 }
                 row.transform.Find("Specials").gameObject.GetComponent<Text>().text = specs.ToString();
                 if ((int)player.CustomProperties["score"] >= moneyValue)  {
+                    if ((int)player.CustomProperties["score"] > moneyValue) {moneyPlayers.Clear();}
                     moneyPlayers.Add(i);
                     moneyValue = (int)player.CustomProperties["score"];
                     moneyBags.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Got the biggest haul for the gang ($" + ((int)player.CustomProperties["score"]).ToString() + ")";
@@ -92,6 +93,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 }
                 if (player.CustomProperties["downs"] != null) {
                     if ((int)player.CustomProperties["downs"] >= deadValue)  {
+                        if ((int)player.CustomProperties["downs"] > deadValue) { deadPlayers.Clear(); }
                         deadPlayers.Add(i);
                         deadValue =  (int)player.CustomProperties["downs"];
                         Debug.Log("Player " + i + " got downed " + (int)player.CustomProperties["downs"]);
@@ -102,6 +104,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 }
                 if (player.CustomProperties["revives"] != null)  {
                     if ((int)player.CustomProperties["revives"] >= GAValue)  {
+                        if ((int)player.CustomProperties["revives"] > GAValue) { GAPlayers.Clear(); }
                         GAPlayers.Add(i);
                         GAValue = (int)player.CustomProperties["revives"];
                         GA.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Had everyone's backs with most saves (" + ((int)player.CustomProperties["revives"]).ToString() + ")";
@@ -109,6 +112,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 }
                 if (player.CustomProperties["alerts"] != null)  {
                     if ((int)player.CustomProperties["alerts"] >= loudValue)  {
+                        if ((int)player.CustomProperties["alerts"] > loudValue) { loudPlayers.Clear(); }
                         loudPlayers.Add(i);
                         loudValue = (int)player.CustomProperties["alerts"];
                         loudMouth.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Couldn't shut up and alerted the most guards (" + ((int)player.CustomProperties["alerts"]).ToString() + ")" ;

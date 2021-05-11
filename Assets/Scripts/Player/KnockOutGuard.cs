@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 
-public class KnockOutGuard : MonoBehaviour
+public class KnockOutGuard : MonoBehaviourPun
 {   
 
     private bool inRangeOfGuard = false;
@@ -42,7 +42,7 @@ public class KnockOutGuard : MonoBehaviour
             guardViewID = -1;
             guard = null;
         } 
-        else if (guard && !guard.GetComponent<GuardMovement>().guardDisabled && guardViewID != -1 && !GetComponent<PlayerMovement>().disabled) //if not already disabled, display locally to the player "E" to say that the player should press E to disable this guard
+        else if (guard && !guard.GetComponent<GuardMovement>().guardDisabled && guardViewID != -1 && !GetComponent<PlayerMovement>().disabled && this.photonView.IsMine) //if not already disabled, display locally to the player "E" to say that the player should press E to disable this guard
         {
             GuardKnockOutTimer knockoutscript = guard.GetComponent<GuardKnockOutTimer>();
             
