@@ -1214,7 +1214,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: danceFlair
   - Type: 1
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Velocity
   m_SynchronizeLayers:
   - SynchronizeType: 0
