@@ -144,39 +144,38 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         else
         {
             //if a target is in fov then path to that target
-            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled)
+            if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled && !sleeping)
             {
                 GameObject playerToFollow = fovScript.visibleTargets[0];
 
-                if (!sleeping)
+                
+                foreach (GameObject g in fovScript.visibleTargets)
                 {
-                    foreach (GameObject g in fovScript.visibleTargets)
+
+                    PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
+
+                    if (!moveScript.disabled)
                     {
+                        playerToFollow = g;
+                        chasedPlayer = g;
 
-                        PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
-
-                        if (!moveScript.disabled)
+                        if (this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
                         {
-                            playerToFollow = g;
-                            chasedPlayer = g;
-
-                            if (this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
-                            {
-                                heySound.Play();
-                            }
-
-                            agent.SetDestination(g.transform.position);
-                            if (agent.speed != chaseSpeed)
-                            {
-                                agent.speed = chaseSpeed;
-                            }
-
-                            this.state = State.chase;
-
-                            break;
+                            heySound.Play();
                         }
+
+                        agent.SetDestination(g.transform.position);
+                        if (agent.speed != chaseSpeed)
+                        {
+                            agent.speed = chaseSpeed;
+                        }
+
+                        this.state = State.chase;
+
+                        break;
                     }
                 }
+                
                 PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
 
                 //if guard is next to player then disable his ass
@@ -298,6 +297,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             if(Mathf.Abs(transform.position.x - patrolPath[0].x) <= 1f && Mathf.Abs(transform.position.z - patrolPath[0].z) <= 1f && sleepy && agent.velocity.magnitude == 0)
             {
                 sleeping = true;
+            } else if(agent.velocity.magnitude> 0 && sleepy)
+            {
+                sleeping = false;
             }
         }        
     }
