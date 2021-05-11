@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4693023169193248518}
   - component: {fileID: 8231267383632996925}
   - component: {fileID: 6962714066068541822}
+  - component: {fileID: 5764872275361869546}
   m_Layer: 21
   m_Name: PlayerShield
   m_TagString: Untagged
@@ -154,3 +155,16 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &5764872275361869546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4693023169193248519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SmoothingDelay: 5
