@@ -273,7 +273,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 
                         if (sleepy)
                         {
-                            Quaternion target = Quaternion.Euler(0, -178, 0);
+                            Quaternion target = Quaternion.Euler(0, -90, 0);
                             transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 3f);
                         }
                         //Debug.Log(currDes);
