@@ -130,9 +130,18 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                             moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                         }
                     } else {
+<<<<<<< Updated upstream
                         if (moneyPlayers.Count > 0) {
                             cuts[i] -= .1f/(noPlayers-moneyPlayers.Count);
                         }
+=======
+                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
+                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                    }
+                } else {
+                    if (moneyPlayers.Count > 0) {
+                        cuts[i] -= .1f/(float)(noPlayers-moneyPlayers.Count);
+>>>>>>> Stashed changes
                     }
                 }
                 if (loudPlayers.Count < noPlayers) {
@@ -144,9 +153,18 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                             loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                         }
                     } else {
+<<<<<<< Updated upstream
                         if (loudPlayers.Count > 0) {
                             cuts[i] += .05f/(noPlayers-loudPlayers.Count);
                         }
+=======
+                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
+                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                    }
+                } else {
+                    if (loudPlayers.Count > 0) {
+                        cuts[i] += .05f/(float)(noPlayers-loudPlayers.Count);
+>>>>>>> Stashed changes
                     }
                 }
                 if (GAPlayers.Count < noPlayers) {
@@ -158,9 +176,19 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                             GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                         }
                     } else {
+<<<<<<< Updated upstream
                         if (GAPlayers.Count > 0) {
                             cuts[i] -= .05f/(noPlayers-GAPlayers.Count);
                         }
+=======
+                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
+                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                    }
+                } else {
+                    if (GAPlayers.Count > 0) {
+                        cuts[i] -= .05f/(float)(noPlayers-GAPlayers.Count);
+                    }
+>>>>>>> Stashed changes
 
                     }
                 }
@@ -173,9 +201,18 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                             deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                         }
                     } else {
+<<<<<<< Updated upstream
                         if (deadPlayers.Count > 0) {
                             cuts[i] += .1f/(noPlayers-deadPlayers.Count);
                         }
+=======
+                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + PhotonNetwork.PlayerList[i].NickName;
+                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                    }
+                } else {
+                    if (deadPlayers.Count > 0) {
+                        cuts[i] += .1f/(float)(noPlayers-deadPlayers.Count);
+>>>>>>> Stashed changes
                     }
                 }
             }
@@ -225,7 +262,11 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 seg.GetComponent<RectTransform>().rotation = Quaternion.identity;
                 seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,startRot);
                 seg.GetComponent<Image>().fillAmount = cuts[i];
+<<<<<<< Updated upstream
                 row.transform.Find("Cut").gameObject.GetComponent<Text>().text = (cuts[i]*100).ToString("0.#") + "%";
+=======
+                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = (cuts[i]*100).ToString("0.0") + "%";
+>>>>>>> Stashed changes
                 if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[i]) {
                     finalEarnings = (int)Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i]);
                 }
