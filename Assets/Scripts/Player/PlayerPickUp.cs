@@ -197,16 +197,16 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
                     break;
                 case "BackDoorHandle":
+                    CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
                     if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
                         displayMessage("This door requires a code");
-                        CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
                         if (!ashes.discovered) {
-                            ashes.discovered = true;
-                            gameController.updateQuest();;
+                            this.photonView.RPC("DiscoverAshes", RpcTarget.All);
                         }
-                        // if (gameController.gameState == 0) {
-                        //     gameController.gameState = 1;
-                        // }
+                    } else {
+                        if (ashes.hidden) {
+                            this.photonView.RPC("UnHideAshes", RpcTarget.All);
+                        }
                     }
                     break;
             }
@@ -231,6 +231,22 @@ public class PlayerPickUp : MonoBehaviourPun
 
         }
         
+    }
+
+    [PunRPC]
+    void DiscoverAshes() {
+        CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
+        ashes.discovered = true;
+        gameController.updateQuest();
+
+    }
+
+    [PunRPC]
+    void UnHideAshes() {
+        CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
+        ashes.hidden = false;
+        gameController.updateQuest();
+
     }
 
 
