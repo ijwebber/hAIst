@@ -10,6 +10,15 @@ public class AnimationStateController : MonoBehaviourPun
     GameObject player;
     SoundController soundController;
     PlayerController playerController;
+
+
+    float velocity = 0.0f;
+
+    public float acceleration = 0.1f;
+
+    public float deceleration = 0.5f;
+
+    int VelocityHash;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,10 +26,11 @@ public class AnimationStateController : MonoBehaviourPun
         player = GameObject.Find("Timmy");
         soundController = GameObject.FindObjectOfType<SoundController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
+        VelocityHash = Animator.StringToHash("Velocity");
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
 
         if(photonView.IsMine == false && PhotonNetwork.IsConnected == true){
@@ -47,6 +57,22 @@ public class AnimationStateController : MonoBehaviourPun
         bool isDancing = handleDancing(stopDancing);
 
 
+        if((forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow) && velocity < 1.0f){
+            velocity += Time.deltaTime * acceleration;
+        }
+        if(!(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow) && velocity > 0.0f){
+            velocity -= Time.deltaTime * deceleration;
+        }
+        if(!(forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow) &&velocity < 0.0f){
+            velocity = 0.0f;
+
+        }
+
+        //Debug.Log("Speed" + velocity);
+
+        animator.SetFloat(VelocityHash,velocity);
+
+
         if(isdown){
             animator.SetBool("isDown",true);
         }
@@ -55,7 +81,7 @@ public class AnimationStateController : MonoBehaviourPun
 
             if(Input.GetKey(KeyCode.Space)){
                 animator.SetBool("isCrouched",true);
-            iscrouched = true;
+                iscrouched = true;
             }
 
             if(!(Input.GetKey(KeyCode.Space))){
@@ -78,8 +104,9 @@ public class AnimationStateController : MonoBehaviourPun
                 animator.SetBool("isWalking",false);
             }
 
-            if(!(Input.GetKey(KeyCode.Space))){
+            if(!(iscrouched && (forwardB || backB || leftB || rightB || upArrow || downArrow || leftArrow || rightArrow))){
                 animator.SetBool("isCrouchWalk",false);
+                //Debug.Log("OH DEAR");
             }
 
             if(isDancing) {
