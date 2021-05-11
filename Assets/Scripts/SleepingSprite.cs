@@ -18,7 +18,7 @@ public class SleepingSprite : MonoBehaviour
         
         if(m.state == State.normal && m.agent.velocity.magnitude == 0)
         {
-            s.enabled = false;
-        } else s.enabled = true;
+            s.enabled = true;
+        } else s.enabled = false;
     }
 }
