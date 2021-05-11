@@ -31,6 +31,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     private State previousState;
     public float chaseSpeed;
     public bool sleepy;
+    public bool sleeping;
     public float walkSpeed;
     public GameObject chasedPlayer;
     private bool start = true;
@@ -148,31 +149,33 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             {
                 GameObject playerToFollow = fovScript.visibleTargets[0];
 
-
-                foreach (GameObject g in fovScript.visibleTargets)
+                if (!sleeping)
                 {
-                    
-                    PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
+                    foreach (GameObject g in fovScript.visibleTargets)
+                    {
 
-                    if (!moveScript.disabled)
-                    {   
-                        playerToFollow = g;
-                        chasedPlayer = g;
-                        
-                        if(this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
+                        PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
+
+                        if (!moveScript.disabled)
                         {
-                            heySound.Play();
+                            playerToFollow = g;
+                            chasedPlayer = g;
+
+                            if (this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
+                            {
+                                heySound.Play();
+                            }
+
+                            agent.SetDestination(g.transform.position);
+                            if (agent.speed != chaseSpeed)
+                            {
+                                agent.speed = chaseSpeed;
+                            }
+
+                            this.state = State.chase;
+
+                            break;
                         }
-                        
-                        agent.SetDestination(g.transform.position);
-                        if(agent.speed != chaseSpeed)
-                        {
-                            agent.speed = chaseSpeed;
-                        }
-                        
-                        this.state = State.chase;
-                        
-                        break;
                     }
                 }
                 PlayerMovement playerMoveScript = playerToFollow.GetComponent<PlayerMovement>();
@@ -291,6 +294,11 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 
                     g.GetComponent<PhotonView>().RPC("KnockOut", p, view.ViewID);
                 }
+            }
+
+            if(Mathf.Abs(transform.position.x - patrolPath[0].x) <= 1f && Mathf.Abs(transform.position.z - patrolPath[0].z) <= 1f && sleepy && agent.velocity.magnitude == 0)
+            {
+                sleeping = true;
             }
         }        
     }
