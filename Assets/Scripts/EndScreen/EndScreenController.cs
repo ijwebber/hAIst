@@ -26,9 +26,21 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public Button PlayAgainLose;
     [SerializeField] DBControllerEnd dbController;
     [SerializeField] private EndScreenAudioController audioController;
+    [SerializeField] private GameObject secretText;
 
     private void Awake()
     {
+        int grandTotal = (int)PhotonNetwork.CurrentRoom.CustomProperties["score"];
+        // 52-3 = 49
+        int totalStolen = 0;
+        if (PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"] != null) {
+            totalStolen = (int)PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"];
+        }
+        Debug.Log("Total stolen = " + totalStolen);
+        if (totalStolen == 49) {
+            grandTotal *= 10;
+            secretText.SetActive(true);
+        }
         if (PhotonNetwork.CurrentRoom == null)
         {
 
@@ -230,15 +242,15 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 seg.GetComponent<Image>().fillAmount = cuts[i];
                 row.transform.Find("Cut").gameObject.GetComponent<Text>().text = (cuts[i]*100).ToString("0.#") + "%";
                 if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[i]) {
-                    finalEarnings = (int)Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i]);
+                    finalEarnings = (int)Mathf.Floor(grandTotal * cuts[i]);
                 }
-                row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i])).ToString();
+                row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (grandTotal * cuts[i]).ToString();
                 startRot -= 360f*cuts[i];
                 Debug.Log("END // " + startRot);
             }
             
             //update total score
-            totalText.text = "$" + ((int)PhotonNetwork.CurrentRoom.CustomProperties["score"]).ToString();
+            totalText.text = "$" + (grandTotal).ToString();
 
             //update database
             if (PlayerPrefs.GetInt("isGuest", -1) == 0) {

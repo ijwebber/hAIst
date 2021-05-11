@@ -308,6 +308,12 @@ public class PlayerPickUp : MonoBehaviourPun
                             gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
                         } else {
                             audioController.PlayLowValue();
+                            int currentStolen = 0;
+                            if (PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"] != null) {
+                                currentStolen = (int)PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"];
+                            }
+                            Hashtable hash = new Hashtable();
+                            hash.Add("itemsStolen", currentStolen + 1);
                         }
 
                         // reset game components

@@ -108,7 +108,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             Hashtable playerHash = new Hashtable();
             int specCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["specialStolen"];
             playerHash.Add("specialStolen", specCount + specials.Count);
-            Debug.LogError("Stole back. Spec count " + specCount + " -> " + (specCount+specials.Count));
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
             gameController.gameState++;
             gameController.regress = false;
