@@ -6,11 +6,18 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioSource addPlayer;
     [SerializeField] private AudioSource introPlayer;
 
+    [SerializeField] private AudioSource sfxPlayer1;
+    [SerializeField] private AudioSource sfxPlayer2;
+    private bool alternate = false;
+
     [SerializeField] private AudioClip intenseMain;
     [SerializeField] private AudioClip intenseAdd;
 
     [SerializeField] private AudioClip intenseMainIntro;
     [SerializeField] private AudioClip intenseAddIntro;
+
+    [SerializeField] private AudioClip lowValueSFX;
+    [SerializeField] private AudioClip highValueSFX;
 
     public void PlayIntenseTheme() {
         mainPlayer.Pause();
@@ -29,13 +36,22 @@ public class AudioController : MonoBehaviour
         addPlayer.volume = mainPlayer.volume;
     }
 
-    /*public void PlayLowValue() {
-        itemPlayer.clip = lowValueSFX;
-        itemPlayer.Play();
+    private void PlaySFX(AudioClip clip) {
+        if (alternate) {
+            sfxPlayer1.clip = clip;
+            sfxPlayer1.Play();
+        } else {
+            sfxPlayer2.clip = clip;
+            sfxPlayer2.Play();
+        }
+        alternate = !alternate;
+    }
+
+    public void PlayLowValue() {
+        PlaySFX(lowValueSFX);
     }
 
     public void PlayHighValue() {
-        itemPlayer.clip = highValueSFX;
-        itemPlayer.Play();
-    }*/
+        PlaySFX(highValueSFX);
+    }
 }
