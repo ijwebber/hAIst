@@ -22,7 +22,7 @@ public class AudioController : MonoBehaviour
     private bool isNotNull;
 
     void Start() {
-        if (intenseMain == null) {
+        if (intenseMain != null) {
             isNotNull = true;
         } else {
             isNotNull = false;
