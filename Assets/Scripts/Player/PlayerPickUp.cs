@@ -20,6 +20,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     public GameObject fixPaintingGame;
     [SerializeField] private GameController gameController;
+    private CollectableItem ashes;
     private PlayerController playerController;
     AudioController audioController;
 
@@ -47,6 +48,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     void Awake() {
         canvasFromPlayer = GameObject.Find("CanvasFromPlayer");
+        ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
         gameController = GameObject.FindObjectOfType<GameController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
         audioController = GameObject.FindObjectOfType<AudioController>();
@@ -197,7 +199,6 @@ public class PlayerPickUp : MonoBehaviourPun
                     }
                     break;
                 case "BackDoorHandle":
-                    CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
                     if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
                         displayMessage("This door requires a code");
                         if (!ashes.discovered) {
@@ -235,18 +236,14 @@ public class PlayerPickUp : MonoBehaviourPun
 
     [PunRPC]
     void DiscoverAshes() {
-        CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
         ashes.discovered = true;
         gameController.updateQuest();
-
     }
 
     [PunRPC]
     void UnHideAshes() {
-        CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
         ashes.hidden = false;
         gameController.updateQuest();
-
     }
 
 
