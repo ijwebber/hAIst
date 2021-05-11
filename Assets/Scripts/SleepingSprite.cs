@@ -18,7 +18,7 @@ public class SleepingSprite : MonoBehaviour
         
         if(m.state == State.normal && m.agent.velocity.magnitude == 0)
         {
-            s.color = new Color(s.color.r, s.color.g, s.color.b, 1);
-        } else s.color = new Color(s.color.r, s.color.g, s.color.b, 0);
+            s.enabled = false;
+        } else s.enabled = true;
     }
 }
