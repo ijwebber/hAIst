@@ -10,11 +10,13 @@ public class CameraProps : MonoBehaviourPun
     void Update() {
         if (disabled && Time.time - disabledTime > disabledLength) {
             disabled = false;
+            this.GetComponent<CameraFOV>().cameraState = State.disabled;
         }
     }
 
     [PunRPC]
     public void setDisabled(bool value) {
+        this.GetComponent<CameraFOV>().cameraState = State.disabled;
         disabled = value;
         disabledTime = Time.time;
     }
