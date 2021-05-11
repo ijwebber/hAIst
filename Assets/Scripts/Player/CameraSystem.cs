@@ -28,6 +28,7 @@ public class CameraSystem : MonoBehaviour
     [Header("Camera references")]
     
     public CinemachineVirtualCamera guardCaughtIn4k;
+    public CinemachineVirtualCamera explosionCam;
     public CinemachineVirtualCamera playerCam;
     public Camera mainCam;
     [SerializeField] private GameObject guardCam;
@@ -402,6 +403,7 @@ public class CameraSystem : MonoBehaviour
     public void playExplosionEffect()
     {
         explosionEffect.SetActive(true);
+        
     }
 
     public void changeWallsForExplosion()

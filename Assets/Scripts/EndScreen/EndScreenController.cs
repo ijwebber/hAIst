@@ -78,8 +78,11 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
                 Player player = PhotonNetwork.PlayerList[i];
                 row.transform.Find("Player").gameObject.GetComponent<Text>().text = player.NickName;
-                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)100/noPlayers).ToString() + "%";
-                row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"])/noPlayers)).ToString();
+                int specs = 0;
+                if (PhotonNetwork.PlayerList[i].CustomProperties["specialsStolen"] != null) {
+                    specs = (int)PhotonNetwork.PlayerList[i].CustomProperties["specialsStolen"];
+                }
+                row.transform.Find("Specials").gameObject.GetComponent<Text>().text = specs.ToString();
                 if ((int)player.CustomProperties["score"] >= moneyValue)  {
                     moneyPlayers.Add(i);
                     moneyValue = (int)player.CustomProperties["score"];
@@ -92,7 +95,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                         deadPlayers.Add(i);
                         deadValue =  (int)player.CustomProperties["downs"];
                         Debug.Log("Player " + i + " got downed " + (int)player.CustomProperties["downs"]);
-                        deadWeight.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "Letting down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
+                        deadWeight.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "let down the side with Most downs (" + ((int)player.CustomProperties["downs"]).ToString() + ")";
                     }
                 } else {
                     Debug.Log("Null downs");
@@ -112,88 +115,106 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     }
                 }
             }
-            int start = 0;
             int finalEarnings = 0;
             float startingCut = (1f/(float)noPlayers);
             float[] cuts = {startingCut, startingCut, startingCut, startingCut};
             for (int i = 0; i < noPlayers; i++)
             {
-                GameObject seg = playerSegs[i];
                 float cut = startingCut;
-                seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,(360/noPlayers)*i + start);
-                if (moneyPlayers.Contains(i)) {
-                    seg.GetComponent<Image>().fillAmount += .1f;
-                    cuts[i] += .1f/moneyPlayers.Count;
-                    if (moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                if (moneyPlayers.Count < noPlayers) {
+                    if (moneyPlayers.Contains(i)) {
+                        cuts[i] += .1f/moneyPlayers.Count;
+                        if (moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
+                            moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        } else {
+                            moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        }
                     } else {
-                        moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
-                    }
-                    start -= 36;
-                } else {
-                    if (moneyPlayers.Count > 0) {
-                        cuts[i] -= .1f/(noPlayers-moneyPlayers.Count);
+                        if (moneyPlayers.Count > 0) {
+                            cuts[i] -= .1f/(noPlayers-moneyPlayers.Count);
+                        }
                     }
                 }
-                if (loudPlayers.Contains(i)) {
-                    seg.GetComponent<Image>().fillAmount -= .05f;
-                    cuts[i] -= .05f/loudPlayers.Count;
-                    if (loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                if (loudPlayers.Count < noPlayers) {
+                    if (loudPlayers.Contains(i)) {
+                        cuts[i] -= .05f/loudPlayers.Count;
+                        if (loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
+                            loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        } else {
+                            loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        }
                     } else {
-                        loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
-                    }
-                    start += 18;
-                } else {
-                    if (loudPlayers.Count > 0) {
-                        cuts[i] += .05f/(noPlayers-loudPlayers.Count);
+                        if (loudPlayers.Count > 0) {
+                            cuts[i] += .05f/(noPlayers-loudPlayers.Count);
+                        }
                     }
                 }
-                if (GAPlayers.Contains(i)) {
-                    seg.GetComponent<Image>().fillAmount += .05f;
-                    cuts[i] += .05f/GAPlayers.Count;
-                    if (GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                if (GAPlayers.Count < noPlayers) {
+                    if (GAPlayers.Contains(i)) {
+                        cuts[i] += .05f/GAPlayers.Count;
+                        if (GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
+                            GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        } else {
+                            GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        }
                     } else {
-                        GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
-                    }
-                    start -= 18;
-                } else {
-                    if (GAPlayers.Count > 0) {
-                        cuts[i] -= .05f/(noPlayers-GAPlayers.Count);
-                    }
+                        if (GAPlayers.Count > 0) {
+                            cuts[i] -= .05f/(noPlayers-GAPlayers.Count);
+                        }
 
-                }
-                if (deadPlayers.Contains(i)) {
-                    seg.GetComponent<Image>().fillAmount -= .1f;
-                    cuts[i] -= .1f/deadPlayers.Count;
-                    if (deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
-                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
-                    } else {
-                        deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
                     }
-                    start += 18;
-                } else {
-                    if (deadPlayers.Count > 0) {
-                        cuts[i] += .1f/(noPlayers-deadPlayers.Count);
+                }
+                if (deadPlayers.Count < noPlayers) {
+                    if (deadPlayers.Contains(i)) {
+                        cuts[i] -= .1f/deadPlayers.Count;
+                        if (deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text == "Player1") {
+                            deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        } else {
+                            deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text += " + " + "<#" + colors[i] + ">" + PhotonNetwork.PlayerList[i].NickName + "<color/>";
+                        }
+                    } else {
+                        if (deadPlayers.Count > 0) {
+                            cuts[i] += .1f/(noPlayers-deadPlayers.Count);
+                        }
                     }
                 }
             }
             if (moneyPlayers.Count == 0) {
                 moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
                 moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
+                moneyBags.transform.Find("ExtraPercent").gameObject.SetActive(false);
+
+            } else if (moneyPlayers.Count == noPlayers) {
+                moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "Everyone!";
+                moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                moneyBags.transform.Find("ExtraPercent").gameObject.SetActive(false); // maybe give a flat bonus
             }
             if (loudPlayers.Count == 0) {
                 loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
                 loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
+                loudMouth.transform.Find("ExtraPercent").gameObject.SetActive(false);
+            } else if (loudPlayers.Count == noPlayers) {
+                loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "Everyone!";
+                loudMouth.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                loudMouth.transform.Find("ExtraPercent").gameObject.SetActive(false); // maybe give a flat bonus
             }
             if (GAPlayers.Count == 0) {
                 GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
                 GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
+                GA.transform.Find("ExtraPercent").gameObject.SetActive(false);
+            } else if (GAPlayers.Count == noPlayers) {
+                GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "Everyone!";
+                GA.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                GA.transform.Find("ExtraPercent").gameObject.SetActive(false); // maybe give a flat bonus
             }
             if (deadPlayers.Count == 0) {
                 deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
                 deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;
+                deadWeight.transform.Find("ExtraPercent").gameObject.SetActive(false);
+            } else if (deadPlayers.Count == noPlayers) {
+                deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "Everyone!";
+                deadWeight.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.white;
+                deadWeight.transform.Find("ExtraPercent").gameObject.SetActive(false); // maybe give a flat bonus
             }
             float startRot = 0;
             for (int i = 0; i < noPlayers; i++)
@@ -201,9 +222,10 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 GameObject row = playerRows[i];
                 GameObject seg = playerSegs[i];
                 seg.SetActive(true);
+                seg.GetComponent<RectTransform>().rotation = Quaternion.identity;
                 seg.GetComponent<RectTransform>().rotation = Quaternion.Euler(0,0,startRot);
                 seg.GetComponent<Image>().fillAmount = cuts[i];
-                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = ((int)(cuts[i]*100)).ToString() + "%";
+                row.transform.Find("Cut").gameObject.GetComponent<Text>().text = (cuts[i]*100).ToString("0.#") + "%";
                 if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[i]) {
                     finalEarnings = (int)Mathf.Floor((int) (PhotonNetwork.CurrentRoom.CustomProperties["score"]) * cuts[i]);
                 }
