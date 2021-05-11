@@ -104,6 +104,10 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 gameController.updateDisp(PhotonNetwork.NickName + " has recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
                 player.GetComponent<PlayerPickUp>().UpdateScore(spec);
             }
+            Hashtable playerHash = new Hashtable();
+            int specCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["specialStolen"];
+            playerHash.Add("specialStolen", specCount + specials.Count);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
             gameController.gameState++;
             gameController.regress = false;
             this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.MasterClient);
@@ -189,6 +193,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 gameController.regress = true;
                                 string serializedObjects = "";
                                 int i = 0;
+                                Hashtable specHash = new Hashtable();
+                                specHash.Add("specialStolen", 0);
+                                PhotonNetwork.LocalPlayer.SetCustomProperties(specHash);
                                 foreach (var spec in playerController.Specials)
                                 {
                                     
