@@ -10,24 +10,38 @@ public class EndScreenAudioController : MonoBehaviourPun
     [SerializeField] private AudioClip lossMain;
     [SerializeField] private AudioClip lossIntro;
 
-    public void PlayWin() {
-        mainPlayer.clip = winMain;
-        introPlayer.clip = winIntro;
+    private bool isNotNull;
 
-        double startTime = AudioSettings.dspTime + 0.2;
-        double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
-        introPlayer.PlayScheduled(startTime);
-        mainPlayer.PlayScheduled(introDuration + startTime);
+    void Start() {
+        if (winMain != null) {
+            isNotNull = true;
+        } else {
+            isNotNull = false;
+        }
+    } 
+
+    public void PlayWin() {
+        if (isNotNull) {
+            mainPlayer.clip = winMain;
+            introPlayer.clip = winIntro;
+
+            double startTime = AudioSettings.dspTime + 0.2;
+            double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
+            introPlayer.PlayScheduled(startTime);
+            mainPlayer.PlayScheduled(introDuration + startTime);
+        }
     }
 
     public void PlayLoss() {
-        mainPlayer.clip = lossMain;
-        introPlayer.clip = lossIntro;
+        if (isNotNull) {
+            mainPlayer.clip = lossMain;
+            introPlayer.clip = lossIntro;
 
-        double startTime = AudioSettings.dspTime + 0.2;
-        double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
-        introPlayer.PlayScheduled(startTime);
-        mainPlayer.PlayScheduled(introDuration + startTime);
+            double startTime = AudioSettings.dspTime + 0.2;
+            double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
+            introPlayer.PlayScheduled(startTime);
+            mainPlayer.PlayScheduled(introDuration + startTime);
+        }
     }
 
 }
