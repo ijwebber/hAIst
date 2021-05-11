@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
     }
     public void disableShield() {
         GameController.GetComponent<GameController>().SetShieldUsed();
-        shieldObj = PhotonNetwork.InstantiateRoomObject("PlayerShield", player.transform.position + shieldOffset, Quaternion.identity);
+        shieldObj = PhotonNetwork.Instantiate("PlayerShield", player.transform.position + shieldOffset, Quaternion.identity);
         Debug.Log("Shield consumed");
         shield = false;
         invincibleFrames = 60;
