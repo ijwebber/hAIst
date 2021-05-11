@@ -20,6 +20,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     public GameObject fixPaintingGame;
     [SerializeField] private GameController gameController;
+    private CollectableItem ashes;
     private PlayerController playerController;
     AudioController audioController;
 
@@ -47,6 +48,7 @@ public class PlayerPickUp : MonoBehaviourPun
 
     void Awake() {
         canvasFromPlayer = GameObject.Find("CanvasFromPlayer");
+        ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
         gameController = GameObject.FindObjectOfType<GameController>();
         playerController = GameObject.FindObjectOfType<PlayerController>();
         audioController = GameObject.FindObjectOfType<AudioController>();
@@ -199,14 +201,13 @@ public class PlayerPickUp : MonoBehaviourPun
                 case "BackDoorHandle":
                     if (!inTrigger.gameObject.GetComponent<DoorHandlerKey>().keyPad.codeCorrect) {
                         displayMessage("This door requires a code");
-                        CollectableItem ashes = GameObject.Find("isaacs-ashes").GetComponent<CollectableItem>();
                         if (!ashes.discovered) {
-                            ashes.discovered = true;
-                            gameController.updateQuest();;
+                            this.photonView.RPC("DiscoverAshes", RpcTarget.All);
                         }
-                        // if (gameController.gameState == 0) {
-                        //     gameController.gameState = 1;
-                        // }
+                    } else {
+                        if (ashes.hidden) {
+                            this.photonView.RPC("UnHideAshes", RpcTarget.All);
+                        }
                     }
                     break;
             }
@@ -231,6 +232,18 @@ public class PlayerPickUp : MonoBehaviourPun
 
         }
         
+    }
+
+    [PunRPC]
+    void DiscoverAshes() {
+        ashes.discovered = true;
+        gameController.updateQuest();
+    }
+
+    [PunRPC]
+    void UnHideAshes() {
+        ashes.hidden = false;
+        gameController.updateQuest();
     }
 
 

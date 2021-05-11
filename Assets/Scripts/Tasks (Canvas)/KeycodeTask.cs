@@ -51,7 +51,9 @@ public class KeycodeTask : MonoBehaviour
                 {
                     // Debug.Log("code submitted: " + _inputCode.text);
                     _inputCode.text = "Correct";
-                    gameController.gameState = 2;
+                    if (gameController.gameState <= 2) {
+                        gameController.gameState = 2;
+                    }
                     keypad.codeCorrect = true;
                     codeCorrect = true;
                     // StartCoroutine(ResetCode());

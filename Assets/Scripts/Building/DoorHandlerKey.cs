@@ -22,7 +22,6 @@ public class DoorHandlerKey : MonoBehaviourPun
         if (keyPad.codeCorrect && !opened) {
             this.gameObject.GetComponent<PhotonView>().RPC("EnterMetal", RpcTarget.All);
         }
-
     }
 
 

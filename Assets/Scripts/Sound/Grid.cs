@@ -149,10 +149,6 @@ public class Grid {
     public float getVelocity(int x, int y) {
         return (float)this.velocities[x,y];
     }
-    
-    public void FixedUpdate() {
-        // updateWalls();
-    }
 
     // update every time step
     public void updateNodes() {

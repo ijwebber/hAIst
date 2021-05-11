@@ -163,8 +163,12 @@ public class GuardController : MonoBehaviour
 
 
     public void disableAllguards(bool value)
-    {
-        foreach(GuardMovement guard in guardMovements) {
+    {   
+        //refresh array
+
+        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+
+        foreach (GuardMovement guard in guardMovements) {
             guard.agent.isStopped = value;
         }
         foreach(MoveSpotLight spot in Spotlights) {
