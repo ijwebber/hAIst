@@ -565,7 +565,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5080172384295789258}
   m_LocalRotation: {x: 0, y: -0.999879, z: 0, w: 0.015558921}
-  m_LocalPosition: {x: -82.02, y: 12, z: 48.3}
+  m_LocalPosition: {x: -9.96, y: 12, z: 61.6}
   m_LocalScale: {x: 1, y: 1, z: 0.99577}
   m_Children:
   - {fileID: 2368381272229519405}
@@ -691,10 +691,11 @@ MonoBehaviour:
   heySound: {fileID: 0}
   specials: []
   patrolPath:
-  - {x: -82.02, y: 12, z: 48.3}
+  - {x: -9.96, y: 12, z: 616}
   state: 0
   chaseSpeed: 6.5
   sleepy: 1
+  sleeping: 0
   walkSpeed: 3.5
   chasedPlayer: {fileID: 0}
   guardDisabled: 0
@@ -739,6 +740,7 @@ MonoBehaviour:
   Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
+  - {fileID: 5350571095147552664}
   - {fileID: 2294070117241346172}
   - {fileID: 2657882084454701496}
   - {fileID: 5200547770397863680}
@@ -1995,13 +1997,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8971235072444591036}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 5, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5605773664588101744}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8971235072444591034
 SpriteRenderer:
   m_ObjectHideFlags: 0

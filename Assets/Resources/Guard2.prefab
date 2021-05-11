@@ -1171,13 +1171,14 @@ MonoBehaviour:
   heySound: {fileID: 0}
   specials: []
   patrolPath:
-  - {x: -15.6, y: 12, z: 31.14}
-  - {x: -19.4, y: 12, z: 7.9}
+  - {x: 16.4, y: 12, z: 17.8}
+  - {x: -19.4, y: 12, z: 9}
   - {x: -60.2, y: 12, z: 41.2}
-  - {x: -14.2, y: 12, z: 64}
+  - {x: -12, y: 12, z: 65}
   state: 0
   chaseSpeed: 6.5
   sleepy: 0
+  sleeping: 0
   walkSpeed: 3.5
   chasedPlayer: {fileID: 0}
   guardDisabled: 0
