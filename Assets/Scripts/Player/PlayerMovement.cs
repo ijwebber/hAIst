@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
     public float speed;
     public PlayerController playerController;
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private Gradient col;
     
     //private TextMesh Caption = null;
     public bool disabled = false;
@@ -168,8 +169,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             } else if (alpha < 0) {
                 alpha = 0;
             }
-            staminaBar.color = new Color(staminaR,staminaG,staminaB,alpha);
-            staminaBarBg.color = new Color(200,0,0,alpha);
+            staminaBar.color = new Color(col.Evaluate(stamina).r * staminaR,col.Evaluate(stamina).g * staminaG,col.Evaluate(stamina).b * staminaB,alpha);
+            staminaBarBg.color = new Color(0.06603771f,0.05606976f,0.05606976f,alpha);
             staminaIndicator.color = new Color(staminaR,staminaG,staminaB,alpha);
 
             finalmoveVector = moveVector.normalized * finalSpeed * Time.deltaTime;
