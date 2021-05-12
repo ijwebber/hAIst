@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8231267383632996925}
   - component: {fileID: 6962714066068541822}
   - component: {fileID: 5764872275361869546}
-  m_Layer: 21
+  m_Layer: 9
   m_Name: PlayerShield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,6 +152,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 8231267383632996925}
+  - {fileID: 5764872275361869546}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
