@@ -242,11 +242,10 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                 seg.GetComponent<Image>().fillAmount = cuts[i];
                 row.transform.Find("Cut").gameObject.GetComponent<Text>().text = (cuts[i]*100).ToString("0.#") + "%";
                 if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[i]) {
-                    finalEarnings = (int)Mathf.Floor(grandTotal * cuts[i]);
+                    finalEarnings = Mathf.FloorToInt(grandTotal * cuts[i]);
                 }
-                row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + (grandTotal * cuts[i]).ToString();
+                row.transform.Find("Earnings").gameObject.GetComponent<Text>().text = "$" + Mathf.FloorToInt(grandTotal * cuts[i]).ToString();
                 startRot -= 360f*cuts[i];
-                Debug.Log("END // " + startRot);
             }
             
             //update total score
@@ -254,8 +253,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
             //update database
             if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
-                Debug.Log("New balance = " + PlayerPrefs.GetInt("PlayerBalance", 0) + (finalEarnings));
-                dbController.EditCoinBalance(PhotonNetwork.NickName, (PlayerPrefs.GetInt("PlayerBalance", 0) + finalEarnings),0);
+                Debug.Log("New balance = " + (finalEarnings));
+                dbController.EditCoinBalance(PhotonNetwork.NickName, (int)(PlayerPrefs.GetInt("PlayerBalance", 0) + finalEarnings),0);
             }
         } else {
             audioController.PlayLoss();
