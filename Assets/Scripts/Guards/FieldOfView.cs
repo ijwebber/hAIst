@@ -12,7 +12,7 @@ public class FieldOfView : MonoBehaviour
     public float meshResolution;
 
     public LayerMask targetMask;
-    public LayerMask obstacleMask;
+    private LayerMask obstacleMask = (1 << 8) | (1 << 12) | (1 << 22);
 
     public NavMeshAgent agent;
     public MeshFilter viewMeshFilter;

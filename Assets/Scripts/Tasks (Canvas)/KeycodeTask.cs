@@ -9,7 +9,6 @@ public class KeycodeTask : MonoBehaviour
     public Text _inputCode;
     public int codeLength = 5;
     public float codeReset = 0.5f;  // code reset time in seconds
-    public PhotonView player;
     private SoundController soundController;
     private GameController gameController;
     [SerializeField] GameObject keyCodeCanvas;
@@ -40,29 +39,33 @@ public class KeycodeTask : MonoBehaviour
         if (buttonNoise != null) {
             buttonNoise.Play();
         }
+        KeyPad myKeyPad = null;
 
         KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
-
+        foreach (KeyPad keypad in keypads)
+        {
+            if (keypad.id == keypadID) {
+                myKeyPad = keypad;
+            }
+        }
+        soundController.sendGrid(myKeyPad.transform.position, Random.Range(50,70));
         if (_inputCode.text.Length == codeLength)
         {
-            foreach (KeyPad keypad in keypads)
+            if (_inputCode.text == myKeyPad.code || myKeyPad.id == keypadID &&_inputCode.text == "37911") // TODO remove this in a real version
             {
-                if (keypad.id == keypadID && _inputCode.text == keypad.code || keypad.id == keypadID &&_inputCode.text == "37911") // TODO remove this in a real version
-                {
-                    // Debug.Log("code submitted: " + _inputCode.text);
-                    _inputCode.text = "Correct";
-                    if (gameController.gameState <= 2) {
-                        gameController.gameState = 2;
-                    }
-                    keypad.codeCorrect = true;
-                    codeCorrect = true;
-                    // StartCoroutine(ResetCode());
-                    StartCoroutine(correct(keypad));
+                // Debug.Log("code submitted: " + _inputCode.text);
+                _inputCode.text = "Correct";
+                if (gameController.gameState <= 2) {
+                    gameController.gameState = 2;
                 }
-                else if (keypad.id == keypadID && _inputCode.text != keypad.code){
-                    _inputCode.text = "Failed";
-                    StartCoroutine(ResetCode());
-                }
+                myKeyPad.codeCorrect = true;
+                codeCorrect = true;
+                // StartCoroutine(ResetCode());
+                StartCoroutine(correct(myKeyPad));
+            }
+            else if (myKeyPad.id == keypadID && _inputCode.text != myKeyPad.code){
+                _inputCode.text = "Failed";
+                StartCoroutine(ResetCode());
             }
         }
         else if (_inputCode.text.Length >= codeLength)

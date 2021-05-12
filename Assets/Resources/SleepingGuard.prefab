@@ -666,9 +666,6 @@ MonoBehaviour:
   targetMask:
     serializedVersion: 2
     m_Bits: 512
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 256
   agent: {fileID: 5350571095147552668}
   viewMeshFilter: {fileID: 0}
   visibleTargets: []

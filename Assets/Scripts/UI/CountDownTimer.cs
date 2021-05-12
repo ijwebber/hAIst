@@ -10,17 +10,15 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
     public Text timerText;
     public Image badge;
-    private float timeLeftOnceSpotted = 260f;
+    private float timeLeftOnceSpotted = 30f;
 
     private bool timerStarted = false;
     private bool endStarted = false;
 
     void Start()
     {
-
         timerText.text = "";
         badge.color = new Color(1,1,1,0);
-
     }
     public override void OnRoomPropertiesUpdate(Hashtable endTriggered)
     {
@@ -53,6 +51,13 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
             {   
                 timerText.text = "0" + minutes + ":" +  "0" + seconds;
             }
+            if (timeLeftOnceSpotted <= 30) {
+                if (Mathf.FloorToInt(timeLeftOnceSpotted) % 2 == 1) {
+                    timerText.color = new Color(1,1,1,1);
+                } else {
+                    timerText.color = new Color(0.8490566f,0,0,1);
+                }
+            }
 
             timeLeftOnceSpotted -= Time.deltaTime;
         }
@@ -61,7 +66,6 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
             timerText.text = "";
             badge.color = new Color(1,1,1,0);
             endStarted = true;
-
 
             StartCoroutine(CameraSystem.Instance.playSwatScene());
             
