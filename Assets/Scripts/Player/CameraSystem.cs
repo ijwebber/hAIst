@@ -203,6 +203,8 @@ public class CameraSystem : MonoBehaviour
 
         GameController gameController = GameObject.FindObjectOfType<GameController>();
         gameController.gameStart();
+
+        GameObject.FindObjectOfType<SoundController>().enableSound(true);
     }
 
     void introCutSceneSetup()
@@ -258,6 +260,7 @@ public class CameraSystem : MonoBehaviour
         GuardController.Instance.disableAllguards(true);
         sceneTransitionCanvas.SetActive(true);
         playerCamFadeOutTrack.SetActive(true);
+        black.SetActive(false);
         yield return new WaitForSeconds(1.5f);
         
         swatCamTrack.SetActive(true);
@@ -281,6 +284,7 @@ public class CameraSystem : MonoBehaviour
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
+        black.SetActive(true);
         BarController.Instance.HideBars();
         sceneTransitionCanvas.SetActive(false);
 
