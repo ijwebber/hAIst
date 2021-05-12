@@ -75,7 +75,9 @@ public class CameraFOV : MonoBehaviour {
             cameraState = State.normal;
         }
         foreach (Transform target in visibleTargets) {
-            guardController.MoveClosestGuard(target.position);
+            if (!target.gameObject.GetComponent<PlayerPickUp>().down){
+                guardController.MoveClosestGuard(target.position);
+            }
         }
 	}
 
