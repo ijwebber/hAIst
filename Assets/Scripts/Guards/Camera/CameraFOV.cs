@@ -71,6 +71,7 @@ public class CameraFOV : MonoBehaviour {
 
         if (visibleTargets.Count > 0) {
             cameraState = State.suspicious;
+            Debug.Log("Suspicious cameera");
         } else {
             cameraState = State.normal;
         }

@@ -13,6 +13,7 @@ public class SoundController : MonoBehaviourPun
     public int threshold = 2;
     public Grid grid;
     public GuardController localSoundGrid;
+    private bool soundEnabled = false;
     // public GuardMovement guardController;
     public GameObject gridContainer;
     public int maxVolume;
@@ -75,12 +76,16 @@ public class SoundController : MonoBehaviourPun
 
     public void sendGrid(Vector3 playerPosition, int intensity) {
         // send new sound source to other clients
-        if (!playerController.isDisabled) {
+        if (!playerController.isDisabled && soundEnabled) {
             localSoundGrid.setValue(playerPosition, intensity);
             this.photonView.RPC("updateGrid", RpcTarget.All, playerPosition.x, playerPosition.y, playerPosition.z, intensity);
         }
         // set value in local grid
         // grid.SetValue(playerPosition, intensity);
+    }
+
+    public void enableSound(bool val) {
+        soundEnabled = val;
     }
 
     [PunRPC]
