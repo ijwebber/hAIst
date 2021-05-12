@@ -386,10 +386,10 @@ MonoBehaviour:
     fallbackErrorPS: {fileID: 4800000, guid: e6e9a19c3678ded42a3bc431ebef7dbd, type: 3}
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 22043415
+    m_Bits: 55597847
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 1071895
+    m_Bits: 34626327
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
