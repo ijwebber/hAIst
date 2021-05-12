@@ -63,37 +63,37 @@ public class IntentActions : MonoBehaviourPun
     public void DisableCamera() {
         DisableCameraResult cameraResult = cameraController.DisableClosestCamera(transform.position);
         if (cameraResult == DisableCameraResult.NOT_FOUND) {
-            gameController.playerUpdates.updateDisplay("Can't find a camera that is enabled to disable!");
+            gameController.playerUpdates.updateDisplay("Driver: I can't find a camera that is enabled to disable!");
         } else if (cameraResult == DisableCameraResult.TOO_FAR) {
-            gameController.playerUpdates.updateDisplay("You need to get closer to the camera!");
+            gameController.playerUpdates.updateDisplay("Driver: You need to get closer to the camera!");
         } else {
-            gameController.playerUpdates.updateDisplay("I've switched the camera off");
+            gameController.playerUpdates.updateDisplay("Driver: I've switched the camera off");
         }
     }
 
     public void EnableCamera()
     {
-        gameController.playerUpdates.updateDisplay("Why would I do that!");
+        gameController.playerUpdates.updateDisplay("Driver: Why would I turn on a camera! Stop wasting time!");
     }
 
     public void DisableLaser() {
         LaserDisableResult laserResult = laserController.DisableNearestLaser(transform.position);
         if (laserResult == LaserDisableResult.NOT_FOUND) {
-            gameController.playerUpdates.updateDisplay("Can't find a laser that is enabled to disable!");
+            gameController.playerUpdates.updateDisplay("Driver: Can't find a laser that is enabled to disable!");
         } else if (laserResult == LaserDisableResult.TOO_FAR) {
-            gameController.playerUpdates.updateDisplay("You need to get closer to the laser!");
+            gameController.playerUpdates.updateDisplay("Driver: You need to get closer to the laser!");
         } else if (laserResult == LaserDisableResult.ERROR) {
-            gameController.playerUpdates.updateDisplay("Can't turn that one off!");
+            gameController.playerUpdates.updateDisplay("Driver: I can't switch that laser off, look around for another way!");
         } else {
-            gameController.playerUpdates.updateDisplay("I've switched the laser off");
+            gameController.playerUpdates.updateDisplay("Driver: I've switched the laser off");
         }
     }
 
     public void EnableLaser() {
-        gameController.playerUpdates.updateDisplay("Why would I do that!");
+        gameController.playerUpdates.updateDisplay("Driver: Why would I switch the laser back on!");
     }
 
     public void Unsure() {
-        gameController.playerUpdates.updateDisplay("I am unsure as to what to do!");
+        gameController.playerUpdates.updateDisplay("Driver: I do not know what you want me to do!");
     }
 }
