@@ -46,6 +46,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     private Vector3 networkPosition;
     private Quaternion networkRotation;
     private new Rigidbody rigidbody;
+    public bool Swat;
     
 
     private bool timedOut = false;

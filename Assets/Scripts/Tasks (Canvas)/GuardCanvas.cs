@@ -12,6 +12,7 @@ public class GuardCanvas : MonoBehaviour
     public Sprite sus;
     public Sprite exclamation;
     public Sprite hat;
+    public Sprite crossSwords;
     public Sprite ZZZ;
     public GuardController guardController;
     public Vector3 offset;
@@ -54,7 +55,11 @@ public class GuardCanvas : MonoBehaviour
                         {
                             case State.normal:
                                 guardIndicator.rectTransform.rotation = Quaternion.identity;
-                                guardIndicator.sprite = hat;
+                                if (guard.Swat) {
+                                    guardIndicator.sprite = crossSwords;
+                                } else {
+                                    guardIndicator.sprite = hat;
+                                }
                                 guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
 
                                 
