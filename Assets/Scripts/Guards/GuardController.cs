@@ -38,6 +38,10 @@ public class GuardController : MonoBehaviour
         this.localGrid = new Grid(202,122,1);
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
+    
+    public void swat() {
+        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+    }
 
     public void setValue(Vector3 position, float intensity) {
         localGrid.SetValue(position, (int)intensity);

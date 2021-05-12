@@ -286,8 +286,7 @@ public class CameraSystem : MonoBehaviour
 
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
-
-        
+        GameObject.FindObjectOfType<GuardController>().swat();
     }
    
 
