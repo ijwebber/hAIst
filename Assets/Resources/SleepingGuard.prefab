@@ -835,7 +835,7 @@ MonoBehaviour:
     SynchronizeType: 2
     Name: isKnockedOut
   - Type: 4
-    SynchronizeType: 0
+    SynchronizeType: 2
     Name: Sleeping
   m_SynchronizeLayers:
   - SynchronizeType: 0
