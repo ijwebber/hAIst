@@ -9,7 +9,7 @@ public class Node {
 
 public class Grid {
     private int width;
-    private int obstacleMask = (1 << 8) | (1 << 12) | (1 << 20);
+    private int obstacleMask = (1 << 8) | (1 << 20);
     private int argonMask = (1 << 21);
     public int[] averages = new int[500];
     private int height;
