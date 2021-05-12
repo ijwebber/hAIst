@@ -292,7 +292,7 @@ public class GameController : MonoBehaviourPunCallbacks
                     setNewQuest(new List<GameObject>() {GameObject.Find("MetalDoorHandler")}, new List<string> {"Look around"}, localRegress);
                     break;
                 case 1: // point to code
-                    setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display")}, new List<string> {"Find the code"}, localRegress);
+                    setNewQuest(new List<GameObject>() {GameObject.Find("Entrance code display"), GameObject.Find("Entrance keypad")}, new List<string> {"Find and enter the code"}, localRegress);
                     break;
                 case 2: // point to key objects
                     foreach (var item in specialItems) {
