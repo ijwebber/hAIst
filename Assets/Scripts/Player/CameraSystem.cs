@@ -145,7 +145,7 @@ public class CameraSystem : MonoBehaviour
         }
 
         
-        if(!introDone && (skipCounter == PhotonNetwork.CurrentRoom.PlayerCount))
+        if(!introDone && PhotonNetwork.CurrentRoom != null && (skipCounter == PhotonNetwork.CurrentRoom.PlayerCount))
         {
             introEnd();
             introDone = true;
