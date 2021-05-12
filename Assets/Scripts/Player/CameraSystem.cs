@@ -201,9 +201,8 @@ public class CameraSystem : MonoBehaviour
 
         black.SetActive(true);
 
-            
-
-        
+        GameController gameController = GameObject.FindObjectOfType<GameController>();
+        gameController.gameStart();
     }
 
     void introCutSceneSetup()

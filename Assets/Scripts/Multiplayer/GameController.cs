@@ -16,6 +16,7 @@ public class GameController : MonoBehaviourPunCallbacks
     public GameObject UpgradeUIPrefab;
     public GameObject PlayerController;
 
+    [SerializeField] private GameObject tutorial;
     public GameObject MuteButton;
     public Sprite sound_on;
     public Sprite sound_off;
@@ -122,6 +123,11 @@ public class GameController : MonoBehaviourPunCallbacks
         }
         mute = false;
         
+    }
+
+    public void gameStart() {
+        gameState = 0;
+        tutorial.GetComponent<Animator>().SetTrigger("startTutorial");
     }
 
     public void SetReviveUsed()
