@@ -1179,6 +1179,7 @@ MonoBehaviour:
   walkSpeed: 3.5
   chasedPlayer: {fileID: 0}
   guardDisabled: 0
+  Swat: 0
 --- !u!114 &2337730633997927904
 MonoBehaviour:
   m_ObjectHideFlags: 0
