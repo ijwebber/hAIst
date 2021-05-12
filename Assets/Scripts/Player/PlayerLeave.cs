@@ -20,7 +20,11 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
             if (other.gameObject.CompareTag("ExitBox")) {
-                uiController.UpdateInfoText("Ready to leave? Press E");
+                if ((int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] == 3) {
+                    uiController.UpdateInfoText("Ready to leave? Press E");
+                } else  {
+                    uiController.UpdateInfoText("You haven't got all of the artifacts!");
+                }
             }
         }
     }
@@ -29,7 +33,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
             if (other.gameObject.CompareTag("ExitBox")) {
-                if (Input.GetKeyDown(KeyCode.E)) {
+                if (Input.GetKeyDown(KeyCode.E) && (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] == 3) {
                     Hashtable hash = new Hashtable() {{"leave", true}, {"win", true}};
                     PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
                     UpdateWaitingText();

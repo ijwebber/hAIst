@@ -105,13 +105,11 @@ public class PlayerPickUp : MonoBehaviourPun
                     if (Input.GetKeyDown(KeyCode.E))
                     {
                         if (!codeDisplay.activeInHierarchy) {
-                            Debug.Log("AYO not active " + inTrigger.gameObject.name);
                             codeDisplay.SetActive(true);
                             CodeDisplayObject display = inTrigger.gameObject.GetComponent<CodeDisplayObject>();
                             codeDisplay.GetComponent<CodeDisplay>().keypadID = display.keypad.id;
                             codeActive = true;
                         } else {
-                            Debug.Log("AYO active " + inTrigger.gameObject.name);
                             codeDisplay.SetActive(false);
                             codeActive = false;
                         }
@@ -302,7 +300,15 @@ public class PlayerPickUp : MonoBehaviourPun
                         int objID = currentObject.GetComponent<PhotonView>().ViewID;
                         gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
 
+                        Hashtable hash = new Hashtable();
                         if (isSpecial) {
+                            int currSpec = 0;
+                            if (PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] != null) {
+                                currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
+                            }
+                            hash.Add("roomSpecial", currSpec + 1);
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                            
                             audioController.PlayHighValue();
                             gameController.playerUpdates.updateDisplay("You have stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
                             gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + other.gameObject.GetComponent<CollectableItem>().itemName + "!");
@@ -312,8 +318,8 @@ public class PlayerPickUp : MonoBehaviourPun
                             if (PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"] != null) {
                                 currentStolen = (int)PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"];
                             }
-                            Hashtable hash = new Hashtable();
                             hash.Add("itemsStolen", currentStolen + 1);
+                            PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
                         }
 
                         // reset game components
