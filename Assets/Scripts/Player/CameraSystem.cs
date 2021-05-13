@@ -111,6 +111,7 @@ public class CameraSystem : MonoBehaviour
         v.url = Path.Combine(Application.streamingAssetsPath, "TestVideo.mp4");
 
         v.renderMode = VideoRenderMode.CameraNearPlane;
+        v.Pause();
         
         
 
