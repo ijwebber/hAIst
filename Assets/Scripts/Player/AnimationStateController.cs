@@ -78,6 +78,10 @@ public class AnimationStateController : MonoBehaviourPun
         animator.SetFloat(VelocityHash,velocity);
 
         if(isdown){
+            animator.SetBool("danceMacarena", false);
+            animator.SetBool("danceLockHipHop", false);
+            animator.SetBool("danceFloorDance", false);
+            animator.SetBool("danceFlair", false);
             animator.SetBool("isDown",true);
         }
         else{
