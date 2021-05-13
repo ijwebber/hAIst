@@ -39,6 +39,12 @@ public class AudioController : MonoBehaviour
         }
     } 
 
+    void Update() {
+        float n = mainPlayer.volume + 0.05f;
+        sfxPlayer1.volume = n;
+        sfxPlayer2.volume = n;
+    }
+
     public void PlayIntenseTheme() {
         if (isNotNull) {
             mainPlayer.Pause();
