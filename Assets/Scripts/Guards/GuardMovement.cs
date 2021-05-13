@@ -106,7 +106,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             {
                 currSpec++;
                 spec.GetComponent<CollectableItem>().stolen = true;
-                spec.GetComponent<CollectableItem>().syncStolen(true);
+                spec.GetComponent<CollectableItem>().syncStolen(true, null);
                 spec.GetComponent<CollectableItem>().guardPoint = null;
                 playerController.Specials.Add(spec);
                 gameController.playerUpdates.updateDisplay("You have recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
@@ -218,7 +218,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                     gameController.gameState -= 1;
                                     serializedObjects += spec.name + ",";
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
-                                    spec.GetComponent<CollectableItem>().syncStolen(false);
+                                    spec.GetComponent<CollectableItem>().syncStolen(false, this.gameObject);
                                     spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
                                     i++;
                                     gameController.playerUpdates.updateDisplay("You've been knocked down and lost " + spec.GetComponent<CollectableItem>().itemName + "!");
