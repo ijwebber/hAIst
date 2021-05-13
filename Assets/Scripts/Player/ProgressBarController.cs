@@ -9,13 +9,14 @@ public class ProgressBarController : MonoBehaviour
     public Gradient gradient;
 
     public void UpdateBar(float x, float min, float max) {
-        float width = (x / (max - min)) * 200;
-        front.GetComponent<RectTransform>().sizeDelta = new Vector2 (width, 16); 
+        front.GetComponent<Image>().fillAmount = (x/(max-min));
         front.GetComponent<Image>().color = gradient.Evaluate(x/(max-min));
     }
 
     public void ResetBar() {
-        front.GetComponent<RectTransform>().sizeDelta = new Vector2 (0, 16); 
+        // front.GetComponent<RectTransform>().sizeDelta = new Vector2 (0, 16); 
+        front.GetComponent<Image>().fillAmount = 0;
+        front.GetComponent<Image>().color = gradient.Evaluate(0);
     }
 
     public void Show() {

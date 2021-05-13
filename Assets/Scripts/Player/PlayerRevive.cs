@@ -102,7 +102,7 @@ public class PlayerRevive : MonoBehaviour
                                     Hashtable playerHash = new Hashtable();
                                     playerHash.Add("revives", currentRevs);
                                     PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
-                                    textObject.GetComponent<Text>().text = "";
+                                    // textObject.GetComponent<Text>().text = "";
 
                                     progressBar.Hide();
                                     progressBar.ResetBar();
@@ -119,6 +119,7 @@ public class PlayerRevive : MonoBehaviour
                             Debug.Log("Progress bar -- " + progressBar.name);
                             progressBar.Hide();
                             progressBar.ResetBar();
+                            textObject.GetComponent<Text>().text = "";
                         }
                     } else {
                         if (textObject.GetComponent<Text>().text == "Hold E to revive") {
