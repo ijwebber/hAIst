@@ -23,6 +23,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 if ((int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] == 3) {
                     uiController.UpdateInfoText("Ready to leave? Press E");
                 } else  {
+                    Debug.Log("CUrrent stolen = " + (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"]);
                     uiController.UpdateInfoText("You haven't got all of the artifacts!");
                 }
             }

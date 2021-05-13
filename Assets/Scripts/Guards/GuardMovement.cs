@@ -114,7 +114,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 player.GetComponent<PlayerPickUp>().UpdateScore(spec);
             }
             Hashtable playerHash = new Hashtable();
-            hash.Add("roomSpecial", currSpec + 1);
+            hash.Add("roomSpecial", currSpec);
             PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
             int specCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["specialStolen"];
             playerHash.Add("specialStolen", specCount + specials.Count);
