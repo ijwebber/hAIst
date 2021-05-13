@@ -11,11 +11,12 @@ public class KnockOutGuard : MonoBehaviourPun
     private int guardViewID = -1;
     
     private TextMeshProUGUI guardStatusText;
+    private AudioController audioController;
     public GameObject guard;
     // Start is called before the first frame update
     void Start()
     {
-        
+        audioController = GameObject.FindObjectOfType<AudioController>();
     }
 
     // Update is called once per frame
@@ -52,6 +53,7 @@ public class KnockOutGuard : MonoBehaviourPun
             if (Input.GetKeyDown(KeyCode.E))
             {
                 // guardStatusText.text = "";
+                audioController.PlayGuardGrunt();
                 guard.GetComponent<GuardMovement>().removeSpecials();
                 guard.GetComponent<GuardMovement>().guardDisabled = true;
                 guard.GetComponent<PhotonView>().RPC("syncGuardDisabled", RpcTarget.All, true);

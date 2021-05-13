@@ -7,6 +7,7 @@ public class DoorHandler : MonoBehaviourPun
 {
 
     public PressButton button;
+    [SerializeField] private AudioController audioController;
     private List<int> l = new List<int>();
 
     // Start is called before the first frame update
@@ -27,6 +28,7 @@ public class DoorHandler : MonoBehaviourPun
     }
 
     IEnumerator openDoor(DoorScript door) {
+        audioController.PlayDoorOpening();
         door.OpenDoor();
         yield return null;
     }
@@ -47,6 +49,7 @@ public class DoorHandler : MonoBehaviourPun
 
         if (l.Count == 0)
         {
+            audioController.PlayDoorOpening();
             doorleft.CloseDoor();
             doorright.CloseDoor();
         }
