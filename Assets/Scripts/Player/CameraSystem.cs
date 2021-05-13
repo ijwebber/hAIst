@@ -11,6 +11,7 @@ using Photon.Realtime;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -51,6 +52,7 @@ public class CameraSystem : MonoBehaviour
     public GameObject C4;
     public GameObject explosionEffect;
     public GameObject skipCounterText;
+    
 
 
     [Header("Flags and floats")]
@@ -71,7 +73,8 @@ public class CameraSystem : MonoBehaviour
     public int skipCounter;
     public const byte skipCutSceneCounterCode = 1;
 
-    private VideoPlayer v;
+    [Header("Players")]
+    public GameObject introPlayer;
 
     [Header("Other Stuff")]
     [SerializeField] private AudioController audioController;
@@ -106,12 +109,13 @@ public class CameraSystem : MonoBehaviour
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
 
-        //v =  mainCam.gameObject.AddComponent<VideoPlayer>();
+        
 
-        //v.url = Path.Combine(Application.streamingAssetsPath, "TestVideo.mp4");
+        introPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Intro.mp4");
 
-        //v.renderMode = VideoRenderMode.CameraNearPlane;
-        //v.Pause();
+        
+        
+       
         
         
 
@@ -172,10 +176,9 @@ public class CameraSystem : MonoBehaviour
             skipCounterText.GetComponent<Text>().text = skipCounter + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
         }
 
-        /*if (Input.GetKeyDown(KeyCode.P))
-        {
-            v.Play();
-        }*/
+
+       
+        
     }
     public void raiseEventSkipCounter()
     {
@@ -203,7 +206,10 @@ public class CameraSystem : MonoBehaviour
         playerCamActive = true;
             
         playerCamTrack.SetActive(true);
+        introPlayer.GetComponent<VideoPlayer>().Pause();
+        introPlayer.SetActive(false);
         introSceneTrack.SetActive(false);
+        mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
         StartCoroutine(disableAfterTime(playerCamTrack, 2f));
         mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));            
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
@@ -246,8 +252,12 @@ public class CameraSystem : MonoBehaviour
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
 
+        mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
+
         black.SetActive(false);
         introSceneTrack.SetActive(true);
+        introPlayer.GetComponent<VideoPlayer>().Play();
+        sceneTransitionCanvas.transform.Find("Image").gameObject.GetComponent<Image>().color = new Color(0, 0, 0, 1);
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
@@ -295,8 +305,9 @@ public class CameraSystem : MonoBehaviour
         //ending
 
         double swatTime = swatCamTrack.GetComponent<PlayableDirector>().duration;
-
-        yield return new WaitForSeconds((float)swatTime);
+        yield return new WaitForSeconds(4.5f);
+        BarController.Instance.HideBars();
+        yield return new WaitForSeconds(0.5f);
         swatCamTrack.SetActive(false);
         yield return new WaitForSeconds(2f);
 
@@ -408,7 +419,7 @@ public class CameraSystem : MonoBehaviour
 
         double trackTime = exitBlowUpTrack.GetComponent<PlayableDirector>().duration;
 
-        yield return new WaitForSeconds((float)trackTime);
+        yield return new WaitForSeconds(8f);
         exitBlowUpTrack.SetActive(false);
         sceneTransitionCanvas.SetActive(false);
         black.SetActive(true);
