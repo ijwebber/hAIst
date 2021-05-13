@@ -355,9 +355,12 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     [PunRPC]
     void snitch(float x, float y, float z) {
         // receive new sound source and update local grid
-        if (this.state == State.normal) {
+        if (this.state == State.normal || this.state == State.suspicious) {
             this.state = State.suspicious;
             agent.SetDestination(new Vector3(x,y,z));
+        } else {
+            // if chasing somebody, move someone else (maybe don't)
+            // guardController.MoveClosestGuard(new Vector3(x,y,z));
         }
     }
 
