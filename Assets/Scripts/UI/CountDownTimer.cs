@@ -10,7 +10,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
     public Text timerText;
     public Image badge;
-    private float timeLeftOnceSpotted = 10f;
+    private float timeLeftOnceSpotted = 240f;
 
     private bool timerStarted = false;
     private bool endStarted = false;

@@ -10,14 +10,15 @@ public class EndScreenAudioController : MonoBehaviourPun
     [SerializeField] private AudioClip lossMain;
     [SerializeField] private AudioClip lossIntro;
 
-    private bool isNotNull;
+    private bool isNotNull = true;
 
     void Start() {
+        /*
         if (winMain != null) {
             isNotNull = true;
         } else {
             isNotNull = false;
-        }
+        }*/
     } 
 
     public void PlayWin() {
