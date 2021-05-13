@@ -130,7 +130,7 @@ public class CameraSystem : MonoBehaviour
 
         introPlayer.GetComponent<VideoPlayer>().Prepare();
         
-        explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
+        
 
         
 
@@ -198,11 +198,11 @@ public class CameraSystem : MonoBehaviour
         }
 
 
-       
-
-
-       
         
+
+
+
+
     }
     public void raiseEventSkipCounter()
     {
@@ -228,21 +228,23 @@ public class CameraSystem : MonoBehaviour
         
             
         playerCamActive = true;
-            
+        mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
         playerCamTrack.SetActive(true);
         
         introPlayer.SetActive(false);
         introSceneTrack.SetActive(false);
-        mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
-        StartCoroutine(disableAfterTime(playerCamTrack, 2f));
+
+        black.SetActive(true);
+        introRenderer.SetActive(false);
+
+        StartCoroutine(disableAfterTime(playerCamTrack, 3f));
         mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));            
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
 
         skipCounterText.GetComponent<Text>().text = "";
 
-        introRenderer.SetActive(false);
-        sceneTransitionCanvas.SetActive(false);
-        
+
+
 
         isCutSceneHappening = false;
 
@@ -250,7 +252,8 @@ public class CameraSystem : MonoBehaviour
         SetPaintingsLayer(13);
         SetLayerRecursively(securityCameraReference, 10);
 
-        black.SetActive(true);
+        
+        
 
         GameController gameController = GameObject.FindObjectOfType<GameController>();
         gameController.gameStart();
@@ -263,9 +266,9 @@ public class CameraSystem : MonoBehaviour
         //Finding guard object for guard scene shot and setting the VC to follow and look at it
         guardCam.GetComponent<CinemachineVirtualCamera>().Follow = guardShotReference.transform;
         guardCam.GetComponent<CinemachineVirtualCamera>().LookAt = guardShotReference.transform;
-    
+
         //find players and disable their control whilst cutscene plays
-        
+        mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
         //sceneTransitionCanvas.SetActive(true);
         //find security cam
@@ -278,7 +281,8 @@ public class CameraSystem : MonoBehaviour
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
         introRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
-        mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
+        
+
 
         black.SetActive(false);
         introSceneTrack.SetActive(true);
@@ -352,20 +356,24 @@ public class CameraSystem : MonoBehaviour
         //ending
 
         double swatTime = swatCamTrack.GetComponent<PlayableDirector>().duration;
-        yield return new WaitForSeconds(6.9f);
+        yield return new WaitForSeconds(8f);
         
         
         
         playerCamTrack.SetActive(true);
-        swatCamTrack.SetActive(false);
-        yield return new WaitForSeconds(0.8f);
         
+        swatCamTrack.SetActive(false);
+
         swatRenderer.SetActive(false);
         black.SetActive(true);
+        
+        
+        
+        
 
-        gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
-        sceneTransitionCanvas.SetActive(false);
-        yield return new WaitForSeconds(0.5f);
+        
+        
+        yield return new WaitForSeconds(2f);
 
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
@@ -378,6 +386,10 @@ public class CameraSystem : MonoBehaviour
         PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
         GameObject.FindObjectOfType<GuardController>().swat();
         GameObject.FindObjectOfType<SoundController>().enableSound(true);
+
+        yield return new WaitForSeconds(1f);
+        playerCamTrack.SetActive(false);
+        sceneTransitionCanvas.SetActive(false);
     }
    
 
@@ -385,7 +397,11 @@ public class CameraSystem : MonoBehaviour
     private IEnumerator disableAfterTime(GameObject g, float time)
     {
         yield return new WaitForSeconds(time);
+        
+        
+        
         g.SetActive(false);
+        sceneTransitionCanvas.SetActive(false);
     }
 
     
@@ -489,15 +505,16 @@ public class CameraSystem : MonoBehaviour
 
         yield return new WaitForSeconds(8f);
         playerCamTrack.SetActive(true);
-        yield return new WaitForSeconds(0.8f);
-
         exitBlowUpTrack.SetActive(false);
-        sceneTransitionCanvas.SetActive(false);
         black.SetActive(true);
         explodeRenderer.SetActive(false);
+        
 
-        yield return new WaitForSeconds(1.5f);
+        
+
+        yield return new WaitForSeconds(2.5f);
         playerCamTrack.SetActive(false);
+        sceneTransitionCanvas.SetActive(false);
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
         
