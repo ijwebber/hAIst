@@ -99,7 +99,7 @@ public class GuardController : MonoBehaviour
     // Returns closest guard to a position
         Vector3 targetPosition = new Vector3(x, y, z);
         GuardMovement closestGuard = null;
-        float closestDistance = 1000;
+        float closestDistance = 10000;
         foreach (GuardMovement guard in guardMovements) {
             Vector3 agentPos = guard.agent.transform.position;
 
