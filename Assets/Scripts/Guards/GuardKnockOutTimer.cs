@@ -28,9 +28,6 @@ public class GuardKnockOutTimer : MonoBehaviour
         if (moveScript.guardDisabled && !timerDisplayed )
         {
             //PhotonView.Get(this).RPC("InstiateTimer", RpcTarget.All);
-
-
-
         }
     }
 

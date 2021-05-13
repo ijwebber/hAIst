@@ -95,7 +95,7 @@ public class GuardController : MonoBehaviour
     }
 
     [PunRPC]
-    public void GetClosestGuard(float x, float y, float z) {
+    void GetClosestGuard(float x, float y, float z) {
     // Returns closest guard to a position
         Vector3 targetPosition = new Vector3(x, y, z);
         GuardMovement closestGuard = null;

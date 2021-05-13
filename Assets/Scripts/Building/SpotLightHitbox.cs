@@ -11,7 +11,7 @@ public class SpotLightHitbox : MonoBehaviour
         if (other.gameObject.layer == 9) {
             if (!other.gameObject.GetComponent<PlayerPickUp>().down) {
                 SpotLight.GetComponent<Light>().color = Color.red;
-                guardController.GetClosestGuard(other.gameObject.transform.position.x, other.gameObject.transform.position.y, other.gameObject.transform.position.z);
+                guardController.MoveClosestGuard(other.gameObject.transform.position);
             }
         }
     }
