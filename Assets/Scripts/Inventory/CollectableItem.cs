@@ -22,9 +22,9 @@ public class CollectableItem : MonoBehaviourPun
         this.gameSelection = chooseMinigame;
     }
     public void syncStolen(bool val, GameObject guardPoint) {
-        string serializedGP = guardPoint.name;
-        if (guardPoint == null) {
-            serializedGP = "null";
+        string serializedGP = "null";
+        if (guardPoint != null) {
+            serializedGP = guardPoint.name;
         }
         this.photonView.RPC("syncStolenRPC", RpcTarget.Others, val, serializedGP);
     }
