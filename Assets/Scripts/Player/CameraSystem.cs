@@ -257,7 +257,7 @@ public class CameraSystem : MonoBehaviour
         black.SetActive(false);
         introSceneTrack.SetActive(true);
         introPlayer.GetComponent<VideoPlayer>().Play();
-        sceneTransitionCanvas.transform.Find("Image").gameObject.GetComponent<Image>().color = new Color(0, 0, 0, 1);
+        
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
