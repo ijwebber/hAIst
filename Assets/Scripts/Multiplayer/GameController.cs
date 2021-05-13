@@ -90,7 +90,14 @@ public class GameController : MonoBehaviourPunCallbacks
         }
         questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
 
-        float xSpawnPos = SpawnPoint.transform.position.x + (float) (PhotonNetwork.LocalPlayer.ActorNumber * 0.6);
+        int actNo = 0;
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (PhotonNetwork.LocalPlayer == PhotonNetwork.PlayerList[i]) {
+                actNo = i;
+            }
+        }
+        float xSpawnPos = SpawnPoint.transform.position.x + (float) (actNo * 0.6);
         Vector3 spawnpoint = SpawnPoint.transform.position;
         spawnpoint.x = xSpawnPos;
         spawnpoint.y = 11f;
