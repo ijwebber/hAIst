@@ -58,7 +58,14 @@ public class UIController : MonoBehaviourPunCallbacks
 
         if (changedProps["score"] != null) {
             string name = targetPlayer.NickName;
-            int i = targetPlayer.ActorNumber - 1;
+            int i = 0;
+            for (int i1 = 0; i1 < PhotonNetwork.PlayerList.Length; i1++)
+            {
+                Player p = PhotonNetwork.PlayerList[i1];
+                if (p == targetPlayer) {
+                    i =  i1;
+                }
+            }
             string playerText = name + ": $" + changedProps["score"];
             playerScores[i].text = playerText;
 
