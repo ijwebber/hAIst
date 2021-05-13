@@ -22,11 +22,11 @@ public class CollectableItem : MonoBehaviourPun
         this.gameSelection = chooseMinigame;
     }
     public void syncStolen(bool val) {
-        this.photonView.RPC("syncStolen", RpcTarget.Others, val);
+        this.photonView.RPC("syncStolenRPC", RpcTarget.Others, val);
     }
 
     [PunRPC]
-    void syncStolen(bool value) {
+    void syncStolenRPC(bool value) {
         this.stolen = value;
     }
 }
