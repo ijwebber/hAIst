@@ -21,6 +21,18 @@ public class PlayerUI : MonoBehaviourPun
         nameText.text = photonView.Owner.NickName;
     }
 
-        
+
+    private void Update()
+    {
+        if (!CameraSystem.Instance.introDone)
+        {
+            nameText.gameObject.SetActive(false);
+        } else
+        {
+            nameText.gameObject.SetActive(true);
+        }
+
+
+    }
 
 }
