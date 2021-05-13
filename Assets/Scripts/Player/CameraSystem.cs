@@ -352,19 +352,20 @@ public class CameraSystem : MonoBehaviour
         //ending
 
         double swatTime = swatCamTrack.GetComponent<PlayableDirector>().duration;
-        yield return new WaitForSeconds(4.5f);
+        yield return new WaitForSeconds(6.9f);
         
-        yield return new WaitForSeconds(0.5f);
-        swatPlayer.GetComponent<VideoPlayer>().Pause();
+        
+        
         playerCamTrack.SetActive(true);
-
         swatCamTrack.SetActive(false);
+        yield return new WaitForSeconds(0.8f);
+        
         swatRenderer.SetActive(false);
         black.SetActive(true);
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
         sceneTransitionCanvas.SetActive(false);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GuardController.Instance.disableAllguards(false);
