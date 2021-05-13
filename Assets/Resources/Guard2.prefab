@@ -1173,7 +1173,7 @@ MonoBehaviour:
   - {x: -53.4, y: 12, z: -2.9}
   - {x: -81.6, y: 12, z: 46.7}
   state: 0
-  chaseSpeed: 6.5
+  chaseSpeed: 7
   sleepy: 0
   sleeping: 0
   walkSpeed: 3.5
