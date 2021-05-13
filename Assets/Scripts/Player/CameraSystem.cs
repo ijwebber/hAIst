@@ -106,12 +106,12 @@ public class CameraSystem : MonoBehaviour
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
 
-        v =  mainCam.gameObject.AddComponent<VideoPlayer>();
+        //v =  mainCam.gameObject.AddComponent<VideoPlayer>();
 
-        v.url = Path.Combine(Application.streamingAssetsPath, "TestVideo.mp4");
+        //v.url = Path.Combine(Application.streamingAssetsPath, "TestVideo.mp4");
 
-        v.renderMode = VideoRenderMode.CameraNearPlane;
-        v.Pause();
+        //v.renderMode = VideoRenderMode.CameraNearPlane;
+        //v.Pause();
         
         
 
@@ -172,10 +172,10 @@ public class CameraSystem : MonoBehaviour
             skipCounterText.GetComponent<Text>().text = skipCounter + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        /*if (Input.GetKeyDown(KeyCode.P))
         {
             v.Play();
-        }
+        }*/
     }
     public void raiseEventSkipCounter()
     {
