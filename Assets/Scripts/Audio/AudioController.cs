@@ -41,6 +41,8 @@ public class AudioController : MonoBehaviour
             introPlayer.PlayScheduled(startTime);
             mainPlayer.PlayScheduled(introDuration + startTime);
             addPlayer.PlayScheduled(introDuration + startTime);
+
+            mainPlayer.loop = true;
         }
     }
 
