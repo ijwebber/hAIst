@@ -104,13 +104,15 @@ public class GuardController : MonoBehaviour
             Vector3 agentPos = guard.agent.transform.position;
 
             float distance = Vector3.Distance(agentPos, targetPosition);
-            if (distance < closestDistance && guard.state == State.normal) {
+            if (distance < closestDistance && guard.state == State.normal && !guard.sleeping) {
                 closestDistance = distance;
                 closestGuard = guard;
             }
         }
-        closestGuard.state = State.suspicious;
-        closestGuard.agent.SetDestination(targetPosition);
+        if (closestGuard != null) {
+            closestGuard.state = State.suspicious;
+            closestGuard.agent.SetDestination(targetPosition);
+        }
     }
 
     public void cutSceneIfSpotted()
