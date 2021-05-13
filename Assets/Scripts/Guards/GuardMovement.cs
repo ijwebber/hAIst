@@ -97,8 +97,14 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 }
     public void removeSpecials() {
         if(specials.Count > 0) {
+            int currSpec = 0;
+            if (PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] != null) {
+                currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
+            }
+            Hashtable hash = new Hashtable();
             foreach (var spec in specials)
             {
+                currSpec++;
                 spec.GetComponent<CollectableItem>().stolen = true;
                 spec.GetComponent<CollectableItem>().guardPoint = null;
                 playerController.Specials.Add(spec);
@@ -107,6 +113,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 player.GetComponent<PlayerPickUp>().UpdateScore(spec);
             }
             Hashtable playerHash = new Hashtable();
+            hash.Add("roomSpecial", currSpec + 1);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
             int specCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["specialStolen"];
             playerHash.Add("specialStolen", specCount + specials.Count);
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
@@ -198,8 +206,14 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 Hashtable specHash = new Hashtable();
                                 specHash.Add("specialStolen", 0);
                                 PhotonNetwork.LocalPlayer.SetCustomProperties(specHash);
+                                int currSpec = 0;
+                                if (PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] != null) {
+                                    currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
+                                }
+                                Hashtable hash = new Hashtable();
                                 foreach (var spec in playerController.Specials)
                                 {
+                                    currSpec--;
                                     gameController.gameState -= 1;
                                     serializedObjects += spec.name + ",";
                                     spec.GetComponent<CollectableItem>().stolen = false; // point to guard;
@@ -218,6 +232,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                     newHash.Add("score", newPlayerScore);
                                     PhotonNetwork.LocalPlayer.SetCustomProperties(newHash);
                                 }
+                                hash.Add("roomSpecial", currSpec);
+                                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
                                 serializedObjects.TrimEnd(","[0]);
                                 this.GetComponent<PhotonView>().RPC("updateGuardSpecials", RpcTarget.All, serializedObjects);
                                 playerController.Specials.Clear();

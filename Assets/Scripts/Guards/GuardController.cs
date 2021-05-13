@@ -90,6 +90,7 @@ public class GuardController : MonoBehaviour
         return agent.SetDestination(position);
     }
     public void MoveClosestGuard(Vector3 targetPosition) {
+        Debug.Log("Move closest guard here");
         this.GetComponent<PhotonView>().RPC("GetClosestGuard", RpcTarget.MasterClient, targetPosition.x, targetPosition.y, targetPosition.z);
     }
 
