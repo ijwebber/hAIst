@@ -11,6 +11,9 @@ public class KeycodeTask : MonoBehaviour
     public float codeReset = 0.5f;  // code reset time in seconds
     private SoundController soundController;
     private GameController gameController;
+
+    private AudioController audioController;
+
     [SerializeField] GameObject keyCodeCanvas;
     private bool isReset = false;
     public bool codeCorrect = false; // This code should be attached to the keycode task object in the canvas
@@ -21,6 +24,7 @@ public class KeycodeTask : MonoBehaviour
     void Awake() {
         soundController = GameObject.FindObjectOfType<SoundController>();
         gameController = GameObject.FindObjectOfType<GameController>();
+        audioController = GameObject.FindObjectOfType<AudioController>();
     }
     private void OnEnable()
     {       // when the UI is active, do the following
@@ -36,8 +40,8 @@ public class KeycodeTask : MonoBehaviour
 
         _inputCode.text += num;             // set inputcode box to what ever buttom input it is
 
-        if (buttonNoise != null) {
-            buttonNoise.Play();
+        if (audioController != null) {
+            audioController.PlayKeypadPress();
         }
         KeyPad myKeyPad = null;
 
@@ -55,6 +59,9 @@ public class KeycodeTask : MonoBehaviour
             {
                 // Debug.Log("code submitted: " + _inputCode.text);
                 _inputCode.text = "Correct";
+
+                audioController.PlayKeypadSuccess();
+
                 if (gameController.gameState <= 2) {
                     gameController.gameState = 2;
                 }
@@ -65,6 +72,7 @@ public class KeycodeTask : MonoBehaviour
             }
             else if (myKeyPad.id == keypadID && _inputCode.text != myKeyPad.code){
                 _inputCode.text = "Failed";
+                audioController.PlayKeypadFailure();
                 StartCoroutine(ResetCode());
             }
         }
