@@ -33,7 +33,7 @@ public class CameraSystem : MonoBehaviour
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera explosionCam;
     public CinemachineVirtualCamera playerCam;
-    public CinemachineVirtualCamera dollyCAm;
+    
     public Camera mainCam;
     [SerializeField] private GameObject guardCam;
 
@@ -237,7 +237,7 @@ public class CameraSystem : MonoBehaviour
         //sceneTransitionCanvas.SetActive(true);
         //find security cam
         securityCameraReference = GameObject.Find("Camera 2");
-        dollyCAm.GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XAxis.m_InputAxisValue = 360;
+        
         //setting the layers for paintings and guard so they render
         SetPaintingsLayer(23);
         SetLayerRecursively(guardShotReference, default);
