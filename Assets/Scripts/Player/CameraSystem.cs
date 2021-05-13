@@ -5,6 +5,8 @@ using UnityEngine.Playables;
 using Cinemachine;
 using UnityEngine.UI;
 using Photon.Pun;
+using UnityEngine.Video;
+using System.IO;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -24,12 +26,14 @@ public class CameraSystem : MonoBehaviour
     public GameObject swatCamTrack;
     public GameObject playerCamFadeOutTrack;
     public GameObject exitBlowUpTrack;
+    public GameObject videoPlayer;
 
     [Header("Camera references")]
     
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera explosionCam;
     public CinemachineVirtualCamera playerCam;
+    public CinemachineVirtualCamera dollyCAm;
     public Camera mainCam;
     [SerializeField] private GameObject guardCam;
 
@@ -47,6 +51,7 @@ public class CameraSystem : MonoBehaviour
     public GameObject C4;
     public GameObject explosionEffect;
     public GameObject skipCounterText;
+
 
     [Header("Flags and floats")]
     [Range(0.6f, 1.0f)]
@@ -66,7 +71,7 @@ public class CameraSystem : MonoBehaviour
     public int skipCounter;
     public const byte skipCutSceneCounterCode = 1;
 
-
+    private VideoPlayer v;
 
     [Header("Other Stuff")]
     [SerializeField] private AudioController audioController;
@@ -101,13 +106,23 @@ public class CameraSystem : MonoBehaviour
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
 
+        v =  mainCam.gameObject.AddComponent<VideoPlayer>();
+
+        v.url = Path.Combine(Application.streamingAssetsPath, "TestVideo.mp4");
+
+        v.renderMode = VideoRenderMode.CameraNearPlane;
         
         
+
+
+
+
     }
 
     // Update is called once per frame
     void Update()
-    {   
+    {
+        
         if (guardShotReference != null)
         {
             if (!start) {
@@ -155,8 +170,11 @@ public class CameraSystem : MonoBehaviour
         {
             skipCounterText.GetComponent<Text>().text = skipCounter + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
         }
-       
-        
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            v.Play();
+        }
     }
     public void raiseEventSkipCounter()
     {
@@ -219,7 +237,7 @@ public class CameraSystem : MonoBehaviour
         //sceneTransitionCanvas.SetActive(true);
         //find security cam
         securityCameraReference = GameObject.Find("Camera 2");
-
+        dollyCAm.GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XAxis.m_InputAxisValue = 360;
         //setting the layers for paintings and guard so they render
         SetPaintingsLayer(23);
         SetLayerRecursively(guardShotReference, default);
