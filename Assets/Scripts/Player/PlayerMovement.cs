@@ -103,10 +103,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             return;
         }
 
-        
-        
-        
-
         //if not disabled then get keyboard input
         if (!disabled && !paused)
         {
@@ -126,7 +122,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             // Checks for any adjustments to speed
             finalSpeed = speed;
             
-            if (Input.GetKey(KeyCode.LeftShift)) {
+            if (Input.GetKey(KeyCode.LeftShift) && !Input.GetKey(KeyCode.Space)) {
                 if (!tired && moveVector != Vector3.zero) {
                     stamina -= 0.005f;
                     finalSpeed = speed * 1.5f;
