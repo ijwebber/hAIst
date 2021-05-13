@@ -19,6 +19,16 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip lowValueSFX;
     [SerializeField] private AudioClip highValueSFX;
 
+    [SerializeField] private AudioClip[] DoorOpening;
+    [SerializeField] private AudioClip[] GuardGrunt;
+    [SerializeField] private AudioClip[] GuardHey;
+    [SerializeField] private AudioClip[] KeypadPress;
+    [SerializeField] private AudioClip KeypadSuccess;
+    [SerializeField] private AudioClip KeypadFailure;
+    [SerializeField] private AudioClip[] PlayerOof;
+    [SerializeField] private AudioClip Helicopter;
+    
+
     private bool isNotNull;
 
     void Start() {
