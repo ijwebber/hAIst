@@ -221,7 +221,7 @@ public class PlayerPickUp : MonoBehaviourPun
             // else{cooldownBox.text = "";}
 
             if(codeDisplay.activeInHierarchy || keycodeGame.activeInHierarchy || fixPaintingGame.activeInHierarchy){
-                    displayMessage(2);
+                displayMessage(2);
             }
        
 
@@ -399,7 +399,7 @@ public class PlayerPickUp : MonoBehaviourPun
         if(Input.GetKeyDown(KeyCode.E) && seconds == 0){    // if player is holding down E, start a timer                     
             startTime = Time.time;
             timer = startTime;
-            displayMessage(2);
+            // displayMessage(2);
             progressBar.Show();
             progressBar.ResetBar();
         }
