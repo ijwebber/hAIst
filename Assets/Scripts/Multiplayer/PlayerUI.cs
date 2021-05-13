@@ -22,17 +22,4 @@ public class PlayerUI : MonoBehaviourPun
     }
 
 
-    private void Update()
-    {
-        if (!CameraSystem.Instance.introDone)
-        {
-            nameText.gameObject.SetActive(false);
-        } else
-        {
-            nameText.gameObject.SetActive(true);
-        }
-
-
-    }
-
 }

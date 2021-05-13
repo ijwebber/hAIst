@@ -20,7 +20,7 @@ public class SoundController : MonoBehaviourPun
             // ask for permissions
             Microphone.Init();
             Microphone.QueryAudioInput();
-            maxVolume = 0;
+            //maxVolume = 0;
 #endif
         }
 
