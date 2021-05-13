@@ -21,6 +21,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     public GuardController guardController;
     private PlayerController playerController;
     private GameController gameController;
+    private AudioController audioController;
     public NavMeshAgent agent;
     public SoundVisual soundVis;
     public AudioSource heySound;
@@ -58,6 +59,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     private void Awake()
     {
         this.gameController = GameObject.FindObjectOfType<GameController>();
+        audioController = GameObject.FindObjectOfType<AudioController>();
     }
 
     private void Start() {
@@ -171,7 +173,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 
                         if (this.state != State.chase && playerToFollow.GetComponent<PhotonView>().IsMine)
                         {
-                            heySound.Play();
+                            audioController.PlayGuardHey();
                         }
 
                         agent.SetDestination(g.transform.position);
@@ -196,6 +198,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                     } else {
                         if (playerController.invincibleFrames == 0) {
                             playerMoveScript.disabled = true;
+                            audioController.PlayPlayerOof();
                             this.state = State.normal;
                             agent.ResetPath();
                             playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
