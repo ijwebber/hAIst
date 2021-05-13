@@ -26,8 +26,8 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip KeypadSuccess;
     [SerializeField] private AudioClip KeypadFailure;
     [SerializeField] private AudioClip[] PlayerOof;
-    [SerializeField] private AudioClip Helicopter;
-    
+    [SerializeField] private AudioClip HelicopterSFX;
+
 
     private bool isNotNull;
 
@@ -45,6 +45,8 @@ public class AudioController : MonoBehaviour
             addPlayer.Pause();
             mainPlayer.clip = intenseMain;
             addPlayer.clip = intenseAdd;
+
+            introPlayer.volume = mainPlayer.volume;
 
             double startTime = AudioSettings.dspTime + 0.2;
             double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
@@ -79,5 +81,42 @@ public class AudioController : MonoBehaviour
 
     public void PlayHighValue() {
         PlaySFX(highValueSFX);
+    }
+
+    private AudioClip chooseOne(AudioClip[] list) {
+        int n = Random.Range(0, list.Length);
+        return list[n];
+    }
+
+    public void PlayDoorOpening() {
+        PlaySFX(chooseOne(DoorOpening));
+    }
+
+    public void PlayGuardGrunt() {
+        PlaySFX(chooseOne(GuardGrunt));
+    }
+
+    public void PlayGuardHey() {
+        PlaySFX(chooseOne(GuardHey));
+    }
+
+    public void PlayKeypadPress() {
+        PlaySFX(chooseOne(KeypadPress));
+    }
+
+    public void PlayKeypadSuccess() {
+        PlaySFX(KeypadSuccess);
+    }
+
+    public void PlayKeypadFailure() {
+        PlaySFX(KeypadFailure);
+    }
+
+    public void PlayPlayerOof() {
+        PlaySFX(chooseOne(PlayerOof));
+    }
+
+    public void PlayHelicopter() {
+        PlaySFX(HelicopterSFX);
     }
 }
