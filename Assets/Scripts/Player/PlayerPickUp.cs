@@ -306,6 +306,7 @@ public class PlayerPickUp : MonoBehaviourPun
                             if (PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] != null) {
                                 currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
                             }
+                            currentObject.GetComponent<CollectableItem>().syncStolen(true);
                             hash.Add("roomSpecial", currSpec + 1);
                             PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
                             

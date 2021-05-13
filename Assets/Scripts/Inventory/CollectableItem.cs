@@ -21,4 +21,12 @@ public class CollectableItem : MonoBehaviourPun
         this.value = newValue;
         this.gameSelection = chooseMinigame;
     }
+    public void syncStolen(bool val) {
+        this.photonView.RPC("syncStolen", RpcTarget.Others, val);
+    }
+
+    [PunRPC]
+    void syncStolen(bool value) {
+        this.stolen = value;
+    }
 }
