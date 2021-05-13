@@ -106,8 +106,8 @@ public class GuardController : MonoBehaviour
             float distance = Vector3.Distance(agentPos, targetPosition);
             if (distance < closestDistance && guard.state == State.normal) {
                 closestDistance = distance;
+                closestGuard = guard;
             }
-            closestGuard = guard;
         }
         closestGuard.state = State.suspicious;
         closestGuard.agent.SetDestination(targetPosition);
