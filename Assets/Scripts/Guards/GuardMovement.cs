@@ -102,9 +102,10 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
             }
             Hashtable hash = new Hashtable();
+            currSpec+=specials.Count;
+            gameController.gameState+=specials.Count;
             foreach (var spec in specials)
             {
-                currSpec++;
                 spec.GetComponent<CollectableItem>().stolen = true;
                 spec.GetComponent<CollectableItem>().syncStolen(true, null);
                 spec.GetComponent<CollectableItem>().guardPoint = null;
@@ -119,7 +120,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             int specCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["specialStolen"];
             playerHash.Add("specialStolen", specCount + specials.Count);
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
-            gameController.gameState++;
             gameController.regress = false;
             this.GetComponent<PhotonView>().RPC("ClearSpecials", RpcTarget.All);
             Debug.Log("Recaptured painting");
