@@ -521,6 +521,7 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(false);
         sceneTransitionCanvas.SetActive(false);
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
+        GameObject.FindObjectOfType<SoundController>().enableSound(true);
         GuardController.Instance.disableAllguards(false);
         
         
