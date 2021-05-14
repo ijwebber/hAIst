@@ -10,6 +10,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
     public Text timerText;
     public Image badge;
+    public SoundController soundController;
     private float timeLeftOnceSpotted = 240f;
 
     private bool timerStarted = false;
@@ -19,7 +20,8 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
     {
         timerText.text = "";
         badge.color = new Color(1,1,1,0);
-    }
+        soundController = GameObject.FindObjectOfType<SoundController>();
+}
     public override void OnRoomPropertiesUpdate(Hashtable endTriggered)
     {
         base.OnRoomPropertiesUpdate(endTriggered);
@@ -58,8 +60,11 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
                     timerText.color = new Color(0.8490566f,0,0,1);
                 }
             }
-
-            timeLeftOnceSpotted -= Time.deltaTime;
+            if (soundController.getSoundValue())
+            {
+                timeLeftOnceSpotted -= Time.deltaTime;
+            }
+            
         }
         else if(timerStarted && !endStarted)
         {
