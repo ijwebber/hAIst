@@ -519,10 +519,10 @@ public class CameraSystem : MonoBehaviour
 
         explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
 
-        while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
+        /*while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
         {
             yield return new WaitForSeconds(0.5f);
-        }
+        }*/
 
         yield return new WaitForSeconds(1.5f);
         explodeRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
