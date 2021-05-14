@@ -278,6 +278,7 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         //freeze guards, will only work if player is master
         GuardController.Instance.disableAllguards(true);
 
+        
         CameraSystem.Instance.caughtCutScene(guardPhotonID, caughtPlayerPhotonID, "The Police have been alerted");
 
         //this starts the incremental camera updates to the desired location (the cutscene)

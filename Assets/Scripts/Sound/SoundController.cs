@@ -88,6 +88,11 @@ public class SoundController : MonoBehaviourPun
         soundEnabled = val;
     }
 
+    public bool getSoundValue()
+    {
+        return soundEnabled;
+    }
+
     [PunRPC]
     void updateGrid(float x, float y, float z, int intensity) {
         // receive new sound source and update local grid
