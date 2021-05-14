@@ -26,10 +26,12 @@ public class EndScreenAudioController : MonoBehaviourPun
             mainPlayer.clip = winMain;
             introPlayer.clip = winIntro;
 
-            double startTime = AudioSettings.dspTime + 0.2;
-            double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
-            introPlayer.PlayScheduled(startTime);
-            mainPlayer.PlayScheduled(introDuration + startTime);
+            if (introPlayer.clip != null) {
+                double startTime = AudioSettings.dspTime + 0.2;
+                double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
+                introPlayer.PlayScheduled(startTime);
+                mainPlayer.PlayScheduled(introDuration + startTime);
+            }
         }
     }
 
