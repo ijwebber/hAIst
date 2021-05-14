@@ -4,6 +4,8 @@ using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 public class CountDownTimer : MonoBehaviourPunCallbacks
 {
@@ -11,7 +13,9 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
     public Text timerText;
     public Image badge;
     public SoundController soundController;
-    private float timeLeftOnceSpotted = 5f;
+    public const byte changeCountDownCode = 2;
+    public GameController gameController;
+    private float timeLeftOnceSpotted = 240f;
 
     private bool timerStarted = false;
     private bool endStarted = false;
@@ -21,7 +25,8 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         timerText.text = "";
         badge.color = new Color(1,1,1,0);
         soundController = GameObject.FindObjectOfType<SoundController>();
-}
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
     public override void OnRoomPropertiesUpdate(Hashtable endTriggered)
     {
         base.OnRoomPropertiesUpdate(endTriggered);
@@ -78,11 +83,50 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
             }
             
         }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                changeCountDownTimer(300f);
+                gameController.playerUpdates.updateDisplay("Time change to: " + 300f);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha8))
+            {
+                changeCountDownTimer(360f);
+                gameController.playerUpdates.updateDisplay("Time change to: " + 360f);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha9))
+            {
+                changeCountDownTimer(420f);
+                gameController.playerUpdates.updateDisplay("Time change to: " + 420f);
+
+            }
+        }
     }
     IEnumerator endTimer()
     {
         yield return new WaitForSeconds(0.5f);
         timerStarted = true;
+    }
+
+    public void changeCountDownTimer(float newTime)
+    {
+        object[] content = new object[] { newTime };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
+        PhotonNetwork.RaiseEvent(changeCountDownCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public void OnEvent(EventData photonEvent)
+    {
+        byte eventCode = photonEvent.Code;
+        object[] data = (object[])photonEvent.CustomData;
+        if (eventCode == changeCountDownCode)
+        {
+           timeLeftOnceSpotted = (float)data[0];
+        }
     }
 
 }
