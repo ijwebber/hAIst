@@ -104,6 +104,13 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
                 gameController.playerUpdates.updateDisplay("Time change to: " + 420f);
 
             }
+
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+            {
+                changeCountDownTimer(1f);
+                gameController.playerUpdates.updateDisplay("Added 60 seconds to timer");
+
+            }
         }
     }
     IEnumerator endTimer()
@@ -129,7 +136,16 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
 
             float newTime = (float)data[0];
 
-            timeLeftOnceSpotted = newTime;
+            if(newTime == 1f)
+            {
+                timeLeftOnceSpotted += 60f;
+            }
+            else
+            {
+                timeLeftOnceSpotted = newTime;
+            }
+
+            
         }
     }
 
