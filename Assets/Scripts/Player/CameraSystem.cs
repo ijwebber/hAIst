@@ -73,6 +73,7 @@ public class CameraSystem : MonoBehaviour
     public int skipCounter;
     public const byte skipCutSceneCounterCode = 1;
     private int cullingMask = 0;
+    public bool disableCutScenes = false;
 
     [Header("Players")]
     public GameObject introPlayer;
@@ -198,7 +199,10 @@ public class CameraSystem : MonoBehaviour
             skipCounterText.GetComponent<Text>().text = skipCounter + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
         }
 
-
+        if(Input.GetKeyDown(KeyCode.Comma))
+        {
+            disableCutScenes = true;
+        }
         
 
 
@@ -523,8 +527,10 @@ public class CameraSystem : MonoBehaviour
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GameObject.FindObjectOfType<SoundController>().enableSound(true);
         GuardController.Instance.disableAllguards(false);
-        
-        
+
+        GameObject.FindObjectOfType<SoundController>().enableSound(true);
+
+
 
     }
 

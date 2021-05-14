@@ -528,7 +528,10 @@ public class GameController : MonoBehaviourPunCallbacks
             int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) changedProps["special"];
             if (remaining == 0) {
 
-                StartCoroutine(CameraSystem.Instance.explodeExitCutScene());
+                if (!CameraSystem.Instance.disableCutScenes)
+                {
+                    StartCoroutine(CameraSystem.Instance.explodeExitCutScene());
+                }
                 /*
                 GameObject[] objs = GameObject.FindGameObjectsWithTag("exit");
                 foreach (GameObject tag in objs)

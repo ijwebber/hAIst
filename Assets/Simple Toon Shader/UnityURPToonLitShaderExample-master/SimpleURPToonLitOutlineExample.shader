@@ -74,7 +74,7 @@ Shader "SimpleURPToonLitExample(With Outline)"
         _ShadowMapColor("_ShadowMapColor", Color) = (1,0.825,0.78)
 
         [Header(Outline)]
-        _OutlineWidth("_OutlineWidth (World Space)", Range(0,4)) = 1
+        _OutlineWidth("_OutlineWidth (World Space)", Range(0,10)) = 1
         _OutlineColor("_OutlineColor", Color) = (0.5,0.5,0.5,1)
         _OutlineZOffset("_OutlineZOffset (View Space)", Range(0,1)) = 0.0001
         [NoScaleOffset]_OutlineZOffsetMaskTex("_OutlineZOffsetMask (black is apply ZOffset)", 2D) = "black" {}
