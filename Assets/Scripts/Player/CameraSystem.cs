@@ -513,16 +513,16 @@ public class CameraSystem : MonoBehaviour
         renderTexture.filterMode = FilterMode.Bilinear;
         renderTexture.Create();
 
-        explodeWallPlayer.GetComponent<RawImage>().texture = renderTexture;
+        explodeRenderer.GetComponent<RawImage>().texture = renderTexture;
 
         explodeWallPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
 
         explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
 
-        /*while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
+        while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
         {
             yield return new WaitForSeconds(0.5f);
-        }*/
+        }
 
         yield return new WaitForSeconds(1.5f);
         explodeRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);

@@ -15,7 +15,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
     public SoundController soundController;
     public const byte changeCountDownCode = 2;
     public GameController gameController;
-    private float timeLeftOnceSpotted = 240f;
+    public float timeLeftOnceSpotted = 240f;
 
     private bool timerStarted = false;
     private bool endStarted = false;
