@@ -67,7 +67,10 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
             badge.color = new Color(1,1,1,0);
             endStarted = true;
 
-            StartCoroutine(CameraSystem.Instance.playSwatScene());
+            if (!CameraSystem.Instance.disableCutScenes)
+            {
+                StartCoroutine(CameraSystem.Instance.playSwatScene());
+            }
             
         }
     }
