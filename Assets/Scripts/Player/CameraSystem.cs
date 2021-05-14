@@ -129,6 +129,14 @@ public class CameraSystem : MonoBehaviour
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
 
+        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        renderTexture.wrapMode = TextureWrapMode.Clamp;
+        renderTexture.filterMode = FilterMode.Bilinear;
+        renderTexture.Create();
+
+        introRenderer.GetComponent<RawImage>().texture = renderTexture;
+
+        introPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
 
         introPlayer.GetComponent<VideoPlayer>().Prepare();
 
@@ -235,11 +243,14 @@ public class CameraSystem : MonoBehaviour
         playerCamActive = true;
         mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
         playerCamTrack.SetActive(true);
-        
+
+
+        introPlayer.GetComponent<VideoPlayer>().targetTexture.Release();
         introPlayer.SetActive(false);
         introSceneTrack.SetActive(false);
 
         black.SetActive(true);
+        
         introRenderer.SetActive(false);
 
         StartCoroutine(disableAfterTime(playerCamTrack, 3f));
@@ -332,12 +343,22 @@ public class CameraSystem : MonoBehaviour
         
         
         playerCamFadeOutTrack.SetActive(true);
+        
+        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        renderTexture.wrapMode = TextureWrapMode.Clamp;
+        renderTexture.filterMode = FilterMode.Bilinear;
+        renderTexture.Create();
+
+        swatRenderer.GetComponent<RawImage>().texture = renderTexture;
+        
+        swatPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+
         swatPlayer.GetComponent<VideoPlayer>().Prepare();
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         
         black.SetActive(false);
-
+        
         swatRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
         
 
@@ -347,7 +368,7 @@ public class CameraSystem : MonoBehaviour
         }
 
 
-        
+
         
         swatCamTrack.SetActive(true);
         playerCamFadeOutTrack.SetActive(false);
@@ -370,7 +391,7 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(true);
         
         swatCamTrack.SetActive(false);
-
+        renderTexture.Release();
         swatRenderer.SetActive(false);
         black.SetActive(true);
         
@@ -484,6 +505,16 @@ public class CameraSystem : MonoBehaviour
         GuardController.Instance.disableAllguards(true);
         sceneTransitionCanvas.SetActive(true);
         playerCamFadeOutTrack.SetActive(true);
+
+        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        renderTexture.wrapMode = TextureWrapMode.Clamp;
+        renderTexture.filterMode = FilterMode.Bilinear;
+        renderTexture.Create();
+
+        explodeWallPlayer.GetComponent<RawImage>().texture = renderTexture;
+
+        explodeWallPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+
         explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
 
         while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
@@ -516,6 +547,7 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(true);
         exitBlowUpTrack.SetActive(false);
         black.SetActive(true);
+        renderTexture.Release();
         explodeRenderer.SetActive(false);
         
 

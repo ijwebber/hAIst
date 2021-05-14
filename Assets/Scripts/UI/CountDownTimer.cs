@@ -11,7 +11,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
     public Text timerText;
     public Image badge;
     public SoundController soundController;
-    private float timeLeftOnceSpotted = 240f;
+    private float timeLeftOnceSpotted = 5f;
 
     private bool timerStarted = false;
     private bool endStarted = false;
