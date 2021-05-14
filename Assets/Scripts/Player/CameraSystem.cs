@@ -528,10 +528,6 @@ public class CameraSystem : MonoBehaviour
         GameObject.FindObjectOfType<SoundController>().enableSound(true);
         GuardController.Instance.disableAllguards(false);
 
-        GameObject.FindObjectOfType<SoundController>().enableSound(true);
-
-
-
     }
 
     public void playExplosionEffect()
