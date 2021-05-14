@@ -21,11 +21,13 @@ public class Laser : MonoBehaviourPun
     public int wiresID;
     public bool disabled = false;
     public RaycastHit hit;
+    GuardController guardController;
 
     // Start is called before the first frame update
     void Start()
     {
         lr = GetComponent<LineRenderer>();        
+        guardController = GameObject.FindObjectOfType<GuardController>();
     }
 
     // Update is called once per frame
@@ -48,6 +50,7 @@ public class Laser : MonoBehaviourPun
 
                     Hashtable setSpotted = new Hashtable() { { "spotted", true }, { "spottingGuardLocation", null }, { "cutSceneDone", true } };
                     PhotonNetwork.CurrentRoom.SetCustomProperties(setSpotted);
+                    guardController.MoveClosestGuard(hit.transform.position);
 
                     if (!argon.tripped) {
                         argon.gameObject.SetActive(true);

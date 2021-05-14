@@ -56,7 +56,6 @@ public class DBControllerEnd : MonoBehaviour
                 if (webRequest.downloadHandler.text == "true")
                 {
                     Debug.Log("Balance edited succesfully.");
-
                 }
                 else
                 {
