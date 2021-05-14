@@ -72,6 +72,7 @@ public class CameraSystem : MonoBehaviour
     private float startingDistance;
     public int skipCounter;
     public const byte skipCutSceneCounterCode = 1;
+    private int cullingMask = 0;
 
     [Header("Players")]
     public GameObject introPlayer;
@@ -129,9 +130,9 @@ public class CameraSystem : MonoBehaviour
 
 
         introPlayer.GetComponent<VideoPlayer>().Prepare();
-        
-        
 
+
+        cullingMask = mainCam.cullingMask;
         
 
 
@@ -223,10 +224,10 @@ public class CameraSystem : MonoBehaviour
 
     
     public void introEnd()
-    {   
+    {
         //change layer of guard back to normal, fade ui back in, turn on black
-        
-            
+
+        mainCam.cullingMask = -1;
         playerCamActive = true;
         mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = true;
         playerCamTrack.SetActive(true);
@@ -286,6 +287,7 @@ public class CameraSystem : MonoBehaviour
 
         black.SetActive(false);
         introSceneTrack.SetActive(true);
+        mainCam.cullingMask = 0;
         introPlayer.GetComponent<VideoPlayer>().Play();
         
     }
@@ -346,6 +348,7 @@ public class CameraSystem : MonoBehaviour
         swatCamTrack.SetActive(true);
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+        mainCam.cullingMask = 0;
         swatPlayer.GetComponent<VideoPlayer>().Play();
         
         
@@ -357,9 +360,9 @@ public class CameraSystem : MonoBehaviour
 
         double swatTime = swatCamTrack.GetComponent<PlayableDirector>().duration;
         yield return new WaitForSeconds(8f);
-        
-        
-        
+
+
+        mainCam.cullingMask = -1;
         playerCamTrack.SetActive(true);
         
         swatCamTrack.SetActive(false);
@@ -494,6 +497,7 @@ public class CameraSystem : MonoBehaviour
 
         
         exitBlowUpTrack.SetActive(true);
+        mainCam.cullingMask = 0;
         explodeWallPlayer.GetComponent<VideoPlayer>().Play();
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
@@ -504,6 +508,7 @@ public class CameraSystem : MonoBehaviour
         double trackTime = exitBlowUpTrack.GetComponent<PlayableDirector>().duration;
 
         yield return new WaitForSeconds(8f);
+        mainCam.cullingMask = -1;
         playerCamTrack.SetActive(true);
         exitBlowUpTrack.SetActive(false);
         black.SetActive(true);
