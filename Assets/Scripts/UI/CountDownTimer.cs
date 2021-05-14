@@ -25,7 +25,7 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         timerText.text = "";
         badge.color = new Color(1,1,1,0);
         soundController = GameObject.FindObjectOfType<SoundController>();
-        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+        PhotonNetwork.NetworkingClient.EventReceived += OnchangeCounterEvent;
     }
     public override void OnRoomPropertiesUpdate(Hashtable endTriggered)
     {
@@ -119,13 +119,17 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         PhotonNetwork.RaiseEvent(changeCountDownCode, content, raiseEventOptions, SendOptions.SendReliable);
     }
 
-    public void OnEvent(EventData photonEvent)
+    public void OnchangeCounterEvent(EventData photonEvent)
     {
         byte eventCode = photonEvent.Code;
-        object[] data = (object[])photonEvent.CustomData;
+        
         if (eventCode == changeCountDownCode)
         {
-           timeLeftOnceSpotted = (float)data[0];
+            object[] data = (object[])photonEvent.CustomData;
+
+            float newTime = (float)data[0];
+
+            timeLeftOnceSpotted = newTime;
         }
     }
 
