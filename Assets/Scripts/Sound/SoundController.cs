@@ -14,6 +14,11 @@ public class SoundController : MonoBehaviourPun
     public Grid grid;
     public GuardController localSoundGrid;
     private bool soundEnabled = false;
+    // public GuardMovement guardController;
+    public GameObject gridContainer;
+    public int maxVolume;
+    float timeElapsed;
+    
         void Awake()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
