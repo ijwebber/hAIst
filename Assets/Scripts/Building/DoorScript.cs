@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class DoorScript : MonoBehaviour
+public class DoorScript : MonoBehaviourPun
 {
     public Animator anim;
     public SoundController soundController;
@@ -23,6 +24,13 @@ public class DoorScript : MonoBehaviour
     }
     
     public void updateWall() {
+        if (PhotonNetwork.IsMasterClient) {
+            this.photonView.RPC("updateWalls", RpcTarget.All);
+        }
+    }
+
+    [PunRPC]
+    void updateWalls(){
         soundController.grid.updateWalls();
     }
 
