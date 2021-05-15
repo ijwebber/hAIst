@@ -60,43 +60,53 @@ public class UIController : MonoBehaviourPunCallbacks
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) {
         base.OnPlayerPropertiesUpdate(targetPlayer, changedProps);  
+        if (changedProps["specialStolen"] != null) {
+            int i = 0;
+            Sprite newStars = null;
+            Color newColor = Color.clear;
+            for (int i1 = 0; i1 < PhotonNetwork.PlayerList.Length; i1++) {
+                Player p = PhotonNetwork.PlayerList[i1];
+                if (p == targetPlayer) {
+                    i = i1;
+                    switch (p.CustomProperties["specialStolen"]) {
+                        case 0:
+                            newStars = null;
+                            break;
+                        case 1:
+                            newStars = star1;
+                            newColor = Color.white;
+                            break;
+                        case 2:
+                            newStars = star2;
+                            newColor = Color.white;
+                            break;
+                        case 3:
+                            newStars = star3;
+                            newColor = Color.white;
+                            break;
+                        default:
+                            newStars = star3;
+                            newColor = Color.white;
+                            break;
+                    }
+                }
+            }
+            stars[i].sprite = newStars;
+            stars[i].color = newColor;
+        }        
 
         if (changedProps["score"] != null) {
             string name = targetPlayer.NickName;
             int i = 0;
-            Sprite newStars = null;
-            Color newColor = Color.clear;
             for (int i1 = 0; i1 < PhotonNetwork.PlayerList.Length; i1++)
             {
                 Player p = PhotonNetwork.PlayerList[i1];
                 if (p == targetPlayer) {
                     i =  i1;
                 }
-                switch (p.CustomProperties["specialStolen"]) {
-                    case 0:
-                        newStars = null;
-                        break;
-                    case 1:
-                        newStars = star1;
-                        newColor = Color.white;
-                        break;
-                    case 2:
-                        newStars = star2;
-                        newColor = Color.white;
-                        break;
-                    case 3:
-                        newStars = star3;
-                        newColor = Color.white;
-                        break;
-                    default:
-                        newStars = star3;
-                        newColor = Color.white;
-                        break;
-                }
             }
             string playerText = name + ": $" + changedProps["score"];
             playerScores[i].text = playerText;
-            stars[i].sprite = newStars;
 
             if (PhotonNetwork.LocalPlayer.IsMasterClient) {
                 int total = 0;
