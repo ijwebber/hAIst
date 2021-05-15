@@ -26,7 +26,6 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip KeypadSuccess;
     [SerializeField] private AudioClip KeypadFailure;
     [SerializeField] private AudioClip[] PlayerOof;
-    [SerializeField] private AudioClip HelicopterSFX;
 
 
     private bool isNotNull;
@@ -138,9 +137,5 @@ public class AudioController : MonoBehaviour
 
     public void PlayPlayerOof() {
         PlaySFX(chooseOne(PlayerOof));
-    }
-
-    public void PlayHelicopter() {
-        PlaySFX(HelicopterSFX);
     }
 }

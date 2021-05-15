@@ -509,7 +509,7 @@ public class GameController : MonoBehaviourPunCallbacks
                 value = Random.Range(10, 40) * 100;                
             }
 
-            //objs[i].GetComponent<CollectableItem>().UpdateObject(value, gameSelection);
+            objs[i].GetComponent<CollectableItem>().UpdateObjectMaster(value, gameSelection);
             view.RPC("UpdateObject", RpcTarget.All, value, gameSelection);
         }
 

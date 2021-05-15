@@ -17,10 +17,16 @@ public class CollectableItem : MonoBehaviourPun
     public int gameSelection;
 
     [PunRPC]
-    public void UpdateObject(int newValue, int chooseMinigame) {
+    void UpdateObject(int newValue, int chooseMinigame) {
         this.value = newValue;
         this.gameSelection = chooseMinigame;
     }
+
+    public void UpdateObjectMaster(int newValue, int chooseMinigame) {
+        this.value = newValue;
+        this.gameSelection = chooseMinigame;
+    }
+
     public void syncStolen(bool val, GameObject guardPoint) {
         string serializedGP = "null";
         if (guardPoint != null) {
