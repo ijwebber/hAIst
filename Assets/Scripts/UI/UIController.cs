@@ -65,6 +65,7 @@ public class UIController : MonoBehaviourPunCallbacks
             string name = targetPlayer.NickName;
             int i = 0;
             Sprite newStars = null;
+            Color newColor = Color.clear;
             for (int i1 = 0; i1 < PhotonNetwork.PlayerList.Length; i1++)
             {
                 Player p = PhotonNetwork.PlayerList[i1];
@@ -77,15 +78,19 @@ public class UIController : MonoBehaviourPunCallbacks
                         break;
                     case 1:
                         newStars = star1;
+                        newColor = Color.white;
                         break;
                     case 2:
                         newStars = star2;
+                        newColor = Color.white;
                         break;
                     case 3:
                         newStars = star3;
+                        newColor = Color.white;
                         break;
                     default:
                         newStars = star3;
+                        newColor = Color.white;
                         break;
                 }
             }

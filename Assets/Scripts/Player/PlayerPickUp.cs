@@ -549,8 +549,8 @@ public class PlayerPickUp : MonoBehaviourPun
             specialStolenCount++;
             itemStolenCount++;
         }
-        playerHash.Add("itemsStolen", itemStolenCount + 1);
-        playerHash.Add("specialStolen", specialStolenCount + 1);
+        playerHash.Add("itemsStolen", itemStolenCount);
+        playerHash.Add("specialStolen", specialStolenCount);
 
         // Set the player property to the new score
         PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
