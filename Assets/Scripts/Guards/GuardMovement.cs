@@ -108,12 +108,12 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             gameController.gameState+=specials.Count;
             string localMessage = "You've recaptured ";
             string remoteMessage = PhotonNetwork.NickName + " has recaptured ";
-            if (playerController.Specials.Count == 1) {
-                localMessage += playerController.Specials[0] + "!";
-                remoteMessage += playerController.Specials[0] + "!";
+            if (specials.Count == 1) {
+                localMessage += specials[0].GetComponent<CollectableItem>().itemName + "!";
+                remoteMessage += specials[0].GetComponent<CollectableItem>().itemName + "!";
             } else {
-                localMessage += playerController.Specials.Count + " artifacts!";
-                remoteMessage += playerController.Specials.Count + " artifacts!";
+                localMessage += specials.Count + " artifacts!";
+                remoteMessage += specials.Count + " artifacts!";
             }
             gameController.playerUpdates.updateDisplay(localMessage);
             gameController.updateDisp(remoteMessage);
@@ -227,14 +227,16 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 string localMessage = "You've been knocked down and lost ";
                                 string remoteMessage = PhotonNetwork.NickName + " has been knocked down and lost ";
                                 if (playerController.Specials.Count == 1) {
-                                    localMessage += playerController.Specials[0] + "!";
-                                    remoteMessage += playerController.Specials[0] + "!";
+                                    localMessage += playerController.Specials[0].GetComponent<CollectableItem>().itemName + "!";
+                                    remoteMessage += playerController.Specials[0].GetComponent<CollectableItem>().itemName + "!";
                                 } else {
                                     localMessage += playerController.Specials.Count + " artifacts!";
                                     remoteMessage += playerController.Specials.Count + " artifacts!";
                                 }
                                 gameController.playerUpdates.updateDisplay(localMessage);
                                 gameController.updateDisp(remoteMessage);
+                                Hashtable specProps = PhotonNetwork.LocalPlayer.CustomProperties;
+                                int currentPlayerScore = (int) specProps["score"]; 
                                 foreach (var spec in playerController.Specials)
                                 {
                                     currSpec--;
@@ -244,16 +246,14 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                     spec.GetComponent<CollectableItem>().syncStolen(false, this.gameObject);
                                     spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
                                     i++;
-                                    Hashtable specProps = PhotonNetwork.LocalPlayer.CustomProperties;
                                     // Increase the current score by the value
-                                    int currentPlayerScore = (int) specProps["score"]; 
-                                    int newPlayerScore = currentPlayerScore - spec.GetComponent<CollectableItem>().value;
+                                    currentPlayerScore -= spec.GetComponent<CollectableItem>().value;
                                     
-                                    // Create a hashtable entry with the new score
-                                    Hashtable newHash = new Hashtable();
-                                    newHash.Add("score", newPlayerScore);
-                                    PhotonNetwork.LocalPlayer.SetCustomProperties(newHash);
                                 }
+                                // Create a hashtable entry with the new score
+                                Hashtable newHash = new Hashtable();
+                                newHash.Add("score", currentPlayerScore);
+                                PhotonNetwork.LocalPlayer.SetCustomProperties(newHash);
                                 hash.Add("roomSpecial", currSpec);
                                 PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
                                 serializedObjects.TrimEnd(","[0]);
