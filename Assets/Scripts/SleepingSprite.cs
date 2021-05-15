@@ -15,10 +15,11 @@ public class SleepingSprite : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if(m.state == State.normal && m.agent.velocity.magnitude == 0)
+
+        if (m.state == State.normal && m.agent.velocity.magnitude == 0)
         {
             s.enabled = true;
-        } else s.enabled = false;
+        }
+        else if (m.state == State.suspicious || m.state == State.chase || m.state == State.disabled) { s.enabled = false; }
     }
 }

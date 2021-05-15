@@ -84,7 +84,7 @@ public class GuardCanvas : MonoBehaviour
                                 break;
                         }
 
-                        if (guard.GetComponent<GuardMovement>().sleepy && guard.agent.velocity.magnitude == 0 && guard.state != State.suspicious)
+                        if (guard.GetComponent<GuardMovement>().sleepy && guard.agent.velocity.magnitude == 0 && guard.state == State.normal)
                         {
                             guardIndicator.sprite = null;
                             guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(0, 0);
