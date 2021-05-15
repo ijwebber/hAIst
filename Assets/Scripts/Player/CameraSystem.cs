@@ -119,26 +119,26 @@ public class CameraSystem : MonoBehaviour
 
         
 
-        introPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Intro.mp4");
+        //introPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Intro.mp4");
 
-        swatPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Swat.mp4");
+        //swatPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Swat.mp4");
 
 
-        explodeWallPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Explode.mp4");
+        //explodeWallPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Explode.mp4");
 
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
 
-        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
-        renderTexture.wrapMode = TextureWrapMode.Clamp;
-        renderTexture.filterMode = FilterMode.Bilinear;
-        renderTexture.Create();
+        //RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        //renderTexture.wrapMode = TextureWrapMode.Clamp;
+        //renderTexture.filterMode = FilterMode.Bilinear;
+        //renderTexture.Create();
 
-        introRenderer.GetComponent<RawImage>().texture = renderTexture;
+        //introRenderer.GetComponent<RawImage>().texture = renderTexture;
 
-        introPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+        //introPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
 
-        introPlayer.GetComponent<VideoPlayer>().Prepare();
+        //introPlayer.GetComponent<VideoPlayer>().Prepare();
 
 
         cullingMask = mainCam.cullingMask;
@@ -154,7 +154,7 @@ public class CameraSystem : MonoBehaviour
     void Update()
     {
         
-        if (guardShotReference != null && introPlayer.GetComponent<VideoPlayer>().isPrepared)
+        if (guardShotReference != null)
         {
             if (!start) {
 
@@ -245,13 +245,13 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(true);
 
 
-        introPlayer.GetComponent<VideoPlayer>().targetTexture.Release();
-        introPlayer.SetActive(false);
+        //introPlayer.GetComponent<VideoPlayer>().targetTexture.Release();
+        //introPlayer.SetActive(false);
         introSceneTrack.SetActive(false);
 
         black.SetActive(true);
         
-        introRenderer.SetActive(false);
+        //introRenderer.SetActive(false);
 
         StartCoroutine(disableAfterTime(playerCamTrack, 3f));
         mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));            
@@ -296,14 +296,14 @@ public class CameraSystem : MonoBehaviour
         SetLayerRecursively(securityCameraReference, default);
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
-        introRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
+        //introRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
         
 
 
         black.SetActive(false);
         introSceneTrack.SetActive(true);
         mainCam.cullingMask = 0;
-        introPlayer.GetComponent<VideoPlayer>().Play();
+        //introPlayer.GetComponent<VideoPlayer>().Play();
         
     }
 
@@ -344,28 +344,28 @@ public class CameraSystem : MonoBehaviour
 
         playerCamFadeOutTrack.SetActive(true);
         
-        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
-        renderTexture.wrapMode = TextureWrapMode.Clamp;
-        renderTexture.filterMode = FilterMode.Bilinear;
-        renderTexture.Create();
+        //RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        //renderTexture.wrapMode = TextureWrapMode.Clamp;
+        //renderTexture.filterMode = FilterMode.Bilinear;
+        //renderTexture.Create();
 
-        swatRenderer.GetComponent<RawImage>().texture = renderTexture;
+        //swatRenderer.GetComponent<RawImage>().texture = renderTexture;
         
-        swatPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+        //swatPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
 
-        swatPlayer.GetComponent<VideoPlayer>().Prepare();
+        //swatPlayer.GetComponent<VideoPlayer>().Prepare();
 
         yield return new WaitForSeconds(1f);
         
         black.SetActive(false);
         
-        swatRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
+        //swatRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
         
 
-        while (!swatPlayer.GetComponent<VideoPlayer>().isPrepared)
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
+        //while (!swatPlayer.GetComponent<VideoPlayer>().isPrepared)
+        //{
+        //    yield return new WaitForSeconds(0.5f);
+       // }
 
 
 
@@ -374,7 +374,7 @@ public class CameraSystem : MonoBehaviour
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
         mainCam.cullingMask = 0;
-        swatPlayer.GetComponent<VideoPlayer>().Play();
+       // swatPlayer.GetComponent<VideoPlayer>().Play();
         
         
         
@@ -391,8 +391,8 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(true);
         
         swatCamTrack.SetActive(false);
-        renderTexture.Release();
-        swatRenderer.SetActive(false);
+        //renderTexture.Release();
+        //swatRenderer.SetActive(false);
         black.SetActive(true);
         
         
@@ -510,24 +510,24 @@ public class CameraSystem : MonoBehaviour
         sceneTransitionCanvas.SetActive(true);
         playerCamFadeOutTrack.SetActive(true);
 
-        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
-        renderTexture.wrapMode = TextureWrapMode.Clamp;
-        renderTexture.filterMode = FilterMode.Bilinear;
-        renderTexture.Create();
+        //RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+       // renderTexture.wrapMode = TextureWrapMode.Clamp;
+        //renderTexture.filterMode = FilterMode.Bilinear;
+        //renderTexture.Create();
 
-        explodeRenderer.GetComponent<RawImage>().texture = renderTexture;
+       // explodeRenderer.GetComponent<RawImage>().texture = renderTexture;
 
-        explodeWallPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+       // explodeWallPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
 
-        explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
+       // explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
 
-        while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
+        //while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
+       // {
+        //    yield return new WaitForSeconds(0.5f);
+       // }
 
         yield return new WaitForSeconds(1.5f);
-        explodeRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
+        //explodeRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
 
         black.SetActive(false);
 
@@ -537,7 +537,7 @@ public class CameraSystem : MonoBehaviour
         
         exitBlowUpTrack.SetActive(true);
         mainCam.cullingMask = 0;
-        explodeWallPlayer.GetComponent<VideoPlayer>().Play();
+       // explodeWallPlayer.GetComponent<VideoPlayer>().Play();
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
 
@@ -551,8 +551,8 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(true);
         exitBlowUpTrack.SetActive(false);
         black.SetActive(true);
-        renderTexture.Release();
-        explodeRenderer.SetActive(false);
+        //renderTexture.Release();
+        //explodeRenderer.SetActive(false);
         
 
         
