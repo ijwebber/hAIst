@@ -244,6 +244,8 @@ public GameObject UpgradeScreen;
 
 public GameObject ChooseUpgradesButton;
 public GameObject UpgradeButtonFromPreGame;
+public Image background;
+public Sprite bdayBG;
 
 // menu buttons
 [SerializeField] private Button btnPreHome, btnPreUpgrade, btnPreMap, btnPreLobby;
@@ -1618,6 +1620,9 @@ public override void OnJoinedRoom()
     Debug.Log("OnJoinedRoom");
     NewLobbyMenu.SetActive(false);
     PreGameMenu.SetActive(true);
+    if (PhotonNetwork.NickName == "JoshTA" && !IsGuest)  {
+        background.sprite = bdayBG;
+    }
     RoomNameButton.GetComponentInChildren<Text>().text = "Room: " + PhotonNetwork.CurrentRoom.Name;
     StopCoroutine("UpdateFriendList");
     ThiefController();
