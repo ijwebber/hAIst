@@ -9,12 +9,17 @@ public class SoundVisual : MonoBehaviour
     public Gradient gradient;
     public Grid grid;
     private Mesh mesh;
-    private int Dimension = 100;
+    private int Dimension = 75;
     public PlayerController playerController;
+    private Vector3[] vertices;
+    private Vector2[] uv;
+    private Color[] colors;
+    private int[] triangles;
 
     private void Start() {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        CreateEmptyMeshArrays(Dimension * Dimension, out vertices, out uv, out colors, out triangles);
     }
 
     public void initGrid(Grid grid) {
@@ -57,7 +62,7 @@ public class SoundVisual : MonoBehaviour
     }
 
     private void UpdateSoundVis() {
-        mesh.Clear();
+        // mesh.Clear();
         grid.getXY(playerController.player.transform.position, out int playerX, out int playerY);
         int startX = Mathf.Max(0, playerX - Dimension/2);
         int startY = Mathf.Max(0, playerY - Dimension/2);
@@ -72,7 +77,6 @@ public class SoundVisual : MonoBehaviour
             startY = grid.GetHeight() - Dimension;
         }
         // this.gameObject.transform.position = new Vector3(startX, this.gameObject.transform.position.y, startY);
-        CreateEmptyMeshArrays(Dimension * Dimension, out Vector3[] vertices, out Vector2[] uv, out Color[] colors, out int[] triangles);
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++)  {  
                 // double gridValue = grid.GetValue(x,y);
@@ -84,10 +88,17 @@ public class SoundVisual : MonoBehaviour
                 double val3 = grid.GetAvgValue(x+1,y+1);
                 double val4 = grid.GetAvgValue(x,y+1);
                 float height0, height1, height2, height3;
-                if (grid.getVelocity(x,y) > 0) { height0 = process(gridValue, .15f, .6f);} else {height0 = 0;}
-                if (grid.getVelocity(x,y) > 0) { height1 = process(val2, .15f, .6f);} else {height1 = 0;}
-                if (grid.getVelocity(x,y) > 0) { height2 = process(val3, .15f, .6f);} else {height2 = 0;}
-                if (grid.getVelocity(x,y) > 0) { height3 = process(val4, .15f, .6f);} else {height3 = 0;}
+                if (grid.getVelocity(x,y) > 0) {
+                    height0 = process(gridValue, .15f, .6f);
+                    height1 = process(val2, .15f, .6f);
+                    height2 = process(val3, .15f, .6f);
+                    height3 = process(val4, .15f, .6f);
+                } else {
+                    height0 = 0;
+                    height1 = 0;
+                    height2 = 0;
+                    height3 = 0;
+                }
                 // float height0 = process(gridValue, .15f, .6f);
                 // float height1 = process(val2, .15f, .6f);
                 // float height2 = process(val3, .15f, .6f);
