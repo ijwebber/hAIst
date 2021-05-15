@@ -107,12 +107,12 @@ public class GameController : MonoBehaviourPunCallbacks
         playerCam.LookAt = player.gameObject.transform.Find("Timmy").transform;
 
         // Set custom props
-        int numOfSpecial = 0;
-        // if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-        numOfSpecial = SetupItems();
-        // }
-        SetProps(numOfSpecial);
-
+        if (PhotonNetwork.LocalPlayer.IsMasterClient) {
+            int numOfSpecial = 0;
+            numOfSpecial = SetupItems();
+            SetProps(numOfSpecial);
+        }
+        
         SetSpotted();
         
         
@@ -474,13 +474,13 @@ public class GameController : MonoBehaviourPunCallbacks
 
     // Set score to 0 && special item numbers
     void SetProps(int numOfSpecial) {
-        Hashtable setPlayer = new Hashtable() {{"score", 0}, {"itemsStolen", 0}, {"specialStolen", 0}, {"leave", false}, {"win", false}, {"disabled", false}};
-		PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);      
-
-        if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            Hashtable setRoom = new Hashtable() {{"score", 0}, {"special", 0}, {"specialMax", numOfSpecial}, {"win", false}, {"isDriverBusy", false}, {"specialStolen", 0}};
-            PhotonNetwork.CurrentRoom.SetCustomProperties(setRoom);
+        foreach (Player p in PhotonNetwork.PlayerList) {
+            Hashtable setPlayer = new Hashtable() {{"score", 0}, {"itemsStolen", 0}, {"specialStolen", 0}, {"leave", false}, {"win", false}, {"disabled", false}};
+		    p.SetCustomProperties(setPlayer);     
         }
+
+        Hashtable setRoom = new Hashtable() {{"score", 0}, {"special", 0}, {"specialMax", numOfSpecial}, {"win", false}, {"isDriverBusy", false}, {"specialStolen", 0}};
+        PhotonNetwork.CurrentRoom.SetCustomProperties(setRoom);
     }
 
     // Returns number of special items
