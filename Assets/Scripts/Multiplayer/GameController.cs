@@ -112,7 +112,16 @@ public class GameController : MonoBehaviourPunCallbacks
             numOfSpecial = SetupItems();
             SetProps(numOfSpecial);
         }
-        
+
+        GameObject[] stealObjs = GameObject.FindGameObjectsWithTag("steal");
+        foreach (GameObject obj in stealObjs)
+        {
+            if (obj.GetComponent<CollectableItem>().special) {
+                specialItems.Add(obj);
+            }
+        }
+
+
         SetSpotted();
         
         
@@ -495,13 +504,12 @@ public class GameController : MonoBehaviourPunCallbacks
             int value;
             if (objs[i].GetComponent<CollectableItem>().special) {
                 value = Random.Range(60, 100) * 100;
-                specialItems.Add(objs[i]);
                 totalSpecial += 1;
             } else {
                 value = Random.Range(10, 40) * 100;                
             }
 
-            objs[i].GetComponent<CollectableItem>().UpdateObject(value, gameSelection);
+            //objs[i].GetComponent<CollectableItem>().UpdateObject(value, gameSelection);
             view.RPC("UpdateObject", RpcTarget.All, value, gameSelection);
         }
 
