@@ -115,19 +115,22 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 localMessage += specials.Count + " artifacts!";
                 remoteMessage += specials.Count + " artifacts!";
             }
+            int currentPlayerScore = (int)PhotonNetwork.LocalPlayer.CustomProperties["score"];
             gameController.playerUpdates.updateDisplay(localMessage);
             gameController.updateDisp(remoteMessage);
             foreach (var spec in specials)
             {
+                currentPlayerScore += spec.GetComponent<CollectableItem>().value;
                 spec.GetComponent<CollectableItem>().stolen = true;
                 spec.GetComponent<CollectableItem>().syncStolen(true, null);
                 spec.GetComponent<CollectableItem>().guardPoint = null;
                 playerController.Specials.Add(spec);
-                player.GetComponent<PlayerPickUp>().UpdateScore(spec);
             }
             Hashtable playerHash = new Hashtable();
+            playerHash.Add("score", currentPlayerScore);
             hash.Add("roomSpecial", currSpec);
             PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
             int specCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["specialStolen"];
             playerHash.Add("specialStolen", specCount + specials.Count);
             PhotonNetwork.LocalPlayer.SetCustomProperties(playerHash);
