@@ -30,6 +30,7 @@ public class AudioController : MonoBehaviour
 
 
     private bool isNotNull;
+    private bool introStarted = false;
 
     void Start() {
         if (intenseMain != null) {
@@ -43,6 +44,23 @@ public class AudioController : MonoBehaviour
         float n = mainPlayer.volume + 0.05f;
         sfxPlayer1.volume = n;
         sfxPlayer2.volume = n;
+
+        if (!introStarted && introPlayer.isPlaying) {
+            introStarted = true;
+        }
+
+        if (!mainPlayer.isPlaying && introStarted && !introPlayer.isPlaying) {
+            mainPlayer.Play();
+            addPlayer.Play();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L)) {
+            PlayIntenseTheme();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Semicolon)) {
+            EnableAdditional();
+        }
     }
 
     public void PlayIntenseTheme() {

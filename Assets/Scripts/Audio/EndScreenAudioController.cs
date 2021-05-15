@@ -12,6 +12,8 @@ public class EndScreenAudioController : MonoBehaviourPun
 
     private bool isNotNull = true;
 
+    private bool introStarted = false;
+
     void Start() {
         /*
         if (winMain != null) {
@@ -21,30 +23,34 @@ public class EndScreenAudioController : MonoBehaviourPun
         }*/
     } 
 
-    public void PlayWin() {
-        if (isNotNull) {
-            mainPlayer.clip = winMain;
-            introPlayer.clip = winIntro;
+    void Update() {
+        if (!introStarted && introPlayer.isPlaying) {
+            introStarted = true;
+        }
 
-            if (introPlayer.clip != null) {
-                double startTime = AudioSettings.dspTime + 0.2;
-                double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
-                introPlayer.PlayScheduled(startTime);
-                mainPlayer.PlayScheduled(introDuration + startTime);
-            }
+        if (!mainPlayer.isPlaying && introStarted && !introPlayer.isPlaying) {
+            mainPlayer.Play();
         }
     }
 
-    public void PlayLoss() {
-        if (isNotNull) {
-            mainPlayer.clip = lossMain;
-            introPlayer.clip = lossIntro;
+    public void PlayWin() {
+        mainPlayer.clip = winMain;
+        introPlayer.clip = winIntro;
 
-            double startTime = AudioSettings.dspTime + 0.2;
-            double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
-            introPlayer.PlayScheduled(startTime);
-            mainPlayer.PlayScheduled(introDuration + startTime);
-        }
+        double startTime = AudioSettings.dspTime + 0.2;
+        double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
+        introPlayer.PlayScheduled(startTime);
+        mainPlayer.PlayScheduled(introDuration + startTime);
+    }
+
+    public void PlayLoss() {
+        mainPlayer.clip = lossMain;
+        introPlayer.clip = lossIntro;
+
+        double startTime = AudioSettings.dspTime + 0.2;
+        double introDuration = (double) introPlayer.clip.samples / introPlayer.clip.frequency;
+        introPlayer.PlayScheduled(startTime);
+        mainPlayer.PlayScheduled(introDuration + startTime);
     }
 
 }
