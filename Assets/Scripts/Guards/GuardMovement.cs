@@ -106,14 +106,23 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             Hashtable hash = new Hashtable();
             currSpec+=specials.Count;
             gameController.gameState+=specials.Count;
+            string localMessage = "You've recaptured ";
+            string remoteMessage = PhotonNetwork.NickName + " has recaptured ";
+            if (playerController.Specials.Count == 1) {
+                localMessage += playerController.Specials[0] + "!";
+                remoteMessage += playerController.Specials[0] + "!";
+            } else {
+                localMessage += playerController.Specials.Count + " artifacts!";
+                remoteMessage += playerController.Specials.Count + " artifacts!";
+            }
+            gameController.playerUpdates.updateDisplay(localMessage);
+            gameController.updateDisp(remoteMessage);
             foreach (var spec in specials)
             {
                 spec.GetComponent<CollectableItem>().stolen = true;
                 spec.GetComponent<CollectableItem>().syncStolen(true, null);
                 spec.GetComponent<CollectableItem>().guardPoint = null;
                 playerController.Specials.Add(spec);
-                gameController.playerUpdates.updateDisplay("You have recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
-                gameController.updateDisp(PhotonNetwork.NickName + " has recaptured " + spec.GetComponent<CollectableItem>().itemName + "!");
                 player.GetComponent<PlayerPickUp>().UpdateScore(spec);
             }
             Hashtable playerHash = new Hashtable();
@@ -202,7 +211,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                             this.state = State.normal;
                             agent.ResetPath();
                             playerToFollow.GetComponent<PhotonView>().RPC("syncDisabled", RpcTarget.All, true);
-                            if (playerController.Specials.Count > 0) {
+                            if (playerController.Specials.Count > 0) {  
                                 // specials = playerController.Specials;
                                 gameController.regress = true;
                                 string serializedObjects = "";
@@ -215,6 +224,17 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                     currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
                                 }
                                 Hashtable hash = new Hashtable();
+                                string localMessage = "You've been knocked down and lost ";
+                                string remoteMessage = PhotonNetwork.NickName + " has been knocked down and lost ";
+                                if (playerController.Specials.Count == 1) {
+                                    localMessage += playerController.Specials[0] + "!";
+                                    remoteMessage += playerController.Specials[0] + "!";
+                                } else {
+                                    localMessage += playerController.Specials.Count + " artifacts!";
+                                    remoteMessage += playerController.Specials.Count + " artifacts!";
+                                }
+                                gameController.playerUpdates.updateDisplay(localMessage);
+                                gameController.updateDisp(remoteMessage);
                                 foreach (var spec in playerController.Specials)
                                 {
                                     currSpec--;
@@ -224,9 +244,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                     spec.GetComponent<CollectableItem>().syncStolen(false, this.gameObject);
                                     spec.GetComponent<CollectableItem>().guardPoint = this.gameObject; // point to guard;
                                     i++;
-                                    gameController.playerUpdates.updateDisplay("You've been knocked down and lost " + spec.GetComponent<CollectableItem>().itemName + "!");
-                                    gameController.updateDisp(PhotonNetwork.NickName + " has been knocked down and lost " + spec.GetComponent<CollectableItem>().itemName + "!");
-
                                     Hashtable specProps = PhotonNetwork.LocalPlayer.CustomProperties;
                                     // Increase the current score by the value
                                     int currentPlayerScore = (int) specProps["score"]; 
