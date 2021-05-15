@@ -10,11 +10,16 @@ public class UIController : MonoBehaviourPunCallbacks
     public GameObject locationText;
     public Text scoreText;
     public Text[] playerScores;
+    public Image[] stars;
+    public Sprite star1, star2, star3;
 
     void Start()
     {
         // Disable all player tags on ui
-        foreach (Text text in playerScores) {
+        for (int i = 0; i < playerScores.Length; i++) {
+            Text text = playerScores[i];
+            Image artifacts = stars[i];
+            artifacts.sprite = null;
             text.enabled = false;
         }
         
@@ -59,15 +64,34 @@ public class UIController : MonoBehaviourPunCallbacks
         if (changedProps["score"] != null) {
             string name = targetPlayer.NickName;
             int i = 0;
+            Sprite newStars = null;
             for (int i1 = 0; i1 < PhotonNetwork.PlayerList.Length; i1++)
             {
                 Player p = PhotonNetwork.PlayerList[i1];
                 if (p == targetPlayer) {
                     i =  i1;
                 }
+                switch (p.CustomProperties["specialStolen"]) {
+                    case 0:
+                        newStars = null;
+                        break;
+                    case 1:
+                        newStars = star1;
+                        break;
+                    case 2:
+                        newStars = star2;
+                        break;
+                    case 3:
+                        newStars = star3;
+                        break;
+                    default:
+                        newStars = star3;
+                        break;
+                }
             }
             string playerText = name + ": $" + changedProps["score"];
             playerScores[i].text = playerText;
+            stars[i].sprite = newStars;
 
             if (PhotonNetwork.LocalPlayer.IsMasterClient) {
                 int total = 0;

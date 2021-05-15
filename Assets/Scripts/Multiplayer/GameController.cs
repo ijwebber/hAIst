@@ -478,7 +478,7 @@ public class GameController : MonoBehaviourPunCallbacks
 		PhotonNetwork.LocalPlayer.SetCustomProperties(setPlayer);      
 
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
-            Hashtable setRoom = new Hashtable() {{"score", 0}, {"special", 0}, {"specialMax", numOfSpecial}, {"win", false}, {"isDriverBusy", false}};
+            Hashtable setRoom = new Hashtable() {{"score", 0}, {"special", 0}, {"specialMax", numOfSpecial}, {"win", false}, {"isDriverBusy", false}, {"specialStolen", 0}};
             PhotonNetwork.CurrentRoom.SetCustomProperties(setRoom);
         }
     }
