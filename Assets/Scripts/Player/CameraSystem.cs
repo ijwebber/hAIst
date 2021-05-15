@@ -340,8 +340,8 @@ public class CameraSystem : MonoBehaviour
 
         GameObject.FindObjectOfType<SoundController>().enableSound(false);
         sceneTransitionCanvas.SetActive(true);
-        
-        
+        isCutSceneHappening = true;
+
         playerCamFadeOutTrack.SetActive(true);
         
         RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
@@ -420,6 +420,7 @@ public class CameraSystem : MonoBehaviour
         yield return new WaitForSeconds(1f);
         playerCamTrack.SetActive(false);
         sceneTransitionCanvas.SetActive(false);
+        isCutSceneHappening = false;
     }
    
 
@@ -502,6 +503,7 @@ public class CameraSystem : MonoBehaviour
     public IEnumerator explodeExitCutScene()
     {
 
+        isCutSceneHappening = true;
         GameObject.FindObjectOfType<SoundController>().enableSound(false);
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
         GuardController.Instance.disableAllguards(true);
@@ -561,6 +563,7 @@ public class CameraSystem : MonoBehaviour
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         GameObject.FindObjectOfType<SoundController>().enableSound(true);
         GuardController.Instance.disableAllguards(false);
+        isCutSceneHappening = false;
 
     }
 
