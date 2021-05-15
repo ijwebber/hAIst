@@ -107,61 +107,59 @@ public class PlayerPickUp : MonoBehaviourPun
                             {
                                 holdDownTask();
                             }
+
+
+                            if (held && seconds == 0)
+                            { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+                                targetTime += cooldown;
+
+                                //other.gameObject.SetActive(false);
+                                UpdateScore(currentObject);
+                                bool isSpecial = CheckIfSpecial(currentObject);
+
+
+                                int objID = currentObject.GetComponent<PhotonView>().ViewID;
+                                gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
+
+                                Hashtable hash = new Hashtable();
+                                if (isSpecial)
+                                {
+                                    int currSpec = 0;
+                                    if (PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] != null)
+                                    {
+                                        currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
+                                    }
+                                    currentObject.GetComponent<CollectableItem>().syncStolen(true, null);
+                                    hash.Add("roomSpecial", currSpec + 1);
+                                    PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+
+                                    audioController.PlayHighValue();
+                                    gameController.playerUpdates.updateDisplay("You have stolen " + inTrigger.gameObject.GetComponent<CollectableItem>().itemName + "!");
+                                    gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + inTrigger.gameObject.GetComponent<CollectableItem>().itemName + "!");
+                                }
+                                else
+                                {
+                                    audioController.PlayLowValue();
+                                    int currentStolen = 0;
+                                    if (PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"] != null)
+                                    {
+                                        currentStolen = (int)PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"];
+                                    }
+                                    hash.Add("itemsStolen", currentStolen + 1);
+                                    PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
+                                }
+
+                                // reset game components
+                                keycodeGame.SetActive(false);
+                                fixPaintingGame.SetActive(false);
+
+                                keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
+                                fixPaintingGame.GetComponent<RotateTask>().win = false;
+
+                                held = false;
+                            }
                         } else {
                             inTrigger = null;
-                        }
-
-
-                        if (held && seconds == 0)
-                        { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
-                            targetTime += cooldown;
-
-                            //other.gameObject.SetActive(false);
-                            UpdateScore(currentObject);
-                            bool isSpecial = CheckIfSpecial(currentObject);
-
-
-                            int objID = currentObject.GetComponent<PhotonView>().ViewID;
-                            gameObject.GetComponent<PhotonView>().RPC("hideObject", RpcTarget.All, objID);
-
-                            Hashtable hash = new Hashtable();
-                            if (isSpecial)
-                            {
-                                int currSpec = 0;
-                                if (PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"] != null)
-                                {
-                                    currSpec = (int)PhotonNetwork.CurrentRoom.CustomProperties["roomSpecial"];
-                                }
-                                currentObject.GetComponent<CollectableItem>().syncStolen(true, null);
-                                hash.Add("roomSpecial", currSpec + 1);
-                                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
-
-                                audioController.PlayHighValue();
-                                gameController.playerUpdates.updateDisplay("You have stolen " + inTrigger.gameObject.GetComponent<CollectableItem>().itemName + "!");
-                                gameController.updateDisp(PhotonNetwork.NickName + " has stolen " + inTrigger.gameObject.GetComponent<CollectableItem>().itemName + "!");
-                            }
-                            else
-                            {
-                                audioController.PlayLowValue();
-                                int currentStolen = 0;
-                                if (PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"] != null)
-                                {
-                                    currentStolen = (int)PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"];
-                                }
-                                hash.Add("itemsStolen", currentStolen + 1);
-                                PhotonNetwork.CurrentRoom.SetCustomProperties(hash);
-                            }
-
-                            // reset game components
-                            keycodeGame.SetActive(false);
-                            fixPaintingGame.SetActive(false);
-
-                            keycodeGame.GetComponent<KeycodeTask>().codeCorrect = false;
-                            fixPaintingGame.GetComponent<RotateTask>().win = false;
-
-                            held = false;
-
-                            
                         }
                         break;
 
