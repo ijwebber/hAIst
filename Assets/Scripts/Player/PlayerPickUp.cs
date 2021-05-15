@@ -98,13 +98,17 @@ public class PlayerPickUp : MonoBehaviourPun
 
                     case "steal":
 
-                        currentObject = inTrigger.gameObject;  // added the current game object
+                        if (currentObject.activeInHierarchy) {
+                            currentObject = inTrigger.gameObject;  // added the current game object
 
-                        int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
+                            int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
 
-                        if (seconds == 0 && !down && held == false)
-                        {
-                            holdDownTask();
+                            if (seconds == 0 && !down && held == false)
+                            {
+                                holdDownTask();
+                            }
+                        } else {
+                            inTrigger = null;
                         }
 
 
