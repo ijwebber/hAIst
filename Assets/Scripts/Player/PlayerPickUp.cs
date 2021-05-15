@@ -95,11 +95,9 @@ public class PlayerPickUp : MonoBehaviourPun
             } else {
                 // Debug.Log("Currently in trigger: " + inTrigger.gameObject.tag);
                 switch (inTrigger.gameObject.tag) {
-
                     case "steal":
-
+                        currentObject = inTrigger.gameObject;  // added the current game object
                         if (currentObject.activeInHierarchy) {
-                            currentObject = inTrigger.gameObject;  // added the current game object
 
                             int gameSelection = currentObject.GetComponent<CollectableItem>().gameSelection;
 
@@ -158,8 +156,6 @@ public class PlayerPickUp : MonoBehaviourPun
 
                                 held = false;
                             }
-                        } else {
-                            inTrigger = null;
                         }
                         break;
 
