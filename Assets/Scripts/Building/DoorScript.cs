@@ -24,13 +24,6 @@ public class DoorScript : MonoBehaviourPun
     }
     
     public void updateWall() {
-        if (PhotonNetwork.IsMasterClient) {
-            this.photonView.RPC("updateWalls", RpcTarget.All);
-        }
-    }
-
-    [PunRPC]
-    void updateWalls(){
         soundController.grid.updateWalls();
     }
 

@@ -34,7 +34,6 @@ public class DoorHandler : MonoBehaviourPun
     }
     void OnTriggerExit(Collider other) {
         if (other.gameObject.name == "Timmy" && button.done) {
-
             this.gameObject.GetComponent<PhotonView>().RPC("Exit", RpcTarget.MasterClient);
         }
     }
@@ -50,8 +49,13 @@ public class DoorHandler : MonoBehaviourPun
         if (l.Count == 0)
         {
             // audioController.PlayDoorOpening();
-            doorleft.CloseDoor();
-            doorright.CloseDoor();
+            this.gameObject.GetComponent<PhotonView>().RPC("CloseDoors", RpcTarget.All);
         }
+    }
+
+    [PunRPC]
+    void CloseDoors() {
+        doorleft.CloseDoor();
+        doorright.CloseDoor();
     }
 }
