@@ -43,6 +43,7 @@ public class PlayerPickUp : MonoBehaviourPun
     public GameObject canvasFromPlayer;
 
     public bool down;
+    private bool knockoutMessage = true;
 
     public ProgressBarController progressBar;
 
@@ -260,6 +261,10 @@ public class PlayerPickUp : MonoBehaviourPun
                             if (gameController.gameState == 0) {
                                 gameController.gameState = 1;
                             }
+                        }
+                        if (knockoutMessage && gameController.gameState >= 2) {
+                            knockoutMessage = false;
+                            gameController.playerUpdates.updateDisplay("Sneak up behind a guard and press E to knock them out");
                         }
                         break;
                     case "BackDoorHandle":

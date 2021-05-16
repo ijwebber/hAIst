@@ -241,6 +241,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 }
                                 gameController.playerUpdates.updateDisplay(localMessage);
                                 gameController.updateDisp(remoteMessage);
+                                gameController.playerUpdates.updateDisplay("Knock out the guard to reclaim the artifacts");
+                                gameController.updateDisp("Knock out the guard to reclaim the artifacts");
                                 Hashtable specProps = PhotonNetwork.LocalPlayer.CustomProperties;
                                 int currentPlayerScore = (int) specProps["score"]; 
                                 foreach (var spec in playerController.Specials)
