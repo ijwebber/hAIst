@@ -195,7 +195,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                             agent.speed = chaseSpeed;
                         }
 
-                        this.state = State.chase;
+                        if (PhotonNetwork.IsMasterClient) {
+                            this.state = State.chase;
+                        }
 
                         break;
                     }
@@ -304,7 +306,6 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                     //if destination has been reached, the guard moves to the next cords in the patrol path
                     if (Mathf.Abs(transform.position.x - agent.destination.x) <= 1f && Mathf.Abs(transform.position.z - agent.destination.z) <= 1f)
                     {
-                        state = State.normal;
                         agent.speed = walkSpeed;
 
                         if (currDes == patrolPath.Count - 1)
@@ -321,6 +322,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         //Debug.Log(currDes);
 
                         if (PhotonNetwork.IsMasterClient) {
+                            state = State.normal;
                             agent.SetDestination(patrolPath[currDes]);
                         }
                     }
@@ -393,7 +395,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         // if (this.specials.Count)
         yield return new WaitForSeconds(disableTime);
         guardDisabled = false;
-        this.state = State.normal;
+        if (PhotonNetwork.IsMasterClient) {
+            this.state = State.normal;
+        }
         timedOut = false;
         agent.isStopped = false;
     }
