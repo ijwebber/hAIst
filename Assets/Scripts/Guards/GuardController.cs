@@ -16,6 +16,7 @@ public class GuardController : MonoBehaviourPun
     public GuardMovement[] guardMovements;
     public PlayerController playerController;
     public bool playersSpotted = false;
+    private float baseMoveSpeed, baseRadius;
 
     public static GuardController Instance { get; private set; }
     [SerializeField] private MoveSpotLight[] Spotlights;
@@ -47,6 +48,18 @@ public class GuardController : MonoBehaviourPun
     [PunRPC]
     void swatUpdate() {
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+        foreach (var guard in guardMovements)
+        {
+            if (guard.Swat) {
+                guard.walkSpeed = baseMoveSpeed*1.8f;
+                guard.chaseSpeed = baseMoveSpeed*1.8f*1.8f;
+                guard.GetComponent<FieldOfView>().viewRadius = baseRadius*1.5f;
+            } else {
+                guard.walkSpeed = baseMoveSpeed;
+                guard.chaseSpeed = baseMoveSpeed*2;
+                guard.GetComponent<FieldOfView>().viewRadius = baseRadius;
+            }
+        }
     }
 
     public void setValue(Vector3 position, float intensity) {
@@ -69,12 +82,51 @@ public class GuardController : MonoBehaviourPun
             cutSceneIfSpotted();
         }  
     }
+
+    [PunRPC]
+    void guardUpdate() {
+        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+        baseMoveSpeed = (float)PhotonNetwork.CurrentRoom.CustomProperties["movespeedSetting"];
+        baseRadius = (int)PhotonNetwork.CurrentRoom.CustomProperties["radiusSetting"];
+        foreach (var guard in guardMovements)
+        {
+            if (!guard.Swat) {
+                guard.walkSpeed = baseMoveSpeed;
+                guard.chaseSpeed = baseMoveSpeed*2;
+                guard.GetComponent<FieldOfView>().viewRadius = baseRadius;
+            }
+        }
+    }
+
+    public void setGuards() {
+        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+        baseMoveSpeed = (float)PhotonNetwork.CurrentRoom.CustomProperties["movespeedSetting"];
+        baseRadius = (int)PhotonNetwork.CurrentRoom.CustomProperties["radiusSetting"];
+        foreach (var guard in guardMovements)
+        {
+            if (!guard.Swat) {
+                guard.walkSpeed = baseMoveSpeed;
+                guard.chaseSpeed = baseMoveSpeed*2;
+                guard.GetComponent<FieldOfView>().viewRadius = baseRadius;
+            }
+        }
+        this.photonView.RPC("guardUpdate", RpcTarget.All);
+    }
     
     void Update() {
         localGrid.velocities = soundController.grid.velocities;
-        if (guardMovements.Length == 0) {
-            guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
-        }
+    //     if (guardMovements.Length == 0) {
+    //         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+    //     } else {
+    //         foreach (var guard in guardMovements)
+    //         {
+    //             if (!guard.Swat) {
+    //                 guard.walkSpeed = baseMoveSpeed;
+    //                 guard.chaseSpeed = baseMoveSpeed*2;
+    //                 guard.GetComponent<FieldOfView>().viewRadius = baseRadius;
+    //             }
+    //         }
+    //     }
     }
 
     public bool inChase() {

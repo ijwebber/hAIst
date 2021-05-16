@@ -41,6 +41,8 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             grandTotal *= 10;
             secretText.SetActive(true);
         }
+        Debug.Log("Multiplier = " + Mathf.FloorToInt(((int)PhotonNetwork.CurrentRoom.CustomProperties["totalMultiplier"]*0.01f)).ToString());
+        grandTotal += Mathf.FloorToInt(grandTotal * (int)PhotonNetwork.CurrentRoom.CustomProperties["totalMultiplier"]*0.01f);
         if (PhotonNetwork.CurrentRoom == null)
         {
 

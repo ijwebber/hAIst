@@ -6,7 +6,7 @@ using TMPro;
 
 using Photon.Pun;
 using Photon.Realtime;
-//using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
+using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 
 public class PreGame : MonoBehaviourPunCallbacks
 {
@@ -28,6 +28,8 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     public GameObject StartGameWaitPanel;
     public GameObject ChooseUpgradesPanel;
+    public GameObject ChooseDifficultySettings;
+    public GameObject difficultyMaster;
     public GameObject LockerPanel;
 
     public Dictionary<string, bool> EnabledUpgrades = new Dictionary<string, bool>();
@@ -53,7 +55,6 @@ public class PreGame : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.IsConnected)
         {
-
             PhotonNetwork.LocalPlayer.SetCustomProperties(customProperties);
         }
         PlayerPrefs.SetInt("speed_boots", 0);
@@ -62,17 +63,13 @@ public class PreGame : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("self_revive", 0);
         PlayerPrefs.SetInt("fast_hands", 0);
         PlayerPrefs.SetInt("ninja", 0);
-
-
+        PhotonHashTable defaultSettings = new PhotonHashTable();
+        defaultSettings.Add("movespeedSetting", 3.5f);
+        defaultSettings.Add("radiusSetting",10);
+        defaultSettings.Add("timeSetting",4);
+        defaultSettings.Add("scoreMultipler",0f);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(defaultSettings);
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
-
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     //just spawns in player object
@@ -340,6 +337,12 @@ public class PreGame : MonoBehaviourPunCallbacks
         ChooseUpgradesPanel.GetComponent<UpgradeController>().PopulateUpdatesPanel();
     }
 
+    public void btnDifficultySettingsClick() {
+        ChooseDifficultySettings.GetComponent<DifficultySettings>().SetupDifficulties();
+        difficultyMaster.SetActive(PhotonNetwork.IsMasterClient);
+        ChooseDifficultySettings.SetActive(true);
+    }
+
     public void EnableLockerPanel()
     {
         _GameLobby.GetComponent<PUN2_GameLobby1>().ControlSkins();
@@ -356,6 +359,10 @@ public class PreGame : MonoBehaviourPunCallbacks
     public void DisableChooseUpgradesPanel()
     {
         ChooseUpgradesPanel.SetActive(false);
+    }
+    public void DisableDifficultyPanel()
+    {
+        ChooseDifficultySettings.SetActive(false);
     }
 
     public void QuitButton()

@@ -129,6 +129,9 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(sleepyGuard.name, sleepyGuard.transform.position, Quaternion.identity);
+        if (PhotonNetwork.IsMasterClient) {
+            GameObject.FindObjectOfType<GuardController>().setGuards();
+        }
         
         // PhotonNetwork.InstantiateRoomObject(soundMesh.name, soundMesh.transform.position, soundMesh.transform.rotation);
 
