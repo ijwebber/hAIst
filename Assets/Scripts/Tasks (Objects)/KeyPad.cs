@@ -68,6 +68,7 @@ public class KeyPad : MonoBehaviour
     void SendCode(int queryId, string code) {
         if (queryId == id) {
             this.code = code;
+            timeElapsed = 0;
         }
     }
 

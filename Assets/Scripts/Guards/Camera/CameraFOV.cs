@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 
 public class CameraFOV : MonoBehaviour {
 
@@ -76,7 +77,7 @@ public class CameraFOV : MonoBehaviour {
             cameraState = State.normal;
         }
         foreach (Transform target in visibleTargets) {
-            if (!target.gameObject.GetComponent<PlayerPickUp>().down){
+            if (!target.gameObject.GetComponent<PlayerPickUp>().down && target.GetComponent<PhotonView>().IsMine){
                 guardController.MoveClosestGuard(target.position);
             }
         }
