@@ -28,14 +28,14 @@ public class CameraSystem : MonoBehaviour
     public GameObject swatCamTrack;
     public GameObject playerCamFadeOutTrack;
     public GameObject exitBlowUpTrack;
-    
+
 
     [Header("Camera references")]
-    
+
     public CinemachineVirtualCamera guardCaughtIn4k;
     public CinemachineVirtualCamera explosionCam;
     public CinemachineVirtualCamera playerCam;
-    
+
     public Camera mainCam;
     [SerializeField] private GameObject guardCam;
 
@@ -53,7 +53,7 @@ public class CameraSystem : MonoBehaviour
     public GameObject C4;
     public GameObject explosionEffect;
     public GameObject skipCounterText;
-    
+
 
 
     [Header("Flags and floats")]
@@ -65,7 +65,7 @@ public class CameraSystem : MonoBehaviour
     public bool isEndCutSceneHappening = false;
     public bool skippedOrNot = false;
     private bool playerCamActive = false;
-    
+
     private GameObject guardShotReference;
     private GameObject thisPlayer;
     private GameObject securityCameraReference;
@@ -87,12 +87,11 @@ public class CameraSystem : MonoBehaviour
 
     [Header("Other Stuff")]
     [SerializeField] private AudioController audioController;
-    
+
     private GameObject black;
     private bool start = false;
 
-    [DllImport("__Internal")]
-    private static extern string GetCutScene(int number);
+    
 
 
 
@@ -107,7 +106,7 @@ public class CameraSystem : MonoBehaviour
             Destroy(gameObject);
         }
 
-        
+
     }
 
     void Start()
@@ -121,33 +120,33 @@ public class CameraSystem : MonoBehaviour
         startingHeight = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y;
         startingDistance = playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z;
 
-        
-
-        introPlayer.GetComponent<VideoPlayer>().url = GetCutScene(1);
-        Debug.LogError(introPlayer.GetComponent<VideoPlayer>().url);
-
-        //swatPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Swat.mp4");
 
 
-        //explodeWallPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Explode.mp4");
+        introPlayer.GetComponent<VideoPlayer>().url = "https://firebasestorage.googleapis.com/v0/b/play-haist.appspot.com/o/Intro.mp4?alt=media&token=bbc91a58-b16e-4b70-b21f-349f46b64076";
+
+
+        swatPlayer.GetComponent<VideoPlayer>().url = "https://firebasestorage.googleapis.com/v0/b/play-haist.appspot.com/o/Swat.mp4?alt=media&token=f503509b-b1f4-4ace-9878-4ee14172d718";
+
+
+        explodeWallPlayer.GetComponent<VideoPlayer>().url = "https://firebasestorage.googleapis.com/v0/b/play-haist.appspot.com/o/Explode.mp4?alt=media&token=40c432b6-480f-4b36-845d-414d7951685e";
 
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
 
-        //RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
-        //renderTexture.wrapMode = TextureWrapMode.Clamp;
-        //renderTexture.filterMode = FilterMode.Bilinear;
-        //renderTexture.Create();
+        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        renderTexture.wrapMode = TextureWrapMode.Clamp;
+        renderTexture.filterMode = FilterMode.Bilinear;
+        renderTexture.Create();
 
-        //introRenderer.GetComponent<RawImage>().texture = renderTexture;
+        introRenderer.GetComponent<RawImage>().texture = renderTexture;
 
-        //introPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+        introPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
 
-        //introPlayer.GetComponent<VideoPlayer>().Prepare();
+        introPlayer.GetComponent<VideoPlayer>().Prepare();
 
 
         cullingMask = mainCam.cullingMask;
-        
+
 
 
 
@@ -158,65 +157,69 @@ public class CameraSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        if (guardShotReference != null)
+
+        if (guardShotReference != null && introPlayer.GetComponent<VideoPlayer>().isPrepared)
         {
-            if (!start) {
+            if (!start)
+            {
 
                 //setting up start cutScene
                 introCutSceneSetup();
 
-                
+
 
 
                 start = true;
             }
 
-           
+
             //for the first escape key press we want to end the cutscene and skip to the player cam
-            if (!introDone && Input.GetKeyDown(KeyCode.Space) && !skippedOrNot)
+            if (!introDone && Input.GetKeyDown(KeyCode.Escape) && !skippedOrNot)
             {
                 raiseEventSkipCounter();
                 skippedOrNot = true;
-                
-                
+
+
             }
 
-            //zooming functionality
-            if (Input.GetAxis("Mouse ScrollWheel") != 0f)
-            {
-                zoomMultiplier += Input.GetAxis("Mouse ScrollWheel")/-5;
-                zoomMultiplier = Mathf.Clamp(zoomMultiplier, 0.6f, 1.0f);
-                playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = startingHeight * zoomMultiplier;
-                playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z = startingDistance * zoomMultiplier;
-            }
-        } else {
+            
+        }
+        else
+        {
 
             if (!guardShotReference)
             {
                 guardShotReference = GameObject.Find("Guard3(Clone)");
             }
-           
-            
+
+
         }
 
-        
-        if(!introDone && PhotonNetwork.CurrentRoom != null && (skipCounter == PhotonNetwork.CurrentRoom.PlayerCount))
+        //zooming functionality
+        if (Input.GetAxis("Mouse ScrollWheel") != 0f && introDone)
+        {
+            zoomMultiplier += Input.GetAxis("Mouse ScrollWheel") / -5;
+            zoomMultiplier = Mathf.Clamp(zoomMultiplier, 0.6f, 1.0f);
+            playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.y = startingHeight * zoomMultiplier;
+            playerCam.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.z = startingDistance * zoomMultiplier;
+        }
+
+        if (!introDone && PhotonNetwork.CurrentRoom != null && (skipCounter == PhotonNetwork.CurrentRoom.PlayerCount))
         {
             introEnd();
             introDone = true;
         }
 
-        if(!introDone && (skipCounter>0))
+        if (!introDone && (skipCounter > 0))
         {
             skipCounterText.GetComponent<Text>().text = skipCounter + "/" + PhotonNetwork.CurrentRoom.PlayerCount;
         }
 
-        if(Input.GetKeyDown(KeyCode.Comma))
+        if (Input.GetKeyDown(KeyCode.Comma))
         {
             disableCutScenes = true;
         }
-        
+
 
 
 
@@ -224,7 +227,7 @@ public class CameraSystem : MonoBehaviour
     }
     public void raiseEventSkipCounter()
     {
-        
+
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; // You would have to set the Receivers to All in order to receive this event on the local client as well
         PhotonNetwork.RaiseEvent(skipCutSceneCounterCode, null, raiseEventOptions, SendOptions.SendReliable);
     }
@@ -239,7 +242,7 @@ public class CameraSystem : MonoBehaviour
         }
     }
 
-    
+
     public void introEnd()
     {
         //change layer of guard back to normal, fade ui back in, turn on black
@@ -250,16 +253,16 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(true);
 
 
-        //introPlayer.GetComponent<VideoPlayer>().targetTexture.Release();
-        //introPlayer.SetActive(false);
+        introPlayer.GetComponent<VideoPlayer>().targetTexture.Release();
+        introPlayer.SetActive(false);
         introSceneTrack.SetActive(false);
 
         black.SetActive(true);
-        
-        //introRenderer.SetActive(false);
+
+        introRenderer.SetActive(false);
 
         StartCoroutine(disableAfterTime(playerCamTrack, 3f));
-        mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));            
+        mainCam.rect = new Rect(new Vector2(0, 0), new Vector2(1f, 1f));
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
 
         skipCounterText.GetComponent<Text>().text = "";
@@ -273,8 +276,8 @@ public class CameraSystem : MonoBehaviour
         SetPaintingsLayer(13);
         SetLayerRecursively(securityCameraReference, 10);
 
-        
-        
+
+
 
         GameController gameController = GameObject.FindObjectOfType<GameController>();
         gameController.gameStart();
@@ -291,25 +294,25 @@ public class CameraSystem : MonoBehaviour
         //find players and disable their control whilst cutscene plays
         mainCam.gameObject.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = false;
         thisPlayer.GetComponent<PlayerMovement>().paused = true;
-        //sceneTransitionCanvas.SetActive(true);
+        sceneTransitionCanvas.SetActive(true);
         //find security cam
         securityCameraReference = GameObject.Find("Camera 2");
-        
+
         //setting the layers for paintings and guard so they render
         SetPaintingsLayer(23);
         SetLayerRecursively(guardShotReference, default);
         SetLayerRecursively(securityCameraReference, default);
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
-        //introRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
-        
+        introRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
+
 
 
         black.SetActive(false);
         introSceneTrack.SetActive(true);
         mainCam.cullingMask = 0;
-        //introPlayer.GetComponent<VideoPlayer>().Play();
-        
+        introPlayer.GetComponent<VideoPlayer>().Play();
+
     }
 
     void SetLayerRecursively(GameObject obj, int newLayer)
@@ -318,9 +321,9 @@ public class CameraSystem : MonoBehaviour
         {
             return;
         }
-       
+
         obj.layer = newLayer;
-       
+
         foreach (Transform child in obj.transform)
         {
             if (null == child)
@@ -331,12 +334,14 @@ public class CameraSystem : MonoBehaviour
         }
     }
 
-    void SetPaintingsLayer(int layer){
+    void SetPaintingsLayer(int layer)
+    {
         var stealItems = GameObject.FindGameObjectsWithTag("steal");
-        foreach(var items in stealItems){items.layer = layer;}
+        foreach (var items in stealItems) { items.layer = layer; }
     }
 
-    public IEnumerator playSwatScene(){
+    public IEnumerator playSwatScene()
+    {
 
 
 
@@ -348,43 +353,43 @@ public class CameraSystem : MonoBehaviour
         isCutSceneHappening = true;
 
         playerCamFadeOutTrack.SetActive(true);
-        
-        //RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
-        //renderTexture.wrapMode = TextureWrapMode.Clamp;
-        //renderTexture.filterMode = FilterMode.Bilinear;
-        //renderTexture.Create();
 
-        //swatRenderer.GetComponent<RawImage>().texture = renderTexture;
-        
-        //swatPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        renderTexture.wrapMode = TextureWrapMode.Clamp;
+        renderTexture.filterMode = FilterMode.Bilinear;
+        renderTexture.Create();
 
-        //swatPlayer.GetComponent<VideoPlayer>().Prepare();
+        swatRenderer.GetComponent<RawImage>().texture = renderTexture;
+
+        swatPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+
+        swatPlayer.GetComponent<VideoPlayer>().Prepare();
 
         yield return new WaitForSeconds(1f);
-        
+
         black.SetActive(false);
-        
-        //swatRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
-        
 
-        //while (!swatPlayer.GetComponent<VideoPlayer>().isPrepared)
-        //{
-        //    yield return new WaitForSeconds(0.5f);
-       // }
+        swatRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
 
 
+        while (!swatPlayer.GetComponent<VideoPlayer>().isPrepared)
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
 
-        
+
+
+
         swatCamTrack.SetActive(true);
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
         mainCam.cullingMask = 0;
-       // swatPlayer.GetComponent<VideoPlayer>().Play();
-        
-        
-        
-        
-        
+        swatPlayer.GetComponent<VideoPlayer>().Play();
+
+
+
+
+
 
         //ending
 
@@ -394,18 +399,18 @@ public class CameraSystem : MonoBehaviour
 
         mainCam.cullingMask = -1;
         playerCamTrack.SetActive(true);
-        
-        swatCamTrack.SetActive(false);
-        //renderTexture.Release();
-        //swatRenderer.SetActive(false);
-        black.SetActive(true);
-        
-        
-        
-        
 
-        
-        
+        swatCamTrack.SetActive(false);
+        renderTexture.Release();
+        swatRenderer.SetActive(false);
+        black.SetActive(true);
+
+
+
+
+
+
+
         yield return new WaitForSeconds(2f);
 
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
@@ -427,20 +432,20 @@ public class CameraSystem : MonoBehaviour
         sceneTransitionCanvas.SetActive(false);
         isCutSceneHappening = false;
     }
-   
+
 
 
     private IEnumerator disableAfterTime(GameObject g, float time)
     {
         yield return new WaitForSeconds(time);
-        
-        
-        
+
+
+
         g.SetActive(false);
         sceneTransitionCanvas.SetActive(false);
     }
 
-    
+
 
 
     public void caughtCutScene(int guardViewID, int caughtPlayerID, string message)
@@ -460,7 +465,7 @@ public class CameraSystem : MonoBehaviour
 
         guardCaughtIn4k.GetCinemachineComponent<CinemachineOrbitalTransposer>().m_XAxis.m_InputAxisValue = 360;
 
-        
+
 
         guardCaughtIn4k.Priority = 11;
 
@@ -469,14 +474,14 @@ public class CameraSystem : MonoBehaviour
         SetLayerRecursively(guard, default);
         BarController.Instance.SetText(message);
         BarController.Instance.ShowBars();
-        
+
         isCaughtCutSceneHappening = true;
 
         StartCoroutine(endCaughtCutScene(guard));
 
-        
-        
-        
+
+
+
 
 
 
@@ -515,34 +520,34 @@ public class CameraSystem : MonoBehaviour
         sceneTransitionCanvas.SetActive(true);
         playerCamFadeOutTrack.SetActive(true);
 
-        //RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
-       // renderTexture.wrapMode = TextureWrapMode.Clamp;
-        //renderTexture.filterMode = FilterMode.Bilinear;
-        //renderTexture.Create();
+        RenderTexture renderTexture = new RenderTexture(1920, 1080, 0, RenderTextureFormat.ARGB32);
+        renderTexture.wrapMode = TextureWrapMode.Clamp;
+        renderTexture.filterMode = FilterMode.Bilinear;
+        renderTexture.Create();
 
-       // explodeRenderer.GetComponent<RawImage>().texture = renderTexture;
+        explodeRenderer.GetComponent<RawImage>().texture = renderTexture;
 
-       // explodeWallPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
+        explodeWallPlayer.GetComponent<VideoPlayer>().targetTexture = renderTexture;
 
-       // explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
+        explodeWallPlayer.GetComponent<VideoPlayer>().Prepare();
 
-        //while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
-       // {
-        //    yield return new WaitForSeconds(0.5f);
-       // }
+        while (!explodeWallPlayer.GetComponent<VideoPlayer>().isPrepared)
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
 
         yield return new WaitForSeconds(1.5f);
-        //explodeRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
+        explodeRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
 
         black.SetActive(false);
 
         // Additional music plays here
         audioController.EnableAdditional();
 
-        
+
         exitBlowUpTrack.SetActive(true);
         mainCam.cullingMask = 0;
-       // explodeWallPlayer.GetComponent<VideoPlayer>().Play();
+        explodeWallPlayer.GetComponent<VideoPlayer>().Play();
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
 
@@ -556,11 +561,11 @@ public class CameraSystem : MonoBehaviour
         playerCamTrack.SetActive(true);
         exitBlowUpTrack.SetActive(false);
         black.SetActive(true);
-        //renderTexture.Release();
-        //explodeRenderer.SetActive(false);
-        
+        renderTexture.Release();
+        explodeRenderer.SetActive(false);
 
-        
+
+
 
         yield return new WaitForSeconds(2.5f);
         playerCamTrack.SetActive(false);
@@ -575,7 +580,7 @@ public class CameraSystem : MonoBehaviour
     public void playExplosionEffect()
     {
         explosionEffect.SetActive(true);
-        
+
     }
 
     public void changeWallsForExplosion()
@@ -586,7 +591,6 @@ public class CameraSystem : MonoBehaviour
     }
 
 
-    
-   
-}
 
+
+}
