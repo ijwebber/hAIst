@@ -12,6 +12,7 @@ using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
+using System.Runtime.InteropServices;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -89,7 +90,10 @@ public class CameraSystem : MonoBehaviour
     
     private GameObject black;
     private bool start = false;
-    
+
+    [DllImport("__Internal")]
+    private static extern string GetCutScene(int number);
+
 
 
     private void Awake()
@@ -119,7 +123,8 @@ public class CameraSystem : MonoBehaviour
 
         
 
-        //introPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Intro.mp4");
+        introPlayer.GetComponent<VideoPlayer>().url = GetCutScene(1);
+        Debug.LogError(introPlayer.GetComponent<VideoPlayer>().url);
 
         //swatPlayer.GetComponent<VideoPlayer>().url = Path.Combine(Application.streamingAssetsPath, "Swat.mp4");
 
