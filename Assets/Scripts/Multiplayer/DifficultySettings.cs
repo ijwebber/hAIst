@@ -40,7 +40,7 @@ public class DifficultySettings : MonoBehaviourPun
 
     public void moveSliderUpdate() {
         moveSliderText.text = (moveSlider.value/2).ToString();
-        moveMultiplier.text = ((moveSlider.value-7)*2).ToString() + "%";
+        moveMultiplier.text = ((moveSlider.value-7)*5).ToString() + "%";
         totalMultiplier.text = "Total: " + ((moveSlider.value - 7)*5 + (radiusSlider.value-10)*2 + (4 - timerSlider.value)*2).ToString() + "%";
     }
 
