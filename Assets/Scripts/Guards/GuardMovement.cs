@@ -316,7 +316,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         }
                         else currDes++;
 
-                        if (sleepy)
+                        if (sleepy && sleeping)
                         {
                             Quaternion target = Quaternion.Euler(0, -90, 0);
                             transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * 3f);
@@ -324,6 +324,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         //Debug.Log(currDes);
 
                         if (PhotonNetwork.IsMasterClient) {
+                            
                             state = State.normal;
                             agent.SetDestination(patrolPath[currDes]);
                         }
@@ -343,12 +344,18 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 }
             }
 
-            if(Mathf.Abs(transform.position.x - patrolPath[0].x) <= 1f && Mathf.Abs(transform.position.z - patrolPath[0].z) <= 1f && sleepy && agent.velocity.magnitude == 0)
+            if (PhotonNetwork.IsMasterClient)
             {
-                sleeping = true;
-            } else if(agent.velocity.magnitude> 0 && sleepy)
-            {
-                sleeping = false;
+                if (Mathf.Abs(transform.position.x - patrolPath[0].x) <= 1f && Mathf.Abs(transform.position.z - patrolPath[0].z) <= 1f && sleepy && agent.velocity.magnitude == 0)
+                {
+                    sleeping = true;
+                    this.photonView.RPC("SyncSleeping", RpcTarget.All, true);
+                }
+                else if (agent.velocity.magnitude > 0 && sleepy)
+                {
+                    sleeping = false;
+                    this.photonView.RPC("SyncSleeping", RpcTarget.All, false);
+                }
             }
         }        
     }
@@ -356,6 +363,12 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     [PunRPC]
     void SyncState(State state) {
         this.state = state;
+    }
+
+    [PunRPC]
+    void SyncSleeping(bool state)
+    {
+        sleeping = state;
     }
 
     [PunRPC]
