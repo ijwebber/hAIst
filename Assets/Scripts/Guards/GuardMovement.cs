@@ -63,7 +63,9 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     }
 
     private void Start() {
-        agent.SetDestination(patrolPath[currDes]);
+        if (PhotonNetwork.IsMasterClient) {
+            agent.SetDestination(patrolPath[currDes]);
+        }
         player = GameObject.Find("Timmy");
         this.state = State.normal;
         this.guardController = GameObject.FindObjectOfType<GuardController>();
@@ -185,7 +187,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                             audioController.PlayGuardHey();
                         }
 
-                        agent.SetDestination(g.transform.position);
+                        if (PhotonNetwork.IsMasterClient) {
+                            agent.SetDestination(g.transform.position);
+                        }
                         if (agent.speed != chaseSpeed)
                         {
                             agent.speed = chaseSpeed;
@@ -316,7 +320,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         }
                         //Debug.Log(currDes);
 
-                        agent.SetDestination(patrolPath[currDes]);
+                        if (PhotonNetwork.IsMasterClient) {
+                            agent.SetDestination(patrolPath[currDes]);
+                        }
                     }
                 }
             }
