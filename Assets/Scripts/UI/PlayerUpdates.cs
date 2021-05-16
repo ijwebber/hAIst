@@ -7,34 +7,34 @@ using TMPro;
 public class PlayerUpdates : MonoBehaviourPun
 {
     [SerializeField] private GameObject sampleText;
-    private List<GameObject> textAssets = new List<GameObject>();
-    private bool riseOthers = false;
+    public List<GameObject> textAssets = new List<GameObject>();
 
     public void updateDisplay(string message) {
         var newText = GameObject.Instantiate(sampleText, this.transform.position, Quaternion.identity,this.transform);
         newText.GetComponent<TextMeshProUGUI>().text = message;
         newText.GetComponent<UpdateText>().playerUpdates = this;
         newText.GetComponent<Animator>().SetTrigger("newUpdate");
-        if (textAssets.Count > 0) {
-            riseOthers = true;
-        }
         textAssets.Add(newText);
+        riseOthers();
     }
 
     public void destroy(TextMeshProUGUI obj) {
-        // textAssets.Remove(obj.gameObject);
+        textAssets.Remove(obj.gameObject);
         // Destroy(obj.gameObject);
     }
 
     void Update() {
-        if (riseOthers) {
-            for (int i = 0; i < textAssets.Count-1; i++)
-            {
-                // textAssets[i].transform.position = new Vector3(168, 45 + 60*n, 0);
-                textAssets[i].GetComponent<UpdateText>().rise++;
-                textAssets[i].GetComponent<UpdateText>().risen = 0;
-            }
-            riseOthers = false;
+        if (Input.GetKeyDown(KeyCode.P)) {
+            updateDisplay("P pressed");
+            updateDisplay("P pressed 1");
+        }
+    }
+    void riseOthers() {
+        for (int i = 0; i < textAssets.Count; i++)
+        {
+            // textAssets[i].transform.position = new Vector3(168, 45 + 60*n, 0);
+            textAssets[i].GetComponent<UpdateText>().rise = (textAssets.Count-1) - i;
+            // textAssets[i].GetComponent<UpdateText>().risen = 0;
         }
     }
 }
