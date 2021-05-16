@@ -27,6 +27,9 @@ public class CountDownTimer : MonoBehaviourPunCallbacks
         soundController = GameObject.FindObjectOfType<SoundController>();
         PhotonNetwork.NetworkingClient.EventReceived += OnchangeCounterEvent;
         timeLeftOnceSpotted = (int)PhotonNetwork.CurrentRoom.CustomProperties["timeSetting"]*60f;
+        if (timeLeftOnceSpotted == 0) {
+            timeLeftOnceSpotted = 5;
+        }
     }
     public override void OnRoomPropertiesUpdate(Hashtable endTriggered)
     {
