@@ -6,7 +6,7 @@ using Photon.Realtime;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Pun;
 
-public class GuardController : MonoBehaviour
+public class GuardController : MonoBehaviourPun
 {
     public LayerMask obstacleMask;
     public Grid localGrid;
@@ -40,6 +40,12 @@ public class GuardController : MonoBehaviour
     }
     
     public void swat() {
+        this.photonView.RPC("swatUpdate", RpcTarget.All);
+        guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
+    }
+
+    [PunRPC]
+    void swatUpdate() {
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
 
