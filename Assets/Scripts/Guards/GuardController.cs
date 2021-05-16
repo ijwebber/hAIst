@@ -117,34 +117,37 @@ public class GuardController : MonoBehaviour
 
     public void cutSceneIfSpotted()
     {
-        foreach (GuardMovement guard in guardMovements)
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (guard.state == State.chase)
-            {   
-                
-                //this is the cutscene location
-                Vector3 guardPos = guard.gameObject.transform.position;
-
-                //get list of players
-                CameraControlPlayer[] players = GameObject.FindObjectsOfType<CameraControlPlayer>();
-
-                
-                //each player needs to run the cutscene code on their own 'CameraControl' script, so we send a targeted rpc to each individual player and the target photonview is owned by that specfic player.
-                foreach(CameraControlPlayer g in players)
+            foreach (GuardMovement guard in guardMovements)
+            {
+                if (guard.state == State.chase)
                 {
-                    PhotonView v = g.gameObject.GetComponent<PhotonView>();
-                    
-                    v.RPC("RpcCutScene", v.Controller, guard.photonView.ViewID, guard.GetComponent<GuardMovement>().chasedPlayer.GetComponent<PhotonView>().ViewID, "The Police have been alerted!", 1);
+
+                    //this is the cutscene location
+                    Vector3 guardPos = guard.gameObject.transform.position;
+
+                    //get list of players
+                    CameraControlPlayer[] players = GameObject.FindObjectsOfType<CameraControlPlayer>();
+
+
+                    //each player needs to run the cutscene code on their own 'CameraControl' script, so we send a targeted rpc to each individual player and the target photonview is owned by that specfic player.
+                    foreach (CameraControlPlayer g in players)
+                    {
+                        PhotonView v = g.gameObject.GetComponent<PhotonView>();
+
+                        v.RPC("RpcCutScene", v.Controller, guard.photonView.ViewID, guard.GetComponent<GuardMovement>().chasedPlayer.GetComponent<PhotonView>().ViewID, "The Police have been alerted!", 1);
+                    }
+
+
+                    //set to true so it doesn't run again when guards spot players
+                    playersSpotted = true;
+
+                    Hashtable endTriggered = new Hashtable() { { "triggered", true } };
+                    PhotonNetwork.CurrentRoom.SetCustomProperties(endTriggered);
+
+                    break;
                 }
-
-                
-                //set to true so it doesn't run again when guards spot players
-                playersSpotted = true;
-
-                Hashtable endTriggered = new Hashtable() { { "triggered", true } };
-                PhotonNetwork.CurrentRoom.SetCustomProperties(endTriggered);
-
-                break;
             }
         }
 

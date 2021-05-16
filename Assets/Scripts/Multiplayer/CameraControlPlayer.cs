@@ -274,9 +274,13 @@ public class CameraControlPlayer : MonoBehaviourPunCallbacks
         //freeze player
         this.GetComponent<PlayerMovement>().paused = true;
 
-       
+
         //freeze guards, will only work if player is master
-        GuardController.Instance.disableAllguards(true);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GuardController.Instance.disableAllguards(true);
+        }
 
         
         CameraSystem.Instance.caughtCutScene(guardPhotonID, caughtPlayerPhotonID, "The Police have been alerted");
