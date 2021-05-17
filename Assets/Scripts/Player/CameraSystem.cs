@@ -177,7 +177,7 @@ public class CameraSystem : MonoBehaviour
 
 
             //for the first escape key press we want to end the cutscene and skip to the player cam
-            if (!introDone && Input.GetKeyDown(KeyCode.Escape) && !skippedOrNot)
+            if (!introDone && Input.GetKeyDown(KeyCode.Space) && !skippedOrNot)
             {
                 raiseEventSkipCounter();
                 skippedOrNot = true;
