@@ -15,7 +15,7 @@ public class UpdateText : MonoBehaviour
     }
 
     void Update() {
-        if (rise > 0 && risen < 40*rise) {
+        if (rise > 0 && risen < 50*rise) {
             this.transform.position += new Vector3(0,5,0);
             risen+=5;
         }
