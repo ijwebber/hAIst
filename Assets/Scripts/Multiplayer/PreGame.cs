@@ -63,12 +63,15 @@ public class PreGame : MonoBehaviourPunCallbacks
         PlayerPrefs.SetInt("self_revive", 0);
         PlayerPrefs.SetInt("fast_hands", 0);
         PlayerPrefs.SetInt("ninja", 0);
-        PhotonHashTable defaultSettings = new PhotonHashTable();
-        defaultSettings.Add("movespeedSetting", 3.5f);
-        defaultSettings.Add("radiusSetting",10);
-        defaultSettings.Add("timeSetting",4);
-        defaultSettings.Add("scoreMultiplier", 0f);
-        PhotonNetwork.CurrentRoom.SetCustomProperties(defaultSettings);
+        if (PhotonNetwork.IsMasterClient) {
+            PhotonHashTable defaultSettings = new PhotonHashTable();
+            defaultSettings.Add("movespeedSetting", 3.5f);
+            defaultSettings.Add("radiusSetting",10);
+            defaultSettings.Add("timeSetting",4);
+            defaultSettings.Add("swatGuards",2);
+            defaultSettings.Add("scoreMultipler",0f);
+            PhotonNetwork.CurrentRoom.SetCustomProperties(defaultSettings);
+        }
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
     }
 

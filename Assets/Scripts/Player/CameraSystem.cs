@@ -13,6 +13,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -47,6 +48,8 @@ public class CameraSystem : MonoBehaviour
     public GameObject swatTeam1;
     public GameObject swatTeam2;
     public GameObject gameUIReference;
+    public GameObject playerCanvasReference;
+    
     public GameObject caughtPlayerObject;
     public GameObject preExplosionWall;
     public GameObject afterExplosionAsset;
@@ -266,6 +269,7 @@ public class CameraSystem : MonoBehaviour
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
 
         skipCounterText.GetComponent<Text>().text = "";
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 1;
 
 
 
@@ -304,6 +308,7 @@ public class CameraSystem : MonoBehaviour
         SetLayerRecursively(securityCameraReference, default);
 
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 0;
         introRenderer.GetComponent<RawImage>().color = new Color(1f, 1f, 1f, 1f);
 
 
@@ -383,6 +388,7 @@ public class CameraSystem : MonoBehaviour
         swatCamTrack.SetActive(true);
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 0;
         mainCam.cullingMask = 0;
         swatPlayer.GetComponent<VideoPlayer>().Play();
 
@@ -404,6 +410,7 @@ public class CameraSystem : MonoBehaviour
         renderTexture.Release();
         swatRenderer.SetActive(false);
         black.SetActive(true);
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 1;
 
 
 
@@ -414,15 +421,28 @@ public class CameraSystem : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
-        GuardController.Instance.disableAllguards(false);
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GuardController.Instance.disableAllguards(false);
+        }
+        
 
 
 
 
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
+            int noOfSwats = (int)PhotonNetwork.CurrentRoom.CustomProperties["swatGuards"];
+            for (int i = 0; i < noOfSwats; i++) {
+                GameObject newGuard = PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, (float)(20.6 + 3*i)), Quaternion.identity);
+                if (i == 1) {
+                    newGuard.GetComponent<GuardMovement>().patrolPath.Reverse();
+                } else if (i > 1) {
+                    newGuard.GetComponent<GuardMovement>().patrolPath.OrderBy(x => Random.value).ToList();
+                }
+                // PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
+            }
         }
         GameObject.FindObjectOfType<GuardController>().swat();
         GameObject.FindObjectOfType<SoundController>().enableSound(true);
@@ -457,6 +477,7 @@ public class CameraSystem : MonoBehaviour
 
         caughtPlayerObject = PhotonView.Find(caughtPlayerID).gameObject;
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 0;
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(guard.transform, 1.0f, 10.0f);
         caughtTargetGroup.GetComponent<CinemachineTargetGroup>().AddMember(caughtPlayerObject.transform, 1.0f, 10.0f);
 
@@ -503,8 +524,12 @@ public class CameraSystem : MonoBehaviour
         SetLayerRecursively(guard, 10);
         thisPlayer.GetComponent<PlayerMovement>().paused = false;
         gameUIReference.GetComponent<CanvasGroup>().alpha = 1;
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 1;
 
-        GuardController.Instance.disableAllguards(false);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GuardController.Instance.disableAllguards(false);
+        }
         GameObject.FindObjectOfType<SoundController>().enableSound(true);
         isCaughtCutSceneHappening = false;
     }
@@ -550,6 +575,7 @@ public class CameraSystem : MonoBehaviour
         explodeWallPlayer.GetComponent<VideoPlayer>().Play();
         playerCamFadeOutTrack.SetActive(false);
         gameUIReference.GetComponent<CanvasGroup>().alpha = 0;
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 0;
 
 
         //ending
@@ -563,6 +589,7 @@ public class CameraSystem : MonoBehaviour
         black.SetActive(true);
         renderTexture.Release();
         explodeRenderer.SetActive(false);
+        playerCanvasReference.GetComponent<CanvasGroup>().alpha = 1;
 
 
 
