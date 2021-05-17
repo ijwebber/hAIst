@@ -69,7 +69,7 @@ public class PreGame : MonoBehaviourPunCallbacks
             defaultSettings.Add("radiusSetting",10);
             defaultSettings.Add("timeSetting",4);
             defaultSettings.Add("swatGuards",2);
-            defaultSettings.Add("scoreMultipler",0f);
+            defaultSettings.Add("scoreMultiplier",0f);
             PhotonNetwork.CurrentRoom.SetCustomProperties(defaultSettings);
         }
         //Debug.Log("USERID: "+PhotonNetwork.LocalPlayer.UserId);
