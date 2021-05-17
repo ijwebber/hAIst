@@ -22,8 +22,6 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     public GameObject winScreen;
     public GameObject lossScreen;
 
-    public Button PlayAgainWin;
-    public Button PlayAgainLose;
     [SerializeField] DBControllerEnd dbController;
     [SerializeField] private EndScreenAudioController audioController;
     [SerializeField] private Text bonusText;
@@ -55,8 +53,6 @@ public class EndScreenController : MonoBehaviourPunCallbacks
         // dbController = GameObject.FindObjectOfType<DBControllerEnd>();
         if (PhotonNetwork.IsMasterClient) {
             PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable() {{"end", false}, {"special", 0}});
-            PlayAgainWin.interactable = true;
-            PlayAgainLose.interactable = true;
         }
 
         PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable() {{"ready", false}});
