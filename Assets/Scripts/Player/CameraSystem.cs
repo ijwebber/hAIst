@@ -13,6 +13,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering.Universal;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 public class CameraSystem : MonoBehaviour
 {
@@ -416,8 +417,16 @@ public class CameraSystem : MonoBehaviour
 
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 20.6f), Quaternion.identity);
-            PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
+            int noOfSwats = (int)PhotonNetwork.CurrentRoom.CustomProperties["swatGuards"];
+            for (int i = 0; i < noOfSwats; i++) {
+                GameObject newGuard = PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, (float)(20.6 + 3*i)), Quaternion.identity);
+                if (i == 1) {
+                    newGuard.GetComponent<GuardMovement>().patrolPath.Reverse();
+                } else if (i > 1) {
+                    newGuard.GetComponent<GuardMovement>().patrolPath.OrderBy(x => Random.value).ToList();
+                }
+                // PhotonNetwork.InstantiateRoomObject(swatTeam1.name, new Vector3(-28.7f, 13.56f, 25f), Quaternion.identity).GetComponent<GuardMovement>().patrolPath.Reverse();
+            }
         }
         GameObject.FindObjectOfType<GuardController>().swat();
         GameObject.FindObjectOfType<SoundController>().enableSound(true);
