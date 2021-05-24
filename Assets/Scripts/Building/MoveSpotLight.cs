@@ -17,6 +17,7 @@ public class MoveSpotLight : MonoBehaviourPun
     }
     void Update()
     {
+        // move spotlight around the designated points
         if (this.photonView.IsMine) {
             if (transform.position != targets[current].position) {
                 Vector3 pos = Vector3.MoveTowards(transform.position, targets[current].position, speed);

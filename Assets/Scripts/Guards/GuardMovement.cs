@@ -52,10 +52,6 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
 
     private bool timedOut = false;
     
-    // public void setGrid(Grid grid) {
-    //     this.grid = grid;
-    // }
-
     private void Awake()
     {
         this.gameController = GameObject.FindObjectOfType<GameController>();
@@ -63,6 +59,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
     }
 
     private void Start() {
+        // initialise guards
         if (PhotonNetwork.IsMasterClient) {
             agent.SetDestination(patrolPath[currDes]);
         }
@@ -75,6 +72,7 @@ public class GuardMovement : MonoBehaviourPun, IPunObservable
         this.rigidbody = this.GetComponent<Rigidbody>();
     }
   
+  // lag compensation
 public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 {
     if (stream.IsWriting)
@@ -96,6 +94,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 
     }
 }
+
+    // when guard is knocked out with specials, remove all carried specials
     public void removeSpecials() {
         if(specials.Count > 0) {
             int currSpec = 0;
@@ -123,8 +123,10 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                 spec.GetComponent<CollectableItem>().stolen = true;
                 spec.GetComponent<CollectableItem>().syncStolen(true, null);
                 spec.GetComponent<CollectableItem>().guardPoint = null;
+                // add specials to player who knocked the guard down
                 playerController.Specials.Add(spec);
             }
+            // update score
             Hashtable playerHash = new Hashtable();
             playerHash.Add("score", currentPlayerScore);
             hash.Add("roomSpecial", currSpec);
@@ -146,6 +148,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             rigidbody.rotation = Quaternion.RotateTowards(rigidbody.rotation, networkRotation, Time.fixedDeltaTime * 100.0f);
         }
     }
+
     void Update()
     {
         if (previousState != state && PhotonNetwork.IsMasterClient) {
@@ -170,11 +173,8 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             if (fovScript.visibleTargets.Count != 0 && this.state != State.disabled && !sleeping)
             {
                 GameObject playerToFollow = fovScript.visibleTargets[0];
-
-                
                 foreach (GameObject g in fovScript.visibleTargets)
                 {
-
                     PlayerMovement moveScript = g.GetComponent<PlayerMovement>();
 
                     if (!moveScript.disabled)
@@ -212,6 +212,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                         playerController.disableShield();
                     } else {
                         if (playerController.invincibleFrames == 0) {
+                            // if player is not in invulnerable state disable
                             playerMoveScript.disabled = true;
                             audioController.PlayPlayerOof();
                             this.state = State.normal;
@@ -223,6 +224,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 string serializedObjects = "";
                                 int i = 0;
                                 Hashtable specHash = new Hashtable();
+                                // set special stolen to 0
                                 specHash.Add("specialStolen", 0);
                                 PhotonNetwork.LocalPlayer.SetCustomProperties(specHash);
                                 int currSpec = 0;
@@ -232,6 +234,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 Hashtable hash = new Hashtable();
                                 string localMessage = "You've been knocked down and lost ";
                                 string remoteMessage = PhotonNetwork.NickName + " has been knocked down and lost ";
+                                // output info message to bottom left of screen
                                 if (playerController.Specials.Count == 1) {
                                     localMessage += playerController.Specials[0].GetComponent<CollectableItem>().itemName + "!";
                                     remoteMessage += playerController.Specials[0].GetComponent<CollectableItem>().itemName + "!";
@@ -245,6 +248,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
                                 gameController.updateDisp("Knock out the guard to reclaim the artifacts");
                                 Hashtable specProps = PhotonNetwork.LocalPlayer.CustomProperties;
                                 int currentPlayerScore = (int) specProps["score"]; 
+                                // update game state and pointers
                                 foreach (var spec in playerController.Specials)
                                 {
                                     currSpec--;
