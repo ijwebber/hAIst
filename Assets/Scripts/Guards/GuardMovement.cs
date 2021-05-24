@@ -408,7 +408,9 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     IEnumerator disableForTime(float disableTime)
     {
         // if (this.specials.Count)
+        
         yield return new WaitForSeconds(disableTime);
+
         guardDisabled = false;
         if (PhotonNetwork.IsMasterClient) {
             this.state = State.normal;

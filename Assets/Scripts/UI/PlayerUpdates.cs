@@ -20,15 +20,9 @@ public class PlayerUpdates : MonoBehaviourPun
 
     public void destroy(TextMeshProUGUI obj) {
         textAssets.Remove(obj.gameObject);
-        // Destroy(obj.gameObject);
+        Destroy(obj.gameObject);
     }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            updateDisplay("P pressed");
-            updateDisplay("P pressed 1");
-        }
-    }
     void riseOthers() {
         for (int i = 0; i < textAssets.Count; i++)
         {
