@@ -53,8 +53,9 @@ public class KeycodeTask : MonoBehaviour
             }
         }
         soundController.sendGrid(myKeyPad.transform.position, Random.Range(50,70));
-        if (_inputCode.text.Length == codeLength)
+        if (_inputCode.text.Length == codeLength) // check to see if input length is equal to expected length
         {
+            // if code is correct
             if (_inputCode.text == myKeyPad.code || myKeyPad.id == keypadID &&_inputCode.text == "37911") // TODO remove this in a real version
             {
                 // Debug.Log("code submitted: " + _inputCode.text);
@@ -70,6 +71,8 @@ public class KeycodeTask : MonoBehaviour
                 // StartCoroutine(ResetCode());
                 StartCoroutine(correct(myKeyPad));
             }
+
+            // else if entered code is incorrect
             else if (myKeyPad.id == keypadID && _inputCode.text != myKeyPad.code){
                 _inputCode.text = "Failed";
                 audioController.PlayKeypadFailure();
