@@ -39,7 +39,7 @@ public class CameraFOV : MonoBehaviour {
         }
     }
 
-
+    // Look for visible players but with a delay.
 	IEnumerator FindTargetsWithDelay(float delay) {
 		while (true) {
 			yield return new WaitForSeconds (delay);
@@ -49,6 +49,7 @@ public class CameraFOV : MonoBehaviour {
 		}
 	}
 
+    // Find if there are any players in view.
 	void GetVisibleTargets() {
 		visibleTargets.Clear();
         
@@ -100,6 +101,8 @@ public class CameraFOV : MonoBehaviour {
         return newPos;
     }
 
+
+    // Draw the cameras field of vision
     void DrawFOV() {
         int stepCount = Mathf.RoundToInt(viewAngle * meshResolution);
         float stepAngleSize = viewAngle / stepCount;

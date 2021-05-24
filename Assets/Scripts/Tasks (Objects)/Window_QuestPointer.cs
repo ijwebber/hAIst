@@ -46,6 +46,7 @@ public class Window_QuestPointer : MonoBehaviourPun
         GameObject.FindObjectOfType<GameController>().gameState = gameState;
     }
 
+// create arrows and point in direction of quest object. If in view, turn arrow green and point above object
     void Update()
     {
         if (targetObjects.Count != 0) {

@@ -10,9 +10,9 @@ public class DoorHandler : MonoBehaviourPun
     [SerializeField] private AudioController audioController;
     private List<int> l = new List<int>();
 
-    // Start is called before the first frame update
     public DoorScript doorleft, doorright;
     void OnTriggerEnter(Collider other) {
+        // trigger door open if button is triggered
         if (other.gameObject.name == "Timmy" && button.done) {
             StartCoroutine(openDoor(doorleft));
             StartCoroutine(openDoor(doorright));
@@ -24,6 +24,7 @@ public class DoorHandler : MonoBehaviourPun
     [PunRPC]
     void Enter()
     {
+        // add 1 to list. Used for ensuring all players have left before closing door
         l.Add(1);
     }
 
@@ -31,6 +32,7 @@ public class DoorHandler : MonoBehaviourPun
         door.OpenDoor();
         yield return null;
     }
+
     void OnTriggerExit(Collider other) {
         if (other.gameObject.name == "Timmy" && button.done) {
             this.gameObject.GetComponent<PhotonView>().RPC("Exit", RpcTarget.MasterClient);

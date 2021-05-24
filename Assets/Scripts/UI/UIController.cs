@@ -95,6 +95,8 @@ public class UIController : MonoBehaviourPunCallbacks
             stars[i].color = newColor;
         }        
 
+
+        // If the score has changed for a player update that on all, then master adds to the total score.
         if (changedProps["score"] != null) {
             string name = targetPlayer.NickName;
             int i = 0;

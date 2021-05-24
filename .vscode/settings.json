@@ -65,7 +65,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "cSpell.enabled": false,
+    "cSpell.enabled": true,
     "files.watcherExclude": {
         "**/Assets/L*": true,
         "**/Assets/Prefabs/**": true,

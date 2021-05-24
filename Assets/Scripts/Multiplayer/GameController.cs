@@ -9,6 +9,7 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+// centralised game settings
 public class GameController : MonoBehaviourPunCallbacks
 {
 
@@ -68,7 +69,6 @@ public class GameController : MonoBehaviourPunCallbacks
 
     System.Random r = new System.Random();
 
-    //just spawns in player object
     private void Awake()
     {
 #if UNITY_EDITOR
@@ -98,6 +98,8 @@ public class GameController : MonoBehaviourPunCallbacks
                 actNo = i;
             }
         }
+
+        // Make sure players spawnpoints are seperated a bit.
         float xSpawnPos = SpawnPoint.transform.position.x + (float) (actNo * 0.6);
         Vector3 spawnpoint = SpawnPoint.transform.position;
         spawnpoint.x = xSpawnPos;
@@ -108,13 +110,14 @@ public class GameController : MonoBehaviourPunCallbacks
         playerCam.Follow = player.gameObject.transform.Find("Timmy").transform;
         playerCam.LookAt = player.gameObject.transform.Find("Timmy").transform;
 
-        // Set custom props
+        // Setup custom room and player properties.
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
             int numOfSpecial = 0;
             numOfSpecial = SetupItems();
             SetProps(numOfSpecial);
         }
 
+        // Check each stealable item and if special add them to the list of specials
         GameObject[] stealObjs = GameObject.FindGameObjectsWithTag("steal");
         foreach (GameObject obj in stealObjs)
         {
@@ -148,6 +151,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     // initialise start sequence
     public void gameStart() {
+        // init game state
         gameState = 0;
         tutorial.GetComponent<Animator>().SetTrigger("startTutorial");
     }
@@ -219,10 +223,6 @@ public class GameController : MonoBehaviourPunCallbacks
             newObj = (GameObject)Instantiate(UpgradeUIPrefab, UpgradeUI.transform);
             newObj.transform.GetChild(1).GetComponent<Image>().sprite = shield;
         }
-
-
-
-
     }
     //resume game
     public void ResumeGame()
@@ -239,7 +239,7 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         OptionsPanel.SetActive(false);
     }
-    // functino to use the mute/unmute button
+    // function to use the mute/unmute button
     public void MutePressed()
     {
         if (mute)
@@ -262,7 +262,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        //enable escape menu
+        // escape menu on ESC pressed
         if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
         {
             //PopulateUpgradeUI();
@@ -271,12 +271,12 @@ public class GameController : MonoBehaviourPunCallbacks
 
         } 
 
+        // display update when someone leaves
         if (PhotonNetwork.PlayerList.Length < playerList.Count) {
             List<string> currentList = new List<string>(playerList);
             foreach (var play in PhotonNetwork.PlayerList)
             {
                 if (playerList.Contains(play.NickName)) {
-                    Debug.Log(play.NickName + " is still here");
                     currentList.Remove(play.NickName);
                 }
             }
@@ -296,9 +296,10 @@ public class GameController : MonoBehaviourPunCallbacks
                 questMarker.newQuest();
                 pager.newQuest();
                 if (gameState > updatedGameState) {
-                    // change originated from here
+                    // change originated from this client
                     updatedGameState = gameState;
                 } else if (regress) {
+                    // if game state has decreased
                     if (gameState < updatedGameState) {
                         updatedGameState = gameState;
                     }
@@ -313,6 +314,7 @@ public class GameController : MonoBehaviourPunCallbacks
             }
             List <string> newText = new List<string>();
             List<GameObject> nextQuestItems = new List<GameObject>();
+            // gamestate controller
             switch (gameState) 
             {
                 case 0: // starting state
@@ -458,6 +460,7 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    // sync quest update
     void updateThis() {
         updateNeeded = true;
     }
@@ -496,7 +499,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    // Set score to 0 && special item numbers
+    // Set up initial custom properties for the room and each player, this is run by master
     void SetProps(int numOfSpecial) {
         foreach (Player p in PhotonNetwork.PlayerList) {
             Hashtable setPlayer = new Hashtable() {{"score", 0}, {"downs",0}, {"revives", 0}, {"alerts",0}, {"itemsStolen", 0}, {"specialStolen", 0}, {"leave", false}, {"win", false}, {"disabled", false}};
@@ -508,6 +511,7 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     // Returns number of special items
+    // Assigns a random value to each item
     int SetupItems() {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("steal");
         
@@ -542,6 +546,7 @@ public class GameController : MonoBehaviourPunCallbacks
         if (changedProps["end"] != null) {
             if ((bool) changedProps["end"]) {
                 if (PhotonNetwork.IsMasterClient) {
+                    // Game is over so load the end screen.
                     PhotonNetwork.LoadLevel("EndScreen");
                 }
             }
@@ -550,7 +555,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
             int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) changedProps["special"];
             if (remaining == 0) {
-
+                // If all special items are stolen then start the explosion cutscene.
                 if (!CameraSystem.Instance.disableCutScenes)
                 {
                     StartCoroutine(CameraSystem.Instance.explodeExitCutScene());
@@ -565,6 +570,8 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    // update quest and pointer
     private void setNewQuest(List<GameObject> objs, List<string> objectives, bool regressTest) {
         if (objs.Count == 0) {
             // questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null", gameState);
@@ -578,6 +585,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
+    // display message on other clients
     public void updateDisp(string message) {
         this.GetComponent<PhotonView>().RPC("displayMessage", RpcTarget.Others, message);
     }

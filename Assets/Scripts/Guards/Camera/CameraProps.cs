@@ -7,6 +7,7 @@ public class CameraProps : MonoBehaviourPun
     private float disabledTime;
     public float disabledLength = 20f;
 
+    // Checks whether to renable the camera or not.
     void Update() {
         if (disabled && Time.time - disabledTime > disabledLength) {
             disabled = false;
@@ -14,6 +15,8 @@ public class CameraProps : MonoBehaviourPun
         }
     }
 
+
+    // Changes whether the camera is disabled or not for everyone.
     [PunRPC]
     public void setDisabled(bool value) {
         this.GetComponent<CameraFOV>().cameraState = State.disabled;

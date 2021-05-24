@@ -10,6 +10,8 @@ public class SpeechRecognition : MonoBehaviourPun
     bool listening = false;
     bool shownMessage = false;
 
+    // External javascript functions
+
     [DllImport("__Internal")]
     private static extern void StartListening();
     [DllImport("__Internal")]
@@ -29,7 +31,7 @@ public class SpeechRecognition : MonoBehaviourPun
             return;
         }
 
-        // Call external JavaScript functions when Y is pressed and let go
+        // Start, Stop or Not allow speech recognition
         if (Input.GetKey(KeyCode.Y)) {
             bool isDriverBusy = (bool) PhotonNetwork.CurrentRoom.CustomProperties["isDriverBusy"];
             if (!listening && !isDriverBusy) {
@@ -52,6 +54,8 @@ public class SpeechRecognition : MonoBehaviourPun
         }
     }
 
+
+    // Receives the input from LUIS from the javascript plugin.
     /// <summary>
     /// The browser sends the result of speech recognition in this role.
     /// </summary>

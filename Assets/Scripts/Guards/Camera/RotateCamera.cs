@@ -19,6 +19,7 @@ public class RotateCamera : MonoBehaviour
         currentRotation = 0;
     }
 
+    // Rotates the camera left and right with regard to the upper and lower bounds that have been set.
     void Update()
     {   
         if (!GetComponent<CameraProps>().disabled) {

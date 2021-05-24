@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
         GetUpgrades();
         DebugUpgrades();
         player = getPlayer();
-        Debug.Log("EQUIPED SKIN IS " + PlayerPrefs.GetString("skin"));
+        Debug.Log("EQUIPPED SKIN IS " + PlayerPrefs.GetString("skin"));
         if (PlayerPrefs.GetInt("isGuest", -1) == 0) {
             isGuest = false;
             applyUpdates();
@@ -45,21 +45,27 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate() {
+        // update shield location
         if (invincibleFrames > 0) {
             shieldObj.transform.position = player.transform.position + shieldOffset;
         }
 
     }
+
     void Update() {
+        // handle shield
         if (invincibleFrames > 0) {
             shieldObj.transform.position = player.transform.position + shieldOffset;
             invincibleFrames--;
         } else {
             if (shieldObj != null) {
+                // destroy shield when frames are consumed
                 PhotonNetwork.Destroy(shieldObj.GetPhotonView());
             }
         }
     }
+
+    // consume shield
     public void disableShield() {
         GameController.GetComponent<GameController>().SetShieldUsed();
         shieldObj = PhotonNetwork.Instantiate("PlayerShield", player.transform.position + shieldOffset, Quaternion.identity);
@@ -68,6 +74,7 @@ public class PlayerController : MonoBehaviour
         invincibleFrames = 60;
     }
 
+    // get upgrades (!)
     public void GetUpgrades()
     {
         upgrades.speed_boots = PlayerPrefs.GetInt("speed_boots", 0);

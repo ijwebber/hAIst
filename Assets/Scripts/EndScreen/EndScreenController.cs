@@ -30,22 +30,22 @@ public class EndScreenController : MonoBehaviourPunCallbacks
     private void Awake()
     {
         int grandTotal = (int)PhotonNetwork.CurrentRoom.CustomProperties["score"];
-        // 52-3 = 49
         int totalStolen = 0;
         if (PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"] != null) {
             totalStolen = (int)PhotonNetwork.CurrentRoom.CustomProperties["itemsStolen"];
         }
-        Debug.Log("Total stolen = " + totalStolen);
+
+        // if all items stolen add bonus
         if (totalStolen == 49) {
             grandTotal *= 10;
             secretText.SetActive(true);
         }
-        Debug.Log("Multiplier = " + Mathf.FloorToInt(((float)PhotonNetwork.CurrentRoom.CustomProperties["scoreMultiplier"]*0.01f)).ToString());
+
+        // calculate bonus percentage from difficulty settings
         bonusText.text = "Bonus percentage: " + ((float)PhotonNetwork.CurrentRoom.CustomProperties["scoreMultiplier"]).ToString() + "%";
         grandTotal += Mathf.FloorToInt(grandTotal * (float)PhotonNetwork.CurrentRoom.CustomProperties["scoreMultiplier"]*0.01f);
         if (PhotonNetwork.CurrentRoom == null)
         {
-
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameLobby 1");
             return;
         }
@@ -65,6 +65,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             winScreen.SetActive(true);
             lossScreen.SetActive(false);
 
+            // initialise end stats
             for (int i = 0; i < playerRows.Length; i++) {
                 GameObject row = playerRows[i];
                 GameObject seg = playerSegs[i];
@@ -134,9 +135,11 @@ public class EndScreenController : MonoBehaviourPunCallbacks
             int finalEarnings = 0;
             float startingCut = (1f/(float)noPlayers);
             float[] cuts = {startingCut, startingCut, startingCut, startingCut};
+            // calculate final cut
             for (int i = 0; i < noPlayers; i++)
             {
                 float cut = startingCut;
+                // calculate amount stolen
                 if (moneyPlayers.Count < noPlayers) {
                     if (moneyPlayers.Contains(i)) {
                         cuts[i] += .1f/moneyPlayers.Count;
@@ -151,6 +154,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                         }
                     }
                 }
+                // alerting guards
                 if (loudPlayers.Count < noPlayers) {
                     if (loudPlayers.Contains(i)) {
                         cuts[i] -= .05f/loudPlayers.Count;
@@ -165,6 +169,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                         }
                     }
                 }
+                // revivals
                 if (GAPlayers.Count < noPlayers) {
                     if (GAPlayers.Contains(i)) {
                         cuts[i] += .05f/GAPlayers.Count;
@@ -180,6 +185,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
 
                     }
                 }
+                // downs
                 if (deadPlayers.Count < noPlayers) {
                     if (deadPlayers.Contains(i)) {
                         cuts[i] -= .1f/deadPlayers.Count;
@@ -195,6 +201,7 @@ public class EndScreenController : MonoBehaviourPunCallbacks
                     }
                 }
             }
+            // edge cases
             if (moneyPlayers.Count == 0) {
                 moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().text = "No-one";
                 moneyBags.transform.Find("Player").GetComponent<TextMeshProUGUI>().color = Color.gray;

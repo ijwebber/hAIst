@@ -31,7 +31,7 @@ public class Grid {
         this.currentPressure = newPressure;
     }
 
-    // update walls (will need to be implemented for moving walls or obstacles)
+    // update walls (implemented for moving walls or obstacles) Calculates which nodes are inside a wall
     public void updateWalls() {
         // populate grid
         for (int i = 0; i < gridArray.GetLength(0)-2; i++) {
@@ -85,6 +85,7 @@ public class Grid {
         return walls;
     }
 
+    // return value at specified grid location
     public double GetValue(int x, int y) {
         try
         {
@@ -101,14 +102,17 @@ public class Grid {
         }
     }
 
+    // return speed at specified grid location
     public double getSpeed(int x, int y) {
         return this.velocities[x,y];
     }
 
+    // return value at world position (needs to calculate grid location)
     public double GetValue(Vector3 worldPosition) {
         getXY(worldPosition, out int x, out int y);
         return this.currentPressure[x,y];
     }
+    // kernel for sound mesh
     public double GetAvgValue(int x, int y) {
         double value = 0;
         if (x-1 > 0) {
@@ -140,32 +144,28 @@ public class Grid {
         return value;
     }
 
-    //get world position of grid (doesn't work)
+    //translate grid location into world location
     public Vector3 GetWorldPosition(int x, int y) {
         Vector3 position = (new Vector3(x,0,y) * cellSize);
         position += offset;
         return position;
     }
+
     public float getVelocity(int x, int y) {
         return (float)this.velocities[x,y];
     }
 
-    // update every time step
+    // update every time step. The big propagatino function
     public void updateNodes() {
         for (int x = width-2; x >= 1; x--) {
             for (int y = height-2; y >= 1; y--) {
                 if (velocities[x,y] > 0) {
                     // god equation -- calculates next node based on the four neighbouring nodes and previous node info
                     double v2 = velocities[x,y]*velocities[x,y];
-                    // double nextValue = 0;
-                    // nextValue += x_1 - 2*currentPressure[x,y] + x_2;
-                    // nextValue += y_1 - 2*currentPressure[x,y] + y_2;
-                    // nextValue *= dt2/(cellSize*cellSize) * velocities[x,y]*velocities[x,y];
-                    // nextValue = 2*currentPressure[x,y] - previousPressure[x,y] + nextValue;
                     double nextValue = 2*currentPressure[x,y] - previousPressure[x,y] + (dt2 * v2) *
                         ((currentPressure[x+1,y] - 2*currentPressure[x,y] + currentPressure[x-1,y])
                             + (currentPressure[x,y+1] - 2*currentPressure[x,y] + currentPressure[x,y-1]));
-                    // if the value is in a wall, don't propagate
+                    // if the value is in a wall, don't propagate. ALso cull below .1 dB
                     if (nextValue > .1f) {
                         nextPressure[x,y] = nextValue;
                     } else {
@@ -181,6 +181,7 @@ public class Grid {
         this.currentPressure = (double[,])nextPressure.Clone();
     }
 
+    // testing
     public void getAverages() {
         for (int i = 0; i < averages.Length; i++)
         {
