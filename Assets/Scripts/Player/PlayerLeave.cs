@@ -16,6 +16,8 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         playerMovement = GameObject.FindObjectOfType<PlayerMovement>();
     }
 
+
+    // Check whether a player is in the exit area.
     void OnTriggerEnter(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
@@ -28,7 +30,9 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                 }
             }
         }
-    }
+    } 
+
+    // If still in the exit area and they press E to leave, set their properties accordingly
 
     void OnTriggerStay(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
@@ -43,6 +47,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         }
     }
 
+    // If they leave the exit area then set ready to leave to false.
     void OnTriggerExit(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
@@ -84,7 +89,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
             }
         } else if (changedProps["disabled"] != null) {
             if ((bool) changedProps["disabled"]) {
-                StartCoroutine(CheckIfPlayersAreDown());
+                StartCoroutine(CheckIfPlayersAreDown()); // Checks to see if all players are down.
             } else {
                 bool cond = true;
                 foreach (Player player in PhotonNetwork.PlayerList) {
@@ -108,7 +113,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
                     }
 
                     if (end) {
-                        Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}};
+                        Hashtable endHash = new Hashtable() {{"end", true}, {"win", false}}; // End the game but with a loss
                         PhotonNetwork.CurrentRoom.SetCustomProperties(endHash);
                     }
                 }
@@ -117,6 +122,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    // if waiting to leave update the waiting text when someone else is ready.
     void UpdateWaitingText() {
         int total = 0;
         int length = PhotonNetwork.PlayerList.Length;
@@ -131,6 +137,7 @@ public class PlayerLeave : MonoBehaviourPunCallbacks
         }
     }
 
+    // If all players are down then end the game.
     IEnumerator CheckIfPlayersAreDown() {
 		while (true) {
 			yield return new WaitForSeconds (.2f);

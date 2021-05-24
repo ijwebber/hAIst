@@ -190,6 +190,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         }
     }
 
+    // Update the location of the player on their UI.
     void OnTriggerEnter(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {

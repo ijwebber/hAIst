@@ -98,6 +98,8 @@ public class GameController : MonoBehaviourPunCallbacks
                 actNo = i;
             }
         }
+
+        // Make sure players spawnpoints are seperated a bit.
         float xSpawnPos = SpawnPoint.transform.position.x + (float) (actNo * 0.6);
         Vector3 spawnpoint = SpawnPoint.transform.position;
         spawnpoint.x = xSpawnPos;
@@ -108,13 +110,14 @@ public class GameController : MonoBehaviourPunCallbacks
         playerCam.Follow = player.gameObject.transform.Find("Timmy").transform;
         playerCam.LookAt = player.gameObject.transform.Find("Timmy").transform;
 
-        // Set custom props
+        // Setup custom room and player properties.
         if (PhotonNetwork.LocalPlayer.IsMasterClient) {
             int numOfSpecial = 0;
             numOfSpecial = SetupItems();
             SetProps(numOfSpecial);
         }
 
+        // Check each stealable item and if special add them to the list of specials
         GameObject[] stealObjs = GameObject.FindGameObjectsWithTag("steal");
         foreach (GameObject obj in stealObjs)
         {
@@ -496,7 +499,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    // Set score to 0 && special item numbers
+    // Set up initial custom properties for the room and each player, this is run by master
     void SetProps(int numOfSpecial) {
         foreach (Player p in PhotonNetwork.PlayerList) {
             Hashtable setPlayer = new Hashtable() {{"score", 0}, {"downs",0}, {"revives", 0}, {"alerts",0}, {"itemsStolen", 0}, {"specialStolen", 0}, {"leave", false}, {"win", false}, {"disabled", false}};
@@ -508,6 +511,7 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     // Returns number of special items
+    // Assigns a random value to each item
     int SetupItems() {
         GameObject[] objs = GameObject.FindGameObjectsWithTag("steal");
         
@@ -542,6 +546,7 @@ public class GameController : MonoBehaviourPunCallbacks
         if (changedProps["end"] != null) {
             if ((bool) changedProps["end"]) {
                 if (PhotonNetwork.IsMasterClient) {
+                    // Game is over so load the end screen.
                     PhotonNetwork.LoadLevel("EndScreen");
                 }
             }
@@ -550,7 +555,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
             int remaining = (int) PhotonNetwork.CurrentRoom.CustomProperties["specialMax"] - (int) changedProps["special"];
             if (remaining == 0) {
-
+                // If all special items are stolen then start the explosion cutscene.
                 if (!CameraSystem.Instance.disableCutScenes)
                 {
                     StartCoroutine(CameraSystem.Instance.explodeExitCutScene());

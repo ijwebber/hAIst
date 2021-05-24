@@ -10,6 +10,7 @@ public class IntentActions : MonoBehaviourPun
     GameController gameController;
 
     void Start() {
+        // Find all of the controllers
         laserController = GameObject.FindObjectOfType<LaserController>();
         cameraController = GameObject.FindObjectOfType<GameCameraController>();
         gameController = GameObject.FindObjectOfType<GameController>();
@@ -20,7 +21,8 @@ public class IntentActions : MonoBehaviourPun
         {
             return;
         }
-
+        
+        // Testing controls
         if (Input.GetKeyDown(KeyCode.B)) {
             DisableLaser();
         }
@@ -36,6 +38,8 @@ public class IntentActions : MonoBehaviourPun
     }
 
     public void CarryOutIntent(string topIntent, float score) {
+
+        // If the confidence is higher than 0.3, carry out the intent.
         if (score > 0.3) {
             switch (topIntent)
             {
@@ -59,7 +63,7 @@ public class IntentActions : MonoBehaviourPun
             Unsure();
         }
     }
-
+    
     public void DisableCamera() {
         DisableCameraResult cameraResult = cameraController.DisableClosestCamera(transform.position);
         if (cameraResult == DisableCameraResult.NOT_FOUND) {

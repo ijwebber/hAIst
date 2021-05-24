@@ -155,6 +155,7 @@ public class PlayerRevive : MonoBehaviour
         else downText.text = "";
     }
 
+    // Handle self revive logic
     public void SelfRevive() {
         if (GetComponent<PhotonView>().IsMine) {
             playerController = GameObject.Find("PlayerController").GetComponent<PlayerController>();

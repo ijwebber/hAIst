@@ -21,6 +21,7 @@ public class GameCameraController : MonoBehaviour
         }
     }
 
+    // Finds and disables the cloest camera to the position in the argument.
     public DisableCameraResult DisableClosestCamera(Vector3 playerPos) {
         List<GameObject> enabledCameras = new List<GameObject>();
 

@@ -10,6 +10,8 @@ public class SpeechRecognition : MonoBehaviourPun
     bool listening = false;
     bool shownMessage = false;
 
+    // External javascript functions
+
     [DllImport("__Internal")]
     private static extern void StartListening();
     [DllImport("__Internal")]
@@ -29,13 +31,13 @@ public class SpeechRecognition : MonoBehaviourPun
             return;
         }
 
+        // Start, Stop or Not allow speech recognition
         if (Input.GetKey(KeyCode.Y)) {
             bool isDriverBusy = (bool) PhotonNetwork.CurrentRoom.CustomProperties["isDriverBusy"];
             if (!listening && !isDriverBusy) {
                 listening = true;
                 Hashtable setBusy = new Hashtable() {{"isDriverBusy", true}};
                 PhotonNetwork.CurrentRoom.SetCustomProperties(setBusy);
-                Debug.Log("penis");
                 StartListening(); 
             } else if (!listening && isDriverBusy && !shownMessage) {
                 gameController.playerUpdates.updateDisplay("The driver is busy talking to someone else!");
@@ -52,6 +54,8 @@ public class SpeechRecognition : MonoBehaviourPun
         }
     }
 
+
+    // Receives the input from LUIS from the javascript plugin.
     /// <summary>
     /// The browser sends the result of speech recognition in this role.
     /// </summary>

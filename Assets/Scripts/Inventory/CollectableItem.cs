@@ -16,6 +16,7 @@ public class CollectableItem : MonoBehaviourPun
 
     public int gameSelection;
 
+    // set the value and minigame for the object
     [PunRPC]
     void UpdateObject(int newValue, int chooseMinigame) {
         this.value = newValue;
