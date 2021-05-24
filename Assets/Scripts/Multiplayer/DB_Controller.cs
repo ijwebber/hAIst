@@ -42,47 +42,52 @@ public class DB_Controller : MonoBehaviour
     }
 
 
-
+    // check if a username exists
     public void CheckUsername(string username)
     {
         StartCoroutine(GetUsers(username));
     }
 
+    // check the login details provided
     public void Login(string username, string password)
     {
         StartCoroutine(CheckLogin(username, password));
     }
 
+    //create a new user account
     public void Create(string username, string password)
     {
         StartCoroutine(CreateUser(username, password));
     }
 
+    // get the users balance
     public void GetCoinBalance(string username)
     {
         StartCoroutine(CoinBalance(username));
     }
 
+    //update the users balance
     public void EditCoinBalance(string username, int new_balance, int type)
     {
         StartCoroutine(EditBalance(username,new_balance,type));
     }
-
+    // update the users mic threshold
     public void EditMicThreshold(string username, int value)
     {
         StartCoroutine(EditThreshold(username, value));
     }
-
+    // get the users mic threshold
     public void GetMicThreshold(string username, int state)
     {
         StartCoroutine(GetThreshold(username, state));
     }
-
+    // update the users mic multiplier
     public void EditMicMultiplier(string username, int value)
     {
         StartCoroutine(EditMultiplier(username, value));
     }
 
+    // save the users mic settings
     public void saveMicSettings() {
         if (_GameLobby.GetComponent<PUN2_GameLobby1>().IsGuest) {
             PlayerPrefs.SetInt("Threshold", (int)threshold.value);
@@ -93,62 +98,71 @@ public class DB_Controller : MonoBehaviour
         }
 
     }
-
+    //get the users multiplier and threshold
     public void getThresholds(string username) {
         GetMicMultiplier(username, 0);
         GetMicThreshold(username, 0);
     }
 
+    // get the users mic multiplier
     public void GetMicMultiplier(string username, int state)
     {
         StartCoroutine(GetMultiplier(username, state));
     }
 
+    // get the users upgrades
     public void GetUpgradeList(string username)
     {
         StartCoroutine(UpgradeList(username));
     }
+    // get the users skins
     public void GetSkinList(string username)
     {
         StartCoroutine(SkinList(username));
     }
-
+    // add an upgrade
     public void AddUpgrade(string username, string upgrade)
     {
         StartCoroutine(Add_Upgrade(username, upgrade));
     }
 
+    // add a skin
     public void AddSkin(string username, string skin)
     {
         StartCoroutine(Add_Skin(username, skin));
     }
 
+    // remove an upgrade
     public void RemoveUpgrade(string username, List<string> upgrades)
     {
         StartCoroutine(Remove_Upgrade(username, upgrades));
     }
 
+    //not used
     public void RemoveUpgrade2(string username, string upgrade, string upgrade2)
     {
         StartCoroutine(Remove_Upgrade2(username, upgrade, upgrade2));
     }
 
+    //not used
     public void EditUpgradeList(string username, string new_upgrade_list)
     {
         StartCoroutine(Edit_Upgrade_List(username, new_upgrade_list));
     }
 
-
+    // get a users friends
     public void GetFriends(string username, int type)
     {
         StartCoroutine(Friends(username,type));
     }
 
+    // check if a uses exists
     public void CheckIfExists(string username, string friend)
     {
         StartCoroutine(CheckIfUserExists(username, friend));
     }
 
+    // add a friend
     public void AddFriend(string username, string friend)
     {
         StartCoroutine(Add(username, friend));

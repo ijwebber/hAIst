@@ -100,6 +100,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         }
     }
 
+    // check the players available skins and set their status accordingly
     public void ControlSkins()
     {
         Debug.Log("SKIN CONTROLLER");
@@ -132,12 +133,14 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     }
 
+    // equip selected skin and show it
     public void EquipSkin()
     {
         string skin_name = ThiefSkins.GetComponent<Image>().sprite.name;
         thief_1.GetComponent<Image>().sprite = ThiefSkins.GetComponent<Image>().sprite;
     }
 
+    // set the upgrades the user has selected to take with them in game
     public void SetUpgradesForGame()
     {
 
@@ -211,7 +214,7 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     }
 
-
+    // update the users ready state
     public void SetReady() 
     {
         Debug.Log("Set Ready Function");
@@ -233,6 +236,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         
     }
 
+    // function to update the player models when they change skins in the pre game lobby
     public void SetPlayerSkins()
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -334,6 +338,7 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     }
 
+    //enable the choose upgrades panel
     public void EnableChooseUpgradesPanel()
     {
         ChooseUpgradesPanel.SetActive(true);
@@ -346,12 +351,14 @@ public class PreGame : MonoBehaviourPunCallbacks
         ChooseDifficultySettings.SetActive(true);
     }
 
+    //enable locker panel
     public void EnableLockerPanel()
     {
         _GameLobby.GetComponent<PUN2_GameLobby1>().ControlSkins();
         LockerPanel.SetActive(true);
     }
 
+    //disable locker panel
     public void DisableLockerPanel()
     {
         //EquipSkin();
@@ -359,19 +366,24 @@ public class PreGame : MonoBehaviourPunCallbacks
         LockerPanel.SetActive(false);
     }
 
+    //disable the choose upgrades panel
     public void DisableChooseUpgradesPanel()
     {
         ChooseUpgradesPanel.SetActive(false);
     }
+    // disable dicficulty panel
+
     public void DisableDifficultyPanel()
     {
         ChooseDifficultySettings.SetActive(false);
     }
 
+    //leave the pre game lobby
     public void QuitButton()
     {
         PhotonNetwork.LeaveRoom();   
     }
+    //start the game
     public void StartGame()
     {
         StartGameWaitPanel.SetActive(true);
@@ -410,7 +422,8 @@ public class PreGame : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel("ArtLevel");
         }
     }
-    
+
+    //check how many players are ready
     public int GetNumReady()
     {
         Debug.Log("GET NUM READY");
@@ -425,7 +438,7 @@ public class PreGame : MonoBehaviourPunCallbacks
         return total_ready;
     }
 
-
+    // set the ready icons underneath the players that are ready
     public void SetReadyChecks()
     {
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -486,6 +499,7 @@ public class PreGame : MonoBehaviourPunCallbacks
 
     }
 
+    //check if all players are ready
     public bool CheckAllReady() 
     {
         int total_ready = 0;

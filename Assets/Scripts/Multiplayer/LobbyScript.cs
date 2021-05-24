@@ -96,7 +96,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
     }
 
 
-
+    // check room name
     public void ChangeRoomNameInput()
     {
         if (RoomNameInput.text.Length >= 4)
@@ -109,6 +109,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
         }
     }
 
+    //create room
     public void CreateRoom()
     {
         joiningRoom = true;
@@ -126,6 +127,7 @@ public class LobbyScript : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(RoomName, roomOptions, TypedLobby.Default);
     }
 
+    //refresh room list
     public void Refresh()
     {
         if (PhotonNetwork.IsConnected)

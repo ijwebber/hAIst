@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Billboard : MonoBehaviour
 {
+
+    //script to show players nametag in the correct orientation regardless of the player's  orientation in game
     private Transform mainCameraTransform;
 
     private void Start()

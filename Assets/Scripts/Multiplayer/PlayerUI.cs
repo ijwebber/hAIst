@@ -9,7 +9,7 @@ using System.Collections;
 public class PlayerUI : MonoBehaviourPun
 {
     [SerializeField] private TextMeshProUGUI nameText;
-
+    //script for player name tag
     private void Start() 
     {
     
