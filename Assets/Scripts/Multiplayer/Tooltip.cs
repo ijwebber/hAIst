@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 
 [ExecuteInEditMode()]
+// script to control tooltips on objects
 public class Tooltip : MonoBehaviour
 {
     public TextMeshProUGUI headerField;
@@ -22,6 +23,7 @@ public class Tooltip : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
+    // add the tooltip text on screen with dynamic size and position
     public void SetText(string content, string header = "")
     {
         if (string.IsNullOrEmpty(header))

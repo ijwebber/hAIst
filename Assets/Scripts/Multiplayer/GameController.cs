@@ -88,6 +88,7 @@ public class GameController : MonoBehaviourPunCallbacks
         {
             playerList.Add(play.NickName);
         }
+        //initialize quest pointer
         questPointer = GameObject.FindObjectOfType<Window_QuestPointer>();
 
         int actNo = 0;
@@ -102,6 +103,7 @@ public class GameController : MonoBehaviourPunCallbacks
         spawnpoint.x = xSpawnPos;
         spawnpoint.y = 11f;
         string prefab_to_instantiate = "character_prefab_" + PlayerPrefs.GetString("skin");
+        //spawn player
         GameObject player = PhotonNetwork.Instantiate(prefab_to_instantiate, spawnpoint, Quaternion.identity);
         playerCam.Follow = player.gameObject.transform.Find("Timmy").transform;
         playerCam.LookAt = player.gameObject.transform.Find("Timmy").transform;
@@ -124,7 +126,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
         SetSpotted();
         
-        
+        //instantiate guards
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
@@ -144,11 +146,13 @@ public class GameController : MonoBehaviourPunCallbacks
         
     }
 
+    // initialise start sequence
     public void gameStart() {
         gameState = 0;
         tutorial.GetComponent<Animator>().SetTrigger("startTutorial");
     }
 
+    // set the revive power up to used when used up
     public void SetReviveUsed()
     {
         foreach (Transform child in UpgradeUI.transform)
@@ -159,6 +163,8 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    // set the shield power up to used when used up
     public void SetShieldUsed()
     {
         foreach (Transform child in UpgradeUI.transform)
@@ -169,6 +175,7 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
+    // set the users upgrades in the pause menu
     public void PopulateUpgradeUI()
     {
         Debug.Log("Populating Upgrade UI");
@@ -217,20 +224,22 @@ public class GameController : MonoBehaviourPunCallbacks
 
 
     }
+    //resume game
     public void ResumeGame()
     {
         EscapeMenu.SetActive(false);
     }
-
+    //enable the options panel
     public void EnableOptionsPanel()
     {
         OptionsPanel.SetActive(true);
     }
+    //disable the options panel
     public void DisableOptionsPanel()
     {
         OptionsPanel.SetActive(false);
     }
-
+    // functino to use the mute/unmute button
     public void MutePressed()
     {
         if (mute)
@@ -253,6 +262,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        //enable escape menu
         if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
         {
             //PopulateUpgradeUI();
@@ -412,6 +422,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
+    //leave the game
     public void QuitButton()
     {
         /*if (PhotonNetwork.IsMasterClient)
@@ -427,6 +438,7 @@ public class GameController : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
+    //change the master client (host) if he leaves
     public void ChangeMasterClientifAvailble()
     {
         if (!PhotonNetwork.IsMasterClient)
