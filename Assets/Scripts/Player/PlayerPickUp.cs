@@ -532,7 +532,6 @@ public class PlayerPickUp : MonoBehaviourPun
 
         if (item.special) {
             int specialStolenCount = (int) props["specialStolen"];
-            Debug.Log("isaac " + itemStolenCount);
             playerHash.Add("specialStolen", specialStolenCount + 1);
         }
 
@@ -553,7 +552,6 @@ public class PlayerPickUp : MonoBehaviourPun
         int itemStolenCount = (int) PhotonNetwork.LocalPlayer.CustomProperties["itemsStolen"];
 
         int specialStolenCount = (int) props["specialStolen"];
-        Debug.Log("isaac " + itemStolenCount);
         if (loss) {
             specialStolenCount--;
             itemStolenCount--;
