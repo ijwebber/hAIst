@@ -306,11 +306,14 @@ public void ExistingUser()
     UserManagerMenu.SetActive(false);
     ExistingUserMenu.SetActive(true);
 }
+
+// Enable Guest Login Menu
 public void Guest()
 {
     UserManagerMenu.SetActive(false);
     GuestMenu.SetActive(true);
 }
+//Enable New User Creation Menu
 public void NewButton()
 {
     UserManagerMenu.SetActive(false);
@@ -318,6 +321,8 @@ public void NewButton()
 }
 
 // NEW USER MENU
+
+// Function to add new account to database
 public void NewAccount()
 {
 
@@ -338,6 +343,7 @@ public void NewAccount()
 
 }
 
+    // Check password strength
 static bool checkPassword(string input, int minimum){
 
     bool hasNum = false;
@@ -385,6 +391,7 @@ public void SignInGuest()
 }
 
 // HOME MENU
+//Enable friends menu
 public void EnableFriendsMenu()
 {
     FriendsMenu.SetActive(true);
@@ -399,6 +406,7 @@ public void EnableFriendsMenu()
     ContentFriends.GetComponent<PopulateGridFriends>().OnRefresh();
 }
 
+// Enalbe Mic Menu
 public void EnableMicThreshold() {
     btnHome.interactable = true;
     if (!IsGuest) {
@@ -444,6 +452,7 @@ if (MicCheck) {
 #endif
 
 }
+
 public void updateMultiplierSlider() {
     multiplierTextAsset.text = Multiplier.value.ToString();
     saveMicButton.GetComponent<Image>().color = new Color32(186,158,48,255);
@@ -464,6 +473,7 @@ public void saveMicClicked() {
     saveMicButton.GetComponent<Image>().color = new Color32(93,93,118,255);
 }
 
+// Enable the lobby menu
 public void EnableLobbyMenu()
 {
     FriendsMenu.SetActive(false);
@@ -489,29 +499,33 @@ public void EnableLobbyMenu()
 
 }
 
+// Enable the locker panel
 public void EnableLockerPanel()
 {
     ControlSkins();
     LockerPanelHome.SetActive(true);
 }
-
+// Disable the locker panel
 public void DisableLockerPanel()
 {
     EquipSkin();
     LockerPanelHome.SetActive(false);
 }
 
+// Enable the skin store
 public void EnableCosmeticStorePanel()
 {
     CosmeticPanelHome.SetActive(true);
 }
 
+// Disable the skin store
 public void DisableCosmeticStorePanel()
 {
     CosmeticPanelHome.SetActive(false);
     skinGroupCosmetic.ResetTabsClose();
 }
 
+// Functino to buy specific skin
 public void BuySkin()
 {
     string skin_name = ThiefCosmetics.GetComponent<Image>().sprite.name;
@@ -528,7 +542,7 @@ public void BuySkin()
 
     }
 }
-
+// Show the equiped skin in the home screen 
 public void EquipSkin()
 {
     string skin_name = ThiefSkins.GetComponent<Image>().sprite.name;
@@ -541,7 +555,7 @@ public void EquipSkin()
     PlayerPrefs.Save();
 
 }
-
+//show the equiped skin in the pre game lobby
 public void EquipSkinPre()
 {
     string skin_name = ThiefSkinsPre.GetComponent<Image>().sprite.name;
@@ -555,6 +569,7 @@ public void EquipSkinPre()
 
 }
 
+//function to load the available skins for a user in the locker panel available for selection
 public void ControlSkins()
 {
     Debug.Log("SKIN CONTROLLER");
@@ -633,6 +648,7 @@ public void ControlSkins()
 
 }
 
+// enable the upgrade menu
 public void EnableUpgradeMenu()
 {
     btnHome.interactable = true;
@@ -652,7 +668,7 @@ public void EnableUpgradeMenu()
     UpgradeMenu.SetActive(true);
 }
 
-
+// enable the room menu
 public void EnableRoomMenu()
 {
     btnHome.interactable = true;
@@ -677,6 +693,7 @@ public void EnableRoomMenu()
 
 }
 
+// function that updataes the friend list to check who is online, runs every 1 second
 IEnumerator UpdateFriendList()
 {
     for (; ; )
@@ -695,11 +712,13 @@ IEnumerator UpdateFriendList()
     }
 }
 
+// function to fetch the friend list from the database
 public void GetFriends(string username, int type)
 {
     DB_Controller.GetComponent<DB_Controller>().GetFriends(username,type);
 }
 
+// add new friend
 public void AddFriend()
 {
     Debug.Log("ADD FRIEND INPUT: " +AddFriendInput.text);
@@ -707,11 +726,13 @@ public void AddFriend()
 
 }
 
+//helper function for when changing the add friend input
 public void ChangeAddFriendInput()
 {
     AddFriendStatus.SetActive(false);
 }
 
+// play button
 public void PlayButton()
 {
     LobbyScript.SetActive(true);
@@ -720,11 +741,13 @@ public void PlayButton()
 
 // UPGRADES
 
+// remove an upgrade after it has been used
 public void RemoveUpgrade(List<string> upgrades)
 {
     DB_Controller.GetComponent<DB_Controller>().RemoveUpgrade(PhotonNetwork.NickName, upgrades);
 }
 
+//buy the speed boots upgrade
 public void BuyUpgradeSpeedBoots(int cost)
 {
     //int updatedCost = int.Parse(speed_boots_cost.text);
@@ -737,6 +760,7 @@ public void BuyUpgradeSpeedBoots(int cost)
     }
 }
 
+// buy the shield upgrade
 public void BuyUpgradeShield()
 {
     if (PlayerBalance >= 2000)
@@ -748,6 +772,7 @@ public void BuyUpgradeShield()
     }
 }
 
+//buy the vision upgrade
 public void BuyUpgradeVision(int cost)
 {
     //int updatedCost = int.Parse(vision_cost.text);
@@ -759,7 +784,7 @@ public void BuyUpgradeVision(int cost)
 
     }
 }
-
+//buy the ninja upgrade
 public void BuyUpgradeNinja(int cost)
 {
     //int updatedCost = int.Parse(vision_cost.text);
@@ -772,7 +797,7 @@ public void BuyUpgradeNinja(int cost)
     }
 }
 
-
+//buy the self revive power up
 public void BuyUpgradeSelfRevive()
 {
     if (PlayerBalance >= 5000)
@@ -784,6 +809,7 @@ public void BuyUpgradeSelfRevive()
     }
 }
 
+// buy the fast hands upgrade
 public void BuyUpgradeFastHands(int cost)
 {
     //int updatedCost = int.Parse(fast_hands_cost.text);
@@ -794,7 +820,7 @@ public void BuyUpgradeFastHands(int cost)
         DB_Controller.GetComponent<DB_Controller>().AddUpgrade(PhotonNetwork.NickName, "fast_hands");
     }
 }
-
+// fetch the players available upgradeds from the database
 public void GetInventory()
 {
     UnlockPanel.SetActive(true);
@@ -812,6 +838,7 @@ public void GetInventory()
 
 }
 
+// function to check owned upgrades of the user and update the ui in the upgrade store to set the owned status of the upgrades
 public void SetOwnedStatus()
 {
     foreach (KeyValuePair<string, int> kvp in PlayerInventory)
@@ -1119,12 +1146,13 @@ public void SetOwnedStatus()
 // PRE GAME MENU
 
 
-
+// leave the pre game lobby
 public void LeaveRoom()
 {
     PhotonNetwork.LeaveRoom();
     EnableRoomMenu();
 }
+// enable the home screen
 public void EnableHomeScreen()
 {
     if (!bg.animating) {
@@ -1146,6 +1174,7 @@ public void EnableHomeScreen()
 
 }
 
+//enable the upgrade screen
 public void EnableUpgradeScreen()
 {
     if (!bg.animating)
@@ -1207,7 +1236,7 @@ public void ToggleNotes() {
     Notes.SetActive(!Notes.activeInHierarchy);
 }
 
-
+//enable the lobby screen
 public void EnableLobbyScreen()
 {
     if (!bg.animating) {
@@ -1232,7 +1261,7 @@ public void EnableLobbyScreen()
 
 
 
-
+//function to control the thieves on the pre game lobby screen. spawns and removes thieves corresponding to the number of players int the room
 public void ThiefController()
 {
     PreGameScript.GetComponent<PreGame>().SetPlayerSkins();
@@ -1280,6 +1309,7 @@ public void ChangeUserNameInput()
     Status.SetActive(false);
     StatusGuest.SetActive(false);
 }
+// main function to begin the login process and initialize the game at startup
 public void SetUserName()
 {
     StartCoroutine(ShowLoadingScreenLogIn(0));
@@ -1351,6 +1381,7 @@ public void SetUserName()
 
 
 }
+// shows a loading screen window for 3 seconds while the game is initialized
 private IEnumerator ShowLoadingScreenLogIn(int type)
 {
     Debug.Log("Showing loading screen");
@@ -1371,6 +1402,7 @@ private IEnumerator ShowLoadingScreenLogIn(int type)
 
 
 }
+// re-initializes the game
 public void ReJoinAfterLeave()
 {
     StartCoroutine(ShowLoadingScreenLogIn(0));
@@ -1441,6 +1473,7 @@ public void ReJoinAfterLeave()
         ContentFriendsNew.GetComponent<PopulateGridFriends>().OnRefresh();
 }
 
+//re-initializes the game
 public void ReJoinAfterPlayAgain()
 {
     StartCoroutine(ShowLoadingScreenLogIn(1));
@@ -1522,7 +1555,7 @@ public void BackToUserManager()
     PasswordError.SetActive(false);
 }
 
-
+// create a new room
 public void JoinNewRooom()
 {
     RoomOptions roomOptions = new RoomOptions();
@@ -1541,23 +1574,27 @@ public void JoinNewRooom()
 
 
 // START MENU
+//begin the game
 public void StartGame()
 {
     StartMenu.SetActive(false);
     UserManagerMenu.SetActive(true);
 }
 
+//quit the game
 public void QuitGame()
 {
     Application.Quit();
 }
 
+//back button
 public void BackToHome()
 {
     CreditsMenu.SetActive(false);
     StartMenu.SetActive(true);
 }
 
+//enable credits
 public void OpenCredits()
 {
     CreditsMenu.SetActive(true);
