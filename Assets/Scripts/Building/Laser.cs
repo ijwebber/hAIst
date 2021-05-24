@@ -22,19 +22,18 @@ public class Laser : MonoBehaviourPun
     public bool disabled = false;
     public RaycastHit hit;
     GuardController guardController;
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         lr = GetComponent<LineRenderer>();        
         guardController = GameObject.FindObjectOfType<GuardController>();
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         if (!disabled)
         {
+            // Display laser beam up to first collision
             lr.SetPosition(0, startPoint.position);
             if (Physics.Raycast(transform.position, -transform.right, out hit))
             {
@@ -68,6 +67,7 @@ public class Laser : MonoBehaviourPun
         
     }
 
+    // Disables this laser for everyone
     [PunRPC]
     void disableLaser()
     {
@@ -75,6 +75,7 @@ public class Laser : MonoBehaviourPun
         this.GetComponent<LineRenderer>().enabled = false;
     }
 
+    // Enables this laser for everyone
     [PunRPC]
     void enableLaser()
     {

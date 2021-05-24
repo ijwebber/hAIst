@@ -21,6 +21,7 @@ public class WireManual : MonoBehaviour
         {
             if (wires.id == wiresID)
             {
+                // Show correct wire colour
                 wire.color = colours[wires.wire];
                 colour.text = "To cut the power to the lasers cut the " + strColour[wires.wire] + " wire.";
             }

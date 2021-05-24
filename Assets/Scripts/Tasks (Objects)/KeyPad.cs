@@ -38,6 +38,7 @@ public class KeyPad : MonoBehaviour
     }
 
     void Update() {
+        // Generate new code every resetTime seconds
         timeElapsed += Time.deltaTime;
         if (timeElapsed > resetTime) {
             timeElapsed -= resetTime;
@@ -57,6 +58,7 @@ public class KeyPad : MonoBehaviour
         }
     }
 
+    // Completes keypad game for everyone
     [PunRPC]
     void updateKeyCode(int id) {
         if (id == this.id) {
@@ -64,6 +66,7 @@ public class KeyPad : MonoBehaviour
         }
     }
 
+    // Sends new code to everyone
     [PunRPC]
     void SendCode(int queryId, string code) {
         if (queryId == id) {

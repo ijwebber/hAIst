@@ -33,6 +33,7 @@ public class CodeDisplay : MonoBehaviour
             {
                 if (keypad.id == keypadID)
                 {
+                    // Keeps code up to date
                     myKeypad = keypad;
                     _cardCode.text = keypad.code;
                 }

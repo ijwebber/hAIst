@@ -25,12 +25,7 @@ public class Wires : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // Completes wire game for everyone
     [PunRPC]
     void updateWires(int id, bool correct)
     {
@@ -41,6 +36,7 @@ public class Wires : MonoBehaviour
         }
     }
 
+    // Sends correct wire to everyone
     [PunRPC]
     void SendWire(int queryId, int wire)
     {

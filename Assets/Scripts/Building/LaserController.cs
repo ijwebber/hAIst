@@ -14,8 +14,11 @@ public class LaserController : MonoBehaviour
 
     float maxDistanceToDisable = 20;
 
+    // Disables laser nearest to the given position
     public LaserDisableResult DisableNearestLaser(Vector3 pos)
     {
+
+        // Finds closest Laser object
         Laser closestLaser = null;
         Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
         foreach (Laser laser in lasers)
@@ -28,6 +31,7 @@ public class LaserController : MonoBehaviour
             }
         }
 
+        // Finds closest LaserDown object
         LaserDown closestLaserDown = null;
         LaserDown[] laserDowns = GameObject.FindObjectsOfType<LaserDown>();
         foreach (LaserDown laserDown in laserDowns)
@@ -40,6 +44,8 @@ public class LaserController : MonoBehaviour
             }
         }
 
+        // Returns TOO_FAR if out of range, SUCCESS if in range and no other way to turn off, and ERROR if there is another way to turn it off
+        // Overly complicated due to separate Laser and LaserDown objects
         if (closestLaser != null && closestLaserDown != null)
         {
             if (Vector3.Distance(closestLaser.GetComponent<Transform>().position, pos) < Vector3.Distance(closestLaserDown.GetComponent<Transform>().position, pos))
@@ -123,6 +129,7 @@ public class LaserController : MonoBehaviour
         }
     }
 
+    // Returns distance of point p3 from line (p1, p2)
     private double distanceFromLine(Vector3 p1, Vector3 p2, Vector3 p3)
     {
         Vector2 startp = new Vector2(p1.x, p1.z);
@@ -146,6 +153,7 @@ public class LaserController : MonoBehaviour
         }
     }
 
+    // Returns perpendicular distance of point p3 from line (p1, p2)
     private double perpendicularDistance(Vector3 p1, Vector3 p2, Vector3 p3)
     {
         Vector2 startp = new Vector2(p1.x, p1.z);

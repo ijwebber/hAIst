@@ -21,6 +21,8 @@ public class IntentActions : MonoBehaviourPun
             return;
         }
 
+        // Shortcut keybinds
+
         if (Input.GetKeyDown(KeyCode.B)) {
             DisableLaser();
         }
@@ -35,6 +37,7 @@ public class IntentActions : MonoBehaviourPun
 
     }
 
+    // Receives intent and score from JavaScript and carries out goal
     public void CarryOutIntent(string topIntent, float score) {
         if (score > 0.3) {
             switch (topIntent)

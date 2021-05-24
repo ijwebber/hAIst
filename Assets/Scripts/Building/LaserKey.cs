@@ -10,6 +10,7 @@ public class LaserKey : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Disables laser if correct code has been entered
         if (keypad.codeCorrect)
         {
             this.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);

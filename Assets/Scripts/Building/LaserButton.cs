@@ -10,6 +10,7 @@ public class LaserButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Disables laser if buttons have been pressed
         if (button.done)
         {
             this.GetComponent<PhotonView>().RPC("disableLaser", RpcTarget.All);

@@ -107,9 +107,9 @@ public class PlayerPickUp : MonoBehaviourPun
                                 holdDownTask();
                             }
 
-
+                            // if both player is in range and the button E is pressed for 5 seconds, then add points to the score, move this to its own method
                             if (held && seconds == 0)
-                            { // if both player is in range and the button E is pressed for 5 secpmds, then add points to the score, move this to its own method
+                            { 
                                 targetTime += cooldown;
 
                                 //other.gameObject.SetActive(false);
@@ -161,6 +161,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         break;
 
                     case "button":
+                        // Press button when E pressed
                         displayMessage("Press E to press button");
                         if (Input.GetKey(KeyCode.E) && seconds == 0 && !down) {
                             int id = inTrigger.gameObject.GetComponent<PressButton>().id;
@@ -168,6 +169,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         }
                         break;
                     case "codedisplay":
+                        // Display code when E pressed
                         displayMessage("Press E to see code");
                         if (Input.GetKeyDown(KeyCode.E))
                         {
@@ -187,6 +189,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         KeyPad keypad = inTrigger.gameObject.GetComponent<KeyPad>();
                         keycodeGame.GetComponent<KeycodeTask>().keypadID = keypad.id;
 
+                        // Display keypad game when E pressed (unless complete)
                         if (Input.GetKeyDown(KeyCode.E) && keycodeGame.activeInHierarchy) {
                             keycodeGame.SetActive(false);
                         }
@@ -215,6 +218,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         }
                         break;
                     case "wiremanual":
+                        // Show manual when E pressed
                         displayMessage("Press E to read manual");
                         if (Input.GetKey(KeyCode.E))
                         {
@@ -229,6 +233,7 @@ public class PlayerPickUp : MonoBehaviourPun
                         Wires wires = inTrigger.gameObject.GetComponent<Wires>();
                         wireGame.GetComponent<WireTask>().wiresID = wires.id;
 
+                        // Display wire game when E pressed  (unless complete)
                         if (wires.complete && !down)
                         {
                             wireGame.SetActive(false);

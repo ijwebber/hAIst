@@ -24,14 +24,17 @@ public class WireTask : MonoBehaviour
         {
             if (wires.id == wiresID)
             {
+                // Cut wire
                 wires.GetComponent<PhotonView>().RPC("updateWires", RpcTarget.Others, wiresID, ( wires.wire == n ));
                 wires.complete = true;
                 wires.correct = ( wires.wire == n );
 
                 complete = true;
 
+                // Check if correct wire
                 if (wires.correct)
                 {
+                    // Disables all lasers connected to these wires
                     Laser[] lasers = GameObject.FindObjectsOfType<Laser>();
                     foreach (Laser laser in lasers)
                     {
