@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿// DEPRECATED SCRIPT
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

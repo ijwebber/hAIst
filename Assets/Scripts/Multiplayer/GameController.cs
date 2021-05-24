@@ -9,6 +9,7 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+// centralised game settings
 public class GameController : MonoBehaviourPunCallbacks
 {
 
@@ -68,7 +69,6 @@ public class GameController : MonoBehaviourPunCallbacks
 
     System.Random r = new System.Random();
 
-    //just spawns in player object
     private void Awake()
     {
 #if UNITY_EDITOR
@@ -97,6 +97,7 @@ public class GameController : MonoBehaviourPunCallbacks
                 actNo = i;
             }
         }
+        // spawn in various players
         float xSpawnPos = SpawnPoint.transform.position.x + (float) (actNo * 0.6);
         Vector3 spawnpoint = SpawnPoint.transform.position;
         spawnpoint.x = xSpawnPos;
@@ -113,6 +114,7 @@ public class GameController : MonoBehaviourPunCallbacks
             SetProps(numOfSpecial);
         }
 
+        // set up special objects
         GameObject[] stealObjs = GameObject.FindGameObjectsWithTag("steal");
         foreach (GameObject obj in stealObjs)
         {
@@ -125,6 +127,7 @@ public class GameController : MonoBehaviourPunCallbacks
         SetSpotted();
         
         
+        // spawn guards
         PhotonNetwork.InstantiateRoomObject(guardPrefab.name, guardPrefab.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab2.name, guardPrefab2.transform.position, Quaternion.identity);
         PhotonNetwork.InstantiateRoomObject(guardPrefab3.name, guardPrefab3.transform.position, Quaternion.identity);
@@ -145,10 +148,12 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     public void gameStart() {
+        // init game state
         gameState = 0;
         tutorial.GetComponent<Animator>().SetTrigger("startTutorial");
     }
 
+    // consumable upgrade DB handling
     public void SetReviveUsed()
     {
         foreach (Transform child in UpgradeUI.transform)
@@ -212,10 +217,6 @@ public class GameController : MonoBehaviourPunCallbacks
             newObj = (GameObject)Instantiate(UpgradeUIPrefab, UpgradeUI.transform);
             newObj.transform.GetChild(1).GetComponent<Image>().sprite = shield;
         }
-
-
-
-
     }
     public void ResumeGame()
     {
@@ -253,6 +254,7 @@ public class GameController : MonoBehaviourPunCallbacks
 
     void Update()
     {
+        // escape menu on ESC pressed
         if (Input.GetKeyDown(KeyCode.Escape) && CamSystem.GetComponent<CameraSystem>().introDone)
         {
             //PopulateUpgradeUI();
@@ -261,12 +263,12 @@ public class GameController : MonoBehaviourPunCallbacks
 
         } 
 
+        // display update when someone leaves
         if (PhotonNetwork.PlayerList.Length < playerList.Count) {
             List<string> currentList = new List<string>(playerList);
             foreach (var play in PhotonNetwork.PlayerList)
             {
                 if (playerList.Contains(play.NickName)) {
-                    Debug.Log(play.NickName + " is still here");
                     currentList.Remove(play.NickName);
                 }
             }
@@ -286,9 +288,10 @@ public class GameController : MonoBehaviourPunCallbacks
                 questMarker.newQuest();
                 pager.newQuest();
                 if (gameState > updatedGameState) {
-                    // change originated from here
+                    // change originated from this client
                     updatedGameState = gameState;
                 } else if (regress) {
+                    // if game state has decreased
                     if (gameState < updatedGameState) {
                         updatedGameState = gameState;
                     }
@@ -303,6 +306,7 @@ public class GameController : MonoBehaviourPunCallbacks
             }
             List <string> newText = new List<string>();
             List<GameObject> nextQuestItems = new List<GameObject>();
+            // gamestate controller
             switch (gameState) 
             {
                 case 0: // starting state
@@ -446,6 +450,7 @@ public class GameController : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
+    // sync quest update
     void updateThis() {
         updateNeeded = true;
     }
@@ -553,6 +558,8 @@ public class GameController : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    // update quest and pointer
     private void setNewQuest(List<GameObject> objs, List<string> objectives, bool regressTest) {
         if (objs.Count == 0) {
             // questPointer.GetComponent<PhotonView>().RPC("updateTarget", RpcTarget.All, "null", gameState);
@@ -566,6 +573,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
+    // display message on other clients
     public void updateDisp(string message) {
         this.GetComponent<PhotonView>().RPC("displayMessage", RpcTarget.Others, message);
     }

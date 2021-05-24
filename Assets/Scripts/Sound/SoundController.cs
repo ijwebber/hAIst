@@ -49,29 +49,25 @@ public class SoundController : MonoBehaviourPun
     //function done every frame
     void Update() {
         // update sound visualisation
-        // grid.updateWalls();
         soundVis.SetGrid();
-        // send microphone volume if above threshold
 #if UNITY_WEBGL && !UNITY_EDITOR
         Microphone.Update();
+        // send microphone volume if above threshold
+        // create new sound emission at location from microphone volume
         if (Microphone.volumes[0]*multiplier > threshold && !this.playerController.isDisabled) {
             sendGrid(playerController.player.transform.position, Mathf.FloorToInt(Microphone.volumes[0]*multiplier*(playerController.ninjaMultiplier)));
         }
 #endif
-        if (Input.GetKeyDown("j") && !this.playerController.isDisabled) {
-            // localSoundGrid.setValue(player.transform.position, 240);
-            sendGrid(playerController.player.transform.position, (int)(240));
-        }
-        if (Input.GetKeyDown("k") && !this.playerController.isDisabled) {
-            sendGrid(playerController.player.transform.position, 60);
-        }
-        if (Input.GetKeyDown("l") && !this.playerController.isDisabled) {
-            sendGrid(playerController.player.transform.position, 30);
-        }
-
-        //flatten array
-        // sendGrid();
-        // this.photonView.RPC("newGrid", RpcTarget.Others, grid.getPressure(), grid.GetWidth(), grid.GetHeight());
+        // testing inputs
+        // if (Input.GetKeyDown("j") && !this.playerController.isDisabled) {
+        //     sendGrid(playerController.player.transform.position, (int)(240));
+        // }
+        // if (Input.GetKeyDown("k") && !this.playerController.isDisabled) {
+        //     sendGrid(playerController.player.transform.position, 60);
+        // }
+        // if (Input.GetKeyDown("l") && !this.playerController.isDisabled) {
+        //     sendGrid(playerController.player.transform.position, 30);
+        // }
     }
 
     public void sendGrid(Vector3 playerPosition, int intensity) {
@@ -99,7 +95,7 @@ public class SoundController : MonoBehaviourPun
         grid.SetValue(new Vector3(x,y,z), intensity);
     }
 
-    // every time step (every 50th of a second)
+    // every time step (every 50th of a second) update nodes
     private void timer() {
         grid.updateNodes();
     }

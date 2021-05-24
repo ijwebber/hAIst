@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// display the timer for the code reset
 public class CodeDisplay : MonoBehaviour
 {
 
@@ -10,19 +11,6 @@ public class CodeDisplay : MonoBehaviour
 
     public int keypadID;
     public KeyPad myKeypad;
-
-    // private void OnEnable()
-    // {
-    //     KeyPad[] keypads = GameObject.FindObjectsOfType<KeyPad>();
-
-    //     foreach (KeyPad keypad in keypads)
-    //     {
-    //         if (keypad.id == keypadID)
-    //         {
-    //             _cardCode.text = keypad.code;
-    //         }
-    //     }
-    // }
 
     void Update() {
         if (this.enabled) {

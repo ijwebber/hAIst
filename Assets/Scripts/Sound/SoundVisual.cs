@@ -62,7 +62,6 @@ public class SoundVisual : MonoBehaviour
     }
 
     private void UpdateSoundVis() {
-        // mesh.Clear();
         grid.getXY(playerController.player.transform.position, out int playerX, out int playerY);
         int startX = Mathf.Max(0, playerX - Dimension/2);
         int startY = Mathf.Max(0, playerY - Dimension/2);
@@ -77,6 +76,7 @@ public class SoundVisual : MonoBehaviour
             startY = grid.GetHeight() - Dimension;
         }
         // this.gameObject.transform.position = new Vector3(startX, this.gameObject.transform.position.y, startY);
+        // calculate value for sound visualiser mesh
         for (int x = startX; x < endX; x++) {
             for (int y = startY; y < endY; y++)  {  
                 // double gridValue = grid.GetValue(x,y);
@@ -88,6 +88,7 @@ public class SoundVisual : MonoBehaviour
                 double val3 = grid.GetAvgValue(x+1,y+1);
                 double val4 = grid.GetAvgValue(x,y+1);
                 float height0, height1, height2, height3;
+                // if node is not a wall
                 if (grid.getVelocity(x,y) > 0) {
                     height0 = process(gridValue, .15f, .6f);
                     height1 = process(val2, .15f, .6f);
@@ -127,6 +128,7 @@ public class SoundVisual : MonoBehaviour
         mesh.RecalculateBounds();
     }
 
+    // squeeze calculated value to normlaise output
     private float process(double val, float min, float max) {
         if (val <= 0) {
             return 0;

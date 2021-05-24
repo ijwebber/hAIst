@@ -9,21 +9,22 @@ public class CrateBehaviour : MonoBehaviourPun, IPunObservable
     [SerializeField] private float soundMul;
     private Vector3 networkPosition;
     private Quaternion networkRotation;
-    void Start() {
-        // rigidbody = this.GetComponent<Rigidbody>();
-    }
+
     void OnCollisionEnter(Collision collision) {
+        // if collision with wall or floor
         if (collision.gameObject.layer == 8 || collision.gameObject.layer == 24) {
             if (collision.relativeVelocity.magnitude > 0.2f) {
                 int calculatedSound = (int)(collision.relativeVelocity.magnitude*soundMul);
                 if (calculatedSound > 240) {
                     calculatedSound = 240;
                 }
+                // send output sound to grid
                 soundController.sendGrid(this.transform.position, calculatedSound);
             }
-            Debug.Log("COLLISION magnitude " + collision.relativeVelocity.magnitude);
         }
     }
+
+    // lag compensation
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -43,6 +44,7 @@ public class CrateBehaviour : MonoBehaviourPun, IPunObservable
         }
     }
 
+    //lag compensation
     void FixedUpdate() {
         if (!photonView.IsMine)
         {

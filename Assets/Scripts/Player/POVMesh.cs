@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
 
+// draw field of view to be used to punch hole in black mesh
 public class POVMesh : MonoBehaviourPun
 {
     public PlayerController playerController;

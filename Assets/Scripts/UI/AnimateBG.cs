@@ -8,11 +8,7 @@ public class AnimateBG : MonoBehaviour
     public GameObject MapMenu;
     public bool animating = false;
     private GameObject screen;
-    // Start is called before the first frame update
-    void Start()
-    {
-        // anim.ResetTrigger("Zoom");
-    }
+
     void Update() {
         if (MapMenu.activeInHierarchy) {
             animating = false;

@@ -29,6 +29,7 @@ public class GuardCanvas : MonoBehaviour
         guardIndicators = new List<Image>();
     }
 
+// every time update, gather guards and cameras that are visible and draw a sprite above their head based on their state
     private void Update() {
         int i = 0;
         foreach (GuardMovement guard in guardController.guardMovements)
@@ -61,9 +62,6 @@ public class GuardCanvas : MonoBehaviour
                                     guardIndicator.sprite = hat;
                                 }
                                 guardIndicator.GetComponent<RectTransform>().sizeDelta = new Vector2(30,30);
-
-                                
-
                                 break;
                             case State.suspicious:
                                 guardIndicator.rectTransform.rotation = Quaternion.identity;

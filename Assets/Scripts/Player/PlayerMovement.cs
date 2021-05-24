@@ -72,6 +72,7 @@ public class PlayerMovement : MonoBehaviourPun, IPunObservable
         
     }
  
+ // lag compensation
 public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 {
     if (stream.IsWriting)
@@ -165,6 +166,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
             } else if (alpha < 0) {
                 alpha = 0;
             }
+            // update stamina bar
             staminaBar.color = new Color(col.Evaluate(stamina).r * staminaR,col.Evaluate(stamina).g * staminaG,col.Evaluate(stamina).b * staminaB,alpha);
             staminaBarBg.color = new Color(0.06603771f,0.05606976f,0.05606976f,alpha);
             staminaIndicator.color = new Color(staminaR,staminaG,staminaB,alpha);
@@ -193,6 +195,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     void OnTriggerEnter(Collider other) {
         if (photonView.IsMine == true && PhotonNetwork.IsConnected == true)
         {
+            // update location (top right of screen)
             if (other.gameObject.CompareTag("LocatorColliders")) {
                 uiController.UpdateLocationText("Location: " + other.gameObject.name);
             }

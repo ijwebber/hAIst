@@ -32,20 +32,23 @@ public class GuardController : MonoBehaviourPun
             Destroy(gameObject);
         }
     }
-    // Start is called before the first frame update
+
     void Start()
     {
         // this.localGrid = new Grid(202,122,.5f);
+        // set new grid for keeping track of local sound instances
         this.localGrid = new Grid(202,122,1);
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
     
+    // when swat guards are spawned in, update guard list
     public void swat() {
         this.photonView.RPC("swatUpdate", RpcTarget.All);
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
     }
 
     [PunRPC]
+    //update swat guards for everyone
     void swatUpdate() {
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
         foreach (var guard in guardMovements)
@@ -62,6 +65,7 @@ public class GuardController : MonoBehaviourPun
         }
     }
 
+    // sound emission set
     public void setValue(Vector3 position, float intensity) {
         localGrid.SetValue(position, (int)intensity);
     }
@@ -84,6 +88,7 @@ public class GuardController : MonoBehaviourPun
     }
 
     [PunRPC]
+    // sync guard settings accross clients
     void guardUpdate() {
         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
         baseMoveSpeed = (float)PhotonNetwork.CurrentRoom.CustomProperties["movespeedSetting"];
@@ -114,19 +119,8 @@ public class GuardController : MonoBehaviourPun
     }
     
     void Update() {
+        // keep velocities consistent with main grid
         localGrid.velocities = soundController.grid.velocities;
-    //     if (guardMovements.Length == 0) {
-    //         guardMovements = GameObject.FindObjectsOfType<GuardMovement>();
-    //     } else {
-    //         foreach (var guard in guardMovements)
-    //         {
-    //             if (!guard.Swat) {
-    //                 guard.walkSpeed = baseMoveSpeed;
-    //                 guard.chaseSpeed = baseMoveSpeed*2;
-    //                 guard.GetComponent<FieldOfView>().viewRadius = baseRadius;
-    //             }
-    //         }
-    //     }
     }
 
     public bool inChase() {
@@ -148,7 +142,6 @@ public class GuardController : MonoBehaviourPun
         return agent.SetDestination(position);
     }
     public void MoveClosestGuard(Vector3 targetPosition) {
-        Debug.Log("Move closest guard here");
         this.GetComponent<PhotonView>().RPC("GetClosestGuard", RpcTarget.MasterClient, targetPosition.x, targetPosition.y, targetPosition.z);
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
 
+// movement script for swat guards
 public class SwatMovement : MonoBehaviour
 {   
 
